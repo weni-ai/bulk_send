@@ -1,0 +1,53 @@
+{
+  "name": "bulk_send",
+  "version": "0.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "NODE_OPTIONS='--experimental-transform-types' rspack dev",
+    "build": "run-p type-check \"build-only {@}\" --",
+    "preview": "NODE_OPTIONS='--experimental-transform-types' rspack preview",
+    "test:unit": "vitest",
+    "build-only": "NODE_OPTIONS='--experimental-transform-types' rspack build",
+    "type-check": "vue-tsc --build",
+    "lint": "eslint . --fix",
+    "format": "prettier --write src/"
+  },
+  "dependencies": {
+    "@rspack/cli": "^1.4.10",
+    "@rspack/core": "^1.4.10",
+    "@sentry/vue": "^9.43.0",
+    "@weni/unnnic-system": "^2.36.0",
+    "dotenv": "^17.2.1",
+    "html-rspack-plugin": "^6.1.2",
+    "pinia": "^3.0.3",
+    "sass-loader": "^16.0.5",
+    "vue": "3.5.11",
+    "vue-i18n": "^11.1.11",
+    "vue-loader": "^17.4.2",
+    "vue-router": "^4.4.5"
+  },
+  "devDependencies": {
+    "@tsconfig/node22": "^22.0.2",
+    "@types/jsdom": "^21.1.7",
+    "@types/node": "^22.17.0",
+    "@vitest/eslint-plugin": "^1.3.4",
+    "@vue/eslint-config-prettier": "^10.2.0",
+    "@vue/eslint-config-typescript": "^14.6.0",
+    "@vue/test-utils": "^2.4.6",
+    "@vue/tsconfig": "^0.7.0",
+    "eslint": "^9.31.0",
+    "eslint-plugin-vue": "~10.3.0",
+    "jiti": "^2.4.2",
+    "jsdom": "^26.1.0",
+    "node-sass": "^9.0.0",
+    "npm-run-all2": "^8.0.4",
+    "prettier": "3.6.2",
+    "sass": "^1.89.2",
+    "typescript": "~5.8.0",
+    "vitest": "^3.2.4",
+    "vue-tsc": "^3.0.4"
+  }
+}
