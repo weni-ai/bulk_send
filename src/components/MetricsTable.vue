@@ -1,31 +1,32 @@
 <template>
   <table class="metrics-table">
-    <tr class="row" v-for="(row, rowIndex) in rows" :key="rowIndex">
-      <td class="cell" v-for="(cell, cellIndex) in row" :key="cellIndex">
-        <section class="content">
-          <section class="label-container">
-            <p class="label">{{ cell.label }}</p>
-            <section :class="['tooltip', { 'tooltip-near': nearTooltip || cell.actions?.length }]">
+    <tr class="metrics-table__row" v-for="(row, rowIndex) in rows" :key="rowIndex">
+      <td class="metrics-table__row__cell" v-for="(cell, cellIndex) in row" :key="cellIndex">
+        <section class="metrics-table__row__cell__content">
+          <section class="metrics-table__row__cell__content__label-container">
+            <p class="metrics-table__row__cell__content__label-container__label">{{ cell.label }}</p>
+            <section
+              :class="['metrics-table__row__cell__content__label-container__tooltip', { 'tooltip-near': nearTooltip || cell.actions?.length }]">
               <UnnnicToolTip v-if="cell.hint" :text="cell.hint" :side="tooltipSide(cellIndex)" :maxWidth="'300px'"
                 enabled>
                 <UnnnicIcon icon="info" scheme="neutral-cleanest" size="nano" filled />
               </UnnnicToolTip>
             </section>
-            <section class="actions" v-if="cell.actions && cell.actions.length > 0">
-              <UnnnicDropdown class="action_dropdown">
+            <section class="metrics-table__row__cell__content__actions" v-if="cell.actions && cell.actions.length > 0">
+              <UnnnicDropdown class="metrics-table__row__cell__content__actions__dropdown">
                 <template #trigger>
                   <UnnnicIcon icon="more_vert" size="ant" scheme="neutral-cloudy" />
                 </template>
 
-                <UnnnicDropdownItem v-for="(action, index) in cell.actions" :key="index" class="action_dropdown_item"
-                  @click="action.onClick">
+                <UnnnicDropdownItem class="metrics-table__row__cell__content__actions__dropdown__item"
+                  v-for="(action, index) in cell.actions" :key="index" @click="action.onClick">
                   <UnnnicIcon :icon="action.icon" size="sm" scheme="neutral-dark" />
-                  <p class="action_label">{{ action.label }}</p>
+                  <p class="metrics-table__row__cell__content__actions__dropdown__item__label">{{ action.label }}</p>
                 </UnnnicDropdownItem>
               </UnnnicDropdown>
             </section>
           </section>
-          <p class="value">{{ cell.value }}</p>
+          <p class="metrics-table__row__cell__content__value">{{ cell.value }}</p>
         </section>
       </td>
     </tr>
@@ -93,24 +94,32 @@ const tooltipSide = (cellIndex: number) => {
 <style scoped lang="scss">
 .metrics-table {
   width: 100%;
+  border-collapse: separate;
   border-spacing: 0;
   table-layout: fixed;
+  border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+  border-radius: $unnnic-border-radius-md;
 
-  & .row {
-    & .cell {
-      border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+  &__row {
+    &__cell {
+      border-right: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+      border-bottom: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
       padding: $unnnic-spacing-md;
 
-      & .content {
+      &:last-child {
+        border-right: none;
+      }
+
+      &__content {
         display: flex;
         flex-direction: column;
         gap: $unnnic-spacing-xs;
 
-        & .label-container {
+        &__label-container {
           display: flex;
           gap: $unnnic-spacing-xs;
 
-          & .label {
+          &__label {
             overflow: hidden;
             color: $unnnic-color-neutral-darkest;
             text-overflow: ellipsis;
@@ -119,7 +128,7 @@ const tooltipSide = (cellIndex: number) => {
             line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
           }
 
-          & .tooltip {
+          &__tooltip {
             display: flex;
             align-items: end;
             justify-content: center;
@@ -128,11 +137,11 @@ const tooltipSide = (cellIndex: number) => {
             cursor: default;
           }
 
-          & .tooltip-near {
+          &__tooltip-near {
             margin-left: unset;
           }
 
-          & .actions {
+          &__actions {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -140,8 +149,8 @@ const tooltipSide = (cellIndex: number) => {
 
             cursor: pointer;
 
-            & .action_dropdown {
-              & .action_dropdown_item {
+            &__dropdown {
+              &__item {
                 display: flex;
                 width: max-content;
                 gap: $unnnic-spacing-xs;
@@ -151,7 +160,7 @@ const tooltipSide = (cellIndex: number) => {
           }
         }
 
-        & .value {
+        &__value {
           color: $unnnic-color-neutral-black;
 
           font-size: $unnnic-font-size-title-md;
@@ -161,23 +170,9 @@ const tooltipSide = (cellIndex: number) => {
       }
     }
 
-    &:first-child {
-      & .cell:first-child {
-        border-top-left-radius: $unnnic-border-radius-md;
-      }
-
-      & .cell:last-child {
-        border-top-right-radius: $unnnic-border-radius-md;
-      }
-    }
-
     &:last-child {
-      & .cell:first-child {
-        border-bottom-left-radius: $unnnic-border-radius-md;
-      }
-
-      & .cell:last-child {
-        border-bottom-right-radius: $unnnic-border-radius-md;
+      .metrics-table__row__cell {
+        border-bottom: none;
       }
     }
   }
