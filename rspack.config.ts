@@ -80,7 +80,7 @@ export default defineConfig({
         loader: 'sass-loader',
         type: 'css',
         options: {
-          additionalData: `@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';`,
+          additionalData: `@use '@weni/unnnic-system/src/assets/scss/unnnic.scss' as *;`,
         },
       },
       {
