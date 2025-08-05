@@ -98,7 +98,7 @@ const tooltipSide = (cellIndex: number) => {
 
   & .row {
     & .cell {
-      border: 1px solid $unnnic-color-neutral-soft;
+      border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
       padding: $unnnic-spacing-md;
 
       & .content {
