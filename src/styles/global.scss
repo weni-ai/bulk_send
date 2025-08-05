@@ -133,3 +133,11 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
+html {
+	font-family: $unnnic-font-family-secondary, sans-serif;
+}
+
+* {
+	box-sizing: border-box;
+}

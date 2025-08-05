@@ -2,8 +2,8 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import * as Sentry from '@sentry/vue'
 
-import '@weni/unnnic-system/dist/style.css'
 import './styles/global.scss'
+import '@weni/unnnic-system/dist/style.css'
 
 import Unnnic from './utils/plugins/UnnnicSystem'
 import i18n from './utils/plugins/i18n'
