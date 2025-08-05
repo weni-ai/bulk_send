@@ -54,15 +54,15 @@ describe('MetricsTable.vue', () => {
       data: mockData,
     });
 
-    const rows = wrapper.findAll('.row');
+    const rows = wrapper.findAll('.metrics-table__row');
     expect(rows).toHaveLength(2);
 
-    const firstRowCells = rows[0].findAll('.cell');
+    const firstRowCells = rows[0].findAll('.metrics-table__row__cell');
     expect(firstRowCells).toHaveLength(2);
     checkCell(firstRowCells[0], 'Metric 1', '100');
     checkCell(firstRowCells[1], 'Metric 2', '200');
 
-    const secondRowCells = rows[1].findAll('.cell');
+    const secondRowCells = rows[1].findAll('.metrics-table__row__cell');
     expect(secondRowCells).toHaveLength(2);
     checkCell(secondRowCells[0], 'Metric 3', '300');
     checkCell(secondRowCells[1], 'Metric 4', '400');
@@ -76,7 +76,7 @@ describe('MetricsTable.vue', () => {
 
     const tooltips = wrapper.findAll('.unnnic-tooltip-stub');
     expect(tooltips).toHaveLength(1);
-    const cells = wrapper.findAll('.cell');
+    const cells = wrapper.findAll('.metrics-table__row__cell');
     expect(cells[1].find('.unnnic-tooltip-stub').exists()).toBe(true);
   });
 
@@ -88,7 +88,7 @@ describe('MetricsTable.vue', () => {
 
     const dropdowns = wrapper.findAll('.unnnic-dropdown-stub');
     expect(dropdowns).toHaveLength(1);
-    const cells = wrapper.findAll('.cell');
+    const cells = wrapper.findAll('.metrics-table__row__cell');
     expect(cells[2].find('.unnnic-dropdown-stub').exists()).toBe(true);
   });
 
