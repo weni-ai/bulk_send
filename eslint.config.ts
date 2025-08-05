@@ -19,10 +19,16 @@ export default defineConfigWithVueTs(
 
   pluginVue.configs['flat/essential'],
   vueTsConfigs.recommended,
-  
+
   {
     ...pluginVitest.configs.recommended,
     files: ['src/**/__tests__/*'],
+  },
+  {
+    files: ['src/**/__tests__/*'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
   },
   skipFormatting,
 )
