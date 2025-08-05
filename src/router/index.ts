@@ -22,22 +22,11 @@ router.afterEach((router) => {
   delete router.query.next
   delete router.query.projectUuid
 
-  if (isFederatedModule) {
-    window.dispatchEvent(
-      new CustomEvent('updateRoute', {
-        detail: { path: router.path, query: router.query },
-      }),
-    )
-  } else {
-    window.parent.postMessage(
-      {
-        event: 'changePathname',
-        pathname: window.location.pathname,
-        query: router.query,
-      },
-      '*',
-    )
-  }
+  window.dispatchEvent(
+    new CustomEvent('updateRoute', {
+      detail: { path: router.path, query: router.query },
+    }),
+  )
 })
 
 export default router
