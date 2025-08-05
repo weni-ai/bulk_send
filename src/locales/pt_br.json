@@ -1,1 +1,7 @@
-{}
+{
+  "home": {
+    "title": "Envio Massivo",
+    "description": "Envie mensagens de marketing em massa para seus contatos",
+    "new_send": "Novo Envio"
+  }
+}
