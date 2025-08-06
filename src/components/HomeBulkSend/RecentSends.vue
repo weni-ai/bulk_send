@@ -1,7 +1,7 @@
 <template>
   <section class="recent-sends">
     <h2 class="recent-sends__title">
-      {{ $t('home.recent_sends') }}
+      {{ $t('home.recent_sends.title') }}
     </h2>
 
     <MissingRecentSends v-if="!recentSendsData.length" class="recent-sends__missing-recent-sends"
