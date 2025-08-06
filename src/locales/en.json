@@ -3,6 +3,10 @@
     "title": "Bulk Send",
     "description": "Send bulk marketing messages to your contacts",
     "new_send": "New Send",
-    "mmlite-disclaimer": "Switch to MM Lite API now to accelerate your growth and gain full delivery control. <span class=\"highlight\">See more</span>"
+    "mmlite-disclaimer": "Switch to MM Lite API now to accelerate your growth and gain full delivery control. <span class=\"highlight\">See more</span>",
+    "recent_sends": "Recent Sends",
+    "no_recent_sends": "Start sending personalized template messages to your contacts at scale",
+    "no_recent_sends_subtitle": "It takes less than 2 minutes to set up your first send.",
+    "no_recent_sends_button": "Start now"
   }
 }
