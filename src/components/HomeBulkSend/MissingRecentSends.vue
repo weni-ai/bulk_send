@@ -3,13 +3,13 @@
     <img src="/svgs/campaign.svg" alt="Campaign Icon" />
     <section class="missing-recent-sends__content">
       <p class="missing-recent-sends__content__title">
-        {{ $t('home.no_recent_sends') }}
+        {{ $t('home.no_recent_sends.title') }}
       </p>
       <p class="missing-recent-sends__content__subtitle">
-        {{ $t('home.no_recent_sends_subtitle') }}
+        {{ $t('home.no_recent_sends.subtitle') }}
       </p>
     </section>
-    <UnnnicButton :text="$t('home.no_recent_sends_button')" type="secondary" @click="handleButtonClick" />
+    <UnnnicButton :text="$t('home.no_recent_sends.button')" type="secondary" @click="handleButtonClick" />
   </section>
 </template>
 
