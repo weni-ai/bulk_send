@@ -1,10 +1,15 @@
 <template>
-  <BulkSendHomeLayout>
+  <BulkSendHomeLayout class="home-bulk-send">
     <template #header>
       <HomeHeader />
     </template>
     <template #content>
       <MetricsTable :data="generalPerformanceData" :maxColumns="3" />
+
+      <UnnnicDisclaimer class="home-bulk-send__mmlite-disclaimer" icon="alert-circle-1-1" scheme="neutral-dark"
+        :text="$t('home.mmlite-disclaimer')" @click="handleMMLiteDisclaimerClick" />
+
+      <BasicDivider />
     </template>
   </BulkSendHomeLayout>
 </template>
@@ -13,6 +18,7 @@
 import BulkSendHomeLayout from '@/layouts/BulkSend/BulkSendHomeLayout.vue'
 import HomeHeader from '@/components/HomeBulkSend/HomeHeader.vue'
 import MetricsTable from '@/components/MetricsTable.vue'
+import BasicDivider from '@/components/BasicDivider.vue'
 
 const generalPerformanceData = [
   {
@@ -55,4 +61,24 @@ const generalPerformanceData = [
     hint: 'Percentage of contacts who successfully received messages, calculated from the total number of unique contacts targeted across all sends.',
   },
 ]
+
+const handleMMLiteDisclaimerClick = () => {
+  console.log('handleMMLiteDisclaimerClick')
+}
 </script>
+
+<style lang="scss" scoped>
+.home-bulk-send {
+  &__mmlite-disclaimer {
+    margin-top: $unnnic-spacing-md;
+    display: flex;
+    flex-direction: row;
+
+    :deep(.highlight) {
+      text-decoration: underline;
+      font-weight: $unnnic-font-weight-bold;
+      cursor: pointer;
+    }
+  }
+}
+</style>

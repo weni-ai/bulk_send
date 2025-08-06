@@ -2,6 +2,7 @@
   "home": {
     "title": "Envío masivo",
     "description": "Envía mensajes de marketing masivos a tus contactos",
-    "new_send": "Nuevo envío"
+    "new_send": "Nuevo envío",
+    "mmlite-disclaimer": "Cambia a la API Lite de MM ahora para acelerar tu crecimiento y obtener control total sobre la entrega. <span class=\"highlight\">Ver más</span>"
   }
 }

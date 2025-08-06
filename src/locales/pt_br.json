@@ -2,6 +2,7 @@
   "home": {
     "title": "Disparo em Massa",
     "description": "Envie mensagens de marketing em massa para seus contatos",
-    "new_send": "Novo disparo"
+    "new_send": "Novo disparo",
+    "mmlite-disclaimer": "Atualize para a API MM Lite para ganhar velocidade e controle completo sobre a entrega das mensagens. <span class=\"highlight\">Ver mais</span>"
   }
 }
