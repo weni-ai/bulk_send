@@ -23,6 +23,17 @@ describe('HomeBulkSend.vue', () => {
             template: '<div class="home-bulk-send__mmlite-disclaimer" @click="$emit(\'click\')"></div>',
             emits: ['click'],
           },
+          UnnnicButton: {
+            template: '<button class="unnnic-button-stub" @click="$emit(\'click\')"></button>',
+            emits: ['click'],
+          },
+          UnnnicInputDatePicker: {
+            template: '<input class="unnnic-input-date-picker-stub" @change="$emit(\'update:modelValue\', { start: \'2024-01-01\', end: \'2024-01-31\' })" />',
+            emits: ['update:modelValue'],
+          },
+          UnnnicInput: {
+            template: '<input class="unnnic-input-stub" @input="$emit(\'update:modelValue\', $event.target.value)" />',
+          },
         },
       },
     })
