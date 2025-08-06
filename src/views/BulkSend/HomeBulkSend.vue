@@ -4,7 +4,12 @@
       <HomeHeader />
     </template>
     <template #content>
-      <MetricsTable :data="generalPerformanceData" :maxColumns="3" />
+      <section class="home-bulk-send__general-performance">
+        <h2 class="home-bulk-send__general-performance__title">
+          {{ $t('home.general_performance') }}
+        </h2>
+        <MetricsTable :data="generalPerformanceData" :maxColumns="3" />
+      </section>
 
       <UnnnicDisclaimer class="home-bulk-send__mmlite-disclaimer" icon="alert-circle-1-1" scheme="neutral-dark"
         :text="$t('home.mmlite-disclaimer')" @click="handleMMLiteDisclaimerClick" />
@@ -93,6 +98,19 @@ const handleStartNewSend = () => {
 .home-bulk-send {
   display: flex;
   flex-direction: column;
+
+  &__general-performance {
+    display: flex;
+    flex-direction: column;
+    gap: $unnnic-spacing-md;
+
+    &__title {
+      color: $unnnic-color-neutral-darkest;
+      font-size: $unnnic-font-size-body-lg;
+      font-weight: $unnnic-font-weight-bold;
+      line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
+    }
+  }
 
   &__mmlite-disclaimer {
     margin-top: $unnnic-spacing-md;

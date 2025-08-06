@@ -5,6 +5,7 @@
     "new_send": "Novo disparo",
     "mmlite-disclaimer": "Atualize para a API MM Lite para ganhar velocidade e controle completo sobre a entrega das mensagens. <span class=\"highlight\">Ver mais</span>",
     "recent_sends": "Disparos recentes",
+    "general_performance": "Desempenho geral (Últimos 30 dias)",
     "no_recent_sends": {
       "title": "Comece agora a se comunicar ativamente com seus contatos em escala",
       "subtitle": "Leva menos de 2 minutos para configurar o primeiro envio",
