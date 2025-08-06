@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { DOMWrapper, mount, VueWrapper } from '@vue/test-utils';
-import MetricsTable from '../components/MetricsTable.vue';
+import MetricsTable from '@/components/MetricsTable.vue';
 
 const mockData = [
   { label: 'Metric 1', value: '100' },
