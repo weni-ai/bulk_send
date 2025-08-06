@@ -1,12 +1,14 @@
 <template>
   <section :class="`bulk-send-home-layout`">
     <slot class="bulk-send-home-layout__header" name="header" />
-    <div class="bulk-send-home-layout__divider"></div>
+    <BasicDivider />
     <slot class="bulk-send-home-layout__content" name="content" />
   </section>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import BasicDivider from '@/components/BasicDivider.vue';
+</script>
 
 <style scoped lang="scss">
 .bulk-send-home-layout {
