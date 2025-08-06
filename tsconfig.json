@@ -12,6 +12,7 @@
     }
   ],
   "compilerOptions": {
+    "outDir": "./dist",
     "types": ["@sentry/vue"],
     "typeRoots": ["./types"],
     "target": "es6",
