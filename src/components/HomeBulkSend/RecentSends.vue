@@ -22,26 +22,15 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import MissingRecentSends from '@/components/HomeBulkSend/MissingRecentSends.vue'
-import { ref, reactive } from 'vue'
+import { createDateRangeFromDaysAgo } from '@/utils/date'
+import { DEFAULT_DATE_RANGE_DAYS } from '@/constants/recentSends'
+import type { RecentSend, DateRange } from '@/types/recentSends'
 
-interface DateRange {
-  start: string
-  end: string
-}
-
-const formatDateWithTimezone = (date: Date) => {
-  const offset = date.getTimezoneOffset()
-  const tzDate = new Date(date.getTime() - (offset * 60 * 1000))
-  return tzDate.toISOString().split('T')[0]
-}
-
-const recentSendsData = reactive<unknown[]>([])
+const recentSendsData = ref<RecentSend[]>([])
 const search = ref('')
-const dateRange = ref<DateRange>({
-  start: formatDateWithTimezone(new Date(new Date().setDate(new Date().getDate() - 30))),
-  end: formatDateWithTimezone(new Date()),
-})
+const dateRange = ref<DateRange>(createDateRangeFromDaysAgo(DEFAULT_DATE_RANGE_DAYS))
 
 const handleSearchUpdate = (value: string) => {
   search.value = value
@@ -52,13 +41,14 @@ const handleDateRangeUpdate = (value: DateRange) => {
 }
 
 const handleStartNewSend = () => {
-  // for now just add a mocked data to the recentSendsData
-  recentSendsData.push({
-    id: recentSendsData.length + 1,
-    name: 'Send ' + (recentSendsData.length + 1),
+  // For now just add mocked data to the recentSendsData
+  const newSend: RecentSend = {
+    id: recentSendsData.value.length + 1,
+    name: `Send ${recentSendsData.value.length + 1}`,
     status: 'pending',
     createdAt: new Date(),
-  })
+  }
+  recentSendsData.value.push(newSend)
 }
 </script>
 
