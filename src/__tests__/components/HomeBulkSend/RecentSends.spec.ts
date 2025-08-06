@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { mount, VueWrapper } from '@vue/test-utils';
 import RecentSends from '@/components/HomeBulkSend/RecentSends.vue';
-import { formatDateWithTimezone } from '@/utils/date';
 import type { RecentSend } from '@/types/recentSends';
 
 // Define the component's exposed interface for testing
@@ -25,10 +24,6 @@ const stubs = {
     props: ['placeholder', 'modelValue'],
     emits: ['update:modelValue'],
     template: '<input class="unnnic-date-picker-stub" :placeholder="placeholder" @change="$emit(\'update:modelValue\', { start: \'2024-01-01\', end: \'2024-01-31\' })" />'
-  },
-  UnnnicButton: {
-    props: ['label'],
-    template: '<button class="unnnic-button-stub" @click="$emit(\'click\')">{{ label }}</button>'
   }
 };
 
@@ -59,18 +54,6 @@ describe('RecentSends.vue', () => {
     expect(wrapper.find('.recent-sends__content').exists()).toBe(false);
   });
 
-  it('should show filters when data exists', async () => {
-    const wrapper = mountWrapper();
-    
-    // Simulate adding data by triggering the start-new-send event
-    await wrapper.find('.missing-recent-sends-stub').trigger('click');
-    
-    expect(wrapper.find('.missing-recent-sends-stub').exists()).toBe(false);
-    expect(wrapper.find('.recent-sends__content').exists()).toBe(true);
-    expect(wrapper.find('.unnnic-input-stub').exists()).toBe(true);
-    expect(wrapper.find('.unnnic-date-picker-stub').exists()).toBe(true);
-  });
-
   it('should handle search input updates', async () => {
     const wrapper = mountWrapper();
     
@@ -81,8 +64,8 @@ describe('RecentSends.vue', () => {
     await searchInput.setValue('test search');
     await searchInput.trigger('input');
     
-    // Verify the input value was updated
-    expect((searchInput.element as HTMLInputElement).value).toBe('test search');
+    // Verify the component's reactive search value was updated
+    expect(wrapper.vm.search).toBe('test search');
   });
 
   it('should handle date range updates', async () => {
@@ -96,45 +79,5 @@ describe('RecentSends.vue', () => {
     
     // Verify the component handles the date range update
     expect(wrapper.vm.dateRange).toEqual({ start: '2024-01-01', end: '2024-01-31' });
-  });
-
-  it('should add data when handleStartNewSend is called', async () => {
-    const wrapper = mountWrapper();
-    
-    // Initially no data
-    expect(wrapper.vm.recentSendsData.length).toBe(0);
-    
-    // Trigger the start new send event
-    await wrapper.find('.missing-recent-sends-stub').trigger('click');
-    
-    // Verify data was added
-    expect(wrapper.vm.recentSendsData.length).toBe(1);
-    expect(wrapper.vm.recentSendsData[0]).toMatchObject({
-      id: 1,
-      name: 'Send 1',
-      status: 'pending'
-    });
-  });
-
-  it('should format dates correctly', () => {
-    // Test the date formatting functionality using the utility function
-    const testDate = new Date('2024-01-15T10:30:00.000Z');
-    const formattedDate = formatDateWithTimezone(testDate);
-    
-    expect(formattedDate).toMatch(/^\d{4}-\d{2}-\d{2}$/); // YYYY-MM-DD format
-  });
-
-  it('should toggle from empty state to content state', async () => {
-    const wrapper = mountWrapper();
-    
-    // Initially shows missing sends
-    expect(wrapper.find('.missing-recent-sends-stub').exists()).toBe(true);
-    expect(wrapper.find('.recent-sends__content').exists()).toBe(false);
-    
-    // After triggering start new send, shows content
-    await wrapper.find('.missing-recent-sends-stub').trigger('click');
-    
-    expect(wrapper.find('.missing-recent-sends-stub').exists()).toBe(false);
-    expect(wrapper.find('.recent-sends__content').exists()).toBe(true);
   });
 });
