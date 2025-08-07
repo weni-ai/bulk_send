@@ -1,32 +1,31 @@
 <template>
   <table class="metrics-table">
     <tr class="metrics-table__row" v-for="(row, rowIndex) in rows" :key="rowIndex">
-      <td class="metrics-table__row__cell" v-for="(cell, cellIndex) in row" :key="cellIndex">
-        <section class="metrics-table__row__cell__content">
-          <section class="metrics-table__row__cell__content__label-container">
-            <p class="metrics-table__row__cell__content__label-container__label">{{ cell.label }}</p>
-            <section
-              :class="['metrics-table__row__cell__content__label-container__tooltip', { 'tooltip-near': nearTooltip || cell.actions?.length }]">
+      <td class="metrics-table__cell" v-for="(cell, cellIndex) in row" :key="cellIndex">
+        <section class="metrics-table__cell-content">
+          <section class="metrics-table__label-container">
+            <p class="metrics-table__label">{{ cell.label }}</p>
+            <section :class="[`metrics-table__tooltip${nearTooltip || cell.actions?.length ? '--near' : ''}`]">
               <UnnnicToolTip v-if="cell.hint" :text="cell.hint" :side="tooltipSide(cellIndex)" :maxWidth="'300px'"
                 enabled>
                 <UnnnicIcon icon="info" scheme="neutral-cleanest" size="nano" filled />
               </UnnnicToolTip>
             </section>
-            <section class="metrics-table__row__cell__content__actions" v-if="cell.actions && cell.actions.length > 0">
-              <UnnnicDropdown class="metrics-table__row__cell__content__actions__dropdown">
+            <section class="metrics-table__actions" v-if="cell.actions && cell.actions.length > 0">
+              <UnnnicDropdown class="metrics-table__dropdown">
                 <template #trigger>
                   <UnnnicIcon icon="more_vert" size="ant" scheme="neutral-cloudy" />
                 </template>
 
-                <UnnnicDropdownItem class="metrics-table__row__cell__content__actions__dropdown__item"
-                  v-for="(action, index) in cell.actions" :key="index" @click="action.onClick">
+                <UnnnicDropdownItem class="metrics-table__dropdown-item" v-for="(action, index) in cell.actions"
+                  :key="index" @click="action.onClick">
                   <UnnnicIcon :icon="action.icon" size="sm" scheme="neutral-dark" />
-                  <p class="metrics-table__row__cell__content__actions__dropdown__item__label">{{ action.label }}</p>
+                  <p class="metrics-table__dropdown-label">{{ action.label }}</p>
                 </UnnnicDropdownItem>
               </UnnnicDropdown>
             </section>
           </section>
-          <p class="metrics-table__row__cell__content__value">{{ cell.value }}</p>
+          <p class="metrics-table__value">{{ cell.value }}</p>
         </section>
       </td>
     </tr>
@@ -100,81 +99,76 @@ const tooltipSide = (cellIndex: number) => {
   border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
   border-radius: $unnnic-border-radius-md;
 
-  &__row {
-    &__cell {
-      border-right: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
-      border-bottom: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
-      padding: $unnnic-spacing-md;
-
-      &:last-child {
-        border-right: none;
-      }
-
-      &__content {
-        display: flex;
-        flex-direction: column;
-        gap: $unnnic-spacing-xs;
-
-        &__label-container {
-          display: flex;
-          gap: $unnnic-spacing-xs;
-
-          &__label {
-            overflow: hidden;
-            color: $unnnic-color-neutral-darkest;
-            text-overflow: ellipsis;
-
-            font-size: $unnnic-font-size-body-lg;
-            line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
-          }
-
-          &__tooltip {
-            display: flex;
-            align-items: end;
-            justify-content: center;
-            margin-left: auto;
-
-            cursor: default;
-          }
-
-          &__tooltip-near {
-            margin-left: unset;
-          }
-
-          &__actions {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-left: auto;
-
-            cursor: pointer;
-
-            &__dropdown {
-              &__item {
-                display: flex;
-                width: max-content;
-                gap: $unnnic-spacing-xs;
-                align-items: center;
-              }
-            }
-          }
-        }
-
-        &__value {
-          color: $unnnic-color-neutral-black;
-
-          font-size: $unnnic-font-size-title-md;
-          line-height: $unnnic-font-size-title-md + $unnnic-line-height-md;
-          font-weight: $unnnic-font-weight-bold;
-        }
-      }
+  &__row:last-child {
+    .metrics-table__cell {
+      border-bottom: none;
     }
+  }
+
+  &__cell {
+    border-right: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+    border-bottom: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+    padding: $unnnic-spacing-md;
 
     &:last-child {
-      .metrics-table__row__cell {
-        border-bottom: none;
-      }
+      border-right: none;
     }
+  }
+
+  &__cell-content {
+    display: flex;
+    flex-direction: column;
+    gap: $unnnic-spacing-xs;
+  }
+
+  &__label-container {
+    display: flex;
+    gap: $unnnic-spacing-xs;
+  }
+
+  &__label {
+    overflow: hidden;
+    color: $unnnic-color-neutral-darkest;
+    text-overflow: ellipsis;
+
+    font-size: $unnnic-font-size-body-lg;
+    line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
+  }
+
+  &__tooltip {
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    margin-left: auto;
+    cursor: default;
+
+    &--near {
+      margin-left: unset;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+
+    cursor: pointer;
+  }
+
+  &__dropdown-item {
+    display: flex;
+    width: max-content;
+    gap: $unnnic-spacing-xs;
+    align-items: center;
+  }
+
+  &__value {
+    color: $unnnic-color-neutral-black;
+
+    font-size: $unnnic-font-size-title-md;
+    line-height: $unnnic-font-size-title-md + $unnnic-line-height-md;
+    font-weight: $unnnic-font-weight-bold;
   }
 }
 </style>
