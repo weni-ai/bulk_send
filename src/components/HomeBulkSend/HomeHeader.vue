@@ -1,9 +1,9 @@
 <template>
   <header class="header">
-    <div class="header__content">
+    <section class="header__content">
       <h1 class="header__title">{{ $t('home.title') }}</h1>
       <p class="header__description">{{ $t('home.description') }}</p>
-    </div>
+    </section>
 
     <UnnnicButton :text="$t('home.new_send')" type="primary" iconLeft="add-1" />
   </header>
