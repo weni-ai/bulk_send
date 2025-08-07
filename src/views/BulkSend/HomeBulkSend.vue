@@ -5,7 +5,7 @@
     </template>
     <template #content>
       <section class="home-bulk-send__general-performance">
-        <h2 class="home-bulk-send__general-performance__title">
+        <h2 class="home-bulk-send__general-performance-title">
           {{ $t('home.general_performance') }}
         </h2>
         <MetricsTable :data="generalPerformanceData" :maxColumns="3" />
@@ -104,7 +104,7 @@ const handleStartNewSend = () => {
     flex-direction: column;
     gap: $unnnic-spacing-md;
 
-    &__title {
+    &-title {
       color: $unnnic-color-neutral-darkest;
       font-size: $unnnic-font-size-body-lg;
       font-weight: $unnnic-font-weight-bold;
