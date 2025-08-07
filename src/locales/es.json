@@ -4,12 +4,16 @@
     "description": "Envía mensajes de marketing masivos a tus contactos",
     "new_send": "Nuevo envío",
     "mmlite-disclaimer": "Cambia a la API Lite de MM ahora para acelerar tu crecimiento y obtener control total sobre la entrega. <button class=\"highlight\">Ver más</button>",
-    "recent_sends": "Envíos recientes",
     "general_performance": "Desempeño general (Últimos 30 días)",
     "no_recent_sends": {
       "title": "Comienza a enviar mensajes personalizados a tus contactos a gran escala",
       "subtitle": "Toma menos de 2 minutos para configurar tu primer envío.",
       "button": "Comenzar ahora"
+    },
+    "recent_sends": {
+      "title": "Envíos recientes",
+      "search_placeholder": "Buscar envío",
+      "date_placeholder": "Últimos 30 días"
     }
   }
 }
