@@ -1,11 +1,12 @@
 <template>
   <table class="metrics-table">
     <tr class="metrics-table__row" v-for="(row, rowIndex) in rows" :key="rowIndex">
-      <td class="metrics-table__cell" v-for="(cell, cellIndex) in row" :key="cellIndex">
-        <section class="metrics-table__cell-content">
+      <td :class="`metrics-table__cell metrics-table__cell${sizeModifier}`" v-for="(cell, cellIndex) in row"
+        :key="cellIndex">
+        <section :class="`metrics-table__cell-content metrics-table__cell-content${sizeModifier}`">
           <section class="metrics-table__label-container">
-            <p class="metrics-table__label">{{ cell.label }}</p>
-            <section :class="[`metrics-table__tooltip${nearTooltip || cell.actions?.length ? '--near' : ''}`]">
+            <p :class="`metrics-table__label metrics-table__label${sizeModifier}`">{{ cell.label }}</p>
+            <section :class="[`metrics-table__tooltip${cellNearModifier(cell)}`]">
               <UnnnicToolTip v-if="cell.hint" :text="cell.hint" :side="tooltipSide(cellIndex)" :maxWidth="'300px'"
                 enabled>
                 <UnnnicIcon icon="info" scheme="neutral-cleanest" size="nano" filled />
@@ -25,7 +26,15 @@
               </UnnnicDropdown>
             </section>
           </section>
-          <p class="metrics-table__value">{{ cell.value }}</p>
+          <section :class="`metrics-table__values-container metrics-table__values-container${sizeModifier}`">
+            <p :class="`metrics-table__value metrics-table__value${sizeModifier}`">
+              {{ cell.value }}
+            </p>
+
+            <p v-if="cell.subValue" :class="`metrics-table__sub-value metrics-table__sub-value${sizeModifier}`">
+              {{ cell.subValue }}
+            </p>
+          </section>
         </section>
       </td>
     </tr>
@@ -38,6 +47,7 @@ import { computed } from 'vue'
 interface MetricsTableItem {
   label: string
   value: string
+  subValue?: string
   hint?: string
   actions?: Array<{
     label: string
@@ -66,6 +76,14 @@ const props = defineProps({
   },
 })
 
+const sizeModifier = computed(() => {
+  return props.size === 'sm' ? '--sm' : ''
+})
+
+const cellNearModifier = (cell: MetricsTableItem): string => {
+  return props.nearTooltip || cell.actions?.length ? '--near' : ''
+}
+
 const rows = computed(() => {
   return props.data.reduce((acc, item, index) => {
     if (index % props.maxColumns === 0) {
@@ -78,6 +96,10 @@ const rows = computed(() => {
 })
 
 const tooltipSide = (cellIndex: number) => {
+  if (props.nearTooltip) {
+    return 'top'
+  }
+
   if (cellIndex % props.maxColumns === 0) {
     return 'right'
   }
@@ -113,12 +135,20 @@ const tooltipSide = (cellIndex: number) => {
     &:last-child {
       border-right: none;
     }
+
+    &--sm {
+      padding: $unnnic-spacing-sm;
+    }
   }
 
   &__cell-content {
     display: flex;
     flex-direction: column;
     gap: $unnnic-spacing-xs;
+
+    &--sm {
+      gap: $unnnic-spacing-nano;
+    }
   }
 
   &__label-container {
@@ -133,6 +163,11 @@ const tooltipSide = (cellIndex: number) => {
 
     font-size: $unnnic-font-size-body-lg;
     line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
+
+    &--sm {
+      font-size: $unnnic-font-size-body-md;
+      line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
+    }
   }
 
   &__tooltip {
@@ -163,12 +198,47 @@ const tooltipSide = (cellIndex: number) => {
     align-items: center;
   }
 
+  &__values-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
   &__value {
     color: $unnnic-color-neutral-black;
 
     font-size: $unnnic-font-size-title-md;
     line-height: $unnnic-font-size-title-md + $unnnic-line-height-md;
     font-weight: $unnnic-font-weight-bold;
+
+    &--sm {
+      font-size: $unnnic-font-size-body-lg;
+      line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
+    }
+  }
+
+  &__sub-value {
+    display: flex;
+    align-items: center;
+
+    color: $unnnic-color-neutral-cloudy;
+
+    font-size: $unnnic-font-size-body-gt;
+    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+
+    &--sm {
+      font-size: $unnnic-font-size-body-md;
+      line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
+    }
+
+    &::before {
+      content: '';
+      display: block;
+      width: $unnnic-border-width-thinner;
+      height: $unnnic-font-size-body-md + $unnnic-line-height-md;
+      background-color: $unnnic-color-neutral-soft;
+      margin: 0 $unnnic-spacing-xs;
+    }
   }
 }
 </style>
