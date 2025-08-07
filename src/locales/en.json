@@ -2,6 +2,7 @@
   "home": {
     "title": "Bulk Send",
     "description": "Send bulk marketing messages to your contacts",
-    "new_send": "New Send"
+    "new_send": "New Send",
+    "mmlite-disclaimer": "Switch to MM Lite API now to accelerate your growth and gain full delivery control. <button class=\"highlight\">See more</button>"
   }
 }
