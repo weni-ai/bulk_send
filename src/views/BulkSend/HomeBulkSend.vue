@@ -5,7 +5,7 @@
     </template>
     <template #content>
       <section class="home-bulk-send__general-performance">
-        <h2 class="home-bulk-send__general-performance__title">
+        <h2 class="home-bulk-send__general-performance-title">
           {{ $t('home.general_performance') }}
         </h2>
         <MetricsTable :data="generalPerformanceData" :maxColumns="3" />
@@ -83,7 +83,7 @@ const handleMMLiteDisclaimerClick = () => {
     flex-direction: column;
     gap: $unnnic-spacing-md;
 
-    &__title {
+    &-title {
       color: $unnnic-color-neutral-darkest;
       font-size: $unnnic-font-size-body-lg;
       font-weight: $unnnic-font-weight-bold;
@@ -95,11 +95,18 @@ const handleMMLiteDisclaimerClick = () => {
     margin-top: $unnnic-spacing-md;
     display: flex;
     flex-direction: row;
+    font-size: $unnnic-font-size-body-sm;
+    line-height: $unnnic-font-size-body-sm + $unnnic-line-height-md;
 
     :deep(.highlight) {
       text-decoration: underline;
       font-weight: $unnnic-font-weight-bold;
       cursor: pointer;
+
+      border: none;
+      background: none;
+      color: $unnnic-color-neutral-dark;
+      padding: 0;
     }
   }
 }
