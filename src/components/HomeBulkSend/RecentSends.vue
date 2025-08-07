@@ -8,14 +8,13 @@
       @start-new-send="handleStartNewSend" />
 
     <section v-else class="recent-sends__content">
-      <section class="recent-sends__content__filters">
-        <UnnnicInput class="recent-sends__content__filters__search" icon-left="search-1"
+      <section class="recent-sends__filters">
+        <UnnnicInput class="recent-sends__search" icon-left="search-1"
           :placeholder="$t('home.recent_sends.search_placeholder')" :model-value="search"
           @update:model-value="handleSearchUpdate" />
 
-        <UnnnicInputDatePicker class="recent-sends__content__filters__date-range"
-          :placeholder="$t('home.recent_sends.date_placeholder')" :model-value="dateRange"
-          @update:model-value="handleDateRangeUpdate" />
+        <UnnnicInputDatePicker class="recent-sends__date-range" :placeholder="$t('home.recent_sends.date_placeholder')"
+          position="right" :model-value="dateRange" @update:model-value="handleDateRangeUpdate" />
       </section>
     </section>
   </section>
@@ -75,23 +74,24 @@ const handleStartNewSend = () => {
     flex-direction: column;
     gap: $unnnic-spacing-md;
     height: 100%;
+  }
 
-    &__filters {
-      display: flex;
-      gap: $unnnic-spacing-sm;
+  &__filters {
+    display: flex;
+    gap: $unnnic-spacing-sm;
+  }
 
-      &__search {
-        flex: 5;
-      }
+  &__search {
+    flex: 5;
+  }
 
-      &__date-range {
-        flex: 1;
+  &__date-range {
+    flex: 1;
 
-        :deep(.unnnic-form) {
-          width: 100%;
-        }
-      }
+    :deep(.unnnic-form) {
+      width: 100%;
     }
   }
+
 }
 </style>
