@@ -12,11 +12,11 @@
       <BasicDivider />
 
       <section class="home-bulk-send__recent-sends">
-        <h2 class="home-bulk-send__recent-sends__title">
+        <h2 class="home-bulk-send__recent-sends-title">
           {{ $t('home.recent_sends') }}
         </h2>
 
-        <MissingRecentSends v-if="!recentSendsData.length" class="home-bulk-send__recent-sends__missing-recent-sends"
+        <MissingRecentSends v-if="!recentSendsData.length" class="home-bulk-send__missing-recent-sends"
           @start-new-send="handleStartNewSend" />
       </section>
     </template>
@@ -112,16 +112,16 @@ const handleStartNewSend = () => {
     gap: $unnnic-spacing-md;
     height: 100%;
 
-    &__title {
+    &-title {
       color: $unnnic-color-neutral-darkest;
       font-size: $unnnic-font-size-body-lg;
       font-weight: $unnnic-font-weight-bold;
       line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
     }
+  }
 
-    &__missing-recent-sends {
-      height: 100%;
-    }
+  &__missing-recent-sends {
+    height: 100%;
   }
 }
 </style>
