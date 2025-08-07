@@ -10,6 +10,15 @@
         :text="$t('home.mmlite-disclaimer')" @click="handleMMLiteDisclaimerClick" />
 
       <BasicDivider />
+
+      <section class="home-bulk-send__recent-sends">
+        <h2 class="home-bulk-send__recent-sends-title">
+          {{ $t('home.recent_sends') }}
+        </h2>
+
+        <MissingRecentSends v-if="!recentSendsData.length" class="home-bulk-send__missing-recent-sends"
+          @start-new-send="handleStartNewSend" />
+      </section>
     </template>
   </BulkSendHomeLayout>
 </template>
@@ -19,6 +28,7 @@ import BulkSendHomeLayout from '@/layouts/BulkSend/BulkSendHomeLayout.vue'
 import HomeHeader from '@/components/HomeBulkSend/HomeHeader.vue'
 import MetricsTable from '@/components/MetricsTable.vue'
 import BasicDivider from '@/components/BasicDivider.vue'
+import MissingRecentSends from '@/components/HomeBulkSend/MissingRecentSends.vue'
 
 const generalPerformanceData = [
   {
@@ -62,13 +72,28 @@ const generalPerformanceData = [
   },
 ]
 
+const recentSendsData: unknown[] = []
+
 const handleMMLiteDisclaimerClick = () => {
   console.log('handleMMLiteDisclaimerClick')
+}
+
+const handleStartNewSend = () => {
+  // for now just add a mocked data to the recentSendsData
+  recentSendsData.push({
+    id: recentSendsData.length + 1,
+    name: 'Send ' + (recentSendsData.length + 1),
+    status: 'pending',
+    createdAt: new Date(),
+  })
 }
 </script>
 
 <style lang="scss" scoped>
 .home-bulk-send {
+  display: flex;
+  flex-direction: column;
+
   &__mmlite-disclaimer {
     margin-top: $unnnic-spacing-md;
     display: flex;
@@ -86,6 +111,24 @@ const handleMMLiteDisclaimerClick = () => {
       color: $unnnic-color-neutral-dark;
       padding: 0;
     }
+  }
+
+  &__recent-sends {
+    display: flex;
+    flex-direction: column;
+    gap: $unnnic-spacing-md;
+    height: 100%;
+
+    &-title {
+      color: $unnnic-color-neutral-darkest;
+      font-size: $unnnic-font-size-body-lg;
+      font-weight: $unnnic-font-weight-bold;
+      line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
+    }
+  }
+
+  &__missing-recent-sends {
+    height: 100%;
   }
 }
 </style>
