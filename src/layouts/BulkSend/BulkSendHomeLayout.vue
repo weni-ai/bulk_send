@@ -1,7 +1,8 @@
 <template>
   <section :class="`bulk-send-home-layout`">
-    <slot class="bulk-send-home-layout__header" name="header" />
-    <div class="bulk-send-home-layout__divider"></div>
+    <section class="bulk-send-home-layout__header">
+      <slot name="header" />
+    </section>
     <slot class="bulk-send-home-layout__content" name="content" />
   </section>
 </template>
@@ -13,7 +14,10 @@
   height: 100%;
   padding: $unnnic-spacing-sm;
 
-  &__divider {
+  &__header::after {
+    content: '';
+    display: block;
+    width: 100%;
     height: $unnnic-border-width-thinner;
     background-color: $unnnic-color-neutral-soft;
     margin: $unnnic-spacing-md 0;
