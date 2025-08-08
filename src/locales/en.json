@@ -12,7 +12,15 @@
     "recent_sends": {
       "title": "Recent Sends",
       "search_placeholder": "Search send",
-      "date_placeholder": "Last 30 days"
+      "date_placeholder": "Last 30 days",
+      "info": {
+        "title": "Information",
+        "started_on": "Started on:",
+        "ended_on": "Ended on:",
+        "template_name": "Template:",
+        "groups": "Contact group:",
+        "sent_by": "Sent by:"
+      }
     }
   }
 }

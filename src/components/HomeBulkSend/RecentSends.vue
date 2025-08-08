@@ -41,13 +41,28 @@ const handleDateRangeUpdate = (value: DateRange) => {
 
 const handleStartNewSend = () => {
   // For now just add mocked data to the recentSendsData
-  const newSend: RecentSend = {
-    id: recentSendsData.value.length + 1,
-    name: `Send ${recentSendsData.value.length + 1}`,
+  const newSends = Array.from({ length: 10 }, (_, index) => ({
+    id: recentSendsData.value.length + index + 1,
+    name: `Send ${recentSendsData.value.length + index + 1}`,
     status: 'pending',
     createdAt: new Date(),
-  }
-  recentSendsData.value.push(newSend)
+    endedAt: new Date(),
+    template: {
+      name: `Template ${recentSendsData.value.length + index + 1}`,
+    },
+    groups: ['Group 1', 'Group 2'],
+    createdBy: 'john.doe@email.com',
+    metrics: {
+      sent: 100000,
+      delivered: 90500,
+      read: 80000,
+      clicked: 20000,
+      failed: 1500,
+      estimatedCost: "R$ 25.000,00",
+    },
+  }))
+
+  recentSendsData.value.push(...newSends)
 }
 </script>
 

@@ -13,7 +13,15 @@
     "recent_sends": {
       "title": "Envíos recientes",
       "search_placeholder": "Buscar envío",
-      "date_placeholder": "Últimos 30 días"
+      "date_placeholder": "Últimos 30 días",
+      "info": {
+        "title": "Información",
+        "started_on": "Iniciado el:",
+        "ended_on": "Finalizado el:",
+        "template_name": "Plantilla:",
+        "groups": "Grupo de contactos:",
+        "sent_by": "Enviado por:"
+      }
     }
   }
 }
