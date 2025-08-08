@@ -128,6 +128,7 @@ const handleViewTemplate = () => {
     display: flex;
     flex-direction: row;
     gap: $unnnic-spacing-nano;
+    white-space: nowrap;
   }
 
   &__started-on::after {
