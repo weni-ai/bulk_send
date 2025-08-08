@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { mount, VueWrapper } from '@vue/test-utils'
 import SendElementInfo from '@/components/HomeBulkSend/SendElementInfo.vue'
 import type { RecentSend } from '@/types/recentSends'
@@ -43,5 +43,13 @@ describe('SendElementInfo.vue', () => {
     expect(wrapper.text()).toContain('Template A')
     expect(wrapper.text()).toContain('Group 1, Group 2')
     expect(wrapper.text()).toContain('Alice')
+  })
+
+  it('handles view template button', () => {
+    const wrapper = mountWrapper({ send: mockSend })
+
+    const consoleSpy = vi.spyOn(console, 'log')
+    wrapper.find('.send-element-info__view-template').trigger('click')
+    expect(consoleSpy).toHaveBeenCalledWith('view template')
   })
 })
