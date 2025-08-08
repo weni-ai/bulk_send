@@ -13,6 +13,36 @@
       "title": "Recent Sends",
       "search_placeholder": "Search send",
       "date_placeholder": "Last 30 days",
+      "metrics": {
+        "sent": {
+          "label": "Sent",
+          "hint": "Mock hint"
+        },
+        "delivered": {
+          "label": "Delivered",
+          "hint": "Mock hint"
+        },
+        "estimated_cost": {
+          "label": "Estimated cost",
+          "hint": "Mock hint"
+        },
+        "read": {
+          "label": "Read",
+          "hint": "Mock hint"
+        },
+        "clicked": {
+          "label": "Clicks",
+          "hint": "Mock hint"
+        },
+        "failed": {
+          "label": "Failed",
+          "hint": "Mock hint"
+        },
+        "actions": {
+          "add_to_a_new_group": "Add to a new group",
+          "view_template": "View template"
+        }
+      },
       "info": {
         "title": "Information",
         "started_on": "Started on:",

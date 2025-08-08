@@ -196,6 +196,10 @@ const tooltipSide = (cellIndex: number) => {
     cursor: pointer;
   }
 
+  &__dropdown {
+    height: 20px; // fixed height to match the design
+  }
+
   &__dropdown-item {
     display: flex;
     width: max-content;
