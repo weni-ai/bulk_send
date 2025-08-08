@@ -3,7 +3,6 @@ import { mount, VueWrapper } from '@vue/test-utils'
 import SendElement from '@/components/HomeBulkSend/SendElement.vue'
 import type { RecentSend } from '@/types/recentSends'
 
-// Mock i18n composable used inside the component
 vi.mock('vue-i18n', () => ({
   useI18n: () => ({ t: (key: string) => key }),
 }))
@@ -16,7 +15,6 @@ const stubs = {
     props: ['text'],
     template: '<div class="unnnic-tag-stub" :class="$attrs.class">{{ text }}</div>',
   },
-  // Keep these simple; we only verify props are wired
   MetricsTable: {
     name: 'MetricsTable',
     props: ['data', 'maxColumns'],
