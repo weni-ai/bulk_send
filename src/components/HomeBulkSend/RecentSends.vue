@@ -16,6 +16,8 @@
         <UnnnicInputDatePicker class="recent-sends__date-range" :placeholder="$t('home.recent_sends.date_placeholder')"
           position="right" :model-value="dateRange" @update:model-value="handleDateRangeUpdate" />
       </section>
+
+      <RecentSendsList :recent-sends="recentSendsData" />
     </section>
   </section>
 </template>
@@ -23,6 +25,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import MissingRecentSends from '@/components/HomeBulkSend/MissingRecentSends.vue'
+import RecentSendsList from '@/components/HomeBulkSend/RecentSendsList.vue'
 import { createDateRangeFromDaysAgo } from '@/utils/date'
 import { DEFAULT_DATE_RANGE_DAYS } from '@/constants/recentSends'
 import type { RecentSend, DateRange } from '@/types/recentSends'
@@ -44,9 +47,9 @@ const handleStartNewSend = () => {
   const newSends = Array.from({ length: 10 }, (_, index) => ({
     id: recentSendsData.value.length + index + 1,
     name: `Send ${recentSendsData.value.length + index + 1}`,
-    status: 'pending',
+    status: index % 2 === 0 ? 'In progress' : 'Finished',
     createdAt: new Date(),
-    endedAt: new Date(),
+    endedAt: new Date(new Date().getTime() + 1000 * 60 * 60 * 24),
     template: {
       name: `Template ${recentSendsData.value.length + index + 1}`,
     },

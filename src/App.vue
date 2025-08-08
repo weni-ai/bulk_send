@@ -1,3 +1,9 @@
+<template>
+  <div id="app" :class="`app-bulk_send-${!sharedStore ? 'dev' : 'prod'}`">
+    <router-view />
+  </div>
+</template>
+
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { safeImport, isFederatedModule } from '@/utils/moduleFederation'
@@ -37,12 +43,6 @@ const updateTokenAndProject = () => {
 }
 </script>
 
-<template>
-  <div id="app" :class="`app-bulk_send-${!sharedStore ? 'dev' : 'prod'}`">
-    <router-view />
-  </div>
-</template>
-
 <style lang="scss" scoped>
 .app-bulk_send-prod {
   height: 100%;
@@ -50,7 +50,6 @@ const updateTokenAndProject = () => {
 }
 
 .app-bulk_send-dev {
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
 }
 </style>
