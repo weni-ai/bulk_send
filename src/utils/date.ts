@@ -2,15 +2,18 @@
  * Date utility functions
  */
 
+import { format } from 'date-fns'
+
 /**
- * Formats a date to YYYY-MM-DD format considering timezone offset
+ * Formats a date to desired format considering timezone offset
  * @param date - The date to format
- * @returns Formatted date string in YYYY-MM-DD format
+ * @param formatStr  - The format to use for formatting (e.g. 'dd/MM/yyyy', 'MM/dd/yyyy', 'yyyy-MM-dd')
+ * @returns Formatted date string in desired format
  */
-export const formatDateWithTimezone = (date: Date): string => {
+export const formatDateWithTimezone = (date: Date, formatStr: string): string => {
   const offset = date.getTimezoneOffset()
-  const tzDate = new Date(date.getTime() - (offset * 60 * 1000))
-  return tzDate.toISOString().split('T')[0]
+  const tzDate = new Date(date.getTime() - offset * 60 * 1000)
+  return format(tzDate, formatStr)
 }
 
 /**
@@ -27,9 +30,9 @@ export const getDateDaysAgo = (daysAgo: number): Date => {
 /**
  * Creates a date range from N days ago to today
  * @param daysAgo - Number of days to go back from today
- * @returns Object with start and end date strings in YYYY-MM-DD format
+ * @returns Object with start and end date strings in yyyy-MM-dd format
  */
 export const createDateRangeFromDaysAgo = (daysAgo: number) => ({
-  start: formatDateWithTimezone(getDateDaysAgo(daysAgo)),
-  end: formatDateWithTimezone(new Date()),
+  start: formatDateWithTimezone(getDateDaysAgo(daysAgo), 'yyyy-MM-dd'),
+  end: formatDateWithTimezone(new Date(), 'yyyy-MM-dd'),
 })

@@ -21,6 +21,7 @@
     "@rspack/core": "^1.4.10",
     "@sentry/vue": "^9.44.2",
     "@weni/unnnic-system": "^2.36.0",
+    "date-fns": "^4.1.0",
     "dotenv": "^17.2.1",
     "html-rspack-plugin": "^6.1.2",
     "pinia": "^3.0.3",
