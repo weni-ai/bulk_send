@@ -154,6 +154,7 @@ const tooltipSide = (cellIndex: number) => {
   &__label-container {
     display: flex;
     gap: $unnnic-spacing-xs;
+    align-items: center;
 
     &--sm {
       gap: $unnnic-spacing-nano;
@@ -176,7 +177,7 @@ const tooltipSide = (cellIndex: number) => {
 
   &__tooltip {
     display: flex;
-    align-items: end;
+    align-self: end;
     justify-content: center;
     margin-left: auto;
     cursor: default;
