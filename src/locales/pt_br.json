@@ -13,7 +13,15 @@
     "recent_sends": {
       "title": "Disparos recentes",
       "search_placeholder": "Pesquisar disparo",
-      "date_placeholder": "Últimos 30 dias"
+      "date_placeholder": "Últimos 30 dias",
+      "info": {
+        "title": "Informações",
+        "started_on": "Iniciado em:",
+        "ended_on": "Finalizado em:",
+        "template_name": "Modelo:",
+        "groups": "Grupo de contatos:",
+        "sent_by": "Enviado por:"
+      }
     }
   }
 }
