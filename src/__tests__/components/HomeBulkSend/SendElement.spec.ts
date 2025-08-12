@@ -18,10 +18,16 @@ const stubs = {
   MetricsTable: {
     name: 'MetricsTable',
     props: ['data', 'maxColumns'],
-    template: '<div class="metrics-table-stub">Metrics: {{ data?.length }}</div>',
+    template:
+      '<div class="metrics-table-stub">Metrics: {{ data?.length }}<button class="metrics-action-clicked" @click="data && data[4] && data[4].actions && data[4].actions[0] && data[4].actions[0].onClick()">open clicked modal</button></div>',
   },
   SendElementInfo: {
     template: '<div class="send-element-info-stub" />',
+  },
+  NewContactGroupModal: {
+    name: 'NewContactGroupModal',
+    props: ['modelValue', 'contactCount', 'category', 'broadcastName'],
+    template: '<div class="new-contact-group-modal-stub"></div>',
   },
 }
 
@@ -91,5 +97,19 @@ describe('SendElement.vue', () => {
     // Failed percentage
     expect(data[5].value).toBe('10%')
     expect(data[5].subValue).toBe('1')
+  })
+
+  it('opens NewContactGroup modal when clicked metric action is triggered', async () => {
+    const wrapper = mountWrapper()
+
+    // Trigger the action provided by the clicked metric
+    await wrapper.find('.metrics-action-clicked').trigger('click')
+
+    const modal = wrapper.findComponent({ name: 'NewContactGroupModal' })
+    expect(modal.exists()).toBe(true)
+    expect(modal.props('modelValue')).toBe(true)
+    expect(modal.props('contactCount')).toBe('10')
+    expect(modal.props('category')).toBe('home.recent_sends.metrics.clicked.category')
+    expect(modal.props('broadcastName')).toBe('Test Send')
   })
 })
