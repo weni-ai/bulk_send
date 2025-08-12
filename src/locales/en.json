@@ -32,11 +32,13 @@
         },
         "clicked": {
           "label": "Clicks",
-          "hint": "Mock hint"
+          "hint": "Mock hint",
+          "category": "Clicked"
         },
         "failed": {
           "label": "Failed",
-          "hint": "Mock hint"
+          "hint": "Mock hint",
+          "category": "Failed"
         },
         "actions": {
           "add_to_a_new_group": "Add to a new group",
@@ -50,6 +52,17 @@
         "template_name": "Template:",
         "groups": "Contact group:",
         "sent_by": "Sent by:"
+      }
+    }
+  },
+  "modals": {
+    "new_contact_group": {
+      "disclaimer": "This group will contain {contactCount} contacts from the {category} results of {broadcastName} campaign.",
+      "title": "New contact group",
+      "name": "Group name",
+      "buttons": {
+        "primary": "Create group",
+        "secondary": "Cancel"
       }
     }
   }
