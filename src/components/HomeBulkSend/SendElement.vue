@@ -16,15 +16,20 @@
       <SendElementInfo class="send-element__info" :send="send" />
       <MetricsTable class="send-element__metrics" :data="sendMetrics" :maxColumns="3" size="sm" near-tooltip />
     </section>
+
+    <NewContactGroupModal v-if="showNewGroupModal" :model-value="showNewGroupModal"
+      @update:model-value="handleUpdateShowNewGroupModal" :contact-count="send.metrics.sent.toLocaleString()"
+      :category="modalCategory" :broadcast-name="modalBroadcastName" />
   </UnnnicCollapse>
 </template>
 
 <script setup lang="ts">
 import MetricsTable from '@/components/MetricsTable.vue';
 import SendElementInfo from '@/components/HomeBulkSend/SendElementInfo.vue';
+import NewContactGroupModal from '@/components/modals/NewContactGroup.vue';
 import type { RecentSend } from '@/types/recentSends';
 import { formatDateWithTimezone } from '@/utils/date';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 
@@ -42,6 +47,20 @@ const tagScheme = computed(() => {
 const date = computed(() => {
   return formatDateWithTimezone(props.send.createdAt, 'dd/MM/yyyy')
 })
+
+const showNewGroupModal = ref(false)
+const modalCategory = ref('')
+const modalBroadcastName = ref('')
+
+const displayNewGroupModal = (category: string, broadcastName: string) => {
+  modalCategory.value = category
+  modalBroadcastName.value = broadcastName
+  showNewGroupModal.value = true
+}
+
+const handleUpdateShowNewGroupModal = (value: boolean) => {
+  showNewGroupModal.value = value
+}
 
 const sendMetrics = computed(() => {
   // TODO: update hints when design is ready
@@ -78,7 +97,7 @@ const sendMetrics = computed(() => {
           label: t('home.recent_sends.metrics.actions.add_to_a_new_group'),
           icon: 'add',
           onClick: () => {
-            console.log('Add to a new group', props.send.id)
+            displayNewGroupModal(t('home.recent_sends.metrics.clicked.category'), props.send.name)
           },
         },
       ],
@@ -93,7 +112,7 @@ const sendMetrics = computed(() => {
           label: t('home.recent_sends.metrics.actions.add_to_a_new_group'),
           icon: 'add',
           onClick: () => {
-            console.log('Add to a new group', props.send.id)
+            displayNewGroupModal(t('home.recent_sends.metrics.failed.category'), props.send.name)
           },
         },
       ],
