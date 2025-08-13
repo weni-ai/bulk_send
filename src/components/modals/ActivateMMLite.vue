@@ -120,16 +120,16 @@ const activateMMLite = () => {
             },
             seconds: 5,
           })
-          return
+        } else {
+          unnnic.unnnicCallAlert({
+            props: {
+              text: t('modals.activate_mmlite.error_alert'),
+              type: 'error',
+            },
+            seconds: 10,
+          })
         }
-
-        unnnic.unnnicCallAlert({
-          props: {
-            text: t('modals.activate_mmlite.error_alert'),
-            type: 'error',
-          },
-          seconds: 10,
-        })
+        emit('update:modelValue', false)
       },
       {
         config_id: configId,
