@@ -87,7 +87,9 @@
       "footer": {
         "text": "ℹ️ Information provided by Meta. See {0} for full details and updates.",
         "link": "Meta documentation"
-      }
+      },
+      "success_alert": "Successfully requested MM Lite API activation",
+      "error_alert": "Error requesting MM Lite activation"
     }
   }
 }

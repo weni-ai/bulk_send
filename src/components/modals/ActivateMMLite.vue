@@ -2,10 +2,11 @@
   <UnnnicModalDialog
     :model-value="modelValue"
     @update:model-value="handleUpdateModelValue"
-    @primaryButtonClick="handlePrimaryButtonClick"
+    @primaryButtonClick="activateMMLite"
     @secondaryButtonClick="handleSecondaryButtonClick"
     :primary-button-props="{
       text: $t('modals.activate_mmlite.buttons.primary'),
+      loading: isMMLiteLoading,
     }"
     :secondary-button-props="{
       text: $t('modals.activate_mmlite.buttons.secondary'),
@@ -73,9 +74,19 @@
 </template>
 
 <script setup lang="ts">
+// @ts-expect-error - unnnic does not yet have types
+import unnnic from '@weni/unnnic-system'
+import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { initFacebookSdk } from '@/utils/plugins/fb'
+import env from '@/utils/env'
+const { t } = useI18n()
+
 defineProps<{
   modelValue: boolean
 }>()
+
+const isMMLiteLoading = ref(false)
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: boolean): void
@@ -85,12 +96,51 @@ const handleUpdateModelValue = (value: boolean) => {
   emit('update:modelValue', value)
 }
 
-const handlePrimaryButtonClick = () => {
-  console.log('primary button clicked')
-}
-
 const handleSecondaryButtonClick = () => {
   emit('update:modelValue', false)
+}
+
+const activateMMLite = () => {
+  const fbAppId = env('WHATSAPP_FACEBOOK_APP_ID')
+  const configId = env('WHATSAPP_MMLITE_CONFIG_ID')
+
+  const callback = () => {
+    isMMLiteLoading.value = true
+
+    // @ts-expect-error - FB is not defined in the editor but will be defined since is a callback after initFacebookSdk
+    FB.login(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      function (response: any) {
+        isMMLiteLoading.value = false
+        if (response.authResponse) {
+          unnnic.unnnicCallAlert({
+            props: {
+              text: t('modals.activate_mmlite.success_alert'),
+              type: 'success',
+            },
+            seconds: 5,
+          })
+          return
+        }
+
+        unnnic.unnnicCallAlert({
+          props: {
+            text: t('modals.activate_mmlite.error_alert'),
+            type: 'error',
+          },
+          seconds: 10,
+        })
+      },
+      {
+        config_id: configId,
+        response_type: 'code',
+        override_default_response_type: true,
+        extras: { features: [{ name: 'marketing_messages_lite' }] },
+      },
+    )
+  }
+
+  initFacebookSdk(fbAppId, callback)
 }
 </script>
 

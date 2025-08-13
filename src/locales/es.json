@@ -87,7 +87,9 @@
       "footer": {
         "text": "ℹ️ Información proporcionada por Meta. Ver {0} para detalles completos y actualizaciones.",
         "link": "Documentación de Meta"
-      }
+      },
+      "success_alert": "Solicitud de activación de API MM Lite realizada con éxito",
+      "error_alert": "Error al solicitar la activación de API MM Lite"
     }
   }
 }
