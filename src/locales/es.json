@@ -3,7 +3,7 @@
     "title": "Envío masivo",
     "description": "Envía mensajes de marketing masivos a tus contactos",
     "new_send": "Nuevo envío",
-    "mmlite-disclaimer": "Cambia a la API Lite de MM ahora para acelerar tu crecimiento y obtener control total sobre la entrega. <button class=\"highlight\">Ver más</button>",
+    "mmlite_disclaimer": "Cambia a la API Lite de MM ahora para acelerar tu crecimiento y obtener control total sobre la entrega. <button class=\"highlight\">Ver más</button>",
     "general_performance": "Desempeño General (Últimos 30 días)",
     "no_recent_sends": {
       "title": "Comienza a enviar mensajes personalizados a tus contactos a gran escala",
@@ -64,6 +64,29 @@
       "buttons": {
         "primary": "Crear grupo",
         "secondary": "Cancel"
+      }
+    },
+    "activate_mmlite": {
+      "buttons": {
+        "primary": "Actualizar a API MM Lite",
+        "secondary": "Tal vez más tarde"
+      },
+      "title": "Actualizar a API MM Lite",
+      "main_subtitle": "🚀 La API MM Lite está aquí: alcance más personas, con entrega inteligente",
+      "why_subtitle": "¿Por qué cambiar a la API MM Lite?",
+      "more_messages_label": "· Más mensajes entregados, con menos esfuerzo",
+      "engagement_label": "· Optimización de entrega basada en engajamiento",
+      "seamless_label": "· Transición sin complicaciones con su configuración actual",
+      "main_description": {
+        "text": "La API MM Lite es una actualización de la API Cloud, diseñada para {0}. Ahora, puede enviar campañas más inteligentes — todas con cambios mínimos en su configuración actual.",
+        "bold_text": "mejorar el rendimiento de su marketing en WhatsApp"
+      },
+      "more_messages_description": "La API MM Lite entrega un número igual o mayor de mensajes que la API Cloud. Los mensajes con alta participación, relevantes y oportunos se priorizan y pueden llegar a más personas.",
+      "engagement_description": "Plantillas con altas tasas de apertura y clic alcanzan automáticamente a más usuarios sin requerir cambios en su estrategia de envío.",
+      "seamless_description": "Continue usando sus números y plantillas existentes. El cambio requiere un esfuerzo mínimo de integración y mantiene el mismo modelo de precios de la API Cloud.",
+      "footer": {
+        "text": "ℹ️ Información proporcionada por Meta. Ver {0} para detalles completos y actualizaciones.",
+        "link": "Documentación de Meta"
       }
     }
   }

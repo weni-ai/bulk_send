@@ -3,7 +3,7 @@
     "title": "Bulk Send",
     "description": "Send bulk marketing messages to your contacts",
     "new_send": "New Send",
-    "mmlite-disclaimer": "Switch to MM Lite API now to accelerate your growth and gain full delivery control. <button class=\"highlight\">See more</button>",
+    "mmlite_disclaimer": "Switch to MM Lite API now to accelerate your growth and gain full delivery control. <button class=\"highlight\">See more</button>",
     "general_performance": "General Performance (Last 30 days)",
     "no_recent_sends": {
       "title": "Start sending personalized template messages to your contacts at scale",
@@ -64,6 +64,29 @@
       "buttons": {
         "primary": "Create group",
         "secondary": "Cancel"
+      }
+    },
+    "activate_mmlite": {
+      "buttons": {
+        "primary": "Update to MM Lite API",
+        "secondary": "Maybe later"
+      },
+      "title": "Update to MM Lite API",
+      "main_subtitle": "🚀 MM Lite API is here: reach more people, with smarter delivery",
+      "why_subtitle": "Why switch to the MM Lite API?",
+      "more_messages_label": "· More messages delivered, with less effort",
+      "engagement_label": "· Engagement-based delivery optimization",
+      "seamless_label": "· Seamless transition with your current setup",
+      "main_description": {
+        "text": "The MM Lite API is an upgrade from the Cloud API, designed to {0}. Now, you can send smarter campaigns — all with minimal changes to your current setup.",
+        "bold_text": "boost your WhatsApp marketing performance"
+      },
+      "more_messages_description": "MM Lite delivers an equal or greater number of messages than the Cloud API. High engagement messages expected, relevant, and timely are prioritized and can reach more people.",
+      "engagement_description": "Templates with high open and click rates automatically reach even more users without requiring changes to your sending strategy.",
+      "seamless_description": "Keep using your existing numbers and templates. The switch requires minimal integration effort and keeps the same pricing model as Cloud API.",
+      "footer": {
+        "text": "ℹ️ Information provided by Meta. See {0} for full details and updates.",
+        "link": "Meta documentation"
       }
     }
   }
