@@ -74,7 +74,7 @@ const handleStartNewSend = () => {
   display: flex;
   flex-direction: column;
   gap: $unnnic-spacing-md;
-  height: 100%;
+  flex: 1;
 
   &__title {
     color: $unnnic-color-neutral-darkest;

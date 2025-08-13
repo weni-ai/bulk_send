@@ -77,11 +77,13 @@ const handleMMLiteDisclaimerClick = () => {
 .home-bulk-send {
   display: flex;
   flex-direction: column;
+  flex: 1;
 
   &__general-performance {
     display: flex;
     flex-direction: column;
     gap: $unnnic-spacing-md;
+    margin-bottom: $unnnic-spacing-md;
 
     &-title {
       color: $unnnic-color-neutral-darkest;
@@ -92,7 +94,6 @@ const handleMMLiteDisclaimerClick = () => {
   }
 
   &__mmlite-disclaimer {
-    margin-top: $unnnic-spacing-md;
     display: flex;
     flex-direction: row;
     font-size: $unnnic-font-size-body-sm;
