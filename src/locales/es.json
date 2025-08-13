@@ -33,11 +33,13 @@
         },
         "clicked": {
           "label": "Clicadas",
-          "hint": "Mock hint"
+          "hint": "Mock hint",
+          "category": "Clicadas"
         },
         "failed": {
           "label": "Falladas",
-          "hint": "Mock hint"
+          "hint": "Mock hint",
+          "category": "Falladas"
         },
         "actions": {
           "add_to_a_new_group": "Agregar a un nuevo grupo",
@@ -51,6 +53,17 @@
         "template_name": "Plantilla:",
         "groups": "Grupo de contactos:",
         "sent_by": "Enviado por:"
+      }
+    }
+  },
+  "modals": {
+    "new_contact_group": {
+      "disclaimer": "Este grupo contendrá {contactCount} contactos de los resultados {category} de {broadcastName}.",
+      "title": "Nuevo grupo de contactos",
+      "name": "Nombre del grupo",
+      "buttons": {
+        "primary": "Crear grupo",
+        "secondary": "Cancel"
       }
     }
   }
