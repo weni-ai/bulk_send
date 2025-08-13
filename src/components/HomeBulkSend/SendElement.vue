@@ -1,7 +1,7 @@
 <template>
   <UnnnicCollapse class="send-element">
     <template #header>
-      <section class="send-element__header">
+      <header class="send-element__header">
         <h2 class="send-element__title">
           {{ send.name }}
         </h2>
@@ -9,7 +9,7 @@
           {{ date }}
         </p>
         <UnnnicTag :class="`send-element__tag send-element__tag--${tagScheme}`" :text="send.status" />
-      </section>
+      </header>
     </template>
 
     <section class="send-element__content">
@@ -105,7 +105,7 @@ const getPercentage = (value: number, total: number) => {
   if (!value || !total) {
     return '-'
   }
-  return `${(value / total) * 100}%`.replace('.', ',')
+  return `${((value / total) * 100).toLocaleString()}%`
 }
 
 const deliveredPercentage = computed(() => {
