@@ -4,9 +4,9 @@
       <td :class="`metrics-table__cell metrics-table__cell${sizeModifier}`" v-for="(cell, cellIndex) in row"
         :key="cellIndex">
         <section :class="`metrics-table__cell-content metrics-table__cell-content${sizeModifier}`">
-          <section class="metrics-table__label-container">
+          <section :class="`metrics-table__label-container metrics-table__label-container${sizeModifier}`">
             <p :class="`metrics-table__label metrics-table__label${sizeModifier}`">{{ cell.label }}</p>
-            <section :class="[`metrics-table__tooltip${cellNearModifier(cell)}`]">
+            <section :class="[`metrics-table__tooltip metrics-table__tooltip${cellNearModifier(cell)}`]">
               <UnnnicToolTip v-if="cell.hint" :text="cell.hint" :side="tooltipSide(cellIndex)" :maxWidth="'300px'"
                 enabled>
                 <UnnnicIcon icon="info" scheme="neutral-cleanest" size="nano" filled />
@@ -137,7 +137,7 @@ const tooltipSide = (cellIndex: number) => {
     }
 
     &--sm {
-      padding: $unnnic-spacing-sm;
+      padding: $unnnic-spacing-ant;
     }
   }
 
@@ -154,6 +154,11 @@ const tooltipSide = (cellIndex: number) => {
   &__label-container {
     display: flex;
     gap: $unnnic-spacing-xs;
+    align-items: center;
+
+    &--sm {
+      gap: $unnnic-spacing-nano;
+    }
   }
 
   &__label {
@@ -172,7 +177,7 @@ const tooltipSide = (cellIndex: number) => {
 
   &__tooltip {
     display: flex;
-    align-items: end;
+    align-self: end;
     justify-content: center;
     margin-left: auto;
     cursor: default;
@@ -189,6 +194,10 @@ const tooltipSide = (cellIndex: number) => {
     margin-left: auto;
 
     cursor: pointer;
+  }
+
+  &__dropdown {
+    height: 20px; // fixed height to match the design
   }
 
   &__dropdown-item {
