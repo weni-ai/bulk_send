@@ -6,45 +6,59 @@ import HomeBulkSend from '@/views/BulkSend/HomeBulkSend.vue'
 const $t = vi.fn((key) => key)
 
 describe('HomeBulkSend.vue', () => {
-  it('should call handleMMLiteDisclaimerClick when disclaimer is clicked', async () => {
-    const wrapper = mount(HomeBulkSend, {
+  const getStubs = () => ({
+    BulkSendHomeLayout: {
+      template: '<div><slot name="header" /><slot name="content" /></div>',
+    },
+    HomeHeader: true,
+    MetricsTable: true,
+    RecentSends: true,
+    ActivateMMLiteModal: {
+      template: '<div class="activate-mmlite-modal" />',
+    },
+    UnnnicDisclaimer: {
+      template:
+        '<div class="home-bulk-send__mmlite-disclaimer" @click="$emit(\'click\', $event)"><button class="show-more-button" @click="$emit(\'click\', $event)">Show more</button></div>',
+      emits: ['click'],
+    },
+    UnnnicButton: {
+      template: '<button class="unnnic-button-stub" @click="$emit(\'click\')"></button>',
+      emits: ['click'],
+    },
+    UnnnicInputDatePicker: {
+      template:
+        "<input class=\"unnnic-input-date-picker-stub\" @change=\"$emit('update:modelValue', { start: '2024-01-01', end: '2024-01-31' })\" />",
+      emits: ['update:modelValue'],
+    },
+    UnnnicInput: {
+      template:
+        '<input class="unnnic-input-stub" @input="$emit(\'update:modelValue\', $event.target.value)" />',
+    },
+  })
+
+  const mountWrapper = () =>
+    mount(HomeBulkSend, {
       global: {
-        mocks: {
-          $t,
-        },
-        stubs: {
-          BulkSendHomeLayout: {
-            template: '<div><slot name="header" /><slot name="content" /></div>',
-          },
-          HomeHeader: true,
-          MetricsTable: true,
-          UnnnicDisclaimer: {
-            template: '<div class="home-bulk-send__mmlite-disclaimer" @click="$emit(\'click\')"></div>',
-            emits: ['click'],
-          },
-          UnnnicButton: {
-            template: '<button class="unnnic-button-stub" @click="$emit(\'click\')"></button>',
-            emits: ['click'],
-          },
-          UnnnicInputDatePicker: {
-            template: '<input class="unnnic-input-date-picker-stub" @change="$emit(\'update:modelValue\', { start: \'2024-01-01\', end: \'2024-01-31\' })" />',
-            emits: ['update:modelValue'],
-          },
-          UnnnicInput: {
-            template: '<input class="unnnic-input-stub" @input="$emit(\'update:modelValue\', $event.target.value)" />',
-          },
-        },
+        mocks: { $t },
+        stubs: getStubs(),
       },
     })
 
-    // TODO: spy on console.log for now since we don't have a real implementation yet
-    const consoleSpy = vi.spyOn(console, 'log')
+  it('should NOT open the modal when the disclaimer container is clicked (outside button)', async () => {
+    const wrapper = mountWrapper()
 
     const disclaimer = wrapper.find('.home-bulk-send__mmlite-disclaimer')
     await disclaimer.trigger('click')
 
-    expect(consoleSpy).toHaveBeenCalledWith('handleMMLiteDisclaimerClick')
+    expect(wrapper.find('.activate-mmlite-modal').exists()).toBe(false)
+  })
 
-    consoleSpy.mockRestore()
+  it('should open the modal when the show more button inside the disclaimer is clicked', async () => {
+    const wrapper = mountWrapper()
+
+    const button = wrapper.find('.show-more-button')
+    await button.trigger('click')
+
+    expect(wrapper.find('.activate-mmlite-modal').exists()).toBe(true)
   })
 })
