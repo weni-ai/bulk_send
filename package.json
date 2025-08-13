@@ -10,7 +10,7 @@
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "NODE_OPTIONS='--experimental-transform-types' rspack preview",
     "test": "vitest",
-    "build-only": "NODE_OPTIONS='--experimental-transform-types' rspack build",
+    "build-only": "rspack build",
     "type-check": "vue-tsc --build",
     "lint": "eslint . --fix",
     "format": "prettier --write src/",
