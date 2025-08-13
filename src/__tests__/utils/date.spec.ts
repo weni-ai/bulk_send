@@ -17,6 +17,13 @@ describe('Date Utils', () => {
 
       expect(formattedDate).toBe('2024-06-15')
     })
+
+    it('should handle dates with timezone offset correctly', () => {
+      const testDate = new Date('2024-06-15T12:00:00.000Z')
+      const formattedDate = formatDateWithTimezone(testDate, 'yyyy-MM-dd HH:mm')
+
+      expect(formattedDate).toBe('2024-06-15 12:00')
+    })
   })
 
   describe('getDateDaysAgo', () => {

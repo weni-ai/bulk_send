@@ -11,8 +11,9 @@ import { format } from 'date-fns'
  * @returns Formatted date string in desired format
  */
 export const formatDateWithTimezone = (date: Date, formatStr: string): string => {
+  // TODO: check if this will work properly with API dates
   const offset = date.getTimezoneOffset()
-  const tzDate = new Date(date.getTime() - offset * 60 * 1000)
+  const tzDate = new Date(date.getTime() + offset * 60 * 1000)
   return format(tzDate, formatStr)
 }
 
