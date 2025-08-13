@@ -13,8 +13,7 @@
 
       <UnnnicDisclaimer class="home-bulk-send__mmlite-disclaimer" icon="alert-circle-1-1" scheme="neutral-dark"
         :text="$t('home.mmlite-disclaimer')" @click="handleMMLiteDisclaimerClick" />
-      <BasicDivider />
-      <RecentSends />
+      <RecentSends class="home-bulk-send__recent-sends" />
     </template>
   </BulkSendHomeLayout>
 </template>
@@ -23,7 +22,6 @@
 import BulkSendHomeLayout from '@/layouts/BulkSend/BulkSendHomeLayout.vue'
 import HomeHeader from '@/components/HomeBulkSend/HomeHeader.vue'
 import MetricsTable from '@/components/MetricsTable.vue'
-import BasicDivider from '@/components/BasicDivider.vue'
 import RecentSends from '@/components/HomeBulkSend/RecentSends.vue'
 
 const generalPerformanceData = [
@@ -108,6 +106,17 @@ const handleMMLiteDisclaimerClick = () => {
       background: none;
       color: $unnnic-color-neutral-dark;
       padding: 0;
+    }
+  }
+
+  &__recent-sends {
+    &::before {
+      content: '';
+      display: block;
+      width: 100%;
+      height: $unnnic-border-width-thinner;
+      background-color: $unnnic-color-neutral-soft;
+      margin-top: $unnnic-spacing-md;
     }
   }
 }

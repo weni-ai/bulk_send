@@ -18,7 +18,6 @@ describe('HomeBulkSend.vue', () => {
           },
           HomeHeader: true,
           MetricsTable: true,
-          BasicDivider: true,
           UnnnicDisclaimer: {
             template: '<div class="home-bulk-send__mmlite-disclaimer" @click="$emit(\'click\')"></div>',
             emits: ['click'],
