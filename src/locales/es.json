@@ -14,6 +14,36 @@
       "title": "Envíos recientes",
       "search_placeholder": "Buscar envío",
       "date_placeholder": "Últimos 30 días",
+      "metrics": {
+        "sent": {
+          "label": "Enviadas",
+          "hint": "Mock hint"
+        },
+        "delivered": {
+          "label": "Entregadas",
+          "hint": "Mock hint"
+        },
+        "estimated_cost": {
+          "label": "Costo estimado",
+          "hint": "Mock hint"
+        },
+        "read": {
+          "label": "Leídas",
+          "hint": "Mock hint"
+        },
+        "clicked": {
+          "label": "Clicadas",
+          "hint": "Mock hint"
+        },
+        "failed": {
+          "label": "Falladas",
+          "hint": "Mock hint"
+        },
+        "actions": {
+          "add_to_a_new_group": "Agregar a un nuevo grupo",
+          "view_template": "Ver plantilla"
+        }
+      },
       "info": {
         "title": "Información",
         "started_on": "Iniciado el:",
