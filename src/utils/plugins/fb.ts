@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 export function initFacebookSdk(appId, loginCallback) {
@@ -10,7 +11,7 @@ export function initFacebookSdk(appId, loginCallback) {
       version: 'v23.0', //Graph API version
     });
 
-    console.log('facebook sdk initialized')
+    console.log('facebook sdk initialized');
 
     // Call login code after init
     loginCallback();
@@ -27,8 +28,8 @@ export function initFacebookSdk(appId, loginCallback) {
 
   // Load the JavaScript SDK asynchronously
   (function (d, s, id) {
-    const js = d.getElementsByTagName(s)[0]
-    const fjs = d.getElementsByTagName(s)[0]
+    let js = d.getElementsByTagName(s)[0];
+    const fjs = d.getElementsByTagName(s)[0];
     if (d.getElementById(id)) return;
     js = d.createElement(s);
     js.id = id;

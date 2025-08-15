@@ -5,7 +5,11 @@
       <p class="header__description">{{ $t('home.description') }}</p>
     </section>
 
-    <UnnnicButton :text="$t('home.new_send')" type="primary" iconLeft="add-1" />
+    <UnnnicButton
+      :text="$t('home.new_send')"
+      type="primary"
+      iconLeft="add-1"
+    />
   </header>
 </template>
 

@@ -1,6 +1,6 @@
-import { describe, it, expect, vi } from 'vitest'
-import { mount, VueWrapper } from '@vue/test-utils'
-import NewContactGroup from '@/components/modals/NewContactGroup.vue'
+import { describe, it, expect, vi } from 'vitest';
+import { mount, VueWrapper } from '@vue/test-utils';
+import NewContactGroup from '@/components/modals/NewContactGroup.vue';
 
 const stubs = {
   UnnnicModalDialog: {
@@ -27,7 +27,7 @@ const stubs = {
     props: ['text', 'icon', 'scheme'],
     template: '<div class="unnnic-disclaimer-stub">{{ text }}</div>',
   },
-}
+};
 
 const mountWrapper = (props = {}) => {
   return mount(NewContactGroup, {
@@ -44,36 +44,36 @@ const mountWrapper = (props = {}) => {
         $t: () => 'stubbed text',
       },
     },
-  }) as VueWrapper
-}
+  }) as VueWrapper;
+};
 
 describe('NewContactGroup.vue', () => {
   it('renders with initial group name from props', () => {
-    const wrapper = mountWrapper()
-    const input = wrapper.find('.unnnic-input-stub')
-    expect((input.element as HTMLInputElement).value).toBe('Clicked - Promo')
-    expect(wrapper.find('.unnnic-disclaimer-stub').exists()).toBe(true)
-  })
+    const wrapper = mountWrapper();
+    const input = wrapper.find('.unnnic-input-stub');
+    expect((input.element as HTMLInputElement).value).toBe('Clicked - Promo');
+    expect(wrapper.find('.unnnic-disclaimer-stub').exists()).toBe(true);
+  });
 
   it('updates group name when input changes', async () => {
-    const wrapper = mountWrapper()
-    const input = wrapper.find('.unnnic-input-stub')
-    await input.setValue('New Group Name')
-    expect((input.element as HTMLInputElement).value).toBe('New Group Name')
-  })
+    const wrapper = mountWrapper();
+    const input = wrapper.find('.unnnic-input-stub');
+    await input.setValue('New Group Name');
+    expect((input.element as HTMLInputElement).value).toBe('New Group Name');
+  });
 
   it('emits close on secondary and logs on primary', async () => {
-    const wrapper = mountWrapper()
+    const wrapper = mountWrapper();
 
     // TODO: change to spy on API call when API is ready
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
-    await wrapper.find('.modal-stub__primary').trigger('click')
-    expect(logSpy).toHaveBeenCalledWith('primary button clicked')
+    await wrapper.find('.modal-stub__primary').trigger('click');
+    expect(logSpy).toHaveBeenCalledWith('primary button clicked');
 
-    await wrapper.find('.modal-stub__secondary').trigger('click')
-    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([false])
+    await wrapper.find('.modal-stub__secondary').trigger('click');
+    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([false]);
 
-    logSpy.mockRestore()
-  })
-})
+    logSpy.mockRestore();
+  });
+});

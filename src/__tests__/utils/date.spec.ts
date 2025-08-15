@@ -1,76 +1,83 @@
-import { describe, it, expect } from 'vitest'
-import { formatDateWithTimezone, getDateDaysAgo, createDateRangeFromDaysAgo } from '@/utils/date'
+import { describe, it, expect } from 'vitest';
+import {
+  formatDateWithTimezone,
+  getDateDaysAgo,
+  createDateRangeFromDaysAgo,
+} from '@/utils/date';
 
 describe('Date Utils', () => {
   describe('formatDateWithTimezone', () => {
     it('should format dates correctly in YYYY-MM-DD format', () => {
-      const testDate = new Date('2024-01-15T10:30:00.000Z')
-      const formattedDate = formatDateWithTimezone(testDate, 'yyyy-MM-dd')
+      const testDate = new Date('2024-01-15T10:30:00.000Z');
+      const formattedDate = formatDateWithTimezone(testDate, 'yyyy-MM-dd');
 
-      expect(formattedDate).toMatch(/^\d{4}-\d{2}-\d{2}$/) // yyyy-MM-dd format
-    })
+      expect(formattedDate).toMatch(/^\d{4}-\d{2}-\d{2}$/); // yyyy-MM-dd format
+    });
 
     it('should handle timezone offset correctly', () => {
       // Test with a known date
-      const testDate = new Date('2024-06-15T12:00:00.000Z')
-      const formattedDate = formatDateWithTimezone(testDate, 'yyyy-MM-dd')
+      const testDate = new Date('2024-06-15T12:00:00.000Z');
+      const formattedDate = formatDateWithTimezone(testDate, 'yyyy-MM-dd');
 
-      expect(formattedDate).toBe('2024-06-15')
-    })
+      expect(formattedDate).toBe('2024-06-15');
+    });
 
     it('should handle dates with timezone offset correctly', () => {
-      const testDate = new Date('2024-06-15T12:00:00.000Z')
-      const formattedDate = formatDateWithTimezone(testDate, 'yyyy-MM-dd HH:mm')
+      const testDate = new Date('2024-06-15T12:00:00.000Z');
+      const formattedDate = formatDateWithTimezone(
+        testDate,
+        'yyyy-MM-dd HH:mm',
+      );
 
-      expect(formattedDate).toBe('2024-06-15 12:00')
-    })
-  })
+      expect(formattedDate).toBe('2024-06-15 12:00');
+    });
+  });
 
   describe('getDateDaysAgo', () => {
     it('should return a date N days ago', () => {
-      const today = new Date()
-      const thirtyDaysAgo = getDateDaysAgo(30)
+      const today = new Date();
+      const thirtyDaysAgo = getDateDaysAgo(30);
 
-      const expectedDate = new Date()
-      expectedDate.setDate(today.getDate() - 30)
+      const expectedDate = new Date();
+      expectedDate.setDate(today.getDate() - 30);
 
-      expect(thirtyDaysAgo.getDate()).toBe(expectedDate.getDate())
-      expect(thirtyDaysAgo.getMonth()).toBe(expectedDate.getMonth())
-      expect(thirtyDaysAgo.getFullYear()).toBe(expectedDate.getFullYear())
-    })
+      expect(thirtyDaysAgo.getDate()).toBe(expectedDate.getDate());
+      expect(thirtyDaysAgo.getMonth()).toBe(expectedDate.getMonth());
+      expect(thirtyDaysAgo.getFullYear()).toBe(expectedDate.getFullYear());
+    });
 
     it('should handle zero days (today)', () => {
-      const today = new Date()
-      const result = getDateDaysAgo(0)
+      const today = new Date();
+      const result = getDateDaysAgo(0);
 
-      expect(result.toDateString()).toBe(today.toDateString())
-    })
-  })
+      expect(result.toDateString()).toBe(today.toDateString());
+    });
+  });
 
   describe('createDateRangeFromDaysAgo', () => {
     it('should create a date range from N days ago to today', () => {
-      const dateRange = createDateRangeFromDaysAgo(30)
+      const dateRange = createDateRangeFromDaysAgo(30);
 
-      expect(dateRange).toHaveProperty('start')
-      expect(dateRange).toHaveProperty('end')
-      expect(dateRange.start).toMatch(/^\d{4}-\d{2}-\d{2}$/)
-      expect(dateRange.end).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+      expect(dateRange).toHaveProperty('start');
+      expect(dateRange).toHaveProperty('end');
+      expect(dateRange.start).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(dateRange.end).toMatch(/^\d{4}-\d{2}-\d{2}$/);
 
       // End date should be today
-      const today = formatDateWithTimezone(new Date(), 'yyyy-MM-dd')
-      expect(dateRange.end).toBe(today)
+      const today = formatDateWithTimezone(new Date(), 'yyyy-MM-dd');
+      expect(dateRange.end).toBe(today);
 
       // Start date should be before end date
-      expect(new Date(dateRange.start) < new Date(dateRange.end)).toBe(true)
-    })
+      expect(new Date(dateRange.start) < new Date(dateRange.end)).toBe(true);
+    });
 
     it('should create correct range for 1 day', () => {
-      const dateRange = createDateRangeFromDaysAgo(1)
-      const yesterday = formatDateWithTimezone(getDateDaysAgo(1), 'yyyy-MM-dd')
-      const today = formatDateWithTimezone(new Date(), 'yyyy-MM-dd')
+      const dateRange = createDateRangeFromDaysAgo(1);
+      const yesterday = formatDateWithTimezone(getDateDaysAgo(1), 'yyyy-MM-dd');
+      const today = formatDateWithTimezone(new Date(), 'yyyy-MM-dd');
 
-      expect(dateRange.start).toBe(yesterday)
-      expect(dateRange.end).toBe(today)
-    })
-  })
-})
+      expect(dateRange.start).toBe(yesterday);
+      expect(dateRange.end).toBe(today);
+    });
+  });
+});

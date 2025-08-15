@@ -1,7 +1,7 @@
-import { describe, it, expect, vi } from 'vitest'
-import { mount, VueWrapper } from '@vue/test-utils'
-import SendElementInfo from '@/components/HomeBulkSend/SendElementInfo.vue'
-import type { RecentSend } from '@/types/recentSends'
+import { describe, it, expect, vi } from 'vitest';
+import { mount, VueWrapper } from '@vue/test-utils';
+import SendElementInfo from '@/components/HomeBulkSend/SendElementInfo.vue';
+import type { RecentSend } from '@/types/recentSends';
 
 const mountWrapper = (props: { send: RecentSend }): VueWrapper => {
   return mount(SendElementInfo, {
@@ -11,8 +11,8 @@ const mountWrapper = (props: { send: RecentSend }): VueWrapper => {
         $t: () => 'stubbed text',
       },
     },
-  })
-}
+  });
+};
 
 const mockSend: RecentSend = {
   id: 1,
@@ -31,25 +31,25 @@ const mockSend: RecentSend = {
     failed: 1,
     estimatedCost: '$1.23',
   },
-}
+};
 
 describe('SendElementInfo.vue', () => {
   it('renders basic info (dates, template, groups, creator)', () => {
-    const wrapper = mountWrapper({ send: mockSend })
+    const wrapper = mountWrapper({ send: mockSend });
 
-    expect(wrapper.find('.send-element-info').exists()).toBe(true)
-    expect(wrapper.text()).toContain('Jan 1, 9:00 AM')
-    expect(wrapper.text()).toContain('Jan 1, 10:00 AM')
-    expect(wrapper.text()).toContain('Template A')
-    expect(wrapper.text()).toContain('Group 1, Group 2')
-    expect(wrapper.text()).toContain('Alice')
-  })
+    expect(wrapper.find('.send-element-info').exists()).toBe(true);
+    expect(wrapper.text()).toContain('Jan 1, 9:00 AM');
+    expect(wrapper.text()).toContain('Jan 1, 10:00 AM');
+    expect(wrapper.text()).toContain('Template A');
+    expect(wrapper.text()).toContain('Group 1, Group 2');
+    expect(wrapper.text()).toContain('Alice');
+  });
 
   it('handles view template button', () => {
-    const wrapper = mountWrapper({ send: mockSend })
+    const wrapper = mountWrapper({ send: mockSend });
 
-    const consoleSpy = vi.spyOn(console, 'log')
-    wrapper.find('.send-element-info__view-template').trigger('click')
-    expect(consoleSpy).toHaveBeenCalledWith('view template')
-  })
-})
+    const consoleSpy = vi.spyOn(console, 'log');
+    wrapper.find('.send-element-info__view-template').trigger('click');
+    expect(consoleSpy).toHaveBeenCalledWith('view template');
+  });
+});

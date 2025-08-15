@@ -3,7 +3,10 @@
     <section class="bulk-send-home-layout__header">
       <slot name="header" />
     </section>
-    <slot class="bulk-send-home-layout__content" name="content" />
+    <slot
+      class="bulk-send-home-layout__content"
+      name="content"
+    />
   </section>
 </template>
 

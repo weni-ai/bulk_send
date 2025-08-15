@@ -1,26 +1,26 @@
 <template>
   <UnnnicModalDialog
-    :model-value="modelValue"
-    @update:model-value="handleUpdateModelValue"
-    @primaryButtonClick="activateMMLite"
-    @secondaryButtonClick="handleSecondaryButtonClick"
-    :primary-button-props="{
+    :modelValue="modelValue"
+    :primaryButtonProps="{
       text: $t('modals.activate_mmlite.buttons.primary'),
       loading: isMMLiteLoading,
     }"
-    :secondary-button-props="{
+    :secondaryButtonProps="{
       text: $t('modals.activate_mmlite.buttons.secondary'),
     }"
     :title="$t('modals.activate_mmlite.title')"
     size="lg"
     showActionsDivider
     showCloseIcon
+    @update:model-value="handleUpdateModelValue"
+    @primary-button-click="activateMMLite"
+    @secondary-button-click="handleSecondaryButtonClick"
   >
     <section class="activate-mmlite-modal__content">
       <h2 class="activate-mmlite-modal__subtitle">
         {{ $t('modals.activate_mmlite.main_subtitle') }}
       </h2>
-      <i18n-t
+      <I18nT
         class="activate-mmlite-modal__description"
         keypath="modals.activate_mmlite.main_description.text"
         tag="p"
@@ -28,7 +28,7 @@
         <b class="activate-mmlite-modal__description--bold">
           {{ $t('modals.activate_mmlite.main_description.bold_text') }}
         </b>
-      </i18n-t>
+      </I18nT>
       <h2 class="activate-mmlite-modal__subtitle">
         {{ $t('modals.activate_mmlite.why_subtitle') }}
       </h2>
@@ -56,7 +56,7 @@
           {{ $t('modals.activate_mmlite.seamless_description') }}
         </p>
       </section>
-      <i18n-t
+      <I18nT
         class="activate-mmlite-modal__footer"
         keypath="modals.activate_mmlite.footer.text"
         tag="footer"
@@ -68,50 +68,49 @@
         >
           {{ $t('modals.activate_mmlite.footer.link') }}
         </a>
-      </i18n-t>
+      </I18nT>
     </section>
   </UnnnicModalDialog>
 </template>
 
 <script setup lang="ts">
 // @ts-expect-error - unnnic does not yet have types
-import unnnic from '@weni/unnnic-system'
-import { ref } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { initFacebookSdk } from '@/utils/plugins/fb'
-import env from '@/utils/env'
-const { t } = useI18n()
+import unnnic from '@weni/unnnic-system';
+import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { initFacebookSdk } from '@/utils/plugins/fb';
+import env from '@/utils/env';
+const { t } = useI18n();
 
 defineProps<{
-  modelValue: boolean
-}>()
+  modelValue: boolean;
+}>();
 
-const isMMLiteLoading = ref(false)
+const isMMLiteLoading = ref(false);
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: boolean): void
-}>()
+const emit = defineEmits(['update:modelValue']);
 
 const handleUpdateModelValue = (value: boolean) => {
-  emit('update:modelValue', value)
-}
+  emit('update:modelValue', value);
+};
 
 const handleSecondaryButtonClick = () => {
-  emit('update:modelValue', false)
-}
+  emit('update:modelValue', false);
+};
 
 const activateMMLite = () => {
-  const fbAppId = env('WHATSAPP_FACEBOOK_APP_ID')
-  const configId = env('WHATSAPP_MMLITE_CONFIG_ID')
+  const fbAppId = env('WHATSAPP_FACEBOOK_APP_ID');
+  const configId = env('WHATSAPP_MMLITE_CONFIG_ID');
 
   const callback = () => {
-    isMMLiteLoading.value = true
+    isMMLiteLoading.value = true;
 
     // @ts-expect-error - FB is not defined in the editor but will be defined since is a callback after initFacebookSdk
+    // eslint-disable-next-line no-undef
     FB.login(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       function (response: any) {
-        isMMLiteLoading.value = false
+        isMMLiteLoading.value = false;
         if (response.authResponse) {
           unnnic.unnnicCallAlert({
             props: {
@@ -119,7 +118,7 @@ const activateMMLite = () => {
               type: 'success',
             },
             seconds: 5,
-          })
+          });
         } else {
           unnnic.unnnicCallAlert({
             props: {
@@ -127,9 +126,9 @@ const activateMMLite = () => {
               type: 'error',
             },
             seconds: 10,
-          })
+          });
         }
-        emit('update:modelValue', false)
+        emit('update:modelValue', false);
       },
       {
         config_id: configId,
@@ -137,11 +136,11 @@ const activateMMLite = () => {
         override_default_response_type: true,
         extras: { features: [{ name: 'marketing_messages_lite' }] },
       },
-    )
-  }
+    );
+  };
 
-  initFacebookSdk(fbAppId, callback)
-}
+  initFacebookSdk(fbAppId, callback);
+};
 </script>
 
 <style scoped lang="scss">

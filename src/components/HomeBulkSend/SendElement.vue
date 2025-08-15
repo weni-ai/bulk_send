@@ -8,18 +8,35 @@
         <p class="send-element__date">
           {{ date }}
         </p>
-        <UnnnicTag :class="`send-element__tag send-element__tag--${tagScheme}`" :text="send.status" />
+        <UnnnicTag
+          :class="`send-element__tag send-element__tag--${tagScheme}`"
+          :text="send.status"
+        />
       </header>
     </template>
 
     <section class="send-element__content">
-      <SendElementInfo class="send-element__info" :send="send" />
-      <MetricsTable class="send-element__metrics" :data="sendMetrics" :maxColumns="3" size="sm" near-tooltip />
+      <SendElementInfo
+        class="send-element__info"
+        :send="send"
+      />
+      <MetricsTable
+        class="send-element__metrics"
+        :data="sendMetrics"
+        :maxColumns="3"
+        size="sm"
+        nearTooltip
+      />
     </section>
 
-    <NewContactGroupModal v-if="showNewGroupModal" :model-value="showNewGroupModal"
-      @update:model-value="handleUpdateShowNewGroupModal" :contact-count="send.metrics.sent.toLocaleString()"
-      :category="modalCategory" :broadcast-name="modalBroadcastName" />
+    <NewContactGroupModal
+      v-if="showNewGroupModal"
+      :modelValue="showNewGroupModal"
+      :contactCount="send.metrics.sent.toLocaleString()"
+      :category="modalCategory"
+      :broadcastName="modalBroadcastName"
+      @update:model-value="handleUpdateShowNewGroupModal"
+    />
   </UnnnicCollapse>
 </template>
 
@@ -30,37 +47,37 @@ import NewContactGroupModal from '@/components/modals/NewContactGroup.vue';
 import type { RecentSend } from '@/types/recentSends';
 import { formatDateWithTimezone } from '@/utils/date';
 import { computed, ref } from 'vue';
-import { useI18n } from 'vue-i18n'
-const { t } = useI18n()
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 
 const props = defineProps<{
-  send: RecentSend
-}>()
+  send: RecentSend;
+}>();
 
 const tagScheme = computed(() => {
   if (props.send.status.toLowerCase() === 'finished') {
-    return 'aux-green'
+    return 'aux-green';
   }
-  return 'aux-orange'
-})
+  return 'aux-orange';
+});
 
 const date = computed(() => {
-  return formatDateWithTimezone(props.send.createdAt, 'dd/MM/yyyy')
-})
+  return formatDateWithTimezone(props.send.createdAt, 'dd/MM/yyyy');
+});
 
-const showNewGroupModal = ref(false)
-const modalCategory = ref('')
-const modalBroadcastName = ref('')
+const showNewGroupModal = ref(false);
+const modalCategory = ref('');
+const modalBroadcastName = ref('');
 
 const displayNewGroupModal = (category: string, broadcastName: string) => {
-  modalCategory.value = category
-  modalBroadcastName.value = broadcastName
-  showNewGroupModal.value = true
-}
+  modalCategory.value = category;
+  modalBroadcastName.value = broadcastName;
+  showNewGroupModal.value = true;
+};
 
 const handleUpdateShowNewGroupModal = (value: boolean) => {
-  showNewGroupModal.value = value
-}
+  showNewGroupModal.value = value;
+};
 
 const sendMetrics = computed(() => {
   // TODO: update hints when design is ready
@@ -97,7 +114,10 @@ const sendMetrics = computed(() => {
           label: t('home.recent_sends.metrics.actions.add_to_a_new_group'),
           icon: 'add',
           onClick: () => {
-            displayNewGroupModal(t('home.recent_sends.metrics.clicked.category'), props.send.name)
+            displayNewGroupModal(
+              t('home.recent_sends.metrics.clicked.category'),
+              props.send.name,
+            );
           },
         },
       ],
@@ -112,36 +132,39 @@ const sendMetrics = computed(() => {
           label: t('home.recent_sends.metrics.actions.add_to_a_new_group'),
           icon: 'add',
           onClick: () => {
-            displayNewGroupModal(t('home.recent_sends.metrics.failed.category'), props.send.name)
+            displayNewGroupModal(
+              t('home.recent_sends.metrics.failed.category'),
+              props.send.name,
+            );
           },
         },
       ],
-    }
-  ]
-})
+    },
+  ];
+});
 
 const getPercentage = (value: number, total: number) => {
   if (!value || !total) {
-    return '-'
+    return '-';
   }
-  return `${((value / total) * 100).toLocaleString()}%`
-}
+  return `${((value / total) * 100).toLocaleString()}%`;
+};
 
 const deliveredPercentage = computed(() => {
-  return getPercentage(props.send.metrics.delivered, props.send.metrics.sent)
-})
+  return getPercentage(props.send.metrics.delivered, props.send.metrics.sent);
+});
 
 const readPercentage = computed(() => {
-  return getPercentage(props.send.metrics.read, props.send.metrics.sent)
-})
+  return getPercentage(props.send.metrics.read, props.send.metrics.sent);
+});
 
 const clickedPercentage = computed(() => {
-  return getPercentage(props.send.metrics.clicked, props.send.metrics.sent)
-})
+  return getPercentage(props.send.metrics.clicked, props.send.metrics.sent);
+});
 
 const failedPercentage = computed(() => {
-  return getPercentage(props.send.metrics.failed, props.send.metrics.sent)
-})
+  return getPercentage(props.send.metrics.failed, props.send.metrics.sent);
+});
 </script>
 
 <style scoped lang="scss">

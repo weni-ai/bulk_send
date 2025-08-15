@@ -1,37 +1,90 @@
 <template>
   <table class="metrics-table">
-    <tr class="metrics-table__row" v-for="(row, rowIndex) in rows" :key="rowIndex">
-      <td :class="`metrics-table__cell metrics-table__cell${sizeModifier}`" v-for="(cell, cellIndex) in row"
-        :key="cellIndex">
-        <section :class="`metrics-table__cell-content metrics-table__cell-content${sizeModifier}`">
-          <section :class="`metrics-table__label-container metrics-table__label-container${sizeModifier}`">
-            <p :class="`metrics-table__label metrics-table__label${sizeModifier}`">{{ cell.label }}</p>
-            <section :class="[`metrics-table__tooltip metrics-table__tooltip${cellNearModifier(cell)}`]">
-              <UnnnicToolTip v-if="cell.hint" :text="cell.hint" :side="tooltipSide(cellIndex)" :maxWidth="'300px'"
-                enabled>
-                <UnnnicIcon icon="info" scheme="neutral-cleanest" size="nano" filled />
+    <tr
+      v-for="(row, rowIndex) in rows"
+      :key="rowIndex"
+      class="metrics-table__row"
+    >
+      <td
+        v-for="(cell, cellIndex) in row"
+        :key="cellIndex"
+        :class="`metrics-table__cell metrics-table__cell${sizeModifier}`"
+      >
+        <section
+          :class="`metrics-table__cell-content metrics-table__cell-content${sizeModifier}`"
+        >
+          <section
+            :class="`metrics-table__label-container metrics-table__label-container${sizeModifier}`"
+          >
+            <p
+              :class="`metrics-table__label metrics-table__label${sizeModifier}`"
+            >
+              {{ cell.label }}
+            </p>
+            <section
+              :class="[
+                `metrics-table__tooltip metrics-table__tooltip${cellNearModifier(cell)}`,
+              ]"
+            >
+              <UnnnicToolTip
+                v-if="cell.hint"
+                :text="cell.hint"
+                :side="tooltipSide(cellIndex)"
+                :maxWidth="'300px'"
+                enabled
+              >
+                <UnnnicIcon
+                  icon="info"
+                  scheme="neutral-cleanest"
+                  size="nano"
+                  filled
+                />
               </UnnnicToolTip>
             </section>
-            <section class="metrics-table__actions" v-if="cell.actions && cell.actions.length > 0">
+            <section
+              v-if="cell.actions && cell.actions.length > 0"
+              class="metrics-table__actions"
+            >
               <UnnnicDropdown class="metrics-table__dropdown">
                 <template #trigger>
-                  <UnnnicIcon icon="more_vert" size="ant" scheme="neutral-cloudy" />
+                  <UnnnicIcon
+                    icon="more_vert"
+                    size="ant"
+                    scheme="neutral-cloudy"
+                  />
                 </template>
 
-                <UnnnicDropdownItem class="metrics-table__dropdown-item" v-for="(action, index) in cell.actions"
-                  :key="index" @click="action.onClick">
-                  <UnnnicIcon :icon="action.icon" size="sm" scheme="neutral-dark" />
-                  <p class="metrics-table__dropdown-label">{{ action.label }}</p>
+                <UnnnicDropdownItem
+                  v-for="(action, index) in cell.actions"
+                  :key="index"
+                  class="metrics-table__dropdown-item"
+                  @click="action.onClick"
+                >
+                  <UnnnicIcon
+                    :icon="action.icon"
+                    size="sm"
+                    scheme="neutral-dark"
+                  />
+                  <p class="metrics-table__dropdown-label">
+                    {{ action.label }}
+                  </p>
                 </UnnnicDropdownItem>
               </UnnnicDropdown>
             </section>
           </section>
-          <section :class="`metrics-table__values-container metrics-table__values-container${sizeModifier}`">
-            <p :class="`metrics-table__value metrics-table__value${sizeModifier}`">
+          <section
+            :class="`metrics-table__values-container metrics-table__values-container${sizeModifier}`"
+          >
+            <p
+              :class="`metrics-table__value metrics-table__value${sizeModifier}`"
+            >
               {{ cell.value }}
             </p>
 
-            <p v-if="cell.subValue" :class="`metrics-table__sub-value metrics-table__sub-value${sizeModifier}`">
+            <p
+              v-if="cell.subValue"
+              :class="`metrics-table__sub-value metrics-table__sub-value${sizeModifier}`"
+            >
               {{ cell.subValue }}
             </p>
           </section>
@@ -42,18 +95,18 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed } from 'vue';
 
 interface MetricsTableItem {
-  label: string
-  value: string
-  subValue?: string
-  hint?: string
+  label: string;
+  value: string;
+  subValue?: string;
+  hint?: string;
   actions?: Array<{
-    label: string
-    icon: string
-    onClick: () => void
-  }>
+    label: string;
+    icon: string;
+    onClick: () => void;
+  }>;
 }
 
 const props = defineProps({
@@ -74,42 +127,42 @@ const props = defineProps({
     default: 'md',
     validator: (value: string) => ['sm', 'md'].includes(value),
   },
-})
+});
 
 const sizeModifier = computed(() => {
-  return props.size === 'sm' ? '--sm' : ''
-})
+  return props.size === 'sm' ? '--sm' : '';
+});
 
 const cellNearModifier = (cell: MetricsTableItem): string => {
-  return props.nearTooltip || cell.actions?.length ? '--near' : ''
-}
+  return props.nearTooltip || cell.actions?.length ? '--near' : '';
+};
 
 const rows = computed(() => {
   return props.data.reduce((acc, item, index) => {
     if (index % props.maxColumns === 0) {
-      acc.push([item])
+      acc.push([item]);
     } else {
-      acc[acc.length - 1].push(item)
+      acc[acc.length - 1].push(item);
     }
-    return acc
-  }, [] as MetricsTableItem[][])
-})
+    return acc;
+  }, [] as MetricsTableItem[][]);
+});
 
 const tooltipSide = (cellIndex: number) => {
   if (props.nearTooltip) {
-    return 'top'
+    return 'top';
   }
 
   if (cellIndex % props.maxColumns === 0) {
-    return 'right'
+    return 'right';
   }
 
   if (cellIndex % props.maxColumns === props.maxColumns - 1) {
-    return 'left'
+    return 'left';
   }
 
-  return 'top'
-}
+  return 'top';
+};
 </script>
 
 <style scoped lang="scss">

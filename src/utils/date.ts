@@ -2,7 +2,7 @@
  * Date utility functions
  */
 
-import { format } from 'date-fns'
+import { format } from 'date-fns';
 
 /**
  * Formats a date to desired format considering timezone offset
@@ -10,12 +10,15 @@ import { format } from 'date-fns'
  * @param formatStr  - The format to use for formatting (e.g. 'dd/MM/yyyy', 'MM/dd/yyyy', 'yyyy-MM-dd')
  * @returns Formatted date string in desired format
  */
-export const formatDateWithTimezone = (date: Date, formatStr: string): string => {
+export const formatDateWithTimezone = (
+  date: Date,
+  formatStr: string,
+): string => {
   // TODO: check if this will work properly with API dates
-  const offset = date.getTimezoneOffset()
-  const tzDate = new Date(date.getTime() + offset * 60 * 1000)
-  return format(tzDate, formatStr)
-}
+  const offset = date.getTimezoneOffset();
+  const tzDate = new Date(date.getTime() + offset * 60 * 1000);
+  return format(tzDate, formatStr);
+};
 
 /**
  * Gets a date N days ago from today
@@ -23,10 +26,10 @@ export const formatDateWithTimezone = (date: Date, formatStr: string): string =>
  * @returns Date object representing the date N days ago
  */
 export const getDateDaysAgo = (daysAgo: number): Date => {
-  const date = new Date()
-  date.setDate(date.getDate() - daysAgo)
-  return date
-}
+  const date = new Date();
+  date.setDate(date.getDate() - daysAgo);
+  return date;
+};
 
 /**
  * Creates a date range from N days ago to today
@@ -36,4 +39,4 @@ export const getDateDaysAgo = (daysAgo: number): Date => {
 export const createDateRangeFromDaysAgo = (daysAgo: number) => ({
   start: formatDateWithTimezone(getDateDaysAgo(daysAgo), 'yyyy-MM-dd'),
   end: formatDateWithTimezone(new Date(), 'yyyy-MM-dd'),
-})
+});

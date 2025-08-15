@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { defineAsyncComponent } from 'vue'
-import * as Sentry from '@sentry/browser'
-import env from './env'
+import { defineAsyncComponent } from 'vue';
+import * as Sentry from '@sentry/browser';
+import env from './env';
 
-export const isFederatedModule = `${window.location.origin}` !== env('PUBLIC_PATH_URL')
+export const isFederatedModule =
+  `${window.location.origin}` !== env('PUBLIC_PATH_URL');
 
 /**
  * Creates a safe async component with automatic defineAsyncComponent wrapper
@@ -12,13 +13,16 @@ export const isFederatedModule = `${window.location.origin}` !== env('PUBLIC_PAT
  * @returns {Component} - Vue async component ready to use
  */
 export function safeAsyncComponent(importFn: () => Promise<any>) {
-  if (!isFederatedModule) return {}
+  if (!isFederatedModule) return {};
 
   return defineAsyncComponent(async () => {
     try {
-      return await importFn()
+      return await importFn();
     } catch (error: any) {
-      console.error('[Module Federation] Failed to load remote component:', error.message)
+      console.error(
+        '[Module Federation] Failed to load remote component:',
+        error.message,
+      );
 
       Sentry.captureException(error, {
         tags: {
@@ -29,9 +33,9 @@ export function safeAsyncComponent(importFn: () => Promise<any>) {
           errorMessage: error.message,
           stack: error.stack,
         },
-      })
+      });
     }
-  })
+  });
 }
 
 /**
@@ -40,19 +44,25 @@ export function safeAsyncComponent(importFn: () => Promise<any>) {
  * @param {string} importPath - The import path for logging purposes
  * @returns {Promise<Object>} - The imported object or empty object
  */
-export async function safeImport(importFn: () => Promise<any>, importPath: string) {
+export async function safeImport(
+  importFn: () => Promise<any>,
+  importPath: string,
+) {
   try {
-    const module = await importFn()
-    return module.default || module
+    const module = await importFn();
+    return module.default || module;
   } catch (error: any) {
-    console.error(`[Module Federation] ${importPath} unavailable:`, error.message)
+    console.error(
+      `[Module Federation] ${importPath} unavailable:`,
+      error.message,
+    );
 
     if (isFederatedModule) {
       Sentry.captureException(error, {
         tags: { module_federation: true, import_path: importPath },
-      })
+      });
     }
 
-    return {}
+    return {};
   }
 }
