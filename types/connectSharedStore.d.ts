@@ -1,12 +1,12 @@
 declare module 'connect/sharedStore' {
   export function useSharedStore(): {
     auth: {
-      token: string
-    }
+      token: string;
+    };
     current: {
       project: {
-        uuid: string
-      }
-    }
-  }
+        uuid: string;
+      };
+    };
+  };
 }

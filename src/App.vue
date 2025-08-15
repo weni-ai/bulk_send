@@ -1,46 +1,49 @@
 <template>
-  <div id="app" :class="`app-bulk_send app-bulk_send--${!sharedStore ? 'dev' : 'prod'}`">
-    <router-view />
+  <div
+    id="app"
+    :class="`app-bulk_send app-bulk_send--${!sharedStore ? 'dev' : 'prod'}`"
+  >
+    <RouterView />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { safeImport, isFederatedModule } from '@/utils/moduleFederation'
-import { useAuthStore } from '@/stores/auth'
-import { useProjectStore } from '@/stores/project'
+import { ref, onMounted } from 'vue';
+import { safeImport, isFederatedModule } from '@/utils/moduleFederation';
+import { useAuthStore } from '@/stores/auth';
+import { useProjectStore } from '@/stores/project';
 
 // Remove top-level await and make it reactive
-const sharedStore = ref(null)
+const sharedStore = ref(null);
 
 onMounted(async () => {
-  updateTokenAndProject()
+  updateTokenAndProject();
 
   // Non-blocking import
   safeImport(() => import('connect/sharedStore'), 'connect/sharedStore')
     .then(({ useSharedStore }) => {
       if (useSharedStore && isFederatedModule) {
         try {
-          sharedStore.value = useSharedStore()
+          sharedStore.value = useSharedStore();
         } catch (error) {
-          console.error('Error initializing shared store:', error)
+          console.error('Error initializing shared store:', error);
         }
       } else {
-        console.log('Not federated module')
+        console.log('Not federated module');
       }
     })
     .catch((error) => {
-      console.error('Error loading shared store module:', error)
-    })
-})
+      console.error('Error loading shared store module:', error);
+    });
+});
 
 const updateTokenAndProject = () => {
-  const authStore = useAuthStore()
-  const projectStore = useProjectStore()
+  const authStore = useAuthStore();
+  const projectStore = useProjectStore();
 
-  authStore.setToken(localStorage.getItem('authToken') || '')
-  projectStore.setProjectUuid(localStorage.getItem('projectUuid') || '')
-}
+  authStore.setToken(localStorage.getItem('authToken') || '');
+  projectStore.setProjectUuid(localStorage.getItem('projectUuid') || '');
+};
 </script>
 
 <style lang="scss" scoped>

@@ -1,25 +1,25 @@
 <template>
   <UnnnicModalDialog
-    :model-value="modelValue"
-    @update:model-value="handleUpdateModelValue"
-    @primaryButtonClick="handlePrimaryButtonClick"
-    @secondaryButtonClick="handleSecondaryButtonClick"
-    :primary-button-props="{
+    :modelValue="modelValue"
+    :primaryButtonProps="{
       text: $t('modals.new_contact_group.buttons.primary'),
     }"
-    :secondary-button-props="{
+    :secondaryButtonProps="{
       text: $t('modals.new_contact_group.buttons.secondary'),
     }"
     :title="$t('modals.new_contact_group.title')"
     size="md"
     showActionsDivider
     showCloseIcon
+    @update:model-value="handleUpdateModelValue"
+    @primary-button-click="handlePrimaryButtonClick"
+    @secondary-button-click="handleSecondaryButtonClick"
   >
     <form class="new-contact-group-modal__form">
       <UnnnicInput
-        :model-value="groupName"
-        @update:model-value="handleUpdateGroupName"
+        :modelValue="groupName"
         :label="$t('modals.new_contact_group.name')"
+        @update:model-value="handleUpdateGroupName"
       />
       <UnnnicDisclaimer
         icon="alert-circle-1-1"
@@ -37,36 +37,34 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from 'vue';
 
 const props = defineProps<{
-  modelValue: boolean
-  contactCount: string
-  category: string
-  broadcastName: string
-}>()
+  modelValue: boolean;
+  contactCount: string;
+  category: string;
+  broadcastName: string;
+}>();
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: boolean): void
-}>()
+const emit = defineEmits(['update:modelValue']);
 
-const groupName = ref(`${props.category} - ${props.broadcastName}`)
+const groupName = ref(`${props.category} - ${props.broadcastName}`);
 
 const handleUpdateModelValue = (value: boolean) => {
-  emit('update:modelValue', value)
-}
+  emit('update:modelValue', value);
+};
 
 const handleUpdateGroupName = (value: string) => {
-  groupName.value = value
-}
+  groupName.value = value;
+};
 
 const handlePrimaryButtonClick = () => {
-  console.log('primary button clicked')
-}
+  console.log('primary button clicked');
+};
 
 const handleSecondaryButtonClick = () => {
-  emit('update:modelValue', false)
-}
+  emit('update:modelValue', false);
+};
 </script>
 
 <style scoped lang="scss">

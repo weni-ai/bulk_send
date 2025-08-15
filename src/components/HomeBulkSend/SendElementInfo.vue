@@ -5,7 +5,9 @@
     </h2>
     <section class="send-element-info__content">
       <section class="send-element-info__dates">
-        <section class="send-element-info__started-on send-element-info__value-container">
+        <section
+          class="send-element-info__started-on send-element-info__value-container"
+        >
           <p class="send-element-info__label">
             {{ $t('home.recent_sends.info.started_on') }}
           </p>
@@ -28,7 +30,10 @@
         </p>
         <p class="send-element-info__value">
           {{ send.template.name }}
-          <button class="send-element-info__view-template" @click="handleViewTemplate">
+          <button
+            class="send-element-info__view-template"
+            @click="handleViewTemplate"
+          >
             {{ $t('home.recent_sends.metrics.actions.view_template') }}
           </button>
         </p>
@@ -58,27 +63,27 @@ import type { RecentSend } from '@/types/recentSends';
 import { formatDateWithTimezone } from '@/utils/date';
 import { computed } from 'vue';
 
-const DATE_FORMAT = '[MMM d, h:mm aa]'
+const DATE_FORMAT = '[MMM d, h:mm aa]';
 
 const props = defineProps<{
-  send: RecentSend
-}>()
+  send: RecentSend;
+}>();
 
 const startedOn = computed(() => {
-  return formatDateWithTimezone(props.send.createdAt, DATE_FORMAT)
-})
+  return formatDateWithTimezone(props.send.createdAt, DATE_FORMAT);
+});
 
 const endedOn = computed(() => {
-  return formatDateWithTimezone(props.send.endedAt, DATE_FORMAT)
-})
+  return formatDateWithTimezone(props.send.endedAt, DATE_FORMAT);
+});
 
 const groups = computed(() => {
-  return props.send.groups.join(', ')
-})
+  return props.send.groups.join(', ');
+});
 
 const handleViewTemplate = () => {
-  console.log('view template')
-}
+  console.log('view template');
+};
 </script>
 
 <style scoped lang="scss">
