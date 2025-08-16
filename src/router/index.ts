@@ -8,6 +8,7 @@ const history = isFederatedModule
 const routes = [
   {
     path: '/',
+    alias: '/init',
     name: 'HomeBulkSend',
     component: () => import('@/views/BulkSend/HomeBulkSend.vue'),
   },

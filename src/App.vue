@@ -1,5 +1,5 @@
 <template>
-  <div id="app" :class="`app-bulk_send-${!sharedStore ? 'dev' : 'prod'}`">
+  <div id="app" :class="`app-bulk_send app-bulk_send--${!sharedStore ? 'dev' : 'prod'}`">
     <router-view />
   </div>
 </template>
@@ -44,12 +44,18 @@ const updateTokenAndProject = () => {
 </script>
 
 <style lang="scss" scoped>
-.app-bulk_send-prod {
-  height: 100%;
-  width: 100%;
-}
+.app-bulk_send {
+  display: flex;
+  flex-direction: column;
 
-.app-bulk_send-dev {
-  height: 100%;
+  &--prod {
+    height: 100%;
+    width: 100%;
+    flex: 1;
+  }
+
+  &--dev {
+    min-height: 100vh;
+  }
 }
 </style>
