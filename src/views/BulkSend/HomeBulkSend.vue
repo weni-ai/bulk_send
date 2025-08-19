@@ -111,7 +111,7 @@ const generalPerformanceData = [
 ];
 
 onBeforeMount(() => {
-  projectStore.getProjectChannels();
+  fetchProjectChannels();
 });
 
 const handleMMLiteDisclaimerClick = (event: Event) => {
@@ -124,6 +124,14 @@ const handleMMLiteDisclaimerClick = (event: Event) => {
 
 const handleUpdateShowActivateMMLiteModal = (value: boolean) => {
   showActivateMMLiteModal.value = value;
+};
+
+const fetchProjectChannels = async () => {
+  try {
+    await projectStore.getProjectChannels();
+  } catch (error) {
+    console.error(error); // TODO: check with design if we need to show an error message to the user
+  }
 };
 </script>
 
