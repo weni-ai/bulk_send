@@ -4,41 +4,67 @@
       <HomeHeader />
     </template>
     <template #content>
-      <section class="home-bulk-send__general-performance">
-        <h2 class="home-bulk-send__general-performance-title">
-          {{ $t('home.general_performance') }}
-        </h2>
-        <MetricsTable
-          :data="generalPerformanceData"
-          :maxColumns="3"
-        />
+      <section class="home-bulk-send__first-section">
+        <section class="home-bulk-send__general-performance">
+          <h2 class="home-bulk-send__general-performance-title">
+            {{ $t('home.general_performance') }}
+          </h2>
+          <MetricsTable
+            :data="generalPerformanceData"
+            :maxColumns="3"
+          />
+        </section>
+
+        <section
+          v-if="showMMLiteSection"
+          class="home-bulk-send__mmlite"
+        >
+          <UnnnicDisclaimer
+            class="home-bulk-send__mmlite-disclaimer"
+            icon="alert-circle-1-1"
+            scheme="neutral-dark"
+            :text="$t('home.mmlite_disclaimer')"
+            @click="(event: Event) => handleMMLiteDisclaimerClick(event)"
+          />
+          <ActivateMMLiteModal
+            v-if="showActivateMMLiteModal"
+            :modelValue="showActivateMMLiteModal"
+            @update:model-value="handleUpdateShowActivateMMLiteModal"
+          />
+        </section>
       </section>
-
-      <UnnnicDisclaimer
-        class="home-bulk-send__mmlite-disclaimer"
-        icon="alert-circle-1-1"
-        scheme="neutral-dark"
-        :text="$t('home.mmlite_disclaimer')"
-        @click="(event: Event) => handleMMLiteDisclaimerClick(event)"
-      />
       <RecentSends class="home-bulk-send__recent-sends" />
-
-      <ActivateMMLiteModal
-        v-if="showActivateMMLiteModal"
-        :modelValue="showActivateMMLiteModal"
-        @update:model-value="handleUpdateShowActivateMMLiteModal"
-      />
     </template>
   </BulkSendHomeLayout>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref, onBeforeMount } from 'vue';
 import BulkSendHomeLayout from '@/layouts/BulkSend/BulkSendHomeLayout.vue';
 import HomeHeader from '@/components/HomeBulkSend/HomeHeader.vue';
 import MetricsTable from '@/components/MetricsTable.vue';
 import RecentSends from '@/components/HomeBulkSend/RecentSends.vue';
 import ActivateMMLiteModal from '@/components/modals/ActivateMMLite.vue';
+import { useProjectStore } from '@/stores/project';
+import type { Channel } from '@/types/channel';
+
+const projectStore = useProjectStore();
+
+const showMMLiteSection = computed(() => {
+  if (projectStore.project.channels.length === 0) {
+    return false;
+  }
+
+  const hasMMLiteChannel = projectStore.project.channels.some(
+    (channel: Channel) => channel.MMLite,
+  );
+
+  const hasWhatsappChannel = projectStore.project.channels.some(
+    (channel: Channel) => channel.channel_type === 'WAC',
+  );
+
+  return hasWhatsappChannel && !hasMMLiteChannel;
+});
 
 const showActivateMMLiteModal = ref(false);
 
@@ -84,6 +110,10 @@ const generalPerformanceData = [
   },
 ];
 
+onBeforeMount(() => {
+  projectStore.getProjectChannels();
+});
+
 const handleMMLiteDisclaimerClick = (event: Event) => {
   // Only show the modal if the user clicks on the show more button inside the disclaimer
   const target = event.target as HTMLElement;
@@ -103,11 +133,17 @@ const handleUpdateShowActivateMMLiteModal = (value: boolean) => {
   flex-direction: column;
   flex: 1;
 
+  &__first-section {
+    display: flex;
+    flex-direction: column;
+    gap: $unnnic-spacing-sm;
+  }
+
   &__general-performance {
     display: flex;
     flex-direction: column;
-    gap: $unnnic-spacing-md;
-    margin-bottom: $unnnic-spacing-md;
+    gap: $unnnic-spacing-sm;
+    // margin-bottom: $unnnic-spacing-md;
 
     &-title {
       color: $unnnic-color-neutral-darkest;
