@@ -4,8 +4,6 @@ import requests from '@/api/requests';
 import { createPinia, setActivePinia } from 'pinia';
 import { useProjectStore } from '@/stores/project';
 
-// Global mock is provided in setup; no inline mock here
-
 describe('api/resources/channels', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
