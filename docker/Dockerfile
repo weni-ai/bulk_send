@@ -1,7 +1,7 @@
 # syntax = docker/dockerfile:1
 
 ARG NODE_VERSION="22.17.1"
-ARG BASE_VERSION="alpine3.19"
+ARG BASE_VERSION="alpine3.22"
 ARG OLD_IMAGE="bulk-send-webapp:latest"
 ARG KEEP_DAYS=60
 
