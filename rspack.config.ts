@@ -106,6 +106,7 @@ export default defineConfig({
       'process.env': JSON.stringify(process.env),
       'import.meta.env': JSON.stringify({
         BASE_URL: '/',
+        DEV: process.env.NODE_ENV === 'development' ? true : false,
       }),
     }),
     new rspack.container.ModuleFederationPlugin({
