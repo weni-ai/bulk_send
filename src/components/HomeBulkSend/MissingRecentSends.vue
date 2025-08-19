@@ -1,6 +1,6 @@
 <template>
   <section class="missing-recent-sends">
-    <img src="/svgs/campaign.svg" alt="Campaign Icon" />
+    <img :src="loadAsset('svgs/campaign.svg')" alt="Campaign Icon" />
     <section class="missing-recent-sends__content">
       <p class="missing-recent-sends__title">
         {{ $t('home.no_recent_sends.title') }}
@@ -14,6 +14,8 @@
 </template>
 
 <script setup lang="ts">
+import { loadAsset } from '@/utils/assets'
+
 const emit = defineEmits(['start-new-send'])
 
 const handleButtonClick = () => {
@@ -27,6 +29,7 @@ const handleButtonClick = () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  flex: 1;
 
   &__content {
     margin: $unnnic-spacing-sm 0;
