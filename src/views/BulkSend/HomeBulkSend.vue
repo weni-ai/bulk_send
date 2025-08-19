@@ -12,17 +12,24 @@
       </section>
 
       <UnnnicDisclaimer class="home-bulk-send__mmlite-disclaimer" icon="alert-circle-1-1" scheme="neutral-dark"
-        :text="$t('home.mmlite-disclaimer')" @click="handleMMLiteDisclaimerClick" />
+        :text="$t('home.mmlite_disclaimer')" @click="(event: Event) => handleMMLiteDisclaimerClick(event)" />
       <RecentSends class="home-bulk-send__recent-sends" />
+
+      <ActivateMMLiteModal v-if="showActivateMMLiteModal" :model-value="showActivateMMLiteModal"
+        @update:model-value="handleUpdateShowActivateMMLiteModal" />
     </template>
   </BulkSendHomeLayout>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import BulkSendHomeLayout from '@/layouts/BulkSend/BulkSendHomeLayout.vue'
 import HomeHeader from '@/components/HomeBulkSend/HomeHeader.vue'
 import MetricsTable from '@/components/MetricsTable.vue'
 import RecentSends from '@/components/HomeBulkSend/RecentSends.vue'
+import ActivateMMLiteModal from '@/components/modals/ActivateMMLite.vue'
+
+const showActivateMMLiteModal = ref(false)
 
 const generalPerformanceData = [
   {
@@ -66,8 +73,16 @@ const generalPerformanceData = [
   },
 ]
 
-const handleMMLiteDisclaimerClick = () => {
-  console.log('handleMMLiteDisclaimerClick')
+const handleMMLiteDisclaimerClick = (event: Event) => {
+  // Only show the modal if the user clicks on the show more button inside the disclaimer
+  const target = event.target as HTMLElement
+  if (target.closest('button')) {
+    showActivateMMLiteModal.value = true
+  }
+}
+
+const handleUpdateShowActivateMMLiteModal = (value: boolean) => {
+  showActivateMMLiteModal.value = value
 }
 </script>
 
