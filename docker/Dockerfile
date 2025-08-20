@@ -1,7 +1,7 @@
 # syntax = docker/dockerfile:1
 
-ARG NODE_VERSION="22.17.1"
-ARG BASE_VERSION="alpine3.19"
+ARG NODE_VERSION="22.18.0"
+ARG BASE_VERSION="alpine3.22"
 ARG OLD_IMAGE="bulk-send-webapp:latest"
 ARG KEEP_DAYS=60
 
@@ -25,14 +25,7 @@ ENV WHATSAPP_FACEBOOK_APP_ID=${WHATSAPP_FACEBOOK_APP_ID}
 ENV WHATSAPP_MMLITE_CONFIG_ID=${WHATSAPP_MMLITE_CONFIG_ID}
 ENV ENVIRONMENT=${ENVIRONMENT}
 
-RUN apk add --no-cache \
-    git \
-    build-base \
-    cairo-dev \
-    pango-dev \
-    jpeg-dev \
-    giflib-dev \
-    librsvg-dev
+RUN apk add --no-cache git
 
 COPY package.json package-lock.json ./
 

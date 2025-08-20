@@ -4,7 +4,21 @@
     "description": "Send bulk marketing messages to your contacts",
     "new_send": "New Send",
     "mmlite_disclaimer": "Switch to MM Lite API now to accelerate your growth and gain full delivery control. <button class=\"highlight\">See more</button>",
-    "general_performance": "General Performance (Last 30 days)",
+    "general_performance": {
+      "title": "General Performance (Last 30 days)",
+      "total_sent": {
+        "label": "Total sent",
+        "hint": "Total number of messages sent through bulk sends within the selected period."
+      },
+      "estimated_total_cost": {
+        "label": "Estimated total cost",
+        "hint": "Estimated cost based on the number of messages sent. Final pricing may vary according to Meta’s billing."
+      },
+      "success_rate": {
+        "label": "Success rate",
+        "hint": "Percentage of contacts who successfully received messages, calculated from the total number of unique contacts targeted across all campaigns."
+      }
+    },
     "no_recent_sends": {
       "title": "Start sending personalized template messages to your contacts at scale",
       "subtitle": "It takes less than 2 minutes to set up your first send.",

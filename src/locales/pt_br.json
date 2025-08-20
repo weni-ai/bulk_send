@@ -4,7 +4,21 @@
     "description": "Envie mensagens de marketing em massa para seus contatos",
     "new_send": "Novo disparo",
     "mmlite_disclaimer": "Atualize para a API MM Lite para ganhar velocidade e controle completo sobre a entrega das mensagens. <button class=\"highlight\">Ver mais</button>",
-    "general_performance": "Desempenho Geral (Últimos 30 dias)",
+    "general_performance": {
+      "title": "Desempenho geral (últimos 30 dias)",
+      "total_sent": {
+        "label": "Total enviado",
+        "hint": "Total de mensagens enviadas através de disparos em massa no período selecionado."
+      },
+      "estimated_total_cost": {
+        "label": "Custo total estimado",
+        "hint": "Custo estimado baseado no número de mensagens enviadas. O preço final pode variar de acordo com a fatura da Meta."
+      },
+      "success_rate": {
+        "label": "Taxa de sucesso",
+        "hint": "Percentual de contatos que receberam mensagens com sucesso, calculado a partir do total de contatos únicos alvos em todas as campanhas."
+      }
+    },
     "no_recent_sends": {
       "title": "Comece agora a se comunicar ativamente com seus contatos em escala",
       "subtitle": "Leva menos de 2 minutos para configurar o primeiro envio",
