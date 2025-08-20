@@ -50,6 +50,7 @@ import { formatDateWithTimezone } from '@/utils/date';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { getEnumKeyByValue } from '@/utils/enum';
+import { Currency } from '@/constants/currency';
 const { t } = useI18n();
 
 const props = defineProps<{
@@ -78,7 +79,7 @@ const displayNewGroupModal = (
 ) => {
   modalCategory.value = t(`home.recent_sends.metrics.${category}.category`);
   modalBroadcastName.value = broadcastName;
-  modalContactCount.value = props.send.statistics[category];
+  modalContactCount.value = Number(props.send.statistics[category]);
   showNewGroupModal.value = true;
 };
 
@@ -92,48 +93,52 @@ const sendMetrics = computed(() => {
     {
       label: t('home.recent_sends.metrics.processed.label'),
       value: processedValue.value || '-',
+      subValue: processedPercentage.value,
       hint: t('home.recent_sends.metrics.sent.hint'),
+    },
+    {
+      label: t('home.recent_sends.metrics.sent.label'),
+      value: props.send.statistics.sent?.toLocaleString() || '-',
+      hint: t('home.recent_sends.metrics.clicked.hint'),
     },
     {
       label: t('home.recent_sends.metrics.delivered.label'),
       value: deliveredPercentage.value,
       subValue: props.send.statistics.delivered?.toLocaleString() || '-',
       hint: t('home.recent_sends.metrics.delivered.hint'),
-    },
-    {
-      label: t('home.recent_sends.metrics.estimated_cost.label'),
-      value: 'R$123,45', // TODO: change to currency when API is ready
-      hint: t('home.recent_sends.metrics.estimated_cost.hint'),
+      actions: [newGroupAction('delivered')],
     },
     {
       label: t('home.recent_sends.metrics.read.label'),
       value: readPercentage.value,
       subValue: props.send.statistics.read?.toLocaleString() || '-',
       hint: t('home.recent_sends.metrics.read.hint'),
-    },
-    {
-      label: t('home.recent_sends.metrics.sent.label'),
-      value: sentPercentage.value,
-      subValue: props.send.statistics.sent?.toLocaleString() || '-',
-      hint: t('home.recent_sends.metrics.clicked.hint'),
+      actions: [newGroupAction('read')],
     },
     {
       label: t('home.recent_sends.metrics.failed.label'),
       value: failedPercentage.value,
       subValue: props.send.statistics.failed?.toLocaleString() || '-',
       hint: t('home.recent_sends.metrics.failed.hint'),
-      actions: [
-        {
-          label: t('home.recent_sends.metrics.actions.add_to_a_new_group'),
-          icon: 'add',
-          onClick: () => {
-            displayNewGroupModal('failed', props.send.name);
-          },
-        },
-      ],
+      actions: [newGroupAction('failed')],
+    },
+    {
+      label: t('home.recent_sends.metrics.estimated_cost.label'),
+      value: estimatedCost.value,
+      hint: t('home.recent_sends.metrics.estimated_cost.hint'),
     },
   ];
 });
+
+const newGroupAction = (category: keyof Statistics) => {
+  return {
+    label: t('home.recent_sends.metrics.actions.add_to_a_new_group'),
+    icon: 'add',
+    onClick: () => {
+      displayNewGroupModal(category, props.send.name);
+    },
+  };
+};
 
 const sendStatusText = computed(() => {
   return t(
@@ -159,13 +164,6 @@ const readPercentage = computed(() => {
   return getPercentage(props.send.statistics.read, props.send.statistics.sent);
 });
 
-const sentPercentage = computed(() => {
-  return getPercentage(
-    props.send.statistics.sent,
-    props.send.statistics.contactCount,
-  );
-});
-
 const failedPercentage = computed(() => {
   return getPercentage(
     props.send.statistics.failed,
@@ -182,6 +180,22 @@ const processedValue = computed(() => {
     processed: props.send.statistics.processed.toLocaleString(),
     total: props.send.statistics.contactCount.toLocaleString(),
   });
+});
+
+const processedPercentage = computed(() => {
+  return getPercentage(
+    props.send.statistics.processed,
+    props.send.statistics.contactCount,
+  );
+});
+
+const estimatedCost = computed(() => {
+  const currency = Currency[props.send.statistics.currency];
+  const value = props.send.statistics.cost.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  return `${currency}${value}`;
 });
 </script>
 

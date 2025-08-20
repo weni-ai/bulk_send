@@ -1,4 +1,7 @@
+import type { Group } from '@/types/groups';
+import type { Template } from '@/types/template';
 import { BroadcastStatus } from '@/constants/broadcasts';
+import { Currency } from '@/constants/currency';
 
 interface BroadcastStatistic {
   id: number;
@@ -7,10 +10,8 @@ interface BroadcastStatistic {
   createdBy: string;
   createdOn: Date;
   modifiedOn: Date;
-  groups: number[]; //TODO: change to group list whe API is ready
-  template: {
-    name: string;
-  };
+  groups: Group[];
+  template: Template;
   statistics: Statistics;
 }
 
@@ -21,6 +22,9 @@ interface Statistics {
   read: number;
   failed: number;
   contactCount: number;
+  cost: number;
+  currency: keyof typeof Currency;
+  template_price: number;
 }
 
 interface BroadcastsMonthPerformance {

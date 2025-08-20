@@ -11,8 +11,6 @@ export function initFacebookSdk(appId, loginCallback) {
       version: 'v23.0', //Graph API version
     });
 
-    console.log('facebook sdk initialized');
-
     // Call login code after init
     loginCallback();
   };
