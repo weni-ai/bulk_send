@@ -2,10 +2,16 @@
   <UnnnicCollapse class="send-element">
     <template #header>
       <header class="send-element__header">
-        <h2 class="send-element__title">
+        <h2
+          class="send-element__title"
+          data-test="title"
+        >
           {{ send.name }}
         </h2>
-        <p class="send-element__date">
+        <p
+          class="send-element__date"
+          data-test="date"
+        >
           {{ date }}
         </p>
         <UnnnicTag

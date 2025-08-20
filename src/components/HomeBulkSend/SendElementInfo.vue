@@ -1,5 +1,8 @@
 <template>
-  <section class="send-element-info">
+  <section
+    class="send-element-info"
+    data-test="send-element-info"
+  >
     <h2 class="send-element-info__title">
       {{ $t('home.recent_sends.info.title') }}
     </h2>
@@ -32,6 +35,7 @@
           {{ templateName }}
           <button
             class="send-element-info__view-template"
+            data-test="view-template"
             @click="handleViewTemplate"
           >
             {{ $t('home.recent_sends.metrics.actions.view_template') }}
