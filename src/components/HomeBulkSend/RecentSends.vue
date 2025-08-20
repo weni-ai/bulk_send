@@ -11,7 +11,7 @@
     </h2>
 
     <MissingRecentSends
-      v-if="!recentSendsData.length && !loadingRecentSends"
+      v-if="showMissingRecentSends"
       class="recent-sends__missing-recent-sends"
       @start-new-send="handleStartNewSend"
     />
@@ -81,6 +81,9 @@ const recentSendsTotal = computed(
 const search = ref('');
 const dateRange = ref<DateRange>(
   createDateRangeFromDaysAgo(DEFAULT_DATE_RANGE_DAYS),
+);
+const showMissingRecentSends = computed(
+  () => !recentSendsData.value.length && !loadingRecentSends.value,
 );
 
 onBeforeMount(() => {

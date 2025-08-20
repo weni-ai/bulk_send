@@ -60,12 +60,10 @@ const currentPageOffset = computed(() => {
   );
 });
 
-// TODO: page limit should be fetched from the API when the API is ready
 const pageLimit = computed(() => {
   return Math.ceil(props.total / props.pageSize);
 });
 
-// TODO: handle page update should be implemented and fetch data from the new page when the API is ready
 const handlePageUpdate = (newPage: number) => {
   emit('update:page', newPage);
 };
