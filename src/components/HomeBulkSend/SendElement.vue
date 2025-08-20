@@ -10,7 +10,7 @@
         </p>
         <UnnnicTag
           :class="`send-element__tag send-element__tag--${tagScheme}`"
-          :text="send.status"
+          :text="sendStatusText"
         />
       </header>
     </template>
@@ -32,7 +32,7 @@
     <NewContactGroupModal
       v-if="showNewGroupModal"
       :modelValue="showNewGroupModal"
-      :contactCount="send.metrics.sent.toLocaleString()"
+      :contactCount="modalContactCount"
       :category="modalCategory"
       :broadcastName="modalBroadcastName"
       @update:model-value="handleUpdateShowNewGroupModal"
@@ -44,34 +44,41 @@
 import MetricsTable from '@/components/MetricsTable.vue';
 import SendElementInfo from '@/components/HomeBulkSend/SendElementInfo.vue';
 import NewContactGroupModal from '@/components/modals/NewContactGroup.vue';
-import type { RecentSend } from '@/types/recentSends';
+import type { BroadcastStatistic, Statistics } from '@/types/broadcast';
+import { BroadcastStatus } from '@/constants/broadcasts';
 import { formatDateWithTimezone } from '@/utils/date';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { getEnumKeyByValue } from '@/utils/enum';
 const { t } = useI18n();
 
 const props = defineProps<{
-  send: RecentSend;
+  send: BroadcastStatistic;
 }>();
 
 const tagScheme = computed(() => {
-  if (props.send.status.toLowerCase() === 'finished') {
+  if (props.send.status === BroadcastStatus.SENT) {
     return 'aux-green';
   }
   return 'aux-orange';
 });
 
 const date = computed(() => {
-  return formatDateWithTimezone(props.send.createdAt, 'dd/MM/yyyy');
+  return formatDateWithTimezone(props.send.createdOn, 'dd/MM/yyyy');
 });
 
 const showNewGroupModal = ref(false);
 const modalCategory = ref('');
 const modalBroadcastName = ref('');
+const modalContactCount = ref(0);
 
-const displayNewGroupModal = (category: string, broadcastName: string) => {
-  modalCategory.value = category;
+const displayNewGroupModal = (
+  category: keyof Statistics,
+  broadcastName: string,
+) => {
+  modalCategory.value = t(`home.recent_sends.metrics.${category}.category`);
   modalBroadcastName.value = broadcastName;
+  modalContactCount.value = props.send.statistics[category];
   showNewGroupModal.value = true;
 };
 
@@ -83,59 +90,44 @@ const sendMetrics = computed(() => {
   // TODO: update hints when design is ready
   return [
     {
-      label: t('home.recent_sends.metrics.sent.label'),
-      value: props.send.metrics.sent?.toLocaleString() || '-',
+      label: t('home.recent_sends.metrics.processed.label'),
+      value: processedValue.value || '-',
       hint: t('home.recent_sends.metrics.sent.hint'),
     },
     {
       label: t('home.recent_sends.metrics.delivered.label'),
       value: deliveredPercentage.value,
-      subValue: props.send.metrics.delivered?.toLocaleString() || '-',
+      subValue: props.send.statistics.delivered?.toLocaleString() || '-',
       hint: t('home.recent_sends.metrics.delivered.hint'),
     },
     {
       label: t('home.recent_sends.metrics.estimated_cost.label'),
-      value: props.send.metrics.estimatedCost.toString(), // TODO: change to currency when API is ready
+      value: 'R$123,45', // TODO: change to currency when API is ready
       hint: t('home.recent_sends.metrics.estimated_cost.hint'),
     },
     {
       label: t('home.recent_sends.metrics.read.label'),
       value: readPercentage.value,
-      subValue: props.send.metrics.read?.toLocaleString() || '-',
+      subValue: props.send.statistics.read?.toLocaleString() || '-',
       hint: t('home.recent_sends.metrics.read.hint'),
     },
     {
-      label: t('home.recent_sends.metrics.clicked.label'),
-      value: clickedPercentage.value,
-      subValue: props.send.metrics.clicked?.toLocaleString() || '-',
+      label: t('home.recent_sends.metrics.sent.label'),
+      value: sentPercentage.value,
+      subValue: props.send.statistics.sent?.toLocaleString() || '-',
       hint: t('home.recent_sends.metrics.clicked.hint'),
-      actions: [
-        {
-          label: t('home.recent_sends.metrics.actions.add_to_a_new_group'),
-          icon: 'add',
-          onClick: () => {
-            displayNewGroupModal(
-              t('home.recent_sends.metrics.clicked.category'),
-              props.send.name,
-            );
-          },
-        },
-      ],
     },
     {
       label: t('home.recent_sends.metrics.failed.label'),
       value: failedPercentage.value,
-      subValue: props.send.metrics.failed?.toLocaleString() || '-',
+      subValue: props.send.statistics.failed?.toLocaleString() || '-',
       hint: t('home.recent_sends.metrics.failed.hint'),
       actions: [
         {
           label: t('home.recent_sends.metrics.actions.add_to_a_new_group'),
           icon: 'add',
           onClick: () => {
-            displayNewGroupModal(
-              t('home.recent_sends.metrics.failed.category'),
-              props.send.name,
-            );
+            displayNewGroupModal('failed', props.send.name);
           },
         },
       ],
@@ -143,27 +135,53 @@ const sendMetrics = computed(() => {
   ];
 });
 
+const sendStatusText = computed(() => {
+  return t(
+    `home.recent_sends.status.${getEnumKeyByValue(BroadcastStatus, props.send.status)}`,
+  );
+});
+
 const getPercentage = (value: number, total: number) => {
-  if (!value || !total) {
-    return '-';
+  if (!total) {
+    return '0%';
   }
   return `${((value / total) * 100).toLocaleString()}%`;
 };
 
 const deliveredPercentage = computed(() => {
-  return getPercentage(props.send.metrics.delivered, props.send.metrics.sent);
+  return getPercentage(
+    props.send.statistics.delivered,
+    props.send.statistics.sent,
+  );
 });
 
 const readPercentage = computed(() => {
-  return getPercentage(props.send.metrics.read, props.send.metrics.sent);
+  return getPercentage(props.send.statistics.read, props.send.statistics.sent);
 });
 
-const clickedPercentage = computed(() => {
-  return getPercentage(props.send.metrics.clicked, props.send.metrics.sent);
+const sentPercentage = computed(() => {
+  return getPercentage(
+    props.send.statistics.sent,
+    props.send.statistics.contactCount,
+  );
 });
 
 const failedPercentage = computed(() => {
-  return getPercentage(props.send.metrics.failed, props.send.metrics.sent);
+  return getPercentage(
+    props.send.statistics.failed,
+    props.send.statistics.sent,
+  );
+});
+
+const processedValue = computed(() => {
+  if (!props.send.statistics.processed) {
+    return '-';
+  }
+
+  return t('home.recent_sends.metrics.processed.value', {
+    processed: props.send.statistics.processed.toLocaleString(),
+    total: props.send.statistics.contactCount.toLocaleString(),
+  });
 });
 </script>
 
