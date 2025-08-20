@@ -1,50 +1,74 @@
 <template>
   <section class="recent-sends-list">
-    <section class="recent-sends-list__content">
+    <section
+      v-if="!loading"
+      class="recent-sends-list__content"
+    >
       <SendElement
-        v-for="send in paginatedRecentSends"
+        v-for="send in recentSends"
         :key="send.id"
         :send="send"
       />
     </section>
+    <section
+      v-else
+      class="recent-sends-list__content"
+    >
+      <UnnnicSkeletonLoading
+        v-for="i in pageSize"
+        :key="i"
+        width="100%"
+        height="62px"
+      />
+    </section>
 
-    <UnnnicPagination
-      class="recent-sends-list__pagination"
-      :max="pageLimit"
-      :modelValue="page"
-      @update:model-value="handlePageUpdate"
-    />
+    <footer class="recent-sends-list__footer">
+      <p class="recent-sends-list__pagination-text">
+        {{
+          $t('home.recent_sends.pagination_text', { currentPageOffset, total })
+        }}
+      </p>
+      <UnnnicPagination
+        class="recent-sends-list__pagination"
+        :max="pageLimit"
+        :modelValue="page"
+        @update:model-value="handlePageUpdate"
+      />
+    </footer>
   </section>
 </template>
 
 <script setup lang="ts">
 import SendElement from '@/components/HomeBulkSend/SendElement.vue';
-import type { RecentSend } from '@/types/recentSends';
-import { PAGE_SIZE } from '@/constants/recentSends';
-import { computed, ref } from 'vue';
+import type { BroadcastStatistic } from '@/types/broadcast';
+import { computed } from 'vue';
 
 const props = defineProps<{
-  recentSends: RecentSend[];
+  loading: boolean;
+  recentSends: BroadcastStatistic[];
+  page: number;
+  pageSize: number;
+  total: number;
 }>();
 
-const page = ref(1);
+const emit = defineEmits(['update:page']);
+
+const currentPageOffset = computed(() => {
+  return Math.min(
+    (props.page - 1) * props.pageSize + props.recentSends.length,
+    props.total,
+  );
+});
+
 // TODO: page limit should be fetched from the API when the API is ready
 const pageLimit = computed(() => {
-  return Math.ceil(props.recentSends.length / PAGE_SIZE);
+  return Math.ceil(props.total / props.pageSize);
 });
 
 // TODO: handle page update should be implemented and fetch data from the new page when the API is ready
 const handlePageUpdate = (newPage: number) => {
-  page.value = newPage;
+  emit('update:page', newPage);
 };
-
-// TODO: computed for now while we have mocked data, in the future will not be needed
-const paginatedRecentSends = computed(() => {
-  return props.recentSends.slice(
-    (page.value - 1) * PAGE_SIZE,
-    page.value * PAGE_SIZE,
-  );
-});
 </script>
 
 <style scoped lang="scss">
@@ -59,8 +83,20 @@ const paginatedRecentSends = computed(() => {
     gap: $unnnic-spacing-xs;
   }
 
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   &__pagination {
     margin-left: auto;
+  }
+
+  &__pagination-text {
+    font-size: $unnnic-font-size-body-md;
+    color: $unnnic-color-neutral-cloudy;
+    line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
   }
 }
 </style>
