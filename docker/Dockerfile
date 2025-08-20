@@ -25,14 +25,7 @@ ENV WHATSAPP_FACEBOOK_APP_ID=${WHATSAPP_FACEBOOK_APP_ID}
 ENV WHATSAPP_MMLITE_CONFIG_ID=${WHATSAPP_MMLITE_CONFIG_ID}
 ENV ENVIRONMENT=${ENVIRONMENT}
 
-RUN apk add --no-cache \
-    git \
-    build-base \
-    cairo-dev \
-    pango-dev \
-    jpeg-dev \
-    giflib-dev \
-    librsvg-dev
+RUN apk add --no-cache git
 
 COPY package.json package-lock.json ./
 
