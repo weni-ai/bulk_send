@@ -1,7 +1,10 @@
 import { describe, it, expect, vi } from 'vitest';
-import { mount, VueWrapper } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import SendElement from '@/components/HomeBulkSend/SendElement.vue';
-import type { RecentSend } from '@/types/recentSends';
+import type { BroadcastStatistic } from '@/types/broadcast';
+import { BroadcastStatus } from '@/constants/broadcasts';
+import { createBroadcast } from '@/__tests__/utils/factories';
+import { nextTick } from 'vue';
 
 vi.mock('vue-i18n', () => ({
   useI18n: () => ({ t: (key: string) => key }),
@@ -15,13 +18,13 @@ const stubs = {
   UnnnicTag: {
     props: ['text'],
     template:
-      '<div class="unnnic-tag-stub" :class="$attrs.class">{{ text }}</div>',
+      '<div data-test="tag" class="unnnic-tag-stub" :class="$attrs.class" :data-scheme="($attrs.class || \'\').includes(\'aux-green\') ? \'aux-green\' : \'aux-orange\'">{{ text }}</div>',
   },
   MetricsTable: {
     name: 'MetricsTable',
     props: ['data', 'maxColumns'],
     template:
-      '<div class="metrics-table-stub">Metrics: {{ data?.length }}<button class="metrics-action-clicked" @click="data && data[4] && data[4].actions && data[4].actions[0] && data[4].actions[0].onClick()">open clicked modal</button></div>',
+      '<div data-test="metrics">Metrics: {{ data?.length }}<button data-test="metrics-action-failed" @click="data && data[5] && data[5].actions && data[5].actions[0] && data[5].actions[0].onClick()">open clicked modal</button></div>',
   },
   SendElementInfo: {
     template: '<div class="send-element-info-stub" />',
@@ -29,33 +32,31 @@ const stubs = {
   NewContactGroupModal: {
     name: 'NewContactGroupModal',
     props: ['modelValue', 'contactCount', 'category', 'broadcastName'],
-    template: '<div class="new-contact-group-modal-stub"></div>',
+    template:
+      '<div data-test="new-contact-group-modal" class="new-contact-group-modal-stub"></div>',
   },
 };
 
-const mountWrapper = (send: Partial<RecentSend> = {}): VueWrapper => {
-  const mockSend: RecentSend = {
-    id: 1,
+const SELECTOR = {
+  title: '[data-test="title"]',
+  date: '[data-test="date"]',
+  tag: '[data-test="tag"]',
+  metrics: '[data-test="metrics"]',
+  metricsActionFailed: '[data-test="metrics-action-failed"]',
+  modal: '[data-test="new-contact-group-modal"]',
+} as const;
+
+const mountWrapper = (overrides: Partial<BroadcastStatistic> = {}) => {
+  const send: BroadcastStatistic = createBroadcast({
     name: 'Test Send',
-    status: 'finished',
-    createdAt: new Date('2024-01-01T12:00:00.000Z'),
-    endedAt: new Date('2024-01-01T13:00:00.000Z'),
-    template: { name: 'Template A' },
-    groups: ['Group 1', 'Group 2'],
-    createdBy: 'Alice',
-    metrics: {
-      sent: 10,
-      delivered: 9,
-      read: 8,
-      clicked: 2,
-      failed: 1,
-      estimatedCost: '1.23',
-    },
-    ...send,
-  };
+    status: BroadcastStatus.SENT,
+    createdOn: new Date('2024-01-01T12:00:00.000Z'),
+    modifiedOn: new Date('2024-01-01T13:00:00.000Z'),
+    ...overrides,
+  });
 
   return mount(SendElement, {
-    props: { send: mockSend },
+    props: { send },
     global: {
       stubs,
     },
@@ -65,32 +66,38 @@ const mountWrapper = (send: Partial<RecentSend> = {}): VueWrapper => {
 describe('SendElement.vue', () => {
   it('renders header with title, date and tag text', () => {
     const wrapper = mountWrapper();
-
-    expect(wrapper.find('.send-element__title').text()).toBe('Test Send');
-    expect(wrapper.find('.send-element__date').text()).toBe('01/01/2024');
-    expect(wrapper.find('.unnnic-tag-stub').text()).toBe('finished');
+    expect(wrapper.find(SELECTOR.title).text()).toBe('Test Send');
+    expect(wrapper.find(SELECTOR.date).text()).toBe('01/01/2024');
+    expect(wrapper.find(SELECTOR.tag).text()).toBe(
+      'home.recent_sends.status.SENT',
+    );
   });
 
-  it('applies green tag scheme when status is finished', () => {
-    const wrapper = mountWrapper({ status: 'finished' });
-    expect(wrapper.find('.send-element__tag--aux-green').exists()).toBe(true);
+  it('applies green tag scheme when status is SENT', () => {
+    const wrapper = mountWrapper({ status: BroadcastStatus.SENT });
+    expect(wrapper.find(SELECTOR.tag).attributes('data-scheme')).toBe(
+      'aux-green',
+    );
   });
 
-  it('applies orange tag scheme when status is not finished', () => {
-    const wrapper = mountWrapper({ status: 'running' });
-    expect(wrapper.find('.send-element__tag--aux-orange').exists()).toBe(true);
+  it('applies orange tag scheme when status is not SENT', () => {
+    const wrapper = mountWrapper({ status: BroadcastStatus.QUEUED });
+    expect(wrapper.find(SELECTOR.tag).attributes('data-scheme')).toBe(
+      'aux-orange',
+    );
   });
 
   it('passes key metric values to MetricsTable', () => {
     const wrapper = mountWrapper();
-    const metricsComp = wrapper.findComponent({ name: 'MetricsTable' });
-    const data = metricsComp.props('data') as Array<any>;
+    const data = wrapper
+      .findComponent({ name: 'MetricsTable' })
+      .props('data') as Array<any>;
 
     expect(Array.isArray(data)).toBe(true);
     expect(data.length).toBe(6);
 
-    // Sent
-    expect(data[0].value).toBe('10');
+    // Processed displays translation key when > 0
+    expect(data[0].value).toBe('home.recent_sends.metrics.processed.value');
 
     // Delivered percentage and subValue
     expect(data[1].value).toBe('90%');
@@ -104,16 +111,18 @@ describe('SendElement.vue', () => {
   it('opens NewContactGroup modal when clicked metric action is triggered', async () => {
     const wrapper = mountWrapper();
 
-    // Trigger the action provided by the clicked metric
-    await wrapper.find('.metrics-action-clicked').trigger('click');
+    // Trigger the action provided by the failed metric
+    await wrapper.find(SELECTOR.metricsActionFailed).trigger('click');
+    await nextTick();
 
-    const modal = wrapper.findComponent({ name: 'NewContactGroupModal' });
-    expect(modal.exists()).toBe(true);
-    expect(modal.props('modelValue')).toBe(true);
-    expect(modal.props('contactCount')).toBe('10');
-    expect(modal.props('category')).toBe(
-      'home.recent_sends.metrics.clicked.category',
+    expect(wrapper.find(SELECTOR.modal).exists()).toBe(true);
+
+    const modalComp = wrapper.findComponent({ name: 'NewContactGroupModal' });
+    expect(modalComp.props('modelValue')).toBe(true);
+    expect(modalComp.props('contactCount')).toBe(1);
+    expect(modalComp.props('category')).toBe(
+      'home.recent_sends.metrics.failed.category',
     );
-    expect(modal.props('broadcastName')).toBe('Test Send');
+    expect(modalComp.props('broadcastName')).toBe('Test Send');
   });
 });

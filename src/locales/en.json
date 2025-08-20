@@ -58,6 +58,10 @@
         "actions": {
           "add_to_a_new_group": "Add to a new group",
           "view_template": "View template"
+        },
+        "processed": {
+          "label": "Processed so far",
+          "value": "{processed} of {total}"
         }
       },
       "info": {
@@ -67,6 +71,12 @@
         "template_name": "Template:",
         "groups": "Contact group:",
         "sent_by": "Sent by:"
+      },
+      "pagination_text": "{currentPageOffset} of {total} sends",
+      "status": {
+        "QUEUED": "In progress",
+        "SENT": "Finished",
+        "FAILED": "Failed"
       }
     }
   },

@@ -1,5 +1,8 @@
 <template>
-  <section class="send-element-info">
+  <section
+    class="send-element-info"
+    data-test="send-element-info"
+  >
     <h2 class="send-element-info__title">
       {{ $t('home.recent_sends.info.title') }}
     </h2>
@@ -29,9 +32,10 @@
           {{ $t('home.recent_sends.info.template_name') }}
         </p>
         <p class="send-element-info__value">
-          {{ send.template.name }}
+          {{ templateName }}
           <button
             class="send-element-info__view-template"
+            data-test="view-template"
             @click="handleViewTemplate"
           >
             {{ $t('home.recent_sends.metrics.actions.view_template') }}
@@ -59,22 +63,32 @@
 </template>
 
 <script setup lang="ts">
-import type { RecentSend } from '@/types/recentSends';
+import type { BroadcastStatistic } from '@/types/broadcast';
+import { BroadcastStatus } from '@/constants/broadcasts';
 import { formatDateWithTimezone } from '@/utils/date';
 import { computed } from 'vue';
 
 const DATE_FORMAT = '[MMM d, h:mm aa]';
 
 const props = defineProps<{
-  send: RecentSend;
+  send: BroadcastStatistic;
 }>();
 
 const startedOn = computed(() => {
-  return formatDateWithTimezone(props.send.createdAt, DATE_FORMAT);
+  return formatDateWithTimezone(props.send.createdOn, DATE_FORMAT);
 });
 
+// TODO: check if ended on will be calculated by the backend
 const endedOn = computed(() => {
-  return formatDateWithTimezone(props.send.endedAt, DATE_FORMAT);
+  if (props.send.status === BroadcastStatus.SENT) {
+    return formatDateWithTimezone(props.send.modifiedOn, DATE_FORMAT);
+  }
+
+  return '-';
+});
+
+const templateName = computed(() => {
+  return props.send.template?.name || '-';
 });
 
 const groups = computed(() => {
@@ -98,9 +112,9 @@ const handleViewTemplate = () => {
 
   &__title {
     color: $unnnic-color-neutral-darkest;
-    font-size: $unnnic-font-size-body-lg;
+    font-size: $unnnic-font-size-body-gt;
     font-weight: $unnnic-font-weight-bold;
-    line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
+    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
   }
 
   &__content {

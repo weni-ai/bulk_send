@@ -58,6 +58,10 @@
         "actions": {
           "add_to_a_new_group": "Adicionar a um novo grupo",
           "view_template": "Ver modelo"
+        },
+        "processed": {
+          "label": "Processadas até agora",
+          "value": "{processed} de {total}"
         }
       },
       "info": {
@@ -67,6 +71,12 @@
         "template_name": "Modelo:",
         "groups": "Grupo de contatos:",
         "sent_by": "Enviado por:"
+      },
+      "pagination_text": "{currentPageOffset} de {total} envios",
+      "status": {
+        "QUEUED": "Em progresso",
+        "SENT": "Finalizado",
+        "FAILED": "Falhas"
       }
     }
   },

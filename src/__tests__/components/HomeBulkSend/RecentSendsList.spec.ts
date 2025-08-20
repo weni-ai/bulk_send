@@ -1,83 +1,95 @@
 import { describe, it, expect } from 'vitest';
-import { mount, VueWrapper } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import RecentSendsList from '@/components/HomeBulkSend/RecentSendsList.vue';
-import type { RecentSend } from '@/types/recentSends';
+import type { BroadcastStatistic } from '@/types/broadcast';
+import { createBroadcast } from '@/__tests__/utils/factories';
 
 const PAGE_SIZE = 5;
 
-const buildRecentSends = (count: number): RecentSend[] => {
-  return Array.from({ length: count }, (_, i) => i + 1).map((id) => ({
-    id,
-    name: `Send ${id}`,
-    status: id % 2 === 0 ? 'finished' : 'running',
-    createdAt: new Date('2024-01-01T00:00:00.000Z'),
-    endedAt: new Date('2024-01-01T01:00:00.000Z'),
-    template: { name: 'Template' },
-    groups: ['G1'],
-    createdBy: 'User',
-    metrics: {
-      sent: 10,
-      delivered: 5,
-      read: 4,
-      clicked: 1,
-      failed: 1,
-      estimatedCost: '0.00',
-    },
-  }));
+const buildRecentSends = (count: number): BroadcastStatistic[] => {
+  const sends: BroadcastStatistic[] = [];
+  for (let i = 1; i <= count; i += 1) {
+    sends.push(createBroadcast({ id: i, name: `Send ${i}` }));
+  }
+  return sends;
 };
+
+const SELECTOR = {
+  sendElement: '[data-test="send-element"]',
+  pagination: '[data-test="pagination"]',
+  skeleton: '[data-test="skeleton"]',
+} as const;
 
 const stubs = {
   SendElement: {
     props: ['send'],
-    template: '<div class="send-element-stub">Send {{ send.id }}</div>',
+    template: '<div data-test="send-element">Send {{ send.id }}</div>',
   },
   UnnnicPagination: {
     props: ['max', 'modelValue'],
     emits: ['update:model-value'],
     template:
-      '<div class="unnnic-pagination-stub" :data-max="max" :data-page="modelValue" @click="$emit(\'update:model-value\', (modelValue || 1) + 1)">Pagination</div>',
+      '<div data-test="pagination" :data-max="max" :data-page="modelValue" @click="$emit(\'update:model-value\', (modelValue || 1) + 1)">Pagination</div>',
+  },
+  UnnnicSkeletonLoading: {
+    props: ['width', 'height'],
+    template: '<div data-test="skeleton" />',
   },
 };
 
-const mountWrapper = (recentSends: RecentSend[]): VueWrapper => {
+const mountWrapper = (options?: {
+  recentSends?: BroadcastStatistic[];
+  loading?: boolean;
+  page?: number;
+  pageSize?: number;
+  total?: number;
+}) => {
+  const props = {
+    loading: options?.loading ?? false,
+    recentSends: options?.recentSends ?? buildRecentSends(PAGE_SIZE),
+    page: options?.page ?? 1,
+    pageSize: options?.pageSize ?? PAGE_SIZE,
+    total: options?.total ?? options?.recentSends?.length ?? PAGE_SIZE,
+  };
   return mount(RecentSendsList, {
-    props: { recentSends },
-    global: { stubs },
+    props,
+    global: {
+      stubs,
+      mocks: { $t: (key: string) => key },
+    },
   });
 };
 
 describe('RecentSendsList.vue', () => {
-  it('renders first page with up to PAGE_SIZE sends', () => {
-    const wrapper = mountWrapper(buildRecentSends(12));
-    const items = wrapper.findAll('.send-element-stub');
-    expect(items).toHaveLength(PAGE_SIZE);
+  it('renders sends when not loading', () => {
+    const wrapper = mountWrapper({ recentSends: buildRecentSends(3) });
+    const items = wrapper.findAll(SELECTOR.sendElement);
+    expect(items).toHaveLength(3);
     expect(wrapper.text()).toContain('Send 1');
-    expect(wrapper.text()).not.toContain('Send 6');
+    expect(wrapper.text()).toContain('Send 3');
   });
 
-  it('sets pagination max pages based on list length', () => {
-    const wrapper = mountWrapper(buildRecentSends(12));
-    const maxAttr = wrapper
-      .find('.unnnic-pagination-stub')
-      .attributes('data-max');
+  it('renders skeletons equal to pageSize when loading', () => {
+    const wrapper = mountWrapper({ loading: true, pageSize: 4 });
+    expect(wrapper.findAll(SELECTOR.skeleton)).toHaveLength(4);
+    expect(wrapper.findAll(SELECTOR.sendElement)).toHaveLength(0);
+  });
+
+  it('sets pagination max pages based on total and pageSize', () => {
+    const wrapper = mountWrapper({
+      recentSends: buildRecentSends(4),
+      total: 12,
+    });
+    const maxAttr = wrapper.find(SELECTOR.pagination).attributes('data-max');
     expect(Number(maxAttr)).toBe(3);
+    const pageAttr = wrapper.find(SELECTOR.pagination).attributes('data-page');
+    expect(Number(pageAttr)).toBe(1);
   });
 
-  it('changes page and updates rendered sends', async () => {
-    const wrapper = mountWrapper(buildRecentSends(12));
-    const pagination = wrapper.find('.unnnic-pagination-stub');
-
-    // Go to page 2
+  it('emits update:page when pagination component changes page', async () => {
+    const wrapper = mountWrapper({});
+    const pagination = wrapper.find(SELECTOR.pagination);
     await pagination.trigger('click');
-    expect(wrapper.text()).toContain('Send 6');
-    expect(wrapper.text()).toContain('Send 10');
-    expect(wrapper.text()).not.toContain('Send 11');
-
-    // Go to page 3
-    await pagination.trigger('click');
-    const items = wrapper.findAll('.send-element-stub');
-    expect(items).toHaveLength(2);
-    expect(wrapper.text()).toContain('Send 11');
-    expect(wrapper.text()).toContain('Send 12');
+    expect(wrapper.emitted('update:page')).toEqual([[2]]);
   });
 });

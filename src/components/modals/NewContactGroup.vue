@@ -26,7 +26,7 @@
         scheme="neutral-dark"
         :text="
           $t('modals.new_contact_group.disclaimer', {
-            contactCount: contactCount,
+            contactCount: contactCount.toLocaleString(),
             category: category,
             broadcastName: broadcastName,
           })
@@ -41,7 +41,7 @@ import { ref } from 'vue';
 
 const props = defineProps<{
   modelValue: boolean;
-  contactCount: string;
+  contactCount: number;
   category: string;
   broadcastName: string;
 }>();
