@@ -1,130 +1,149 @@
 import { mount } from '@vue/test-utils';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import HomeBulkSend from '@/views/BulkSend/HomeBulkSend.vue';
 import { createPinia, setActivePinia } from 'pinia';
 import { useProjectStore } from '@/stores/project';
+import { useBroadcastsStore } from '@/stores/broadcasts';
+
+// Mock useI18n to avoid installing i18n plugin
+vi.mock('vue-i18n', () => ({
+  useI18n: () => ({ t: (key: string) => key }),
+}));
 
 // Mock i18n
 const $t = vi.fn((key) => key);
 
 describe('HomeBulkSend.vue', () => {
-  const getStubs = () => ({
+  const DEFAULT_PROJECT_UUID = 'proj-123';
+  const DEFAULT_CHANNELS = [{ uuid: '1', name: 'WAC 1', channel_type: 'WAC' }];
+  const SELECTOR = {
+    header: '[data-test="home-header"]',
+    metricsTable: '[data-test="metrics-table"]',
+    recentSends: '[data-test="recent-sends"]',
+    activateMMLiteModal: '[data-test="activate-mmlite-modal"]',
+    mmliteDisclaimer: '[data-test="mmlite-disclaimer"]',
+    showMoreButton: '[data-test="show-more-button"]',
+    skeleton: '[data-test="skeleton"]',
+  } as const;
+
+  const STUBS = {
     BulkSendHomeLayout: {
       template: '<div><slot name="header" /><slot name="content" /></div>',
     },
-    HomeHeader: true,
-    MetricsTable: true,
-    RecentSends: true,
+    HomeHeader: { template: '<div data-test="home-header" />' },
+    MetricsTable: { template: '<div data-test="metrics-table" />' },
+    RecentSends: { template: '<div data-test="recent-sends" />' },
     ActivateMMLiteModal: {
-      template: '<div class="activate-mmlite-modal" />',
+      template: '<div data-test="activate-mmlite-modal" />',
     },
     UnnnicDisclaimer: {
-      template:
-        '<div class="home-bulk-send__mmlite-disclaimer" @click="$emit(\'click\', $event)"><button class="show-more-button" @click="$emit(\'click\', $event)">Show more</button></div>',
       emits: ['click'],
-    },
-    UnnnicButton: {
       template:
-        '<button class="unnnic-button-stub" @click="$emit(\'click\')"></button>',
-      emits: ['click'],
+        '<div data-test="mmlite-disclaimer" @click="$emit(\'click\', $event)"><button data-test="show-more-button" @click="$emit(\'click\', $event)">Show more</button></div>',
     },
-    UnnnicInputDatePicker: {
-      template:
-        "<input class=\"unnnic-input-date-picker-stub\" @change=\"$emit('update:modelValue', { start: '2024-01-01', end: '2024-01-31' })\" />",
-      emits: ['update:modelValue'],
-    },
-    UnnnicInput: {
-      template:
-        '<input class="unnnic-input-stub" @input="$emit(\'update:modelValue\', $event.target.value)" />',
-    },
-  });
+    UnnnicSkeletonLoading: { template: '<div data-test="skeleton" />' },
+  } as const;
 
   const mountWrapper = (
-    options: { channels?: Array<any>; stubAction?: boolean } = {},
+    options: {
+      channels?: Array<any>;
+      stubProjectAction?: boolean;
+      stubBroadcastAction?: boolean;
+      projectUuid?: string;
+      loadingMonthPerformance?: boolean;
+    } = {},
   ) => {
     const pinia = createPinia();
     setActivePinia(pinia);
     const projectStore = useProjectStore(pinia);
+    const broadcastsStore = useBroadcastsStore(pinia);
 
-    // Default to showing the disclaimer (WAC present, no MMLite)
-    const defaultChannels = [{ uuid: '1', name: 'WAC 1', channel_type: 'WAC' }];
+    projectStore.project.uuid = options.projectUuid ?? DEFAULT_PROJECT_UUID;
+    projectStore.project.channels = options.channels ?? DEFAULT_CHANNELS;
+    broadcastsStore.loadingBroadcastsMonthPerformance =
+      options.loadingMonthPerformance ?? false;
 
-    projectStore.project.channels = options.channels ?? defaultChannels;
+    const projectSpy =
+      options.stubProjectAction !== false
+        ? vi.spyOn(projectStore, 'getProjectChannels').mockResolvedValue()
+        : undefined;
+    const broadcastSpy =
+      options.stubBroadcastAction !== false
+        ? vi
+            .spyOn(broadcastsStore, 'getBroadcastsMonthPerformance')
+            .mockResolvedValue()
+        : undefined;
 
-    if (options.stubAction !== false) {
-      vi.spyOn(projectStore, 'getProjectChannels').mockResolvedValue();
-    }
-
-    return mount(HomeBulkSend, {
+    const wrapper = mount(HomeBulkSend, {
       global: {
         plugins: [pinia],
         mocks: { $t },
-        stubs: getStubs(),
+        stubs: STUBS,
       },
     });
+
+    return { wrapper, projectStore, broadcastsStore, projectSpy, broadcastSpy };
   };
 
-  it('should NOT open the modal when the disclaimer container is clicked (outside button)', async () => {
-    const wrapper = mountWrapper();
-
-    const disclaimer = wrapper.find('.home-bulk-send__mmlite-disclaimer');
-    await disclaimer.trigger('click');
-
-    expect(wrapper.find('.activate-mmlite-modal').exists()).toBe(false);
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
-  it('should open the modal when the show more button inside the disclaimer is clicked', async () => {
-    const wrapper = mountWrapper();
-
-    const button = wrapper.find('.show-more-button');
-    await button.trigger('click');
-
-    expect(wrapper.find('.activate-mmlite-modal').exists()).toBe(true);
+  it('does not open modal when clicking outside the button in disclaimer', async () => {
+    const { wrapper } = mountWrapper();
+    await wrapper.find(SELECTOR.mmliteDisclaimer).trigger('click');
+    expect(wrapper.find(SELECTOR.activateMMLiteModal).exists()).toBe(false);
   });
 
-  it('should call getProjectChannels on mount', async () => {
-    const pinia = createPinia();
-    setActivePinia(pinia);
-    const projectStore = useProjectStore(pinia);
-    const spy = vi
-      .spyOn(projectStore, 'getProjectChannels')
-      .mockResolvedValue();
-
-    mount(HomeBulkSend, {
-      global: {
-        plugins: [pinia],
-        mocks: { $t },
-        stubs: getStubs(),
-      },
-    });
-
-    expect(spy).toHaveBeenCalledTimes(1);
+  it('opens modal when clicking the show more button inside disclaimer', async () => {
+    const { wrapper } = mountWrapper();
+    await wrapper.find(SELECTOR.showMoreButton).trigger('click');
+    expect(wrapper.find(SELECTOR.activateMMLiteModal).exists()).toBe(true);
   });
 
-  it('shows MMLite disclaimer when there is WhatsApp (WAC) but no MMLite channel', () => {
-    const wrapper = mountWrapper({
+  it('calls getProjectChannels on mount', async () => {
+    const { projectSpy } = mountWrapper();
+    expect(projectSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('calls getBroadcastsMonthPerformance on mount with project uuid', async () => {
+    const { broadcastSpy } = mountWrapper({ projectUuid: 'proj-xyz' });
+    expect(broadcastSpy).toHaveBeenCalledWith('proj-xyz');
+  });
+
+  it('shows MMLite disclaimer when there is WAC but no MMLite channel', () => {
+    const { wrapper } = mountWrapper({
       channels: [{ uuid: '1', name: 'WAC 1', channel_type: 'WAC' }],
     });
 
-    expect(wrapper.find('.home-bulk-send__mmlite').exists()).toBe(true);
-    expect(wrapper.find('.home-bulk-send__mmlite-disclaimer').exists()).toBe(
-      true,
-    );
+    expect(wrapper.find(SELECTOR.mmliteDisclaimer).exists()).toBe(true);
   });
 
   it('hides MMLite disclaimer when MMLite channel exists', () => {
-    const wrapper = mountWrapper({
+    const { wrapper } = mountWrapper({
       channels: [
         { uuid: '1', name: 'WAC 1', channel_type: 'WAC' },
         { uuid: '2', name: 'WAC MMLite', channel_type: 'WAC', MMLite: true },
       ],
     });
 
-    expect(wrapper.find('.home-bulk-send__mmlite').exists()).toBe(false);
+    expect(wrapper.find(SELECTOR.mmliteDisclaimer).exists()).toBe(false);
   });
 
   it('hides MMLite disclaimer when there are no channels', () => {
-    const wrapper = mountWrapper({ channels: [] });
-    expect(wrapper.find('.home-bulk-send__mmlite').exists()).toBe(false);
+    const { wrapper } = mountWrapper({ channels: [] });
+    expect(wrapper.find(SELECTOR.mmliteDisclaimer).exists()).toBe(false);
+  });
+
+  it('shows skeleton when month performance is loading', () => {
+    const { wrapper } = mountWrapper({ loadingMonthPerformance: true });
+    expect(wrapper.find(SELECTOR.skeleton).exists()).toBe(true);
+    expect(wrapper.find(SELECTOR.metricsTable).exists()).toBe(false);
+  });
+
+  it('shows metrics table when month performance is loaded', () => {
+    const { wrapper } = mountWrapper({ loadingMonthPerformance: false });
+    expect(wrapper.find(SELECTOR.metricsTable).exists()).toBe(true);
+    expect(wrapper.find(SELECTOR.skeleton).exists()).toBe(false);
   });
 });

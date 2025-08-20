@@ -4,7 +4,21 @@
     "description": "Envía mensajes de marketing masivos a tus contactos",
     "new_send": "Nuevo envío",
     "mmlite_disclaimer": "Cambia a la API Lite de MM ahora para acelerar tu crecimiento y obtener control total sobre la entrega. <button class=\"highlight\">Ver más</button>",
-    "general_performance": "Desempeño General (Últimos 30 días)",
+    "general_performance": {
+      "title": "Rendimiento general (últimos 30 días)",
+      "total_sent": {
+        "label": "Total enviado",
+        "hint": "Total de mensajes enviados a través de disparos en masa en el período seleccionado."
+      },
+      "estimated_total_cost": {
+        "label": "Costo total estimado",
+        "hint": "Costo estimado basado en el número de mensajes enviados. El precio final puede variar según la facturación de Meta."
+      },
+      "success_rate": {
+        "label": "Tasa de éxito",
+        "hint": "Porcentaje de contactos que recibieron mensajes con éxito, calculado a partir del total de contactos únicos objetivo en todas las campañas."
+      }
+    },
     "no_recent_sends": {
       "title": "Comienza a enviar mensajes personalizados a tus contactos a gran escala",
       "subtitle": "Toma menos de 2 minutos para configurar tu primer envío.",
