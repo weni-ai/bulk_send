@@ -92,7 +92,7 @@ const templateName = computed(() => {
 });
 
 const groups = computed(() => {
-  return props.send.groups.join(', ');
+  return props.send.groups.map((group) => group.name).join(', ');
 });
 
 const handleViewTemplate = () => {
