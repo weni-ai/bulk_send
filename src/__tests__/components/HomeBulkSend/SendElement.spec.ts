@@ -24,7 +24,7 @@ const stubs = {
     name: 'MetricsTable',
     props: ['data', 'maxColumns'],
     template:
-      '<div data-test="metrics">Metrics: {{ data?.length }}<button data-test="metrics-action-failed" @click="data && data[5] && data[5].actions && data[5].actions[0] && data[5].actions[0].onClick()">open clicked modal</button></div>',
+      '<div data-test="metrics">Metrics: {{ data?.length }}<button data-test="metrics-action-failed" @click="(data && (data.find(m => m.actions) && data.find(m => m.actions).actions[0] && data.find(m => m.actions).actions[0].onClick()))">open clicked modal</button></div>',
   },
   SendElementInfo: {
     template: '<div class="send-element-info-stub" />',
@@ -45,6 +45,18 @@ const SELECTOR = {
   metricsActionFailed: '[data-test="metrics-action-failed"]',
   modal: '[data-test="new-contact-group-modal"]',
 } as const;
+
+const getMetricsData = (wrapper: any) =>
+  (wrapper.findComponent({ name: 'MetricsTable' }).props('data') as any[]) ||
+  [];
+
+const clickMetricAction = (wrapper: any, metricKey: string) => {
+  const data = getMetricsData(wrapper);
+  const row = data.find((m) =>
+    String(m.label).includes(`home.recent_sends.metrics.${metricKey}.label`),
+  );
+  row?.actions?.[0]?.onClick?.();
+};
 
 const mountWrapper = (overrides: Partial<BroadcastStatistic> = {}) => {
   const send: BroadcastStatistic = createBroadcast({
@@ -96,30 +108,44 @@ describe('SendElement.vue', () => {
     expect(Array.isArray(data)).toBe(true);
     expect(data.length).toBe(6);
 
+    const byLabel = Object.fromEntries(
+      data.map((m: any) => [m.label as string, m]),
+    );
+
     // Processed displays translation key when > 0
-    expect(data[0].value).toBe('home.recent_sends.metrics.processed.value');
+    expect(byLabel['home.recent_sends.metrics.processed.label'].value).toBe(
+      'home.recent_sends.metrics.processed.value',
+    );
 
     // Delivered percentage and subValue
-    expect(data[1].value).toBe('90%');
-    expect(data[1].subValue).toBe('9');
+    expect(byLabel['home.recent_sends.metrics.delivered.label'].value).toBe(
+      '90%',
+    );
+    expect(byLabel['home.recent_sends.metrics.delivered.label'].subValue).toBe(
+      '9',
+    );
 
     // Failed percentage
-    expect(data[5].value).toBe('10%');
-    expect(data[5].subValue).toBe('1');
+    expect(byLabel['home.recent_sends.metrics.failed.label'].value).toBe('10%');
+    expect(byLabel['home.recent_sends.metrics.failed.label'].subValue).toBe(
+      '1',
+    );
   });
 
-  it('opens NewContactGroup modal when clicked metric action is triggered', async () => {
+  it('opens NewContactGroup modal when failed metric action is triggered', async () => {
     const wrapper = mountWrapper();
 
-    // Trigger the action provided by the failed metric
-    await wrapper.find(SELECTOR.metricsActionFailed).trigger('click');
+    // Invoke the failed metric action via helper
+    clickMetricAction(wrapper, 'failed');
     await nextTick();
 
     expect(wrapper.find(SELECTOR.modal).exists()).toBe(true);
 
     const modalComp = wrapper.findComponent({ name: 'NewContactGroupModal' });
     expect(modalComp.props('modelValue')).toBe(true);
-    expect(modalComp.props('contactCount')).toBe(1);
+    expect(modalComp.props('contactCount')).toBe(
+      (wrapper.props('send') as BroadcastStatistic).statistics.failed,
+    );
     expect(modalComp.props('category')).toBe(
       'home.recent_sends.metrics.failed.category',
     );

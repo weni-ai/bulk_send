@@ -31,11 +31,13 @@
       "metrics": {
         "sent": {
           "label": "Sent",
-          "hint": "Mock hint"
+          "hint": "Mock hint",
+          "category": "Sent"
         },
         "delivered": {
           "label": "Delivered",
-          "hint": "Mock hint"
+          "hint": "Mock hint",
+          "category": "Delivered"
         },
         "estimated_cost": {
           "label": "Estimated cost",
@@ -43,7 +45,8 @@
         },
         "read": {
           "label": "Read",
-          "hint": "Mock hint"
+          "hint": "Mock hint",
+          "category": "Read"
         },
         "clicked": {
           "label": "Clicks",

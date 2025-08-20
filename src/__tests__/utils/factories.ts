@@ -11,8 +11,11 @@ export const createBroadcast = (
     createdBy: 'tester',
     createdOn: new Date('2024-01-01T00:00:00Z'),
     modifiedOn: new Date('2024-01-02T00:00:00Z'),
-    groups: [1, 2],
-    template: { name: 'Template' },
+    groups: [
+      { uuid: 'uuid-1', name: 'Group 1' },
+      { uuid: 'uuid-2', name: 'Group 2' },
+    ],
+    template: { id: 1, name: 'Template' },
     statistics: {
       processed: 10,
       sent: 10,
@@ -20,6 +23,9 @@ export const createBroadcast = (
       read: 8,
       failed: 1,
       contactCount: 10,
+      cost: 2,
+      currency: 'USD',
+      template_price: 0.2,
     },
   };
 
