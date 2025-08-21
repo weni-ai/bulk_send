@@ -1,8 +1,11 @@
 import request from '@/api/requests';
-import type { RequestParams } from '@/types/requests';
+import type { PageRequestParams } from '@/types/requests';
 
 export default {
-  async getBroadcastsStatistics(projectUuid: string, params: RequestParams) {
+  async getBroadcastsStatistics(
+    projectUuid: string,
+    params: PageRequestParams,
+  ) {
     const response = await request.$http.get(
       `/api/v2/internals/broadcasts-statistics`,
       {
