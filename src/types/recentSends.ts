@@ -2,7 +2,7 @@
  * Types for recent sends functionality
  */
 
-export interface RecentSend {
+interface RecentSend {
   id: number;
   name: string;
   status: string;
@@ -23,7 +23,9 @@ export interface RecentSend {
   };
 }
 
-export interface DateRange {
+interface DateRange {
   start: string;
   end: string;
 }
+
+export type { RecentSend, DateRange };
