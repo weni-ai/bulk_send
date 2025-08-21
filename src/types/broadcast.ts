@@ -5,9 +5,9 @@ import { BroadcastStatus } from '@/constants/broadcasts';
 import { Currency } from '@/constants/currency';
 
 interface BroadcastStatisticsParams extends PageRequestParams {
-  start_date: string;
-  end_date: string;
-  name: string;
+  start_date?: string;
+  end_date?: string;
+  name?: string;
 }
 
 interface BroadcastStatistic {
