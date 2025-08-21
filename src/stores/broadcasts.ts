@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
 import type {
   BroadcastStatistic,
+  BroadcastStatisticsParams,
   BroadcastsMonthPerformance,
 } from '@/types/broadcast';
-import type { RequestParams } from '@/types/requests';
 import BroadcastStatistics from '@/api/resources/broadcasts';
 
 export const useBroadcastsStore = defineStore('broadcasts', {
@@ -19,36 +19,45 @@ export const useBroadcastsStore = defineStore('broadcasts', {
     },
   }),
   actions: {
-    async getBroadcastsStatistics(projectUuid: string, params: RequestParams) {
+    async getBroadcastsStatistics(
+      projectUuid: string,
+      params: BroadcastStatisticsParams,
+    ) {
       this.loadingBroadcastsStatistics = true;
-      const response = await BroadcastStatistics.getBroadcastsStatistics(
-        projectUuid,
-        params,
-      );
-      this.broadcastsStatisticsCount = response.data.count;
-      this.broadcastsStatistics = response.data.results.map(
-        (result: BroadcastStatistic) => ({
-          ...result,
-          createdOn: new Date(result.createdOn),
-          modifiedOn: new Date(result.modifiedOn),
-        }),
-      );
-      this.loadingBroadcastsStatistics = false;
+      try {
+        const response = await BroadcastStatistics.getBroadcastsStatistics(
+          projectUuid,
+          params,
+        );
+        this.broadcastsStatisticsCount = response.data.count;
+        this.broadcastsStatistics = response.data.results.map(
+          (result: BroadcastStatistic) => ({
+            ...result,
+            createdOn: new Date(result.createdOn),
+            modifiedOn: new Date(result.modifiedOn),
+          }),
+        );
+      } finally {
+        this.loadingBroadcastsStatistics = false;
+      }
     },
     async getBroadcastsMonthPerformance(projectUuid: string) {
       this.loadingBroadcastsMonthPerformance = true;
-      const response =
-        await BroadcastStatistics.getBroadcastsMonthPerformance(projectUuid);
+      try {
+        const response =
+          await BroadcastStatistics.getBroadcastsMonthPerformance(projectUuid);
 
-      const stats = response.data.last30DaysStats;
-      const cost = 123; // TODO: calculate cost from the response when API brings the required fields
+        const stats = response.data.last30DaysStats;
+        const cost = 123; // TODO: calculate cost from the response when API brings the required fields
 
-      this.broadcastMonthPerformance = {
-        totalSent: stats.totalSent,
-        estimatedCost: cost,
-        successRate: response.data.successRate,
-      };
-      this.loadingBroadcastsMonthPerformance = false;
+        this.broadcastMonthPerformance = {
+          totalSent: stats.totalSent,
+          estimatedCost: cost,
+          successRate: response.data.successRate,
+        };
+      } finally {
+        this.loadingBroadcastsMonthPerformance = false;
+      }
     },
   },
 });
