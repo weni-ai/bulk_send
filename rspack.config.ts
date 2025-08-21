@@ -1,24 +1,25 @@
-import { defineConfig } from '@rspack/cli'
-import { rspack } from '@rspack/core'
-import type { SwcLoaderOptions } from '@rspack/core'
-import HtmlRspackPlugin from 'html-rspack-plugin'
-import { VueLoaderPlugin } from 'vue-loader'
-import { resolve } from 'path'
-import path from 'path'
-import dotenv from 'dotenv'
-import { fileURLToPath } from 'url'
-import pkg from './package.json' with { type: 'json' }
+/* eslint-disable no-undef */
+import { defineConfig } from '@rspack/cli';
+import { rspack } from '@rspack/core';
+import type { SwcLoaderOptions } from '@rspack/core';
+import HtmlRspackPlugin from 'html-rspack-plugin';
+import { VueLoaderPlugin } from 'vue-loader';
+import { resolve } from 'path';
+import path from 'path';
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import pkg from './package.json' with { type: 'json' };
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-dotenv.config()
+dotenv.config();
 
 const toPosixPath = (filepath: string) =>
-  path.sep === '/' ? filepath : filepath.replace(/\\/g, '/')
+  path.sep === '/' ? filepath : filepath.replace(/\\/g, '/');
 
 // Target browsers, see: https://github.com/browserslist/browserslist
-const targets = ['chrome >= 87', 'edge >= 88', 'firefox >= 78', 'safari >= 14']
+const targets = ['chrome >= 87', 'edge >= 88', 'firefox >= 78', 'safari >= 14'];
 
 export default defineConfig({
   context: __dirname,
@@ -35,7 +36,8 @@ export default defineConfig({
     filename: 'assets/js/[name]-[contenthash].js',
     chunkFilename: 'assets/js/[name]-[contenthash].js',
     assetModuleFilename: 'assets/[name]-[hash][ext]',
-    devtoolModuleFilenameTemplate: (info) => toPosixPath(info.absoluteResourcePath),
+    devtoolModuleFilenameTemplate: (info) =>
+      toPosixPath(info.absoluteResourcePath),
   },
   entry: {
     main: './src/main.ts',
@@ -144,4 +146,4 @@ export default defineConfig({
   experiments: {
     css: true,
   },
-})
+});

@@ -4,43 +4,60 @@
       {{ $t('home.recent_sends.title') }}
     </h2>
 
-    <MissingRecentSends v-if="!recentSendsData.length" class="recent-sends__missing-recent-sends"
-      @start-new-send="handleStartNewSend" />
+    <MissingRecentSends
+      v-if="!recentSendsData.length"
+      class="recent-sends__missing-recent-sends"
+      @start-new-send="handleStartNewSend"
+    />
 
-    <section v-else class="recent-sends__content">
+    <section
+      v-else
+      class="recent-sends__content"
+    >
       <section class="recent-sends__filters">
-        <UnnnicInput class="recent-sends__search" icon-left="search-1"
-          :placeholder="$t('home.recent_sends.search_placeholder')" :model-value="search"
-          @update:model-value="handleSearchUpdate" />
+        <UnnnicInput
+          class="recent-sends__search"
+          iconLeft="search-1"
+          :placeholder="$t('home.recent_sends.search_placeholder')"
+          :modelValue="search"
+          @update:model-value="handleSearchUpdate"
+        />
 
-        <UnnnicInputDatePicker class="recent-sends__date-range" :placeholder="$t('home.recent_sends.date_placeholder')"
-          position="right" :model-value="dateRange" @update:model-value="handleDateRangeUpdate" />
+        <UnnnicInputDatePicker
+          class="recent-sends__date-range"
+          :placeholder="$t('home.recent_sends.date_placeholder')"
+          position="right"
+          :modelValue="dateRange"
+          @update:model-value="handleDateRangeUpdate"
+        />
       </section>
 
-      <RecentSendsList :recent-sends="recentSendsData" />
+      <RecentSendsList :recentSends="recentSendsData" />
     </section>
   </section>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import MissingRecentSends from '@/components/HomeBulkSend/MissingRecentSends.vue'
-import RecentSendsList from '@/components/HomeBulkSend/RecentSendsList.vue'
-import { createDateRangeFromDaysAgo } from '@/utils/date'
-import { DEFAULT_DATE_RANGE_DAYS } from '@/constants/recentSends'
-import type { RecentSend, DateRange } from '@/types/recentSends'
+import { ref } from 'vue';
+import MissingRecentSends from '@/components/HomeBulkSend/MissingRecentSends.vue';
+import RecentSendsList from '@/components/HomeBulkSend/RecentSendsList.vue';
+import { createDateRangeFromDaysAgo } from '@/utils/date';
+import { DEFAULT_DATE_RANGE_DAYS } from '@/constants/recentSends';
+import type { RecentSend, DateRange } from '@/types/recentSends';
 
-const recentSendsData = ref<RecentSend[]>([])
-const search = ref('')
-const dateRange = ref<DateRange>(createDateRangeFromDaysAgo(DEFAULT_DATE_RANGE_DAYS))
+const recentSendsData = ref<RecentSend[]>([]);
+const search = ref('');
+const dateRange = ref<DateRange>(
+  createDateRangeFromDaysAgo(DEFAULT_DATE_RANGE_DAYS),
+);
 
 const handleSearchUpdate = (value: string) => {
-  search.value = value
-}
+  search.value = value;
+};
 
 const handleDateRangeUpdate = (value: DateRange) => {
-  dateRange.value = value
-}
+  dateRange.value = value;
+};
 
 const handleStartNewSend = () => {
   // For now just add mocked data to the recentSendsData
@@ -61,12 +78,12 @@ const handleStartNewSend = () => {
       read: 80000,
       clicked: 20000,
       failed: 1500,
-      estimatedCost: "R$ 25.000,00",
+      estimatedCost: 'R$ 25.000,00',
     },
-  }))
+  }));
 
-  recentSendsData.value.push(...newSends)
-}
+  recentSendsData.value.push(...newSends);
+};
 </script>
 
 <style lang="scss" scoped>
@@ -110,6 +127,5 @@ const handleStartNewSend = () => {
       width: 100%;
     }
   }
-
 }
 </style>

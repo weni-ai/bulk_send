@@ -1,7 +1,8 @@
-const PUBLIC_PATH_URL = process.env.PUBLIC_PATH_URL
+// eslint-disable-next-line no-undef
+const PUBLIC_PATH_URL = process.env.PUBLIC_PATH_URL;
 
 const loadAsset = (assetPath: string) => {
-  return `${PUBLIC_PATH_URL}/${assetPath}`
-}
+  return `${PUBLIC_PATH_URL}/${assetPath}`;
+};
 
-export { loadAsset }
+export { loadAsset };

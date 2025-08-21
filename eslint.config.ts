@@ -1,8 +1,12 @@
-import { globalIgnores } from 'eslint/config'
-import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
-import pluginVue from 'eslint-plugin-vue'
-import pluginVitest from '@vitest/eslint-plugin'
-import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
+import { globalIgnores } from 'eslint/config';
+import {
+  defineConfigWithVueTs,
+  vueTsConfigs,
+} from '@vue/eslint-config-typescript';
+import pluginVue from 'eslint-plugin-vue';
+import pluginVitest from '@vitest/eslint-plugin';
+// @ts-expect-error - weniConfig is not typed
+import weniConfig from '@weni/eslint-config/vue3';
 
 // To allow more languages other than `ts` in `.vue` files, uncomment the following lines:
 // import { configureVueProject } from '@vue/eslint-config-typescript'
@@ -30,5 +34,5 @@ export default defineConfigWithVueTs(
       '@typescript-eslint/no-explicit-any': 'off',
     },
   },
-  skipFormatting,
-)
+  weniConfig,
+);

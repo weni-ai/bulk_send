@@ -1,6 +1,9 @@
 <template>
   <section class="missing-recent-sends">
-    <img :src="loadAsset('svgs/campaign.svg')" alt="Campaign Icon" />
+    <img
+      :src="loadAsset('svgs/campaign.svg')"
+      alt="Campaign Icon"
+    />
     <section class="missing-recent-sends__content">
       <p class="missing-recent-sends__title">
         {{ $t('home.no_recent_sends.title') }}
@@ -9,18 +12,22 @@
         {{ $t('home.no_recent_sends.subtitle') }}
       </p>
     </section>
-    <UnnnicButton :text="$t('home.no_recent_sends.button')" type="secondary" @click="handleButtonClick" />
+    <UnnnicButton
+      :text="$t('home.no_recent_sends.button')"
+      type="secondary"
+      @click="handleButtonClick"
+    />
   </section>
 </template>
 
 <script setup lang="ts">
-import { loadAsset } from '@/utils/assets'
+import { loadAsset } from '@/utils/assets';
 
-const emit = defineEmits(['start-new-send'])
+const emit = defineEmits(['start-new-send']);
 
 const handleButtonClick = () => {
-  emit('start-new-send')
-}
+  emit('start-new-send');
+};
 </script>
 
 <style lang="scss" scoped>
@@ -33,7 +40,7 @@ const handleButtonClick = () => {
 
   &__content {
     margin: $unnnic-spacing-sm 0;
-    text-align: cente
+    text-align: cente;
   }
 
   &__title {

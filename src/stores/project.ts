@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 
 export const useProjectStore = defineStore('project', {
   state: () => ({
@@ -8,7 +8,7 @@ export const useProjectStore = defineStore('project', {
   }),
   actions: {
     setProjectUuid(projectUuid: string) {
-      this.project.uuid = projectUuid
+      this.project.uuid = projectUuid;
     },
   },
-})
+});

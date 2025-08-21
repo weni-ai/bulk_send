@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -6,7 +6,7 @@ export const useAuthStore = defineStore('auth', {
   }),
   actions: {
     setToken(token: string) {
-      this.token = token
+      this.token = token;
     },
   },
-})
+});

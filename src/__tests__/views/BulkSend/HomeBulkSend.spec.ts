@@ -1,9 +1,9 @@
-import { mount } from '@vue/test-utils'
-import { describe, it, expect, vi } from 'vitest'
-import HomeBulkSend from '@/views/BulkSend/HomeBulkSend.vue'
+import { mount } from '@vue/test-utils';
+import { describe, it, expect, vi } from 'vitest';
+import HomeBulkSend from '@/views/BulkSend/HomeBulkSend.vue';
 
 // Mock i18n
-const $t = vi.fn((key) => key)
+const $t = vi.fn((key) => key);
 
 describe('HomeBulkSend.vue', () => {
   const getStubs = () => ({
@@ -22,7 +22,8 @@ describe('HomeBulkSend.vue', () => {
       emits: ['click'],
     },
     UnnnicButton: {
-      template: '<button class="unnnic-button-stub" @click="$emit(\'click\')"></button>',
+      template:
+        '<button class="unnnic-button-stub" @click="$emit(\'click\')"></button>',
       emits: ['click'],
     },
     UnnnicInputDatePicker: {
@@ -34,7 +35,7 @@ describe('HomeBulkSend.vue', () => {
       template:
         '<input class="unnnic-input-stub" @input="$emit(\'update:modelValue\', $event.target.value)" />',
     },
-  })
+  });
 
   const mountWrapper = () =>
     mount(HomeBulkSend, {
@@ -42,23 +43,23 @@ describe('HomeBulkSend.vue', () => {
         mocks: { $t },
         stubs: getStubs(),
       },
-    })
+    });
 
   it('should NOT open the modal when the disclaimer container is clicked (outside button)', async () => {
-    const wrapper = mountWrapper()
+    const wrapper = mountWrapper();
 
-    const disclaimer = wrapper.find('.home-bulk-send__mmlite-disclaimer')
-    await disclaimer.trigger('click')
+    const disclaimer = wrapper.find('.home-bulk-send__mmlite-disclaimer');
+    await disclaimer.trigger('click');
 
-    expect(wrapper.find('.activate-mmlite-modal').exists()).toBe(false)
-  })
+    expect(wrapper.find('.activate-mmlite-modal').exists()).toBe(false);
+  });
 
   it('should open the modal when the show more button inside the disclaimer is clicked', async () => {
-    const wrapper = mountWrapper()
+    const wrapper = mountWrapper();
 
-    const button = wrapper.find('.show-more-button')
-    await button.trigger('click')
+    const button = wrapper.find('.show-more-button');
+    await button.trigger('click');
 
-    expect(wrapper.find('.activate-mmlite-modal').exists()).toBe(true)
-  })
-})
+    expect(wrapper.find('.activate-mmlite-modal').exists()).toBe(true);
+  });
+});
