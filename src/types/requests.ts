@@ -1,6 +1,6 @@
-interface RequestParams {
+interface PageRequestParams {
   offset?: number;
   limit?: number;
 }
 
-export type { RequestParams };
+export type { PageRequestParams };

@@ -58,6 +58,7 @@
 
 <script setup lang="ts">
 import { computed, ref, onBeforeMount } from 'vue';
+import { useDebounceFn } from '@vueuse/core';
 import MissingRecentSends from '@/components/HomeBulkSend/MissingRecentSends.vue';
 import RecentSendsList from '@/components/HomeBulkSend/RecentSendsList.vue';
 import { createDateRangeFromDaysAgo } from '@/utils/date';
@@ -65,6 +66,8 @@ import { DEFAULT_DATE_RANGE_DAYS, PAGE_SIZE } from '@/constants/recentSends';
 import type { DateRange } from '@/types/recentSends';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import { useProjectStore } from '@/stores/project';
+import { endOfDay, startOfDay } from 'date-fns';
+import { TZDate } from '@date-fns/tz';
 
 const broadcastsStore = useBroadcastsStore();
 const projectStore = useProjectStore();
@@ -90,13 +93,15 @@ onBeforeMount(() => {
   fetchRecentSends();
 });
 
-const handleSearchUpdate = (value: string) => {
+const handleSearchUpdate = useDebounceFn((value: string) => {
   search.value = value;
-};
+  fetchRecentSends();
+}, 500);
 
-const handleDateRangeUpdate = (value: DateRange) => {
+const handleDateRangeUpdate = useDebounceFn((value: DateRange) => {
   dateRange.value = value;
-};
+  fetchRecentSends();
+}, 500);
 
 const handleStartNewSend = () => {
   // TODO: implement redirect to new send page
@@ -105,10 +110,18 @@ const handleStartNewSend = () => {
 
 const fetchRecentSends = async () => {
   try {
-    await broadcastsStore.getBroadcastsStatistics(projectStore.project.uuid, {
+    const params = {
       offset: (recentSendsPage.value - 1) * recentSendsPageSize,
       limit: recentSendsPageSize,
-    });
+      start_date: startOfDay(new TZDate(dateRange.value.start)).toISOString(),
+      end_date: endOfDay(new TZDate(dateRange.value.end)).toISOString(),
+      name: search.value.trim(),
+    };
+
+    await broadcastsStore.getBroadcastsStatistics(
+      projectStore.project.uuid,
+      params,
+    );
   } catch (error) {
     console.error(error); // TODO: check with design if we need to show an error message to the user
   }

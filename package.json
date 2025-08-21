@@ -17,9 +17,11 @@
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@date-fns/tz": "^1.4.1",
     "@rspack/cli": "^1.4.10",
     "@rspack/core": "^1.4.10",
     "@sentry/vue": "^9.44.2",
+    "@vueuse/core": "^13.7.0",
     "@weni/unnnic-system": "^2.36.0",
     "axios": "^1.11.0",
     "camelcase-keys": "^9.1.3",
