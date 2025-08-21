@@ -72,6 +72,6 @@ jobs:
         ${{ needs.setup.outputs.extra_build_args }}
       target_repository: weni-ai/kubernetes-manifests-platform
       target_repository_branch: main
-      target_application: bulk-send-webapp
+      target_application: bulk-send
       target_patch_file: deployment.json
     secrets: inherit
