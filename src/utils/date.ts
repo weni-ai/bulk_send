@@ -2,7 +2,7 @@
  * Date utility functions
  */
 
-import { format } from 'date-fns';
+import { addMinutes, format } from 'date-fns';
 
 /**
  * Formats a date to desired format considering timezone offset
@@ -40,3 +40,7 @@ export const createDateRangeFromDaysAgo = (daysAgo: number) => ({
   start: formatDateWithTimezone(getDateDaysAgo(daysAgo), 'yyyy-MM-dd'),
   end: formatDateWithTimezone(new Date(), 'yyyy-MM-dd'),
 });
+
+export const getDateInUTC = (date: Date) => {
+  return addMinutes(date, date.getTimezoneOffset());
+};

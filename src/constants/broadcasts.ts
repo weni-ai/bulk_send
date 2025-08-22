@@ -1,7 +1,17 @@
+import type { CoreStatistics } from '@/types/broadcast';
+
 enum BroadcastStatus {
   QUEUED = 'Q',
   SENT = 'S',
   FAILED = 'F',
 }
 
-export { BroadcastStatus };
+const ContactGroupStatus: Record<keyof CoreStatistics, string> = {
+  processed: 'P',
+  sent: 'S',
+  delivered: 'D',
+  read: 'R',
+  failed: 'F',
+};
+
+export { BroadcastStatus, ContactGroupStatus };
