@@ -91,6 +91,13 @@
       "buttons": {
         "primary": "Create group",
         "secondary": "Cancel"
+      },
+      "categories": {
+        "processed": "Processed",
+        "sent": "Sent",
+        "delivered": "Delivered",
+        "read": "Read",
+        "failed": "Failed"
       }
     },
     "activate_mmlite": {

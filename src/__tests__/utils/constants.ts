@@ -1,0 +1,3 @@
+const DEFAULT_PROJECT_UUID = 'proj-123';
+
+export { DEFAULT_PROJECT_UUID };
