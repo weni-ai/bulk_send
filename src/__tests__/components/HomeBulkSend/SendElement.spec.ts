@@ -146,9 +146,7 @@ describe('SendElement.vue', () => {
     expect(modalComp.props('contactCount')).toBe(
       (wrapper.props('send') as BroadcastStatistic).statistics.failed,
     );
-    expect(modalComp.props('category')).toBe(
-      'home.recent_sends.metrics.failed.category',
-    );
+    expect(modalComp.props('category')).toBe('failed');
     expect(modalComp.props('broadcastName')).toBe('Test Send');
   });
 });
