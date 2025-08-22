@@ -40,7 +40,7 @@ const handleButtonClick = () => {
 
   &__content {
     margin: $unnnic-spacing-sm 0;
-    text-align: cente;
+    text-align: center;
   }
 
   &__title {
