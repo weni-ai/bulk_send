@@ -91,6 +91,13 @@
       "buttons": {
         "primary": "Criar grupo",
         "secondary": "Cancel"
+      },
+      "categories": {
+        "processed": "Processadas",
+        "sent": "Enviadas",
+        "delivered": "Entregues",
+        "read": "Lidas",
+        "failed": "Falhas"
       }
     },
     "activate_mmlite": {
