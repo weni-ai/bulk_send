@@ -8,12 +8,11 @@ import { useProjectStore } from '@/stores/project';
 import { createBroadcast } from '@/__tests__/utils/factories';
 import type { BroadcastStatistic } from '@/types/broadcast';
 import { startOfDay, endOfDay } from 'date-fns';
-import { TZDate } from '@date-fns/tz';
-import { createDateRangeFromDaysAgo } from '@/utils/date';
+import { createDateRangeFromDaysAgo, getDateInUTC } from '@/utils/date';
 import type { DateRange } from '@/types/recentSends';
+import { DEFAULT_PROJECT_UUID } from '@/__tests__/utils/constants';
 
 // Inline helper and stubs
-const DEFAULT_PROJECT_UUID = 'proj-123';
 const TEST_DATE_RANGE = { start: '2024-01-01', end: '2024-01-31' };
 const SELECTOR = {
   root: '[data-test="recent-sends"]',
@@ -26,11 +25,15 @@ const SELECTOR = {
 };
 const $t = (key: string) => key;
 
-// Helper to build ISO start/end from any DateRange
-const mkIsoRange = (range: DateRange) => ({
-  start: startOfDay(new TZDate(range.start)).toISOString(),
-  end: endOfDay(new TZDate(range.end)).toISOString(),
-});
+// Helper to build ISO start/end from any DateRange (mirrors component logic)
+const mkIsoRange = (range: DateRange) => {
+  const startDate = getDateInUTC(new Date(range.start));
+  const endDate = getDateInUTC(new Date(range.end));
+  return {
+    start: startOfDay(startDate).toISOString(),
+    end: endOfDay(endDate).toISOString(),
+  };
+};
 
 const stubs = {
   MissingRecentSends: {
