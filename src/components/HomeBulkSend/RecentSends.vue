@@ -10,6 +10,7 @@
       {{ $t('home.recent_sends.title') }}
     </h2>
 
+    <!-- TODO: fix this component being rendered when the search is empty-->
     <MissingRecentSends
       v-if="showMissingRecentSends"
       class="recent-sends__missing-recent-sends"
@@ -61,13 +62,12 @@ import { computed, ref, onBeforeMount } from 'vue';
 import { useDebounceFn } from '@vueuse/core';
 import MissingRecentSends from '@/components/HomeBulkSend/MissingRecentSends.vue';
 import RecentSendsList from '@/components/HomeBulkSend/RecentSendsList.vue';
-import { createDateRangeFromDaysAgo } from '@/utils/date';
+import { createDateRangeFromDaysAgo, getDateInUTC } from '@/utils/date';
 import { DEFAULT_DATE_RANGE_DAYS, PAGE_SIZE } from '@/constants/recentSends';
 import type { DateRange } from '@/types/recentSends';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import { useProjectStore } from '@/stores/project';
 import { endOfDay, startOfDay } from 'date-fns';
-import { TZDate } from '@date-fns/tz';
 
 const broadcastsStore = useBroadcastsStore();
 const projectStore = useProjectStore();
@@ -109,12 +109,14 @@ const handleStartNewSend = () => {
 };
 
 const fetchRecentSends = async () => {
+  const startDate = getDateInUTC(new Date(dateRange.value.start));
+  const endDate = getDateInUTC(new Date(dateRange.value.end));
   try {
     const params = {
       offset: (recentSendsPage.value - 1) * recentSendsPageSize,
       limit: recentSendsPageSize,
-      start_date: startOfDay(new TZDate(dateRange.value.start)).toISOString(),
-      end_date: endOfDay(new TZDate(dateRange.value.end)).toISOString(),
+      start_date: startOfDay(startDate).toISOString(),
+      end_date: endOfDay(endDate).toISOString(),
       name: search.value.trim(),
     };
 
