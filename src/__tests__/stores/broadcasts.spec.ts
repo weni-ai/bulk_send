@@ -10,6 +10,7 @@ vi.mock('@/api/resources/broadcasts', () => ({
   default: {
     getBroadcastsStatistics: vi.fn(),
     getBroadcastsMonthPerformance: vi.fn(),
+    createGroupFromStatus: vi.fn(),
   },
 }));
 
@@ -91,5 +92,33 @@ describe('broadcasts store', () => {
     // cost is a temporary constant in store for now
     expect(typeof store.broadcastMonthPerformance.estimatedCost).toBe('number');
     expect(store.loadingBroadcastsMonthPerformance).toBe(false);
+  });
+
+  it('createGroupFromStatus calls API and toggles loading flag', async () => {
+    const store = useBroadcastsStore();
+
+    const mocked = Broadcasts as Mocked<typeof Broadcasts>;
+    mocked.createGroupFromStatus.mockResolvedValue({
+      data: { id: 7 },
+    } as AxiosResponse);
+
+    expect(store.loadingCreateGroupFromStatus).toBe(false);
+    const promise = store.createGroupFromStatus(
+      'proj-123',
+      'Group Name',
+      99,
+      'failed',
+    );
+    expect(store.loadingCreateGroupFromStatus).toBe(true);
+    const result = await promise;
+
+    expect(mocked.createGroupFromStatus).toHaveBeenCalledWith(
+      'proj-123',
+      'Group Name',
+      99,
+      'failed',
+    );
+    expect(result).toEqual({ id: 7 });
+    expect(store.loadingCreateGroupFromStatus).toBe(false);
   });
 });

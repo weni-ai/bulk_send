@@ -22,12 +22,15 @@ interface BroadcastStatistic {
   statistics: Statistics;
 }
 
-interface Statistics {
+interface CoreStatistics {
   processed: number;
   sent: number;
   delivered: number;
   read: number;
   failed: number;
+}
+
+interface Statistics extends CoreStatistics {
   contactCount: number;
   cost: number;
   currency: keyof typeof Currency;
@@ -42,6 +45,7 @@ interface BroadcastsMonthPerformance {
 
 export type {
   BroadcastStatistic,
+  CoreStatistics,
   Statistics,
   BroadcastsMonthPerformance,
   BroadcastStatisticsParams,

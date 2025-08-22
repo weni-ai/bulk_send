@@ -4,12 +4,15 @@ import type {
   BroadcastStatisticsParams,
   BroadcastsMonthPerformance,
 } from '@/types/broadcast';
+
 import BroadcastStatistics from '@/api/resources/broadcasts';
+import { ContactGroupStatus } from '@/constants/broadcasts';
 
 export const useBroadcastsStore = defineStore('broadcasts', {
   state: () => ({
     loadingBroadcastsStatistics: false,
     loadingBroadcastsMonthPerformance: false,
+    loadingCreateGroupFromStatus: false,
     broadcastsStatisticsCount: 0,
     broadcastsStatistics: <BroadcastStatistic[]>[],
     broadcastMonthPerformance: <BroadcastsMonthPerformance>{
@@ -57,6 +60,26 @@ export const useBroadcastsStore = defineStore('broadcasts', {
         };
       } finally {
         this.loadingBroadcastsMonthPerformance = false;
+      }
+    },
+    async createGroupFromStatus(
+      projectUuid: string,
+      groupName: string,
+      broadcastID: number,
+      status: keyof typeof ContactGroupStatus,
+    ) {
+      this.loadingCreateGroupFromStatus = true;
+      try {
+        const response = await BroadcastStatistics.createGroupFromStatus(
+          projectUuid,
+          groupName,
+          broadcastID,
+          status,
+        );
+
+        return response.data;
+      } finally {
+        this.loadingCreateGroupFromStatus = false;
       }
     },
   },

@@ -47,4 +47,31 @@ describe('api/resources/broadcasts', () => {
       data: { last30DaysStats: {}, successRate: 0 },
     });
   });
+
+  it('calls POST /contact_groups with project uuid and mapped status', async () => {
+    const httpPost = (requests as any).$http.post as ReturnType<typeof vi.fn>;
+    httpPost.mockResolvedValue({ data: { id: 1 } });
+
+    const projectUuid = 'proj-123';
+    const groupName = 'Failed - Promo';
+    const broadcastID = 42;
+    const statusKey = 'failed';
+
+    const result = await Broadcasts.createGroupFromStatus(
+      projectUuid,
+      groupName,
+      broadcastID,
+      statusKey as any,
+    );
+
+    expect(httpPost).toHaveBeenCalledWith(
+      `/api/v2/internals/contact_groups?project_uuid=${projectUuid}`,
+      {
+        broadcast_id: broadcastID,
+        name: groupName,
+        status: 'F',
+      },
+    );
+    expect(result).toEqual({ data: { id: 1 } });
+  });
 });
