@@ -80,7 +80,9 @@
         "QUEUED": "In progress",
         "SENT": "Finished",
         "FAILED": "Failed"
-      }
+      },
+      "refresh": "Refresh",
+      "empty_text": "We couldn’t find any sends matching your search"
     }
   },
   "modals": {
