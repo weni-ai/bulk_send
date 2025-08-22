@@ -11,49 +11,47 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
-      image_latest: ${{ steps.setup.outputs.image_latest }}
-      image_tag_latest: ${{ steps.setup.outputs.image_tag_latest }}
-      extra_build_args: ${{ steps.extra_build_args.outputs.BUILD_ENV_ARGS}}
+      image_latest: ${{ steps.setup_outputs.outputs.image_latest }}
+      image_tag_latest: ${{ steps.setup_outputs.outputs.image_tag_latest }}
+      extra_build_args: ${{ steps.extra_build_args.outputs.BUILD_ENV_ARGS }}
+      manifests_environment: ${{ steps.setup_outputs.outputs.MANIFESTS_ENVIRONMENT }}
     steps:
       - name: Set outputs
-        id: setup
+        id: setup_outputs
         run: |
           TAG="$( echo "${GITHUB_REF}" | cut -d'/' -f3 )"
-          if grep -qs -e '^.*.*-develop' <<< "${TAG}" ; then
+          if [[ "${TAG}" =~ ^.*.*-develop ]]; then
             echo "Found environment: DEVELOP - ${TAG}"
-            echo "MANIFESTS_ENVIRONMENT=develop" | tee "${GITHUB_OUTPUT}"
-            export "MANIFESTS_ENVIRONMENT=develop"
-          elif grep -qs -e '^.*.*-staging' <<< "${TAG}" ; then
+            echo "MANIFESTS_ENVIRONMENT=develop" >> "${GITHUB_OUTPUT}"
+          elif [[ "${TAG}" =~ ^.*.*-staging ]]; then
             echo "Found environment: STAGING - ${TAG}"
-            echo "MANIFESTS_ENVIRONMENT=staging" | tee -a "${GITHUB_OUTPUT}"
-            export "MANIFESTS_ENVIRONMENT=staging"
-          elif grep -qs -e '^.*.*' <<< "${TAG}" ; then
+            echo "MANIFESTS_ENVIRONMENT=staging" >> "${GITHUB_OUTPUT}"
+          elif [[ "${TAG}" =~ ^.*.* ]]; then
             echo "No environment found, assuming: PRODUCTION - ${TAG}"
-            echo "MANIFESTS_ENVIRONMENT=production" | tee -a "${GITHUB_OUTPUT}"
-            export "MANIFESTS_ENVIRONMENT=production"
+            echo "MANIFESTS_ENVIRONMENT=production" >> "${GITHUB_OUTPUT}"
           else
             echo 'Not a valid tag. Skipping...'
             exit 1
           fi
-          echo "image_latest=${{ secrets.REGISTRY_ECR }}/bulk-send:latest-${MANIFESTS_ENVIRONMENT}" | tee -a "${GITHUB_OUTPUT}"
-          echo "image_tag_latest=latest-${MANIFESTS_ENVIRONMENT}" | tee -a "${GITHUB_OUTPUT}"
+          echo "image_latest=${{ secrets.REGISTRY_ECR }}/bulk-send:latest-${MANIFESTS_ENVIRONMENT}" >> "${GITHUB_OUTPUT}"
+          echo "image_tag_latest=latest-${MANIFESTS_ENVIRONMENT}" >> "${GITHUB_OUTPUT}"
       
       - name: Download webapp secret
-        uses: actions/checkout@master
+        uses: actions/checkout@v4
         with:
           ref: main
           repository: "weni-ai/webapp-secret"
           token: "${{ secrets.DEVOPS_GITHUB_PERMANENT_TOKEN }}"
-          path: ./webapp-secret/  
+          path: ./webapp-secret/ 
 
       - name: Set variables
         id: extra_build_args
         run: |
           {
-            echo 'BUILD_ENV_ARGS<<EOFenv'
-            cat webapp-secret/bulk_send/${{ steps.setup.outputs.MANIFESTS_ENVIRONMENT }}/env || exit 1
-            echo EOFenv
-          } | tee -a "$GITHUB_OUTPUT"
+            echo "BUILD_ENV_ARGS<<EOF"
+            cat "webapp-secret/bulk_send/${{ steps.setup_outputs.outputs.MANIFESTS_ENVIRONMENT }}/env" || exit 1
+            echo "EOF"
+          } >> "${GITHUB_OUTPUT}"
           rm -rf webapp-secret
 
   call-workflow:
