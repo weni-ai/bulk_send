@@ -18,12 +18,18 @@ const SELECTOR = {
   sendElement: '[data-test="send-element"]',
   pagination: '[data-test="pagination"]',
   skeleton: '[data-test="skeleton"]',
+  refresh: '[data-test="refresh-btn"]',
 } as const;
 
 const stubs = {
   SendElement: {
     props: ['send'],
     template: '<div data-test="send-element">Send {{ send.id }}</div>',
+  },
+  UnnnicButton: {
+    props: ['text', 'type'],
+    template:
+      '<button data-test="refresh-btn" @click="$emit(\'click\')">{{ text }}</button>',
   },
   UnnnicPagination: {
     props: ['max', 'modelValue'],
@@ -91,5 +97,14 @@ describe('RecentSendsList.vue', () => {
     const pagination = wrapper.find(SELECTOR.pagination);
     await pagination.trigger('click');
     expect(wrapper.emitted('update:page')).toEqual([[2]]);
+  });
+
+  it('shows empty state and refresh emits update:page with current page', async () => {
+    const wrapper = mountWrapper({ recentSends: [], total: 0, page: 3 });
+    // empty state renders translation key and refresh button
+    expect(wrapper.text()).toContain('home.recent_sends.empty_text');
+    await wrapper.find(SELECTOR.refresh).trigger('click');
+    const emissions = wrapper.emitted('update:page') || [];
+    expect(emissions[emissions.length - 1]).toEqual([3]);
   });
 });

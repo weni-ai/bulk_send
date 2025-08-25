@@ -80,7 +80,9 @@
         "QUEUED": "Em progresso",
         "SENT": "Finalizado",
         "FAILED": "Falhas"
-      }
+      },
+      "refresh": "Atualizar",
+      "empty_text": "Não encontramos disparos que correspondam à sua pesquisa"
     }
   },
   "modals": {

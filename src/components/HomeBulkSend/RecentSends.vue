@@ -10,7 +10,6 @@
       {{ $t('home.recent_sends.title') }}
     </h2>
 
-    <!-- TODO: fix this component being rendered when the search is empty-->
     <MissingRecentSends
       v-if="showMissingRecentSends"
       class="recent-sends__missing-recent-sends"
@@ -72,6 +71,7 @@ import { endOfDay, startOfDay } from 'date-fns';
 const broadcastsStore = useBroadcastsStore();
 const projectStore = useProjectStore();
 
+const isSearching = ref(false);
 const recentSendsData = computed(() => broadcastsStore.broadcastsStatistics);
 const loadingRecentSends = computed(
   () => broadcastsStore.loadingBroadcastsStatistics,
@@ -86,7 +86,10 @@ const dateRange = ref<DateRange>(
   createDateRangeFromDaysAgo(DEFAULT_DATE_RANGE_DAYS),
 );
 const showMissingRecentSends = computed(
-  () => !recentSendsData.value.length && !loadingRecentSends.value,
+  () =>
+    !recentSendsData.value.length &&
+    !loadingRecentSends.value &&
+    !isSearching.value,
 );
 
 onBeforeMount(() => {
@@ -95,12 +98,13 @@ onBeforeMount(() => {
 
 const handleSearchUpdate = useDebounceFn((value: string) => {
   search.value = value;
-  fetchRecentSends();
+  isSearching.value = true;
+  handlePageUpdate(1);
 }, 500);
 
 const handleDateRangeUpdate = useDebounceFn((value: DateRange) => {
   dateRange.value = value;
-  fetchRecentSends();
+  handlePageUpdate(1);
 }, 500);
 
 const handleStartNewSend = () => {
@@ -139,7 +143,7 @@ const handlePageUpdate = (page: number) => {
 .recent-sends {
   display: flex;
   flex-direction: column;
-  gap: $unnnic-spacing-md;
+  gap: $unnnic-spacing-sm;
   flex: 1;
 
   &__title {
@@ -156,7 +160,7 @@ const handlePageUpdate = (page: number) => {
   &__content {
     display: flex;
     flex-direction: column;
-    gap: $unnnic-spacing-md;
+    gap: $unnnic-spacing-sm;
     height: 100%;
   }
 

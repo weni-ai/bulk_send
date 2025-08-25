@@ -80,7 +80,9 @@
         "QUEUED": "En progreso",
         "SENT": "Finalizado",
         "FAILED": "Fallado"
-      }
+      },
+      "refresh": "Actualizar",
+      "empty_text": "No encontramos envíos que coincidan con tu búsqueda"
     }
   },
   "modals": {

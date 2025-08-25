@@ -152,7 +152,6 @@ const fetchBroadcastsMonthPerformance = async () => {
     display: flex;
     flex-direction: column;
     gap: $unnnic-spacing-sm;
-    // margin-bottom: $unnnic-spacing-md;
 
     &-title {
       color: $unnnic-color-neutral-darkest;
@@ -188,6 +187,7 @@ const fetchBroadcastsMonthPerformance = async () => {
       height: $unnnic-border-width-thinner;
       background-color: $unnnic-color-neutral-soft;
       margin-top: $unnnic-spacing-md;
+      margin-bottom: $unnnic-spacing-xs;
     }
   }
 }
