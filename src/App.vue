@@ -13,7 +13,9 @@ import { safeImport, isFederatedModule } from '@/utils/moduleFederation';
 import { useAuthStore } from '@/stores/auth';
 import { useProjectStore } from '@/stores/project';
 
-// Remove top-level await and make it reactive
+const authStore = useAuthStore();
+const projectStore = useProjectStore();
+
 const sharedStore = ref(null);
 
 onMounted(async () => {
@@ -22,25 +24,39 @@ onMounted(async () => {
   // Non-blocking import
   safeImport(() => import('connect/sharedStore'), 'connect/sharedStore')
     .then(({ useSharedStore }) => {
+      console.log('[BulkSend - App.vue] Shared store imported', useSharedStore);
       if (useSharedStore && isFederatedModule) {
+        console.log('[BulkSend - App.vue] Using shared store');
         try {
           sharedStore.value = useSharedStore();
+          console.log(
+            '[BulkSend - App.vue] Shared store initialized',
+            sharedStore.value,
+          );
         } catch (error) {
-          console.error('Error initializing shared store:', error);
+          console.error(
+            '[BulkSend - App.vue] Error initializing shared store:',
+            error,
+          );
         }
       } else {
-        console.log('Not federated module');
+        console.log('[BulkSend - App.vue] Not federated module');
       }
     })
     .catch((error) => {
-      console.error('Error loading shared store module:', error);
+      console.error(
+        '[BulkSend - App.vue] Error loading shared store module:',
+        error,
+      );
     });
 });
 
 const updateTokenAndProject = () => {
-  const authStore = useAuthStore();
-  const projectStore = useProjectStore();
-
+  console.log(
+    '[BulkSend - App.vue] Updating token and project',
+    localStorage.getItem('authToken'),
+    localStorage.getItem('projectUuid'),
+  );
   authStore.setToken(localStorage.getItem('authToken') || '');
   projectStore.setProjectUuid(localStorage.getItem('projectUuid') || '');
 };
