@@ -24,15 +24,9 @@ onBeforeMount(async () => {
   // Non-blocking import
   safeImport(() => import('connect/sharedStore'), 'connect/sharedStore')
     .then(({ useSharedStore }) => {
-      console.log('[BulkSend - App.vue] Shared store imported', useSharedStore);
       if (useSharedStore && isFederatedModule) {
-        console.log('[BulkSend - App.vue] Using shared store');
         try {
           sharedStore.value = useSharedStore();
-          console.log(
-            '[BulkSend - App.vue] Shared store initialized',
-            sharedStore.value,
-          );
         } catch (error) {
           console.error(
             '[BulkSend - App.vue] Error initializing shared store:',
@@ -52,11 +46,6 @@ onBeforeMount(async () => {
 });
 
 const updateTokenAndProject = () => {
-  console.log(
-    '[BulkSend - App.vue] Updating token and project',
-    localStorage.getItem('authToken'),
-    localStorage.getItem('projectUuid'),
-  );
   authStore.setToken(localStorage.getItem('authToken') || '');
   projectStore.setProjectUuid(localStorage.getItem('projectUuid') || '');
 };
