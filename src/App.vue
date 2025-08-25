@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import { safeImport, isFederatedModule } from '@/utils/moduleFederation';
 import { useAuthStore } from '@/stores/auth';
 import { useProjectStore } from '@/stores/project';
@@ -18,7 +18,7 @@ const projectStore = useProjectStore();
 
 const sharedStore = ref(null);
 
-onMounted(async () => {
+onBeforeMount(async () => {
   updateTokenAndProject();
 
   // Non-blocking import

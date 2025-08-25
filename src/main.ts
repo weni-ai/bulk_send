@@ -61,19 +61,23 @@ export default async function mountBulkSendApp({
 // Handle sharedStore asynchronously without blocking app mount
 safeImport(() => import('connect/sharedStore'), 'connect/sharedStore')
   .then((module) => {
-    console.log('Shared store imported');
+    console.log('[BulkSend - main.ts] Shared store imported');
     if (module.useSharedStore && isFederatedModule) {
-      console.log('Using shared store');
+      console.log('[BulkSend - main.ts] Using shared store');
       const sharedStore = module.useSharedStore();
       if (sharedStore) {
-        console.log('Setting auth token and project uuid', sharedStore);
+        console.log(
+          '[BulkSend - main.ts] Setting auth token and project uuid',
+          sharedStore.auth.token,
+          sharedStore.current.project.uuid,
+        );
         localStorage.setItem('authToken', sharedStore.auth.token);
         localStorage.setItem('projectUuid', sharedStore.current.project.uuid);
       }
     }
   })
   .catch((e) => {
-    console.log('Error importing shared store', e);
+    console.log('[BulkSend - main.ts] Error importing shared store', e);
     // Ignore errors - app should work without sharedStore
   });
 
