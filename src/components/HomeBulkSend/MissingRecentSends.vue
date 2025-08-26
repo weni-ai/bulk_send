@@ -1,7 +1,7 @@
 <template>
   <section class="missing-recent-sends">
     <img
-      :src="loadAsset('svgs/campaign.svg')"
+      :src="campaignIcon"
       alt="Campaign Icon"
     />
     <section class="missing-recent-sends__content">
@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { loadAsset } from '@/utils/assets';
+import campaignIcon from '@/assets/images/campaign.svg';
 
 const emit = defineEmits(['start-new-send']);
 
