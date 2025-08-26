@@ -172,7 +172,7 @@ const tooltipSide = (cellIndex: number) => {
   border-spacing: 0;
   table-layout: fixed;
   border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
-  border-radius: $unnnic-border-radius-md;
+  border-radius: $unnnic-border-radius-sm;
 
   &__row:last-child {
     .metrics-table__cell {
