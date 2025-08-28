@@ -1,4 +1,4 @@
-import type { GroupReference } from '@/types/groups';
+import type { Group, GroupReference } from '@/types/groups';
 import type { Template } from '@/types/template';
 import type { PageRequestParams } from '@/types/requests';
 import { BroadcastStatus, NewBroadcastPage } from '@/constants/broadcasts';
@@ -45,6 +45,7 @@ interface BroadcastsMonthPerformance {
 
 interface NewBroadcastState {
   currentPage: NewBroadcastPage;
+  selectedGroups: Group[];
 }
 
 export type {
