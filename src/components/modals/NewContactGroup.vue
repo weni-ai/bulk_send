@@ -3,6 +3,7 @@
     :modelValue="modelValue"
     :primaryButtonProps="{
       text: $t('modals.new_contact_group.buttons.primary'),
+      loading: broadcastsStore.loadingCreateGroupFromStatus,
     }"
     :secondaryButtonProps="{
       text: $t('modals.new_contact_group.buttons.secondary'),
@@ -27,7 +28,7 @@
         :text="
           $t('modals.new_contact_group.disclaimer', {
             contactCount: contactCount.toLocaleString(),
-            category: category,
+            category: categoryLabel,
             broadcastName: broadcastName,
           })
         "
@@ -37,18 +38,32 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import type { ContactGroupStatus } from '@/constants/broadcasts';
+import { useBroadcastsStore } from '@/stores/broadcasts';
+import { useProjectStore } from '@/stores/project';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+
+const broadcastsStore = useBroadcastsStore();
+const projectStore = useProjectStore();
 
 const props = defineProps<{
   modelValue: boolean;
   contactCount: number;
-  category: string;
+  category: keyof typeof ContactGroupStatus | null;
   broadcastName: string;
+  broadcastID: number;
 }>();
+
+const categoryLabel = computed(() => {
+  return t(`modals.new_contact_group.categories.${props.category}`);
+});
 
 const emit = defineEmits(['update:modelValue']);
 
-const groupName = ref(`${props.category} - ${props.broadcastName}`);
+const groupName = ref(`${categoryLabel.value} - ${props.broadcastName}`);
 
 const handleUpdateModelValue = (value: boolean) => {
   emit('update:modelValue', value);
@@ -58,8 +73,20 @@ const handleUpdateGroupName = (value: string) => {
   groupName.value = value;
 };
 
-const handlePrimaryButtonClick = () => {
-  console.log('primary button clicked');
+const handlePrimaryButtonClick = async () => {
+  if (!props.category) {
+    return;
+  }
+
+  await broadcastsStore.createGroupFromStatus(
+    projectStore.project.uuid,
+    groupName.value,
+    props.broadcastID,
+    props.category,
+  );
+
+  emit('update:modelValue', false);
+  // TODO: check with design if we need to show a success message
 };
 
 const handleSecondaryButtonClick = () => {

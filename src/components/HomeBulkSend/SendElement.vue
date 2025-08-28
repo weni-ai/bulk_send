@@ -41,6 +41,7 @@
       :contactCount="modalContactCount"
       :category="modalCategory"
       :broadcastName="modalBroadcastName"
+      :broadcastID="send.id"
       @update:model-value="handleUpdateShowNewGroupModal"
     />
   </UnnnicCollapse>
@@ -50,8 +51,8 @@
 import MetricsTable from '@/components/MetricsTable.vue';
 import SendElementInfo from '@/components/HomeBulkSend/SendElementInfo.vue';
 import NewContactGroupModal from '@/components/modals/NewContactGroup.vue';
-import type { BroadcastStatistic, Statistics } from '@/types/broadcast';
-import { BroadcastStatus } from '@/constants/broadcasts';
+import type { BroadcastStatistic } from '@/types/broadcast';
+import { BroadcastStatus, ContactGroupStatus } from '@/constants/broadcasts';
 import { formatDateWithTimezone } from '@/utils/date';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -75,15 +76,15 @@ const date = computed(() => {
 });
 
 const showNewGroupModal = ref(false);
-const modalCategory = ref('');
+const modalCategory = ref<keyof typeof ContactGroupStatus | null>(null);
 const modalBroadcastName = ref('');
 const modalContactCount = ref(0);
 
 const displayNewGroupModal = (
-  category: keyof Statistics,
+  category: keyof typeof ContactGroupStatus,
   broadcastName: string,
 ) => {
-  modalCategory.value = t(`home.recent_sends.metrics.${category}.category`);
+  modalCategory.value = category;
   modalBroadcastName.value = broadcastName;
   modalContactCount.value = Number(props.send.statistics[category]) || 0;
   showNewGroupModal.value = true;
@@ -136,7 +137,7 @@ const sendMetrics = computed(() => {
   ];
 });
 
-const newGroupAction = (category: keyof Statistics) => {
+const newGroupAction = (category: keyof typeof ContactGroupStatus) => {
   return {
     label: t('home.recent_sends.metrics.actions.add_to_a_new_group'),
     icon: 'add',
@@ -173,7 +174,7 @@ const readPercentage = computed(() => {
 const failedPercentage = computed(() => {
   return getPercentage(
     props.send.statistics.failed,
-    props.send.statistics.sent,
+    props.send.statistics.contactCount,
   );
 });
 
