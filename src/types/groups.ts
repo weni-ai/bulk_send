@@ -1,6 +1,11 @@
-interface Group {
+interface GroupReference {
   uuid: string;
   name: string;
 }
 
-export type { Group };
+interface Group extends GroupReference {
+  id: number;
+  memberCount: number;
+}
+
+export type { Group, GroupReference };

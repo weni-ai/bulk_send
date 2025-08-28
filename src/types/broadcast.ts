@@ -1,4 +1,4 @@
-import type { Group } from '@/types/groups';
+import type { GroupReference } from '@/types/groups';
 import type { Template } from '@/types/template';
 import type { PageRequestParams } from '@/types/requests';
 import { BroadcastStatus } from '@/constants/broadcasts';
@@ -17,7 +17,7 @@ interface BroadcastStatistic {
   createdBy: string;
   createdOn: Date;
   modifiedOn: Date;
-  groups: Group[];
+  groups: GroupReference[];
   template: Template;
   statistics: Statistics;
 }
