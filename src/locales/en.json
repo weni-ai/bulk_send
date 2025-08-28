@@ -164,7 +164,8 @@
         "title": "Review and send"
       },
       "contact_import": {
-        "title": "Import contacts"
+        "title": "Import contacts",
+        "selected_groups_disclaimer": "You have already selected a contact group, so you cannot import contacts."
       }
     }
   }

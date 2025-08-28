@@ -164,7 +164,8 @@
         "title": "Revisar y enviar"
       },
       "contact_import": {
-        "title": "Import contacts"
+        "title": "Import contacts",
+        "selected_groups_disclaimer": "Ya ha seleccionado un grupo de contactos, por lo que no puede importar contactos."
       }
     }
   }
