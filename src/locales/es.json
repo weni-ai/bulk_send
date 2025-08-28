@@ -127,5 +127,45 @@
       "success_alert": "Solicitud de activación de API MM Lite realizada con éxito",
       "error_alert": "Error al solicitar la activación de API MM Lite"
     }
+  },
+  "new_broadcast": {
+    "title": "Nuevo envío",
+    "pages": {
+      "select_groups": {
+        "title": "Contactos",
+        "select_contact_groups": "Seleccionar grupos de contactos",
+        "sort_by": {
+          "label": "Ordenar por nombre:",
+          "options": {
+            "asc": "Asc",
+            "desc": "Desc"
+          }
+        },
+        "search_placeholder": "Buscar grupos",
+        "group_count": "{count} contactos | {count} contacto | {count} contactos",
+        "overview": {
+          "cost_value": "{currency}{cost} (Unidad: {currency}{templateMultiplier} por mensaje entregado)",
+          "cost_label": "Costo estimado:",
+          "total_label": "Total:",
+          "total_value": "{total} contactos seleccionados | {total} contacto seleccionado | {total} contactos seleccionados",
+          "title": "{count} grupos seleccionados | {count} grupo seleccionado | {count} grupos seleccionados",
+          "removal_tooltip": "Eliminar grupos seleccionados"
+        },
+        "no_groups": "No encontramos ningún grupo que coincida con tu búsqueda",
+        "pagination_text": "{currentPageOffset} de {total} grupos"
+      },
+      "select_template": {
+        "title": "Plantillas"
+      },
+      "select_variables": {
+        "title": "Variables"
+      },
+      "confirm_and_send": {
+        "title": "Revisar y enviar"
+      },
+      "contact_import": {
+        "title": "Import contacts"
+      }
+    }
   }
 }

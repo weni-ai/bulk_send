@@ -127,5 +127,45 @@
       "success_alert": "Solicitação de ativação da API MM Lite realizada com sucesso",
       "error_alert": "Erro ao solicitar ativação da API MM Lite"
     }
+  },
+  "new_broadcast": {
+    "title": "Novo disparo",
+    "pages": {
+      "select_groups": {
+        "title": "Contatos",
+        "select_contact_groups": "Selecionar grupos de contatos",
+        "sort_by": {
+          "label": "Ordenar por nome:",
+          "options": {
+            "asc": "Asc",
+            "desc": "Desc"
+          }
+        },
+        "search_placeholder": "Pesquisar grupos",
+        "group_count": "{count} contatos | {count} contato | {count} contatos",
+        "overview": {
+          "cost_value": "{currency}{cost} (Unidade: {currency}{templateMultiplier} por mensagem entregue)",
+          "cost_label": "Custo estimado:",
+          "total_label": "Total:",
+          "total_value": "{total} contatos selecionados | {total} contato selecionado | {total} contatos selecionados",
+          "title": "{count} grupos selecionados | {count} grupo selecionado | {count} grupos selecionados",
+          "removal_tooltip": "Remover grupos selecionados"
+        },
+        "no_groups": "Não encontramos nenhum grupo correspondente à sua pesquisa",
+        "pagination_text": "{currentPageOffset} de {total} grupos"
+      },
+      "select_template": {
+        "title": "Modelos"
+      },
+      "select_variables": {
+        "title": "Variáveis"
+      },
+      "confirm_and_send": {
+        "title": "Revisar e enviar"
+      },
+      "contact_import": {
+        "title": "Importar contatos"
+      }
+    }
   }
 }
