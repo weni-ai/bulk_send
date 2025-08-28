@@ -127,5 +127,45 @@
       "success_alert": "Successfully requested MM Lite API activation",
       "error_alert": "Error requesting MM Lite activation"
     }
+  },
+  "new_broadcast": {
+    "title": "New send",
+    "pages": {
+      "select_groups": {
+        "title": "Contacts",
+        "select_contact_groups": "Select contact groups",
+        "sort_by": {
+          "label": "Sort by name:",
+          "options": {
+            "asc": "Asc",
+            "desc": "Desc"
+          }
+        },
+        "search_placeholder": "Search groups",
+        "group_count": "{count} contacts | {count} contact | {count} contacts",
+        "overview": {
+          "cost_value": "{currency}{cost} (Unit: {currency}{templateMultiplier} per delivered message)",
+          "cost_label": "Estimate cost:",
+          "total_label": "Total:",
+          "total_value": "{total} contacts selected | {total} contact selected | {total} contacts selected",
+          "title": "{count} selected groups | {count} selected group | {count} selected groups",
+          "removal_tooltip": "Remove selected groups"
+        },
+        "no_groups": "We couldn’t find any groups matching your search",
+        "pagination_text": "{currentPageOffset} of {total} groups"
+      },
+      "select_template": {
+        "title": "Templates"
+      },
+      "select_variables": {
+        "title": "Variables"
+      },
+      "confirm_and_send": {
+        "title": "Review and send"
+      },
+      "contact_import": {
+        "title": "Import contacts"
+      }
+    }
   }
 }
