@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import Channels from '@/api/resources/channels';
+import ChannelsAPI from '@/api/resources/channels';
 import type { Channel } from '@/types/channel';
 
 export const useProjectStore = defineStore('project', {
@@ -16,7 +16,7 @@ export const useProjectStore = defineStore('project', {
     },
     async getProjectChannels() {
       this.loadingChannels = true;
-      const response = await Channels.listChannels();
+      const response = await ChannelsAPI.listChannels();
       this.project.channels = response.data.results;
       this.loadingChannels = false;
     },
