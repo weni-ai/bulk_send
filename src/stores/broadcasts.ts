@@ -3,10 +3,11 @@ import type {
   BroadcastStatistic,
   BroadcastStatisticsParams,
   BroadcastsMonthPerformance,
+  NewBroadcastState,
 } from '@/types/broadcast';
 
-import BroadcastStatistics from '@/api/resources/broadcasts';
-import { ContactGroupStatus } from '@/constants/broadcasts';
+import BroadcastStatisticsAPI from '@/api/resources/broadcasts';
+import { ContactGroupStatus, NewBroadcastPage } from '@/constants/broadcasts';
 
 export const useBroadcastsStore = defineStore('broadcasts', {
   state: () => ({
@@ -20,6 +21,9 @@ export const useBroadcastsStore = defineStore('broadcasts', {
       estimatedCost: 0,
       successRate: 0,
     },
+    newBroadcast: <NewBroadcastState>{
+      currentPage: NewBroadcastPage.SELECT_GROUPS,
+    },
   }),
   actions: {
     async getBroadcastsStatistics(
@@ -28,7 +32,7 @@ export const useBroadcastsStore = defineStore('broadcasts', {
     ) {
       this.loadingBroadcastsStatistics = true;
       try {
-        const response = await BroadcastStatistics.getBroadcastsStatistics(
+        const response = await BroadcastStatisticsAPI.getBroadcastsStatistics(
           projectUuid,
           params,
         );
@@ -48,7 +52,9 @@ export const useBroadcastsStore = defineStore('broadcasts', {
       this.loadingBroadcastsMonthPerformance = true;
       try {
         const response =
-          await BroadcastStatistics.getBroadcastsMonthPerformance(projectUuid);
+          await BroadcastStatisticsAPI.getBroadcastsMonthPerformance(
+            projectUuid,
+          );
 
         const stats = response.data.last30DaysStats;
         const cost = 123; // TODO: calculate cost from the response when API brings the required fields
@@ -70,7 +76,7 @@ export const useBroadcastsStore = defineStore('broadcasts', {
     ) {
       this.loadingCreateGroupFromStatus = true;
       try {
-        const response = await BroadcastStatistics.createGroupFromStatus(
+        const response = await BroadcastStatisticsAPI.createGroupFromStatus(
           projectUuid,
           groupName,
           broadcastID,
@@ -81,6 +87,9 @@ export const useBroadcastsStore = defineStore('broadcasts', {
       } finally {
         this.loadingCreateGroupFromStatus = false;
       }
+    },
+    setNewBroadcastPage(page: NewBroadcastPage) {
+      this.newBroadcast.currentPage = page;
     },
   },
 });
