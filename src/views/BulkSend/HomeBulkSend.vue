@@ -7,11 +7,19 @@
       <section class="home-bulk-send__first-section">
         <section class="home-bulk-send__general-performance">
           <h2 class="home-bulk-send__general-performance-title">
-            {{ $t('home.general_performance') }}
+            {{ $t('home.general_performance.title') }}
           </h2>
           <MetricsTable
+            v-if="!broadcastsStore.loadingBroadcastsMonthPerformance"
             :data="generalPerformanceData"
             :maxColumns="3"
+          />
+          <UnnnicSkeletonLoading
+            v-else
+            width="100%"
+            height="112px"
+            tag="div"
+            :loading="true"
           />
         </section>
 
@@ -46,9 +54,14 @@ import MetricsTable from '@/components/MetricsTable.vue';
 import RecentSends from '@/components/HomeBulkSend/RecentSends.vue';
 import ActivateMMLiteModal from '@/components/modals/ActivateMMLite.vue';
 import { useProjectStore } from '@/stores/project';
+import { useBroadcastsStore } from '@/stores/broadcasts';
 import type { Channel } from '@/types/channel';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const projectStore = useProjectStore();
+const broadcastsStore = useBroadcastsStore();
 
 const showMMLiteSection = computed(() => {
   if (projectStore.project.channels.length === 0) {
@@ -70,48 +83,25 @@ const showActivateMMLiteModal = ref(false);
 
 const generalPerformanceData = [
   {
-    label: 'Total sent',
-    value: '124.580',
-    hint: 'Total number of messages sent through bulk sends within the selected period.',
-    actions: [
-      {
-        label: 'View details',
-        icon: 'info',
-        onClick: () => {
-          console.log('View details');
-        },
-      },
-    ],
+    label: t('home.general_performance.total_sent.label'),
+    value: broadcastsStore.broadcastMonthPerformance.totalSent,
+    hint: t('home.general_performance.total_sent.hint'),
   },
   {
-    label: 'Estimated total cost',
-    value: '$ 7.474,80',
-    hint: 'Estimated cost based on the number of messages sent. Final pricing may vary according to Meta’s billing.',
+    label: t('home.general_performance.estimated_total_cost.label'),
+    value: broadcastsStore.broadcastMonthPerformance.estimatedCost,
+    hint: t('home.general_performance.estimated_total_cost.hint'),
   },
   {
-    label: 'Success rate',
-    value: '91%',
-    hint: 'Percentage of contacts who successfully received messages, calculated from the total number of unique contacts targeted across all sends.',
-  },
-  {
-    label: 'Total sent 2',
-    value: '124.580',
-    hint: 'Total number of messages sent through bulk sends within the selected period.',
-  },
-  {
-    label: 'Estimated total cost 2',
-    value: '$ 7.474,80',
-    hint: 'Estimated cost based on the number of messages sent. Final pricing may vary according to Meta’s billing.',
-  },
-  {
-    label: 'Success rate 2',
-    value: '91%',
-    hint: 'Percentage of contacts who successfully received messages, calculated from the total number of unique contacts targeted across all sends.',
+    label: t('home.general_performance.success_rate.label'),
+    value: broadcastsStore.broadcastMonthPerformance.successRate,
+    hint: t('home.general_performance.success_rate.hint'),
   },
 ];
 
 onBeforeMount(() => {
   fetchProjectChannels();
+  fetchBroadcastsMonthPerformance();
 });
 
 const handleMMLiteDisclaimerClick = (event: Event) => {
@@ -129,6 +119,16 @@ const handleUpdateShowActivateMMLiteModal = (value: boolean) => {
 const fetchProjectChannels = async () => {
   try {
     await projectStore.getProjectChannels();
+  } catch (error) {
+    console.error(error); // TODO: check with design if we need to show an error message to the user
+  }
+};
+
+const fetchBroadcastsMonthPerformance = async () => {
+  try {
+    await broadcastsStore.getBroadcastsMonthPerformance(
+      projectStore.project.uuid,
+    );
   } catch (error) {
     console.error(error); // TODO: check with design if we need to show an error message to the user
   }

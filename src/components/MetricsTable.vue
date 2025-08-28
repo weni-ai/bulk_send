@@ -99,8 +99,8 @@ import { computed } from 'vue';
 
 interface MetricsTableItem {
   label: string;
-  value: string;
-  subValue?: string;
+  value: string | number;
+  subValue?: string | number;
   hint?: string;
   actions?: Array<{
     label: string;
@@ -237,6 +237,7 @@ const tooltipSide = (cellIndex: number) => {
 
     &--near {
       margin-left: unset;
+      height: $unnnic-font-size-body-md + $unnnic-line-height-md;
     }
   }
 
@@ -250,7 +251,7 @@ const tooltipSide = (cellIndex: number) => {
   }
 
   &__dropdown {
-    height: 20px; // fixed height to match the design
+    height: $unnnic-font-size-body-md + $unnnic-line-height-md;
   }
 
   &__dropdown-item {
