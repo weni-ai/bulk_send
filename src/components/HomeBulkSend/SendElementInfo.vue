@@ -92,7 +92,7 @@ const templateName = computed(() => {
 });
 
 const groups = computed(() => {
-  return props.send.groups.join(', ');
+  return props.send.groups.map((group) => group.name).join(', ');
 });
 
 const handleViewTemplate = () => {
@@ -101,6 +101,7 @@ const handleViewTemplate = () => {
 </script>
 
 <style scoped lang="scss">
+// TODO: fix this component width and overflow behavior, on small screens an unwanted overflow is occurring
 .send-element-info {
   display: flex;
   flex-direction: column;

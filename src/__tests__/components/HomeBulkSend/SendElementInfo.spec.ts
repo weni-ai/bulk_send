@@ -22,7 +22,7 @@ const mockSendSent: BroadcastStatistic = createBroadcast({
   createdBy: 'Alice',
   createdOn: new Date('2024-01-01T09:00:00.000Z'),
   modifiedOn: new Date('2024-01-01T10:00:00.000Z'),
-  template: { name: 'Template A' },
+  template: { id: 1, name: 'Template A' },
 });
 
 const mockSendQueued: BroadcastStatistic = createBroadcast({
@@ -40,7 +40,7 @@ describe('SendElementInfo.vue', () => {
     expect(wrapper.text()).toContain('Jan 1, 9:00 AM');
     expect(wrapper.text()).toContain('Jan 1, 10:00 AM');
     expect(wrapper.text()).toContain('Template A');
-    expect(wrapper.text()).toContain('1, 2');
+    expect(wrapper.text()).toContain('Group 1, Group 2');
     expect(wrapper.text()).toContain('Alice');
   });
 
