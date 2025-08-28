@@ -1,104 +1,179 @@
-import { describe, it, expect } from 'vitest';
-import { mount, VueWrapper } from '@vue/test-utils';
+import { describe, it, expect, vi, afterEach } from 'vitest';
+import { PAGE_SIZE } from '@/constants/recentSends';
+import { mount } from '@vue/test-utils';
+import { createPinia, setActivePinia } from 'pinia';
 import RecentSends from '@/components/HomeBulkSend/RecentSends.vue';
-import type { RecentSend } from '@/types/recentSends';
+import { useBroadcastsStore } from '@/stores/broadcasts';
+import { useProjectStore } from '@/stores/project';
+import { createBroadcast } from '@/__tests__/utils/factories';
+import type { BroadcastStatistic } from '@/types/broadcast';
 
-// Define the component's exposed interface for testing
-interface RecentSendsComponentInstance {
-  search: string;
-  dateRange: { start: string; end: string };
-  recentSendsData: RecentSend[];
-}
+// Inline helper and stubs
+const DEFAULT_PROJECT_UUID = 'proj-123';
+const TEST_DATE_RANGE = { start: '2024-01-01', end: '2024-01-31' };
+const SELECTOR = {
+  root: '[data-test="recent-sends"]',
+  title: '[data-test="title"]',
+  content: '[data-test="content"]',
+  missing: '[data-test="missing-recent-sends"]',
+  search: '[data-test="search-input"]',
+  date: '[data-test="date-range"]',
+  list: '[data-test="recent-sends-list"]',
+};
+const $t = (key: string) => key;
 
 const stubs = {
   MissingRecentSends: {
     emits: ['start-new-send'],
     template:
-      '<div class="missing-recent-sends-stub" @click="$emit(\'start-new-send\')">Missing Recent Sends</div>',
+      '<div data-test="missing-recent-sends" @click="$emit(\'start-new-send\')">Missing Recent Sends</div>',
   },
   RecentSendsList: {
-    props: ['recentSends'],
+    name: 'RecentSendsList',
+    props: ['loading', 'recentSends', 'page', 'pageSize', 'total'],
+    emits: ['update:page'],
     template:
-      '<div class="recent-sends-list-stub">RecentSendsList Stub - {{ recentSends.length }}</div>',
+      '<div data-test="recent-sends-list">RecentSendsList - {{ recentSends.length }}</div>',
   },
   UnnnicInput: {
+    name: 'UnnnicInput',
     props: ['placeholder', 'modelValue', 'iconLeft'],
-    emits: ['update:modelValue'],
+    emits: ['update:model-value'],
     template:
-      '<input class="unnnic-input-stub" :placeholder="placeholder" :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
+      '<input data-test="search-input" :placeholder="placeholder" :value="modelValue" @input="$emit(\'update:model-value\', $event.target.value)" />',
   },
   UnnnicInputDatePicker: {
+    name: 'UnnnicInputDatePicker',
     props: ['placeholder', 'modelValue'],
-    emits: ['update:modelValue'],
+    emits: ['update:model-value'],
     template:
-      '<input class="unnnic-date-picker-stub" :placeholder="placeholder" @change="$emit(\'update:modelValue\', { start: \'2024-01-01\', end: \'2024-01-31\' })" />',
+      '<input data-test="date-range" :placeholder="placeholder" @change="$emit(\'update:model-value\', { start: \'2024-01-01\', end: \'2024-01-31\' })" />',
   },
 };
 
-const mountWrapper = (props = {}): VueWrapper<RecentSendsComponentInstance> => {
-  return mount(RecentSends, {
+type MountOptions = {
+  props?: Record<string, unknown>;
+  projectUuid?: string;
+  broadcasts?: {
+    loading?: boolean;
+    statistics?: BroadcastStatistic[];
+    count?: number;
+  };
+  spy?: boolean;
+};
+
+const mountRecentSends = (options: MountOptions = {}) => {
+  const pinia = createPinia();
+  setActivePinia(pinia);
+
+  const {
+    props = {},
+    projectUuid = DEFAULT_PROJECT_UUID,
+    broadcasts = {},
+    spy: shouldSpy = true,
+  } = options;
+  const { loading = false, statistics, count = 0 } = broadcasts;
+
+  const projectStore = useProjectStore(pinia);
+  projectStore.project.uuid = projectUuid;
+
+  const broadcastsStore = useBroadcastsStore(pinia);
+  broadcastsStore.loadingBroadcastsStatistics = loading;
+  broadcastsStore.broadcastsStatistics = statistics ?? [];
+  broadcastsStore.broadcastsStatisticsCount = count;
+
+  const spy = shouldSpy
+    ? vi.spyOn(broadcastsStore, 'getBroadcastsStatistics')
+    : undefined;
+  if (spy) spy.mockResolvedValue();
+
+  const wrapper = mount(RecentSends, {
     props,
     global: {
-      mocks: {
-        $t: () => 'stubbed text',
-      },
+      plugins: [pinia],
+      mocks: { $t },
       stubs,
     },
-  }) as VueWrapper<RecentSendsComponentInstance>;
+  });
+
+  return { wrapper, pinia, projectStore, broadcastsStore, spy };
 };
 
 describe('RecentSends.vue', () => {
-  it('should render the component correctly', () => {
-    const wrapper = mountWrapper();
-
-    expect(wrapper.find('.recent-sends').exists()).toBe(true);
-    expect(wrapper.find('.recent-sends__title').exists()).toBe(true);
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
-  it('should show MissingRecentSends when no data exists', () => {
-    const wrapper = mountWrapper();
+  it('renders core UI elements', () => {
+    const { wrapper } = mountRecentSends();
 
-    expect(wrapper.find('.missing-recent-sends-stub').exists()).toBe(true);
-    expect(wrapper.find('.recent-sends__content').exists()).toBe(false);
+    expect(wrapper.find(SELECTOR.root).exists()).toBe(true);
+    expect(wrapper.find(SELECTOR.title).exists()).toBe(true);
   });
 
-  it('should handle search input updates', async () => {
-    const wrapper = mountWrapper();
+  it('shows empty state when there is no data', () => {
+    const { wrapper } = mountRecentSends();
 
-    // Add data first to show filters
-    await wrapper.find('.missing-recent-sends-stub').trigger('click');
-
-    const searchInput = wrapper.find('.unnnic-input-stub');
-    await searchInput.setValue('test search');
-    await searchInput.trigger('input');
-
-    // Verify the component's reactive search value was updated
-    expect(wrapper.vm.search).toBe('test search');
+    expect(wrapper.find(SELECTOR.missing).exists()).toBe(true);
+    expect(wrapper.find(SELECTOR.content).exists()).toBe(false);
   });
 
-  it('should handle date range updates', async () => {
-    const wrapper = mountWrapper();
-
-    // Add data first to show filters
-    await wrapper.find('.missing-recent-sends-stub').trigger('click');
-
-    const datePicker = wrapper.find('.unnnic-date-picker-stub');
-    await datePicker.trigger('change');
-
-    // Verify the component handles the date range update
-    expect(wrapper.vm.dateRange).toEqual({
-      start: '2024-01-01',
-      end: '2024-01-31',
+  it('fetches on mount with default page params', () => {
+    const { spy } = mountRecentSends({ spy: true });
+    expect(spy).toBeDefined();
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(DEFAULT_PROJECT_UUID, {
+      offset: 0,
+      limit: PAGE_SIZE,
     });
   });
 
-  it('should list recent sends', async () => {
-    const wrapper = mountWrapper();
+  it('propagates loading state to the list', () => {
+    const { wrapper } = mountRecentSends({ broadcasts: { loading: true } });
+    expect(wrapper.find(SELECTOR.content).exists()).toBe(true);
+    const list = wrapper.findComponent({ name: 'RecentSendsList' });
+    expect(list.exists()).toBe(true);
+    expect(list.props('loading')).toBe(true);
+  });
 
-    // TODO: when API is ready, change how data is fetched
-    // Add data first to show filters
-    await wrapper.find('.missing-recent-sends-stub').trigger('click');
+  it('updates search value on input', async () => {
+    const { wrapper } = mountRecentSends({ broadcasts: { loading: true } });
+    const searchInput = wrapper.find(SELECTOR.search);
+    await searchInput.setValue('test search');
+    await searchInput.trigger('input');
+    expect(wrapper.vm.search).toBe('test search');
+  });
 
-    expect(wrapper.find('.recent-sends-list-stub').exists()).toBe(true);
+  it('updates date range on picker change', async () => {
+    const { wrapper } = mountRecentSends({ broadcasts: { loading: true } });
+    const datePicker = wrapper.find(SELECTOR.date);
+    await datePicker.trigger('change');
+    expect(wrapper.vm.dateRange).toEqual(TEST_DATE_RANGE);
+  });
+
+  it('displays list when data exists', async () => {
+    const { wrapper } = mountRecentSends({
+      broadcasts: { statistics: [createBroadcast()], count: 1 },
+    });
+    expect(wrapper.find(SELECTOR.list).exists()).toBe(true);
+  });
+
+  it('paginates and fetches the next page', async () => {
+    const { wrapper, spy } = mountRecentSends({
+      broadcasts: { statistics: [createBroadcast()], count: 10 },
+      spy: true,
+    });
+    expect(spy).toBeDefined();
+    // First call on mount
+    expect(spy).toHaveBeenCalledTimes(1);
+    // Emit pagination update from the list
+    const list = wrapper.findComponent({ name: 'RecentSendsList' });
+    list.vm.$emit('update:page', 2);
+    // Second call with updated offset
+    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenLastCalledWith(DEFAULT_PROJECT_UUID, {
+      offset: (2 - 1) * PAGE_SIZE,
+      limit: PAGE_SIZE,
+    });
   });
 });

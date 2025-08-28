@@ -1,11 +1,17 @@
 <template>
-  <section class="recent-sends">
-    <h2 class="recent-sends__title">
+  <section
+    class="recent-sends"
+    data-test="recent-sends"
+  >
+    <h2
+      class="recent-sends__title"
+      data-test="title"
+    >
       {{ $t('home.recent_sends.title') }}
     </h2>
 
     <MissingRecentSends
-      v-if="!recentSendsData.length"
+      v-if="showMissingRecentSends"
       class="recent-sends__missing-recent-sends"
       @start-new-send="handleStartNewSend"
     />
@@ -13,10 +19,15 @@
     <section
       v-else
       class="recent-sends__content"
+      data-test="content"
     >
-      <section class="recent-sends__filters">
+      <section
+        class="recent-sends__filters"
+        data-test="filters"
+      >
         <UnnnicInput
           class="recent-sends__search"
+          data-test="search-input"
           iconLeft="search-1"
           :placeholder="$t('home.recent_sends.search_placeholder')"
           :modelValue="search"
@@ -25,6 +36,7 @@
 
         <UnnnicInputDatePicker
           class="recent-sends__date-range"
+          data-test="date-range"
           :placeholder="$t('home.recent_sends.date_placeholder')"
           position="right"
           :modelValue="dateRange"
@@ -32,24 +44,51 @@
         />
       </section>
 
-      <RecentSendsList :recentSends="recentSendsData" />
+      <RecentSendsList
+        :loading="loadingRecentSends"
+        :recentSends="recentSendsData"
+        :page="recentSendsPage"
+        :pageSize="recentSendsPageSize"
+        :total="recentSendsTotal"
+        @update:page="handlePageUpdate"
+      />
     </section>
   </section>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref, onBeforeMount } from 'vue';
 import MissingRecentSends from '@/components/HomeBulkSend/MissingRecentSends.vue';
 import RecentSendsList from '@/components/HomeBulkSend/RecentSendsList.vue';
 import { createDateRangeFromDaysAgo } from '@/utils/date';
-import { DEFAULT_DATE_RANGE_DAYS } from '@/constants/recentSends';
-import type { RecentSend, DateRange } from '@/types/recentSends';
+import { DEFAULT_DATE_RANGE_DAYS, PAGE_SIZE } from '@/constants/recentSends';
+import type { DateRange } from '@/types/recentSends';
+import { useBroadcastsStore } from '@/stores/broadcasts';
+import { useProjectStore } from '@/stores/project';
 
-const recentSendsData = ref<RecentSend[]>([]);
+const broadcastsStore = useBroadcastsStore();
+const projectStore = useProjectStore();
+
+const recentSendsData = computed(() => broadcastsStore.broadcastsStatistics);
+const loadingRecentSends = computed(
+  () => broadcastsStore.loadingBroadcastsStatistics,
+);
+const recentSendsPage = ref(1);
+const recentSendsPageSize = PAGE_SIZE;
+const recentSendsTotal = computed(
+  () => broadcastsStore.broadcastsStatisticsCount,
+);
 const search = ref('');
 const dateRange = ref<DateRange>(
   createDateRangeFromDaysAgo(DEFAULT_DATE_RANGE_DAYS),
 );
+const showMissingRecentSends = computed(
+  () => !recentSendsData.value.length && !loadingRecentSends.value,
+);
+
+onBeforeMount(() => {
+  fetchRecentSends();
+});
 
 const handleSearchUpdate = (value: string) => {
   search.value = value;
@@ -60,29 +99,24 @@ const handleDateRangeUpdate = (value: DateRange) => {
 };
 
 const handleStartNewSend = () => {
-  // For now just add mocked data to the recentSendsData
-  const newSends = Array.from({ length: 10 }, (_, index) => ({
-    id: recentSendsData.value.length + index + 1,
-    name: `Send ${recentSendsData.value.length + index + 1}`,
-    status: index % 2 === 0 ? 'In progress' : 'Finished',
-    createdAt: new Date(),
-    endedAt: new Date(new Date().getTime() + 1000 * 60 * 60 * 24),
-    template: {
-      name: `Template ${recentSendsData.value.length + index + 1}`,
-    },
-    groups: ['Group 1', 'Group 2'],
-    createdBy: 'john.doe@email.com',
-    metrics: {
-      sent: 100000,
-      delivered: 90500,
-      read: 80000,
-      clicked: 20000,
-      failed: 1500,
-      estimatedCost: 'R$ 25.000,00',
-    },
-  }));
+  // TODO: implement redirect to new send page
+  console.log('handleStartNewSend');
+};
 
-  recentSendsData.value.push(...newSends);
+const fetchRecentSends = async () => {
+  try {
+    await broadcastsStore.getBroadcastsStatistics(projectStore.project.uuid, {
+      offset: (recentSendsPage.value - 1) * recentSendsPageSize,
+      limit: recentSendsPageSize,
+    });
+  } catch (error) {
+    console.error(error); // TODO: check with design if we need to show an error message to the user
+  }
+};
+
+const handlePageUpdate = (page: number) => {
+  recentSendsPage.value = page;
+  fetchRecentSends();
 };
 </script>
 
@@ -117,7 +151,7 @@ const handleStartNewSend = () => {
   }
 
   &__search {
-    flex: 5;
+    flex: 3;
   }
 
   &__date-range {

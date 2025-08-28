@@ -33,7 +33,7 @@ const mountWrapper = (props = {}) => {
   return mount(NewContactGroup, {
     props: {
       modelValue: true,
-      contactCount: '12',
+      contactCount: 12,
       category: 'Clicked',
       broadcastName: 'Promo',
       ...props,
