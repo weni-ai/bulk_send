@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { PAGE_SIZE } from '@/constants/recentSends';
+import { PAGE_SIZE, DEFAULT_DATE_RANGE_DAYS } from '@/constants/recentSends';
 import { mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import RecentSends from '@/components/HomeBulkSend/RecentSends.vue';
@@ -7,6 +7,10 @@ import { useBroadcastsStore } from '@/stores/broadcasts';
 import { useProjectStore } from '@/stores/project';
 import { createBroadcast } from '@/__tests__/utils/factories';
 import type { BroadcastStatistic } from '@/types/broadcast';
+import { startOfDay, endOfDay } from 'date-fns';
+import { TZDate } from '@date-fns/tz';
+import { createDateRangeFromDaysAgo } from '@/utils/date';
+import type { DateRange } from '@/types/recentSends';
 
 // Inline helper and stubs
 const DEFAULT_PROJECT_UUID = 'proj-123';
@@ -21,6 +25,12 @@ const SELECTOR = {
   list: '[data-test="recent-sends-list"]',
 };
 const $t = (key: string) => key;
+
+// Helper to build ISO start/end from any DateRange
+const mkIsoRange = (range: DateRange) => ({
+  start: startOfDay(new TZDate(range.start)).toISOString(),
+  end: endOfDay(new TZDate(range.end)).toISOString(),
+});
 
 const stubs = {
   MissingRecentSends: {
@@ -101,6 +111,7 @@ const mountRecentSends = (options: MountOptions = {}) => {
 
 describe('RecentSends.vue', () => {
   afterEach(() => {
+    vi.useRealTimers();
     vi.restoreAllMocks();
   });
 
@@ -118,13 +129,20 @@ describe('RecentSends.vue', () => {
     expect(wrapper.find(SELECTOR.content).exists()).toBe(false);
   });
 
-  it('fetches on mount with default page params', () => {
+  it('fetches on mount with default page, date range and empty search', () => {
     const { spy } = mountRecentSends({ spy: true });
     expect(spy).toBeDefined();
     expect(spy).toHaveBeenCalledTimes(1);
+
+    const defaultRange = createDateRangeFromDaysAgo(DEFAULT_DATE_RANGE_DAYS);
+    const { start: expectedStart, end: expectedEnd } = mkIsoRange(defaultRange);
+
     expect(spy).toHaveBeenCalledWith(DEFAULT_PROJECT_UUID, {
       offset: 0,
       limit: PAGE_SIZE,
+      start_date: expectedStart,
+      end_date: expectedEnd,
+      name: '',
     });
   });
 
@@ -136,19 +154,53 @@ describe('RecentSends.vue', () => {
     expect(list.props('loading')).toBe(true);
   });
 
-  it('updates search value on input', async () => {
-    const { wrapper } = mountRecentSends({ broadcasts: { loading: true } });
+  it('debounces search updates and calls API with trimmed name', async () => {
+    vi.useFakeTimers();
+    const { wrapper, spy } = mountRecentSends({
+      spy: true,
+      broadcasts: { loading: true },
+    });
     const searchInput = wrapper.find(SELECTOR.search);
-    await searchInput.setValue('test search');
+
+    await searchInput.setValue('  test search  ');
     await searchInput.trigger('input');
-    expect(wrapper.vm.search).toBe('test search');
+
+    await vi.advanceTimersByTimeAsync(500);
+
+    const defaultRange = createDateRangeFromDaysAgo(DEFAULT_DATE_RANGE_DAYS);
+    const { start: expectedStart, end: expectedEnd } = mkIsoRange(defaultRange);
+
+    expect(spy).toHaveBeenLastCalledWith(DEFAULT_PROJECT_UUID, {
+      offset: 0,
+      limit: PAGE_SIZE,
+      start_date: expectedStart,
+      end_date: expectedEnd,
+      name: 'test search',
+    });
   });
 
-  it('updates date range on picker change', async () => {
-    const { wrapper } = mountRecentSends({ broadcasts: { loading: true } });
+  it('debounces date range changes and calls API with new start/end dates', async () => {
+    vi.useFakeTimers();
+    const { wrapper, spy } = mountRecentSends({
+      spy: true,
+      broadcasts: { loading: true },
+    });
     const datePicker = wrapper.find(SELECTOR.date);
+
     await datePicker.trigger('change');
-    expect(wrapper.vm.dateRange).toEqual(TEST_DATE_RANGE);
+
+    await vi.advanceTimersByTimeAsync(500);
+
+    const { start: expectedStart, end: expectedEnd } =
+      mkIsoRange(TEST_DATE_RANGE);
+
+    expect(spy).toHaveBeenLastCalledWith(DEFAULT_PROJECT_UUID, {
+      offset: 0,
+      limit: PAGE_SIZE,
+      start_date: expectedStart,
+      end_date: expectedEnd,
+      name: '',
+    });
   });
 
   it('displays list when data exists', async () => {
@@ -171,9 +223,47 @@ describe('RecentSends.vue', () => {
     list.vm.$emit('update:page', 2);
     // Second call with updated offset
     expect(spy).toHaveBeenCalledTimes(2);
+    const defaultRange = createDateRangeFromDaysAgo(DEFAULT_DATE_RANGE_DAYS);
+    const { start: expectedStart, end: expectedEnd } = mkIsoRange(defaultRange);
     expect(spy).toHaveBeenLastCalledWith(DEFAULT_PROJECT_UUID, {
       offset: (2 - 1) * PAGE_SIZE,
       limit: PAGE_SIZE,
+      start_date: expectedStart,
+      end_date: expectedEnd,
+      name: '',
+    });
+  });
+
+  it('collapses rapid search typing into a single debounced API call', async () => {
+    vi.useFakeTimers();
+    const { wrapper, spy } = mountRecentSends({
+      spy: true,
+      broadcasts: { loading: true },
+    });
+    const searchInput = wrapper.find(SELECTOR.search);
+
+    await searchInput.setValue('t');
+    await searchInput.trigger('input');
+    await searchInput.setValue('te');
+    await searchInput.trigger('input');
+    await searchInput.setValue('tes');
+    await searchInput.trigger('input');
+    await searchInput.setValue('test');
+    await searchInput.trigger('input');
+
+    await vi.advanceTimersByTimeAsync(500);
+
+    const defaultRange = createDateRangeFromDaysAgo(DEFAULT_DATE_RANGE_DAYS);
+    const { start: expectedStart, end: expectedEnd } = mkIsoRange(defaultRange);
+
+    // 1 initial call + 1 debounced call
+    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenLastCalledWith(DEFAULT_PROJECT_UUID, {
+      offset: 0,
+      limit: PAGE_SIZE,
+      start_date: expectedStart,
+      end_date: expectedEnd,
+      name: 'test',
     });
   });
 });

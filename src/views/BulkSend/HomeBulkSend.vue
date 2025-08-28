@@ -140,6 +140,7 @@ const fetchBroadcastsMonthPerformance = async () => {
   display: flex;
   flex-direction: column;
   flex: 1;
+  overflow-y: auto;
 
   &__first-section {
     display: flex;

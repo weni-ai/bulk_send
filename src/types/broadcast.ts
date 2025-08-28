@@ -1,7 +1,14 @@
 import type { Group } from '@/types/groups';
 import type { Template } from '@/types/template';
+import type { PageRequestParams } from '@/types/requests';
 import { BroadcastStatus } from '@/constants/broadcasts';
 import { Currency } from '@/constants/currency';
+
+interface BroadcastStatisticsParams extends PageRequestParams {
+  start_date?: string;
+  end_date?: string;
+  name?: string;
+}
 
 interface BroadcastStatistic {
   id: number;
@@ -33,4 +40,9 @@ interface BroadcastsMonthPerformance {
   successRate: number;
 }
 
-export type { BroadcastStatistic, Statistics, BroadcastsMonthPerformance };
+export type {
+  BroadcastStatistic,
+  Statistics,
+  BroadcastsMonthPerformance,
+  BroadcastStatisticsParams,
+};
