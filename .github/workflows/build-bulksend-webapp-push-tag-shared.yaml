@@ -14,6 +14,7 @@ jobs:
       image_latest: ${{ steps.setup.outputs.image_latest }}
       image_tag_latest: ${{ steps.setup.outputs.image_tag_latest }}
       extra_build_args: ${{ steps.extra_build_args.outputs.BUILD_ENV_ARGS}}
+
     steps:
       - name: Set outputs
         id: setup
@@ -72,6 +73,6 @@ jobs:
         ${{ needs.setup.outputs.extra_build_args }}
       target_repository: weni-ai/kubernetes-manifests-platform
       target_repository_branch: main
-      target_application: bulk-send-webapp
+      target_application: bulk-send
       target_patch_file: deployment.json
     secrets: inherit
