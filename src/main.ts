@@ -69,7 +69,8 @@ safeImport(() => import('connect/sharedStore'), 'connect/sharedStore')
       }
     }
   })
-  .catch(() => {
+  .catch((e) => {
+    console.log('[BulkSend - main.ts] Error importing shared store', e);
     // Ignore errors - app should work without sharedStore
   });
 

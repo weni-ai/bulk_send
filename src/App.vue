@@ -8,15 +8,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import { safeImport, isFederatedModule } from '@/utils/moduleFederation';
 import { useAuthStore } from '@/stores/auth';
 import { useProjectStore } from '@/stores/project';
 
-// Remove top-level await and make it reactive
+const authStore = useAuthStore();
+const projectStore = useProjectStore();
+
 const sharedStore = ref(null);
 
-onMounted(async () => {
+onBeforeMount(async () => {
   updateTokenAndProject();
 
   // Non-blocking import
@@ -26,21 +28,24 @@ onMounted(async () => {
         try {
           sharedStore.value = useSharedStore();
         } catch (error) {
-          console.error('Error initializing shared store:', error);
+          console.error(
+            '[BulkSend - App.vue] Error initializing shared store:',
+            error,
+          );
         }
       } else {
-        console.log('Not federated module');
+        console.log('[BulkSend - App.vue] Not federated module');
       }
     })
     .catch((error) => {
-      console.error('Error loading shared store module:', error);
+      console.error(
+        '[BulkSend - App.vue] Error loading shared store module:',
+        error,
+      );
     });
 });
 
 const updateTokenAndProject = () => {
-  const authStore = useAuthStore();
-  const projectStore = useProjectStore();
-
   authStore.setToken(localStorage.getItem('authToken') || '');
   projectStore.setProjectUuid(localStorage.getItem('projectUuid') || '');
 };
