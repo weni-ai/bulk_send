@@ -11,6 +11,7 @@ import { startOfDay, endOfDay } from 'date-fns';
 import { createDateRangeFromDaysAgo, getDateInUTC } from '@/utils/date';
 import type { DateRange } from '@/types/recentSends';
 import { DEFAULT_PROJECT_UUID } from '@/__tests__/utils/constants';
+import { nextTick } from 'vue';
 
 // Inline helper and stubs
 const TEST_DATE_RANGE = { start: '2024-01-01', end: '2024-01-31' };
@@ -182,6 +183,26 @@ describe('RecentSends.vue', () => {
     });
   });
 
+  it('suppresses empty state while searching', async () => {
+    vi.useFakeTimers();
+    const { wrapper, broadcastsStore } = mountRecentSends({
+      spy: true,
+      broadcasts: { loading: true },
+    });
+    const searchInput = wrapper.find(SELECTOR.search);
+
+    await searchInput.setValue('hello');
+    await searchInput.trigger('input');
+    await vi.advanceTimersByTimeAsync(500);
+
+    // Simulate request completed, but still searching; empty state should remain hidden
+    broadcastsStore.loadingBroadcastsStatistics = false;
+    await nextTick();
+
+    expect(wrapper.find(SELECTOR.missing).exists()).toBe(false);
+    expect(wrapper.find(SELECTOR.content).exists()).toBe(true);
+  });
+
   it('debounces date range changes and calls API with new start/end dates', async () => {
     vi.useFakeTimers();
     const { wrapper, spy } = mountRecentSends({
@@ -267,6 +288,37 @@ describe('RecentSends.vue', () => {
       start_date: expectedStart,
       end_date: expectedEnd,
       name: 'test',
+    });
+  });
+
+  it('resets to page 1 on search from a later page', async () => {
+    vi.useFakeTimers();
+    const { wrapper, spy } = mountRecentSends({
+      spy: true,
+      broadcasts: { statistics: [createBroadcast()], count: 20 },
+    });
+    // Go to page 3
+    const list = wrapper.findComponent({ name: 'RecentSendsList' });
+    list.vm.$emit('update:page', 3);
+    expect(spy).toHaveBeenCalledTimes(2);
+
+    // Type a search which should reset page to 1
+    const searchInput = wrapper.find(SELECTOR.search);
+    await searchInput.setValue('abc');
+    await searchInput.trigger('input');
+    await vi.advanceTimersByTimeAsync(500);
+
+    const defaultRange = createDateRangeFromDaysAgo(DEFAULT_DATE_RANGE_DAYS);
+    const { start: expectedStart, end: expectedEnd } = mkIsoRange(defaultRange);
+
+    // Third call uses offset 0 (page 1)
+    expect(spy).toHaveBeenCalledTimes(3);
+    expect(spy).toHaveBeenLastCalledWith(DEFAULT_PROJECT_UUID, {
+      offset: 0,
+      limit: PAGE_SIZE,
+      start_date: expectedStart,
+      end_date: expectedEnd,
+      name: 'abc',
     });
   });
 });

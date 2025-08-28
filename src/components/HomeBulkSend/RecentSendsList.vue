@@ -4,11 +4,26 @@
       v-if="!loading"
       class="recent-sends-list__content"
     >
-      <SendElement
-        v-for="send in recentSends"
-        :key="send.id"
-        :send="send"
-      />
+      <section v-if="recentSends.length > 0">
+        <SendElement
+          v-for="send in recentSends"
+          :key="send.id"
+          :send="send"
+        />
+      </section>
+      <section
+        v-else
+        class="recent-sends-list__empty"
+      >
+        <p class="recent-sends-list__empty-text">
+          {{ $t('home.recent_sends.empty_text') }}
+        </p>
+        <UnnnicButton
+          :text="$t('home.recent_sends.refresh')"
+          type="secondary"
+          @click="() => handlePageUpdate(page)"
+        />
+      </section>
     </section>
     <section
       v-else
@@ -22,7 +37,10 @@
       />
     </section>
 
-    <footer class="recent-sends-list__footer">
+    <footer
+      v-if="recentSends.length > 0"
+      class="recent-sends-list__footer"
+    >
       <p class="recent-sends-list__pagination-text">
         {{
           $t('home.recent_sends.pagination_text', { currentPageOffset, total })
@@ -95,6 +113,18 @@ const handlePageUpdate = (newPage: number) => {
     font-size: $unnnic-font-size-body-md;
     color: $unnnic-color-neutral-cloudy;
     line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
+  }
+
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $unnnic-spacing-sm;
+    padding: $unnnic-spacing-sm 0;
+
+    color: $unnnic-color-neutral-cloudy;
+    font-size: $unnnic-font-size-body-gt;
+    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
   }
 }
 </style>
