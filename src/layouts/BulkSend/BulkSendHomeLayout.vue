@@ -1,5 +1,5 @@
 <template>
-  <section :class="`bulk-send-home-layout`">
+  <BaseLayout>
     <section class="bulk-send-home-layout__header">
       <slot name="header" />
     </section>
@@ -7,16 +7,15 @@
       class="bulk-send-home-layout__content"
       name="content"
     />
-  </section>
+  </BaseLayout>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import BaseLayout from '@/layouts/BaseLayout.vue';
+</script>
 
 <style scoped lang="scss">
 .bulk-send-home-layout {
-  height: 100%;
-  padding: $unnnic-spacing-sm;
-
   &__header::after {
     content: '';
     display: block;
