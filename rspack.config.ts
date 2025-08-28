@@ -82,7 +82,7 @@ export default defineConfig({
         loader: 'sass-loader',
         type: 'css',
         options: {
-          additionalData: `@use '@weni/unnnic-system/src/assets/scss/unnnic.scss' as *;`,
+          additionalData: `@use '@weni/unnnic-system/src/assets/scss/unnnic.scss' as *; @use '@/styles/mixins.scss' as *;`,
         },
       },
       {
