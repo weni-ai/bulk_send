@@ -124,10 +124,7 @@ const fetchRecentSends = async () => {
       name: search.value.trim(),
     };
 
-    await broadcastsStore.getBroadcastsStatistics(
-      projectStore.project.uuid,
-      params,
-    );
+    broadcastsStore.getBroadcastsStatistics(projectStore.project.uuid, params);
   } catch (error) {
     console.error(error); // TODO: check with design if we need to show an error message to the user
   }
