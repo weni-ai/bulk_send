@@ -14,4 +14,11 @@ const ContactGroupStatus: Record<keyof CoreStatistics, string> = {
   failed: 'F',
 };
 
-export { BroadcastStatus, ContactGroupStatus };
+enum NewBroadcastPage {
+  SELECT_GROUPS = 'select_groups',
+  SELECT_TEMPLATE = 'select_template',
+  SELECT_VARIABLES = 'select_variables',
+  CONFIRM_AND_SEND = 'confirm_and_send',
+}
+
+export { BroadcastStatus, ContactGroupStatus, NewBroadcastPage };

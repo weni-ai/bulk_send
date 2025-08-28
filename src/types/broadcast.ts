@@ -1,7 +1,7 @@
 import type { GroupReference } from '@/types/groups';
 import type { Template } from '@/types/template';
 import type { PageRequestParams } from '@/types/requests';
-import { BroadcastStatus } from '@/constants/broadcasts';
+import { BroadcastStatus, NewBroadcastPage } from '@/constants/broadcasts';
 import { Currency } from '@/constants/currency';
 
 interface BroadcastStatisticsParams extends PageRequestParams {
@@ -43,10 +43,15 @@ interface BroadcastsMonthPerformance {
   successRate: number;
 }
 
+interface NewBroadcastState {
+  currentPage: NewBroadcastPage;
+}
+
 export type {
   BroadcastStatistic,
   CoreStatistics,
   Statistics,
   BroadcastsMonthPerformance,
   BroadcastStatisticsParams,
+  NewBroadcastState,
 };
