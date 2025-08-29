@@ -12,6 +12,7 @@ import { ref, onBeforeMount } from 'vue';
 import { safeImport, isFederatedModule } from '@/utils/moduleFederation';
 import { useAuthStore } from '@/stores/auth';
 import { useProjectStore } from '@/stores/project';
+import { moduleStorage } from '@/utils/storage';
 
 const authStore = useAuthStore();
 const projectStore = useProjectStore();
@@ -46,8 +47,8 @@ onBeforeMount(async () => {
 });
 
 const updateTokenAndProject = () => {
-  authStore.setToken(localStorage.getItem('authToken') || '');
-  projectStore.setProjectUuid(localStorage.getItem('projectUuid') || '');
+  authStore.setToken(moduleStorage.getItem('authToken') || '');
+  projectStore.setProjectUuid(moduleStorage.getItem('projectUuid') || '');
 };
 </script>
 

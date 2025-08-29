@@ -11,6 +11,7 @@ import i18n from './utils/plugins/i18n';
 import App from './App.vue';
 import router from './router';
 import env from './utils/env';
+import { moduleStorage } from './utils/storage';
 
 import { safeImport, isFederatedModule } from './utils/moduleFederation';
 
@@ -64,8 +65,8 @@ safeImport(() => import('connect/sharedStore'), 'connect/sharedStore')
     if (module.useSharedStore && isFederatedModule) {
       const sharedStore = module.useSharedStore();
       if (sharedStore) {
-        localStorage.setItem('authToken', sharedStore.auth.token);
-        localStorage.setItem('projectUuid', sharedStore.current.project.uuid);
+        moduleStorage.setItem('authToken', sharedStore.auth.token);
+        moduleStorage.setItem('projectUuid', sharedStore.current.project.uuid);
       }
     }
   })
