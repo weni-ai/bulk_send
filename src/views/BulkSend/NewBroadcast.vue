@@ -49,7 +49,7 @@ const handleGroupSelectionOpen = (value: boolean) => {
 const handleContactImportOpen = (value: boolean) => {
   broadcastsStore.setContactImportOpen(value);
   broadcastsStore.setGroupSelectionOpen(!value);
-};
+
 };
 </script>
 
