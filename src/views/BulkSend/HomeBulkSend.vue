@@ -81,7 +81,7 @@ const showMMLiteSection = computed(() => {
 
 const showActivateMMLiteModal = ref(false);
 
-const generalPerformanceData = [
+const generalPerformanceData = computed(() => [
   {
     label: t('home.general_performance.total_sent.label'),
     value: broadcastsStore.broadcastMonthPerformance.totalSent,
@@ -97,7 +97,7 @@ const generalPerformanceData = [
     value: broadcastsStore.broadcastMonthPerformance.successRate,
     hint: t('home.general_performance.success_rate.hint'),
   },
-];
+]);
 
 onBeforeMount(() => {
   fetchProjectChannels();
