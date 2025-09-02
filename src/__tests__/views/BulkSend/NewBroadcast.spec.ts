@@ -3,7 +3,6 @@ import { mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import NewBroadcast from '@/views/BulkSend/NewBroadcast.vue';
 import { useBroadcastsStore } from '@/stores/broadcasts';
-import { NewBroadcastPage } from '@/constants/broadcasts';
 
 vi.mock('vue-i18n', () => ({
   useI18n: () => ({ t: (key: string) => key }),
