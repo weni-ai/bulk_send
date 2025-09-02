@@ -4,11 +4,21 @@ import { createPinia, setActivePinia } from 'pinia';
 import NewBroadcast from '@/views/BulkSend/NewBroadcast.vue';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 
+vi.mock('vue-router', () => ({
+  useRouter: () => ({ back: vi.fn() }),
+}));
 vi.mock('vue-i18n', () => ({
   useI18n: () => ({ t: (key: string) => key }),
 }));
 
 const STUBS = {
+  UnnnicButton: {
+    props: ['type', 'disabled'],
+    template: '<button data-test="unnnic-button"><slot /></button>',
+  },
+  ContactImportProcessing: {
+    template: '<div data-test="contact-import-processing" />',
+  },
   NewBroadcastLayout: {
     template:
       '<div><slot name="header" /><div data-test="content"><slot name="content" /></div></div>',
@@ -36,7 +46,7 @@ const mountWrapper = () => {
     .spyOn(broadcastsStore, 'setNewBroadcastPage')
     .mockImplementation(() => {});
   const wrapper = mount(NewBroadcast, {
-    global: { plugins: [pinia], stubs: STUBS },
+    global: { plugins: [pinia], stubs: STUBS, mocks: { $t: (k: string) => k } },
   });
   return { wrapper, setPageSpy };
 };

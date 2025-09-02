@@ -5,7 +5,7 @@
         class="new-broadcast-header__back-button"
         type="tertiary"
         iconLeft="arrow_back"
-        @click="() => router.back()"
+        @click="handleBackButtonClick"
       />
       <h1 class="new-broadcast-header__title-text">
         {{ $t('new_broadcast.title') }}
@@ -22,6 +22,13 @@ import { useRouter } from 'vue-router';
 import NewBroadcastNavigator from '@/components/NewBroadcast/NewBroadcastNavigator.vue';
 
 const router = useRouter();
+
+const emit = defineEmits(['back']);
+
+const handleBackButtonClick = () => {
+  emit('back');
+  router.back();
+};
 </script>
 
 <style scoped lang="scss">

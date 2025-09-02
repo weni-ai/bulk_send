@@ -1,10 +1,18 @@
 <template>
   <NewBroadcastLayout>
     <template #header>
-      <NewBroadcastHeader />
+      <NewBroadcastHeader @back="handleBack" />
     </template>
     <template #content>
       <section class="new-broadcast-layout__content">
+        <section
+          v-if="isSelectGroupsPage"
+          class="new-broadcast-layout__contacts"
+        >
+          <section
+            v-if="!hasContactImport"
+            class="new-broadcast-layout__content-groups"
+          >
         <GroupSelection
           class="new-broadcast-layout__group-selection"
           :open="groupSelectionOpen"
@@ -15,20 +23,48 @@
           @update:open="handleContactImportOpen"
         />
       </section>
+
+          <ContactImportProcessing v-if="hasContactImport" />
+        </section>
+      </section>
+      <!-- TODO: Move this into each step page for easier management? -->
+      <section class="new-broadcast-layout__content-actions">
+        <UnnnicButton
+          class="new-broadcast-layout__content-actions-cancel"
+          type="tertiary"
+          @click="handleCancel"
+        >
+          {{ $t('new_broadcast.pages.actions.cancel') }}
+        </UnnnicButton>
+        <UnnnicButton
+          class="new-broadcast-layout__content-actions-continue"
+          :disabled="!canContinue"
+          @click="handleContinue"
+        >
+          {{ $t('new_broadcast.pages.actions.continue') }}
+        </UnnnicButton>
+      </section>
     </template>
   </NewBroadcastLayout>
 </template>
 
 <script setup lang="ts">
 import { computed, onBeforeMount } from 'vue';
+import { useRouter } from 'vue-router';
 import { useBroadcastsStore } from '@/stores/broadcasts';
+import { useContactImportStore } from '@/stores/contactImport';
+import { useProjectStore } from '@/stores/project';
 import { NewBroadcastPage } from '@/constants/broadcasts';
 import NewBroadcastLayout from '@/layouts/BulkSend/NewBroadcastLayout.vue';
 import NewBroadcastHeader from '@/components/NewBroadcast/NewBroadcastHeader.vue';
 import GroupSelection from '@/components/NewBroadcast/GroupSelection/GroupSelection.vue';
 import ContactImport from '@/components/NewBroadcast/ContactImport/ContactImport.vue';
+import ContactImportProcessing from '@/components/NewBroadcast/ContactImport/ContactImportProcessing.vue';
+const router = useRouter();
 
 const broadcastsStore = useBroadcastsStore();
+const contactImportStore = useContactImportStore();
+const projectStore = useProjectStore();
 
 onBeforeMount(() => {
   broadcastsStore.setNewBroadcastPage(NewBroadcastPage.SELECT_GROUPS);
@@ -41,6 +77,26 @@ const contactImportOpen = computed(
   () => broadcastsStore.newBroadcast.contactImportOpen,
 );
 
+const isSelectGroupsPage = computed(
+  () =>
+    broadcastsStore.newBroadcast.currentPage === NewBroadcastPage.SELECT_GROUPS,
+);
+const hasContactImport = computed(() => contactImportStore.import);
+
+const canContinue = computed(() => {
+  return (
+    broadcastsStore.newBroadcast.selectedGroups.length > 0 ||
+    contactImportStore.import
+  );
+});
+
+const canConfirmImport = computed(() => {
+  return (
+    broadcastsStore.newBroadcast.currentPage ===
+      NewBroadcastPage.SELECT_GROUPS && contactImportStore.import
+  );
+});
+
 const handleGroupSelectionOpen = (value: boolean) => {
   broadcastsStore.setGroupSelectionOpen(value);
   broadcastsStore.setContactImportOpen(!value);
@@ -49,7 +105,36 @@ const handleGroupSelectionOpen = (value: boolean) => {
 const handleContactImportOpen = (value: boolean) => {
   broadcastsStore.setContactImportOpen(value);
   broadcastsStore.setGroupSelectionOpen(!value);
+};
 
+const handleCancel = () => {
+  if (!canContinue.value) {
+    // return to previous page
+    router.back();
+  }
+
+  if (contactImportStore.import) {
+    contactImportStore.clearImport();
+  }
+
+  broadcastsStore.setNewBroadcastPage(NewBroadcastPage.SELECT_GROUPS);
+};
+
+const handleContinue = () => {
+  if (canConfirmImport.value) {
+    contactImportStore.confirmContactImport(
+      projectStore.project.uuid,
+      contactImportStore.import!.importId,
+      contactImportStore.importProcessing,
+    );
+
+    broadcastsStore.setNewBroadcastPage(NewBroadcastPage.SELECT_TEMPLATE);
+  }
+};
+
+const handleBack = () => {
+  broadcastsStore.setNewBroadcastPage(NewBroadcastPage.SELECT_GROUPS);
+  contactImportStore.clearImport();
 };
 </script>
 
@@ -62,6 +147,17 @@ const handleContactImportOpen = (value: boolean) => {
     height: $unnnic-border-width-thinner;
     background-color: $unnnic-color-neutral-soft;
     margin: $unnnic-spacing-md 0;
+  }
+
+  &__content-actions {
+    display: flex;
+    margin-top: auto;
+    gap: $unnnic-spacing-sm;
+  }
+
+  &__content-actions-cancel,
+  &__content-actions-continue {
+    flex: 1;
   }
 }
 </style>
