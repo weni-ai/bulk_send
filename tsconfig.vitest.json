@@ -8,7 +8,7 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "lib": [],
+    "lib": ["ES2021", "DOM"],
     "types": ["node", "jsdom"]
   }
 }
