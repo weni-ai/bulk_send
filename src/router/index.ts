@@ -16,6 +16,11 @@ const routes = [
     name: 'HomeBulkSend',
     component: () => import('@/views/BulkSend/HomeBulkSend.vue'),
   },
+  {
+    path: '/broadcast/create',
+    name: 'NewBroadcast',
+    component: () => import('@/views/BulkSend/NewBroadcast.vue'),
+  },
 ];
 
 const router = createRouter({
