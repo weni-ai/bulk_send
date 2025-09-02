@@ -132,7 +132,10 @@ const sendMetrics = computed(() => {
     {
       label: t('home.recent_sends.metrics.estimated_cost.label'),
       value: estimatedCost.value,
-      hint: t('home.recent_sends.metrics.estimated_cost.hint'),
+      hint: t('home.recent_sends.metrics.estimated_cost.hint', {
+        currency: 'US$', // TODO: get currency from backend when ready
+        cost: '0.12', // TODO: get cost from backend when ready
+      }),
     },
   ];
 });
