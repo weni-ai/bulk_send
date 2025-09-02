@@ -8,6 +8,10 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['src/__tests__/setup/global-mocks.ts'],
+    coverage: {
+      enabled: true,
+      reporter: ['text', 'json', 'html'],
+    },
   },
   resolve: {
     alias: {
