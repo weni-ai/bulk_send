@@ -126,6 +126,43 @@
       },
       "success_alert": "Successfully requested MM Lite API activation",
       "error_alert": "Error requesting MM Lite activation"
+    },
+    "contact_import_upload_instructions": {
+      "title": "File formatting recommendations",
+      "subtitle": "Instructions",
+      "list": {
+        "item_1": "Save your file in XLSX, XLS or CSV format",
+        "item_2": "Include a <b class=\"bold\">header row</b> with the supported column names (see below)",
+        "item_3": "Your file can contain up to <b class=\"bold\">300,000 rows</b>",
+        "item_4": "Blank cells will be ignored. To clear a value, use <b class=\"bold\">--</b>",
+        "item_5": "Additional columns will be ignored unless prefixed with <b class=\"bold\">Field:</b>"
+      },
+      "subtitle_2": "Supported fields:",
+      "table": {
+        "header_1": "Column header",
+        "header_2": "Description",
+        "header_3": "Example",
+        "header_description": {
+          "name": "Full contact name",
+          "urn_tel": "Phone number with country code",
+          "urn_whatsapp": "WhatsApp number (with country code)",
+          "field_team": "Custom field (e.g. team name)"
+        },
+        "header_example": {
+          "name": "Jane Doe",
+          "field_team": "Managers"
+        },
+        "header_label": {
+          "name": "Name",
+          "urn_tel": "URN:tel",
+          "urn_whatsapp": "URN:whatsapp",
+          "field_team": "Field:Team"
+        }
+      },
+      "footer": {
+        "title": "You can {0} template to help you get started",
+        "title_highlight": "download a sample"
+      }
     }
   },
   "new_broadcast": {
@@ -155,7 +192,18 @@
         "pagination_text": "{currentPageOffset} of {total} groups"
       },
       "select_template": {
-        "title": "Templates"
+        "title": "Templates",
+        "page_title": "Select template message",
+        "filters": {
+          "new_tamplate": "New template",
+          "search_placeholder": "Search template"
+        },
+        "table": {
+          "name": "Name",
+          "date": "Date",
+          "content": "Content",
+          "language": "Language"
+        }
       },
       "select_variables": {
         "title": "Variables"
@@ -165,7 +213,56 @@
       },
       "contact_import": {
         "title": "Import contacts",
-        "selected_groups_disclaimer": "You have already selected a contact group, so you cannot import contacts."
+        "selected_groups_disclaimer": "You have already selected a contact group, so you cannot import contacts.",
+        "upload_instructions": {
+          "text": "{0} – to learn how to prepare your file",
+          "button": "View instructions"
+        },
+        "upload_area": {
+          "title": {
+            "text": "Drag and drop or {0} to upload",
+            "highlight": "Choose file"
+          },
+          "subtitle": "Import your contact list using an Excel (.xls, .xlsx) or CSV (.csv) file.",
+          "unknown_error_alert": "Unknown error while uploading file",
+          "unsupported_format_alert": "Unsupported file format",
+          "exceeded_the_maximum_file_size_limit_alert": "File too large"
+        },
+        "processing": {
+          "form": {
+            "action_type": {
+              "create": "Create a new group",
+              "add": "Add to an existing group",
+              "import_without_adding": "Import without adding to any group"
+            },
+            "title": "Select how the imported contacts should be handled",
+            "group_name": {
+              "placeholder": "Group name",
+              "label": "Name your new group"
+            },
+            "group_select": {
+              "label": "Choose your group",
+              "placeholder": "Select or search"
+            }
+          },
+          "overview": {
+            "contact_count": "{count} contacts"
+          },
+          "mapping": {
+            "title": "Column mapping",
+            "type": {
+              "TEXT": "Text",
+              "NUMBER": "Number",
+              "DATE": "Date"
+            }
+          },
+          "title": "Import file processing",
+          "duplicated_contacts_disclaimer": "{count} duplicate contacts detected. Only the first occurence of each will be kept. <button class=\"highlight\">Download contacts list</button>"
+        }
+      },
+      "actions": {
+        "cancel": "Cancel",
+        "continue": "Continue"
       }
     }
   }
