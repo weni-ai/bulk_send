@@ -75,7 +75,7 @@ describe('broadcasts store', () => {
     mocked.getBroadcastsMonthPerformance.mockResolvedValue({
       data: {
         last30DaysStats: { totalSent: 42 },
-        successRate: 0.77,
+        successRate30Days: 0.77,
       },
     } as AxiosResponse);
 
