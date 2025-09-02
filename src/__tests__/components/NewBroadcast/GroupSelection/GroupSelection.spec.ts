@@ -146,4 +146,20 @@ describe('GroupSelection.vue', () => {
       '0',
     );
   });
+
+  it('resets page to 1 when search or sort changes', async () => {
+    const { wrapper } = mountWithStores(true);
+    // set page to 2
+    await wrapper.find(SELECTOR.next).trigger('click');
+    expect(wrapper.find(SELECTOR.list).attributes('data-page')).toBe('2');
+    // set search
+    await wrapper.find(SELECTOR.setSearch).trigger('click');
+    expect(wrapper.find(SELECTOR.list).attributes('data-page')).toBe('1');
+    // set page to 2
+    await wrapper.find(SELECTOR.next).trigger('click');
+    expect(wrapper.find(SELECTOR.list).attributes('data-page')).toBe('2');
+    // set sort
+    await wrapper.find(SELECTOR.setSort).trigger('click');
+    expect(wrapper.find(SELECTOR.list).attributes('data-page')).toBe('1');
+  });
 });

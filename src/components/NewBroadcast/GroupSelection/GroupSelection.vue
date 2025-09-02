@@ -87,10 +87,12 @@ const handlePageUpdate = (newPage: number) => {
 };
 
 const handleSearchUpdate = (value: string) => {
+  groupsPage.value = 1;
   search.value = value;
 };
 
 const handleSortUpdate = (value: string) => {
+  groupsPage.value = 1;
   sort.value = value;
 };
 
