@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref } from 'vue';
+import { computed, onBeforeMount } from 'vue';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import { NewBroadcastPage } from '@/constants/broadcasts';
 import NewBroadcastLayout from '@/layouts/BulkSend/NewBroadcastLayout.vue';
@@ -34,17 +34,22 @@ onBeforeMount(() => {
   broadcastsStore.setNewBroadcastPage(NewBroadcastPage.SELECT_GROUPS);
 });
 
-const groupSelectionOpen = ref(true);
-const contactImportOpen = ref(false);
+const groupSelectionOpen = computed(
+  () => broadcastsStore.newBroadcast.groupSelectionOpen,
+);
+const contactImportOpen = computed(
+  () => broadcastsStore.newBroadcast.contactImportOpen,
+);
 
 const handleGroupSelectionOpen = (value: boolean) => {
-  groupSelectionOpen.value = value;
-  contactImportOpen.value = !value;
+  broadcastsStore.setGroupSelectionOpen(value);
+  broadcastsStore.setContactImportOpen(!value);
 };
 
 const handleContactImportOpen = (value: boolean) => {
-  contactImportOpen.value = value;
-  groupSelectionOpen.value = !value;
+  broadcastsStore.setContactImportOpen(value);
+  broadcastsStore.setGroupSelectionOpen(!value);
+};
 };
 </script>
 
