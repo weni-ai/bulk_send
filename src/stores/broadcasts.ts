@@ -8,6 +8,7 @@ import type {
 
 import BroadcastStatisticsAPI from '@/api/resources/broadcasts';
 import { ContactGroupStatus, NewBroadcastPage } from '@/constants/broadcasts';
+import type { Group } from '@/types/groups';
 
 export const useBroadcastsStore = defineStore('broadcasts', {
   state: () => ({
@@ -23,6 +24,7 @@ export const useBroadcastsStore = defineStore('broadcasts', {
     },
     newBroadcast: <NewBroadcastState>{
       currentPage: NewBroadcastPage.SELECT_GROUPS,
+      selectedGroups: <Group[]>[],
     },
   }),
   actions: {
@@ -90,6 +92,9 @@ export const useBroadcastsStore = defineStore('broadcasts', {
     },
     setNewBroadcastPage(page: NewBroadcastPage) {
       this.newBroadcast.currentPage = page;
+    },
+    setSelectedGroups(groups: Group[]) {
+      this.newBroadcast.selectedGroups = groups;
     },
   },
 });

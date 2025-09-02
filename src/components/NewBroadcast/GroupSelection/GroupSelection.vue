@@ -40,6 +40,7 @@
 import { ref, onBeforeMount, computed, watch } from 'vue';
 import { useDebounceFn } from '@vueuse/core';
 import { useGroupsStore } from '@/stores/groups';
+import { useBroadcastsStore } from '@/stores/broadcasts';
 import { useProjectStore } from '@/stores/project';
 import GroupSelectionOverview from '@/components/NewBroadcast/GroupSelection/GroupSelectionOverview.vue';
 import GroupSelectionFilters from '@/components/NewBroadcast/GroupSelection/GroupSelectionFilters.vue';
@@ -49,6 +50,7 @@ import type { Group } from '@/types/groups';
 
 const groupsStore = useGroupsStore();
 const projectStore = useProjectStore();
+const broadcastsStore = useBroadcastsStore();
 
 defineProps<{
   open: boolean;
@@ -65,7 +67,9 @@ const sort = ref(SORT_OPTIONS.ASC);
 const groupsPage = ref(1);
 const groupsPageSize = PAGE_SIZE;
 const groupsTotal = computed(() => groupsStore.groupsCount);
-const selectedGroups = ref<Group[]>([]);
+const selectedGroups = computed(
+  () => broadcastsStore.newBroadcast.selectedGroups,
+);
 
 watch(
   [search, sort, groupsPage],
@@ -104,7 +108,7 @@ const fetchGroups = () => {
 };
 
 const handleSelectedGroupsUpdate = (groups: Group[]) => {
-  selectedGroups.value = groups;
+  broadcastsStore.setSelectedGroups(groups);
 };
 </script>
 
