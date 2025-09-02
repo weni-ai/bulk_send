@@ -126,6 +126,43 @@
       },
       "success_alert": "Solicitud de activación de API MM Lite realizada con éxito",
       "error_alert": "Error al solicitar la activación de API MM Lite"
+    },
+    "contact_import_upload_instructions": {
+      "title": "Recomendaciones de formato de archivo",
+      "subtitle": "Instrucciones",
+      "list": {
+        "item_1": "Guarde su archivo en formato XLSX, XLS o CSV",
+        "item_2": "Incluya una <b class=\"bold\">fila de encabezado</b> con los nombres de columna soportados (ver abajo)",
+        "item_3": "Su archivo puede contener hasta <b class=\"bold\">300,000 filas</b>",
+        "item_4": "Las celdas en blanco serán ignoradas. Para limpiar un valor, use <b class=\"bold\">--</b>",
+        "item_5": "Las columnas adicionales serán ignoradas a menos que estén prefijadas con <b class=\"bold\">Field:</b>"
+      },
+      "subtitle_2": "Campos soportados:",
+      "table": {
+        "header_1": "Encabezado de columna",
+        "header_2": "Descripción",
+        "header_3": "Ejemplo",
+        "header_description": {
+          "name": "Nombre completo del contacto",
+          "urn_tel": "Número de teléfono con código de país",
+          "urn_whatsapp": "Número de WhatsApp (con código de país)",
+          "field_team": "Campo personalizado (ej. nombre del equipo)"
+        },
+        "header_example": {
+          "name": "Jane Doe",
+          "field_team": "Gerentes"
+        },
+        "header_label": {
+          "name": "Nombre",
+          "urn_tel": "URN:tel",
+          "urn_whatsapp": "URN:whatsapp",
+          "field_team": "Field:Equipo"
+        }
+      },
+      "footer": {
+        "title": "Puedes {0} de plantilla para ayudarte a comenzar",
+        "title_highlight": "descargar un ejemplo"
+      }
     }
   },
   "new_broadcast": {
@@ -155,7 +192,18 @@
         "pagination_text": "{currentPageOffset} de {total} grupos"
       },
       "select_template": {
-        "title": "Plantillas"
+        "title": "Plantillas",
+        "page_title": "Seleccionar mensaje de plantilla",
+        "filters": {
+          "new_tamplate": "Nueva plantilla",
+          "search_placeholder": "Buscar plantilla"
+        },
+        "table": {
+          "name": "Nombre",
+          "date": "Fecha",
+          "content": "Contenido",
+          "language": "Idioma"
+        }
       },
       "select_variables": {
         "title": "Variables"
@@ -164,8 +212,57 @@
         "title": "Revisar y enviar"
       },
       "contact_import": {
-        "title": "Import contacts",
-        "selected_groups_disclaimer": "Ya ha seleccionado un grupo de contactos, por lo que no puede importar contactos."
+        "title": "Importar contactos",
+        "selected_groups_disclaimer": "Ya has seleccionado un grupo de contactos, por lo tanto no puedes importar contactos.",
+        "upload_instructions": {
+          "text": "{0} – para aprender cómo preparar su archivo",
+          "button": "Ver instrucciones"
+        },
+        "upload_area": {
+          "title": {
+            "text": "Arrastre y suelte o {0} para subir",
+            "highlight": "Elegir archivo"
+          },
+          "subtitle": "Importe su lista de contactos usando un archivo Excel (.xls, .xlsx) o CSV (.csv).",
+          "unknown_error_alert": "Error desconocido al subir el archivo",
+          "unsupported_format_alert": "Formato de archivo no soportado",
+          "exceeded_the_maximum_file_size_limit_alert": "Archivo demasiado grande"
+        },
+        "processing": {
+          "form": {
+            "action_type": {
+              "create": "Crear un nuevo grupo",
+              "add": "Agregar a un grupo existente",
+              "import_without_adding": "Importar sin agregar a ningún grupo"
+            },
+            "title": "Seleccionar cómo se deben manejar los contactos importados",
+            "group_name": {
+              "placeholder": "Nombre del grupo",
+              "label": "Nombre su nuevo grupo"
+            },
+            "group_select": {
+              "label": "Elegir su grupo",
+              "placeholder": "Seleccionar o buscar"
+            }
+          },
+          "overview": {
+            "contact_count": "{count} contactos"
+          },
+          "mapping": {
+            "title": "Mapeo de columnas",
+            "type": {
+              "TEXT": "Texto",
+              "NUMBER": "Número",
+              "DATE": "Fecha"
+            }
+          },
+          "title": "Procesamiento de archivo de importación",
+          "duplicated_contacts_disclaimer": "{count} contactos duplicados detectados. Solo se mantendrá la primera ocurrencia de cada uno. <button class=\"highlight\">Descargar lista de contactos</button>"
+        }
+      },
+      "actions": {
+        "cancel": "Cancelar",
+        "continue": "Continuar"
       }
     }
   }
