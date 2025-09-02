@@ -16,6 +16,8 @@
           $t('new_broadcast.pages.contact_import.selected_groups_disclaimer')
         "
       />
+
+      <ContactImportUpload :disabled="hasSelectedGroups" />
     </section>
   </UnnnicCollapse>
 </template>
@@ -23,18 +25,19 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useBroadcastsStore } from '@/stores/broadcasts';
+import ContactImportUpload from '@/components/NewBroadcast/ContactImport/ContactImportUpload.vue';
 
 const broadcastsStore = useBroadcastsStore();
-
-const selectedGroups = computed(
-  () => broadcastsStore.newBroadcast.selectedGroups,
-);
 
 defineProps<{
   open: boolean;
 }>();
 
 const emit = defineEmits(['update:open']);
+
+const selectedGroups = computed(
+  () => broadcastsStore.newBroadcast.selectedGroups,
+);
 
 const handleCollapseUpdate = (value: boolean) => {
   emit('update:open', value);

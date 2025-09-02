@@ -19,6 +19,14 @@ const STUBS = {
     props: ['icon', 'text'],
     template: '<div data-test="disclaimer">{{ text }}</div>',
   },
+  ContactImportUpload: {
+    template: '<div data-test="upload" />',
+  },
+} as const;
+
+const SELECTOR = {
+  toggle: '[data-test="toggle"]',
+  disclaimer: '[data-test="disclaimer"]',
 } as const;
 
 const mountWrapper = (open = true) => {
@@ -39,7 +47,7 @@ const mountWrapper = (open = true) => {
 describe('ContactImport.vue', () => {
   it('emits update:open via collapse toggle', async () => {
     const { wrapper } = mountWrapper(true);
-    await wrapper.find('[data-test="toggle"]').trigger('click');
+    await wrapper.find(SELECTOR.toggle).trigger('click');
     expect(wrapper.emitted('update:open')?.[0]).toEqual([false]);
   });
 
@@ -49,13 +57,13 @@ describe('ContactImport.vue', () => {
       { id: 1, uuid: 'u1', name: 'G1', memberCount: 10 },
     ] as any);
     await wrapper.vm.$nextTick();
-    expect(wrapper.find('[data-test="disclaimer"]').exists()).toBe(true);
+    expect(wrapper.find(SELECTOR.disclaimer).exists()).toBe(true);
   });
 
   it('hides disclaimer when no selected groups', async () => {
     const { wrapper, broadcastsStore } = mountWrapper(true);
     broadcastsStore.setSelectedGroups([]);
     await wrapper.vm.$nextTick();
-    expect(wrapper.find('[data-test="disclaimer"]').exists()).toBe(false);
+    expect(wrapper.find(SELECTOR.disclaimer).exists()).toBe(false);
   });
 });
