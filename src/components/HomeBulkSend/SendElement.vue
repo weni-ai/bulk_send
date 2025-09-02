@@ -86,7 +86,7 @@ const displayNewGroupModal = (
 ) => {
   modalCategory.value = category;
   modalBroadcastName.value = broadcastName;
-  modalContactCount.value = Number(props.send.statistics[category]);
+  modalContactCount.value = Number(props.send.statistics[category]) || 0;
   showNewGroupModal.value = true;
 };
 
