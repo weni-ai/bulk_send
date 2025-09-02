@@ -14,3 +14,11 @@
   font-size: $unnnic-font-size-body-md;
   line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
 }
+
+@mixin button-reset {
+  padding: unset;
+  background: unset;
+  border: unset;
+  outline: none;
+  box-shadow: none;
+}
