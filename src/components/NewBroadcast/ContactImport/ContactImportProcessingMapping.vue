@@ -49,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch, type Ref } from 'vue';
 import { useContactImportStore } from '@/stores/contactImport';
 import {
   ContactImportColumnType,
@@ -121,7 +121,7 @@ const fieldTypeOptions = [
 ];
 
 const tableRows = ref<Row[]>([]);
-const selectAll = ref(true);
+const selectAll: Ref<false | 'less'> = ref('less');
 
 onMounted(() => {
   tableRows.value = initTableRows();
@@ -211,7 +211,18 @@ const itemTypeLabel = (type: ContactFieldType): string => {
 };
 
 const handleSelectAll = () => {
-  selectAll.value = !selectAll.value;
+  selectAll.value = selectAll.value === 'less' ? false : 'less';
+
+  const selectAllToBoolean = selectAll.value === 'less' ? true : false;
+  updateAllRowsSelection(selectAllToBoolean);
+};
+
+const updateAllRowsSelection = (selected: boolean) => {
+  tableRows.value.forEach((row) => {
+    if (!disabledItemSelection(row)) {
+      row.selected = selected;
+    }
+  });
 };
 
 const handleSelect = (item: Row) => {
