@@ -74,7 +74,6 @@
 </template>
 
 <script setup lang="ts">
-// @ts-expect-error - unnnic does not yet have types
 import unnnic from '@weni/unnnic-system';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
