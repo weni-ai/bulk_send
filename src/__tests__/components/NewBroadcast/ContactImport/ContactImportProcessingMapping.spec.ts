@@ -133,4 +133,43 @@ describe('ContactImportProcessingMapping.vue', () => {
       contactImportStore.importProcessing.columnsData['column_2_value_type'],
     ).toBe(ContactFieldType.DATE);
   });
+
+  it('selectAll toggles only editable rows and updates store', async () => {
+    const { wrapper, contactImportStore } = mountWrapper();
+    await wrapper.vm.$nextTick();
+
+    const rows = wrapper.findAll(SELECTOR.row);
+    // Initially all rows selected
+    expect(
+      rows.map((r) => r.find(SELECTOR.checkbox).attributes('data-checked')),
+    ).toEqual(['true', 'true', 'true']);
+
+    // Click select-all to deselect editable rows (NEW_FIELD only)
+    await wrapper
+      .find('[data-test="select-all"]')
+      .find(SELECTOR.checkbox)
+      .trigger('click');
+    await wrapper.vm.$nextTick();
+
+    expect(
+      rows.map((r) => r.find(SELECTOR.checkbox).attributes('data-checked')),
+    ).toEqual(['true', 'true', 'false']);
+    expect(
+      contactImportStore.importProcessing.columnsData['column_2_include'],
+    ).toBe(false);
+
+    // Click select-all again to reselect editable rows
+    await wrapper
+      .find('[data-test="select-all"]')
+      .find(SELECTOR.checkbox)
+      .trigger('click');
+    await wrapper.vm.$nextTick();
+
+    expect(
+      rows.map((r) => r.find(SELECTOR.checkbox).attributes('data-checked')),
+    ).toEqual(['true', 'true', 'true']);
+    expect(
+      contactImportStore.importProcessing.columnsData['column_2_include'],
+    ).toBe(true);
+  });
 });
