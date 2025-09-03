@@ -15,6 +15,13 @@ import { moduleStorage } from './utils/storage';
 
 import { safeImport, isFederatedModule } from './utils/moduleFederation';
 
+const { useSharedStore } = await safeImport(
+  () => import('connect/sharedStore'),
+  'connect/sharedStore',
+);
+
+const sharedStore = useSharedStore?.();
+
 interface MountBulkSendAppOptions {
   containerId?: string;
   initialRoute?: string;
@@ -59,23 +66,10 @@ export default async function mountBulkSendApp({
   return { app: appRef, router };
 }
 
-// Handle sharedStore asynchronously without blocking app mount
-safeImport(() => import('connect/sharedStore'), 'connect/sharedStore')
-  .then((module) => {
-    if (module.useSharedStore && isFederatedModule) {
-      const sharedStore = module.useSharedStore();
-      if (sharedStore) {
-        moduleStorage.setItem('authToken', sharedStore.auth.token);
-        moduleStorage.setItem('projectUuid', sharedStore.current.project.uuid);
-      }
-    }
-  })
-  .catch((e) => {
-    console.log('[BulkSend - main.ts] Error importing shared store', e);
-    // Ignore errors - app should work without sharedStore
-  });
-
-// Always mount the app if it's not a federated module
-if (!isFederatedModule) {
+if (sharedStore && isFederatedModule) {
+  moduleStorage.setItem('authToken', sharedStore.auth.token);
+  moduleStorage.setItem('projectUuid', sharedStore.current.project.uuid);
+} else {
+  console.log('[BulkSend - main.ts] Mounting app not federated');
   mountBulkSendApp();
 }
