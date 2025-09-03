@@ -1,8 +1,10 @@
 <template>
   <section class="contact-import-upload">
-    <!-- TODO: add disabled in design system -->
     <UnnnicDropArea
-      class="contact-import-upload__drop-area"
+      :class="{
+        'contact-import-upload__drop-area': true,
+        'contact-import-upload__drop-area--disabled': disabled,
+      }"
       :currentFiles="currentFiles"
       :supportedFormats="supportedFormats"
       :acceptMultiple="false"
@@ -15,11 +17,19 @@
     >
       <template #title>
         <I18nT
-          class="contact-import-upload__title"
+          :class="{
+            'contact-import-upload__title': true,
+            'contact-import-upload__title--disabled': disabled,
+          }"
           keypath="new_broadcast.pages.contact_import.upload_area.title.text"
           tag="span"
         >
-          <button class="contact-import-upload__title-highlight">
+          <button
+            :class="{
+              'contact-import-upload__title-highlight': true,
+              'contact-import-upload__title-highlight--disabled': disabled,
+            }"
+          >
             {{
               $t(
                 'new_broadcast.pages.contact_import.upload_area.title.highlight',
@@ -29,13 +39,18 @@
         </I18nT>
       </template>
       <template #subtitle>
-        <h2 class="contact-import-upload__subtitle">
+        <h2
+          :class="{
+            'contact-import-upload__subtitle': true,
+            'contact-import-upload__subtitle--disabled': disabled,
+          }"
+        >
           {{ $t('new_broadcast.pages.contact_import.upload_area.subtitle') }}
         </h2>
       </template>
     </UnnnicDropArea>
 
-    <ContactImportUploadInstructions />
+    <ContactImportUploadInstructions :disabled="disabled" />
   </section>
 </template>
 
@@ -137,9 +152,19 @@ const handleExceededTheMaximumFileSizeLimit = () => {
     margin-top: $unnnic-spacing-md;
   }
 
+  &__title--disabled,
+  &__title-highlight--disabled,
+  &__subtitle--disabled {
+    color: $unnnic-color-neutral-clean;
+  }
+
   &__drop-area:deep(.unnnic-upload-area__dropzone__icon) {
     color: $unnnic-color-neutral-dark;
     font-size: $unnnic-font-size-title-sm;
+  }
+
+  &__drop-area--disabled:deep(.unnnic-upload-area__dropzone__icon) {
+    color: $unnnic-color-neutral-clean;
   }
 }
 </style>
