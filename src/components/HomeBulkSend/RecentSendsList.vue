@@ -4,13 +4,13 @@
       v-if="!loading"
       class="recent-sends-list__content"
     >
-      <section v-if="recentSends.length > 0">
+      <template v-if="recentSends.length > 0">
         <SendElement
           v-for="send in recentSends"
           :key="send.id"
           :send="send"
         />
-      </section>
+      </template>
       <section
         v-else
         class="recent-sends-list__empty"
