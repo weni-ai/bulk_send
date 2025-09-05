@@ -21,7 +21,7 @@
         <UnnnicButton
           :text="$t('home.recent_sends.refresh')"
           type="secondary"
-          @click="() => handlePageUpdate(page)"
+          @click="handleReset"
         />
       </section>
     </section>
@@ -57,9 +57,10 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
+import { useDebounceFn } from '@vueuse/core';
 import SendElement from '@/components/HomeBulkSend/SendElement.vue';
 import type { BroadcastStatistic } from '@/types/broadcast';
-import { computed } from 'vue';
 
 const props = defineProps<{
   loading: boolean;
@@ -69,7 +70,7 @@ const props = defineProps<{
   total: number;
 }>();
 
-const emit = defineEmits(['update:page']);
+const emit = defineEmits(['update:page', 'reset']);
 
 const currentPageOffset = computed(() => {
   return Math.min(
@@ -85,6 +86,10 @@ const pageLimit = computed(() => {
 const handlePageUpdate = (newPage: number) => {
   emit('update:page', newPage);
 };
+
+const handleReset = useDebounceFn(() => {
+  emit('reset');
+}, 300);
 </script>
 
 <style scoped lang="scss">

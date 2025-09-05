@@ -54,6 +54,7 @@
         :pageSize="recentSendsPageSize"
         :total="recentSendsTotal"
         @update:page="handlePageUpdate"
+        @reset="handleReset"
       />
     </section>
   </section>
@@ -117,6 +118,12 @@ const handleDateRangeUpdate = useDebounceFn((value: DateRange) => {
 const handleSearchClear = () => {
   search.value = '';
   isSearching.value = false;
+};
+
+const handleReset = () => {
+  search.value = '';
+  dateRange.value = createDateRangeFromDaysAgo(DEFAULT_DATE_RANGE_DAYS);
+  handlePageUpdate(1);
 };
 
 const handleStartNewSend = () => {
