@@ -31,6 +31,7 @@
         :selectedGroups="selectedGroups"
         @update:page="handlePageUpdate"
         @update:selected-groups="handleSelectedGroupsUpdate"
+        @reset="handleReset"
       />
     </section>
   </UnnnicCollapse>
@@ -97,6 +98,12 @@ const handleSearchUpdate = (value: string) => {
 const handleSortUpdate = (value: string) => {
   groupsPage.value = 1;
   sort.value = value;
+};
+
+const handleReset = () => {
+  groupsPage.value = 1;
+  search.value = '';
+  sort.value = SORT_OPTIONS.ASC;
 };
 
 const fetchGroups = () => {

@@ -81,7 +81,7 @@
         "SENT": "Finalizado",
         "FAILED": "Fallado"
       },
-      "refresh": "Actualizar",
+      "refresh": "Limpiar filtros",
       "empty_text": "No encontramos envíos que coincidan con tu búsqueda"
     }
   },
@@ -192,7 +192,8 @@
           "removal_tooltip": "Eliminar grupos seleccionados"
         },
         "no_groups": "No encontramos ningún grupo que coincida con tu búsqueda",
-        "pagination_text": "{currentPageOffset} de {total} grupos"
+        "pagination_text": "{currentPageOffset} de {total} grupos",
+        "clear_filters": "Limpiar filtros"
       },
       "select_template": {
         "title": "Plantillas",

@@ -81,7 +81,7 @@
         "SENT": "Finalizado",
         "FAILED": "Falhas"
       },
-      "refresh": "Atualizar",
+      "refresh": "Limpar filtros",
       "empty_text": "Não encontramos disparos que correspondam à sua pesquisa"
     }
   },
@@ -192,7 +192,8 @@
           "removal_tooltip": "Remover grupos selecionados"
         },
         "no_groups": "Não encontramos nenhum grupo correspondente à sua pesquisa",
-        "pagination_text": "{currentPageOffset} de {total} grupos"
+        "pagination_text": "{currentPageOffset} de {total} grupos",
+        "clear_filters": "Limpar filtros"
       },
       "select_template": {
         "title": "Modelos",

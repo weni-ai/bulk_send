@@ -39,7 +39,10 @@
         />
       </section>
     </section>
-    <GroupSelectionListEmpty v-if="showEmptyList" />
+    <GroupSelectionListEmpty
+      v-if="showEmptyList"
+      @reset="handleReset"
+    />
     <GroupSelectionListFooter
       :page="page"
       :pageSize="pageSize"
@@ -73,7 +76,7 @@ const props = defineProps<{
   loading: boolean;
 }>();
 
-const emit = defineEmits(['update:page', 'update:selected-groups']);
+const emit = defineEmits(['update:page', 'update:selected-groups', 'reset']);
 
 const showGroupsList = computed(() => {
   return !props.loading && groups.value.length > 0;
@@ -105,6 +108,10 @@ const rows: ComputedRef<GroupWithSelected[][]> = computed(() => {
 
 const handlePageUpdate = (newPage: number) => {
   emit('update:page', newPage);
+};
+
+const handleReset = () => {
+  emit('reset');
 };
 
 const handleGroupSelectionUpdate = (group: Group) => {
