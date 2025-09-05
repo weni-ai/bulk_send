@@ -11,14 +11,6 @@ vi.mock('vue-i18n', () => ({ useI18n: () => ({ t: (k: string) => k }) }));
 // mock debounce to run immediately
 vi.mock('@vueuse/core', () => ({ useDebounceFn: (fn: any) => fn }));
 
-// mock templates API to avoid useProjectStore at import time
-vi.mock('@/api/resources/templates', () => ({
-  default: {
-    getTemplates: vi.fn(),
-    getTemplate: vi.fn(),
-  },
-}));
-
 const SELECTOR = {
   filtersSetSearch: '[data-test="set-search"]',
   listNext: '[data-test="next"]',
