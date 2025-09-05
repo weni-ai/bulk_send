@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { nextTick } from 'vue';
 import { mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import TemplateSelectionPreview from '@/components/NewBroadcast/TemplateSelection/TemplateSelectionPreview.vue';
@@ -22,10 +23,10 @@ const stubs = {
     template:
       '<div\n' +
       '  data-test="template-preview-component"\n' +
-      '  :data-header-type="template?.header?.type || ""\n' +
-      '  :data-media-type="template?.header?.mediaType || ""\n' +
-      '  :data-body="template?.body || ""\n' +
-      '  :data-footer="template?.footer || ""\n' +
+      "  :data-header-type=\"template && template.header ? (template.header.type || '' ) : ''\"\n" +
+      "  :data-media-type=\"template && template.header ? (template.header.mediaType || '' ) : ''\"\n" +
+      '  :data-body="template && template.body ? template.body : \'\'"\n' +
+      '  :data-footer="template && template.footer ? template.footer : \'\'"\n' +
       '/>',
   },
 };
@@ -53,7 +54,7 @@ describe('TemplateSelectionPreview.vue', () => {
     expect(wrapper.find(SELECTOR.preview).exists()).toBe(false);
   });
 
-  it('renders preview with mapped template when a template is selected', () => {
+  it('renders preview with mapped template when a template is selected', async () => {
     const { wrapper, broadcastsStore } = mountWithStore();
 
     const template: Template = {
@@ -70,6 +71,7 @@ describe('TemplateSelectionPreview.vue', () => {
     };
 
     broadcastsStore.setSelectedTemplate(template);
+    await nextTick();
 
     // name and preview should render
     expect(wrapper.find(SELECTOR.name).exists()).toBe(true);
