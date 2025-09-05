@@ -20,7 +20,8 @@ const SELECTOR = {
   title: '[data-test="title"]',
   content: '[data-test="content"]',
   missing: '[data-test="missing-recent-sends"]',
-  search: '[data-test="search-input"]',
+  search: 'input[data-test="search-input"]',
+  clear: '[data-test="search-input-clear"]',
   date: '[data-test="date-range"]',
   list: '[data-test="recent-sends-list"]',
 };
@@ -51,10 +52,19 @@ const stubs = {
   },
   UnnnicInput: {
     name: 'UnnnicInput',
-    props: ['placeholder', 'modelValue', 'iconLeft'],
-    emits: ['update:model-value'],
+    props: [
+      'placeholder',
+      'modelValue',
+      'iconLeft',
+      'iconRight',
+      'iconRightClickable',
+    ],
+    emits: ['update:model-value', 'icon-right-click'],
     template:
-      '<input data-test="search-input" :placeholder="placeholder" :value="modelValue" @input="$emit(\'update:model-value\', $event.target.value)" />',
+      '<div>' +
+      '<input data-test="search-input" :placeholder="placeholder" :value="modelValue" @input="$emit(\'update:model-value\', $event.target.value)" />' +
+      '<button v-if="modelValue && modelValue.length > 0" data-test="search-input-clear" @click="$emit(\'icon-right-click\')">x</button>' +
+      '</div>',
   },
   UnnnicInputDatePicker: {
     name: 'UnnnicInputDatePicker',
@@ -320,5 +330,65 @@ describe('RecentSends.vue', () => {
       end_date: expectedEnd,
       name: 'abc',
     });
+  });
+
+  it('shows clear icon only when there is search text', async () => {
+    vi.useFakeTimers();
+    const { wrapper } = mountRecentSends({ broadcasts: { loading: true } });
+
+    // Initially no search text -> clear icon hidden
+    expect(wrapper.find(SELECTOR.clear).exists()).toBe(false);
+
+    // Type something -> clear icon appears after debounce set value
+    const searchInput = wrapper.find(SELECTOR.search);
+    await searchInput.setValue('a');
+    await searchInput.trigger('input');
+    await vi.advanceTimersByTimeAsync(500);
+    await nextTick();
+    expect(wrapper.find(SELECTOR.clear).exists()).toBe(true);
+
+    // Clear model by typing empty -> clear icon hides again
+    await searchInput.setValue('');
+    await searchInput.trigger('input');
+    await vi.advanceTimersByTimeAsync(500);
+    await nextTick();
+    expect(wrapper.find(SELECTOR.clear).exists()).toBe(false);
+  });
+
+  it('clicking clear resets search, hides empty state suppression, and avoids redundant fetch', async () => {
+    vi.useFakeTimers();
+    const { wrapper, spy, broadcastsStore } = mountRecentSends({
+      spy: true,
+      broadcasts: { loading: true },
+    });
+
+    // Start typing to show clear icon and create searching state
+    const searchInput = wrapper.find(SELECTOR.search);
+    await searchInput.setValue('hello');
+    await searchInput.trigger('input');
+    await vi.advanceTimersByTimeAsync(500);
+    await nextTick();
+    expect(wrapper.find(SELECTOR.clear).exists()).toBe(true);
+
+    const initialCalls = spy ? spy.mock.calls.length : 0;
+
+    // Click clear
+    await wrapper.find(SELECTOR.clear).trigger('click');
+    await nextTick();
+
+    // After clearing, input becomes empty and clear icon disappears
+    const inputEl = wrapper.find(SELECTOR.search).element as HTMLInputElement;
+    expect(inputEl.value).toBe('');
+    expect(wrapper.find(SELECTOR.clear).exists()).toBe(false);
+
+    // Should not trigger an immediate extra fetch beyond the debounce-driven last one
+    const afterClearCalls = spy ? spy.mock.calls.length : 0;
+    expect(afterClearCalls).toBe(initialCalls);
+
+    // Also, with loading false and empty results, empty state can be shown again
+    broadcastsStore.loadingBroadcastsStatistics = false;
+    await nextTick();
+    expect(wrapper.find(SELECTOR.missing).exists()).toBe(true);
+    expect(wrapper.find(SELECTOR.content).exists()).toBe(false);
   });
 });
