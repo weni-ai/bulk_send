@@ -24,6 +24,8 @@ export const useBroadcastsStore = defineStore('broadcasts', {
     },
     newBroadcast: <NewBroadcastState>{
       currentPage: NewBroadcastPage.SELECT_GROUPS,
+      groupSelectionOpen: true,
+      contactImportOpen: false,
       selectedGroups: <Group[]>[],
     },
   }),
@@ -64,7 +66,7 @@ export const useBroadcastsStore = defineStore('broadcasts', {
         this.broadcastMonthPerformance = {
           totalSent: stats.totalSent,
           estimatedCost: cost,
-          successRate: response.data.successRate,
+          successRate: response.data.successRate30Days,
         };
       } finally {
         this.loadingBroadcastsMonthPerformance = false;
@@ -95,6 +97,12 @@ export const useBroadcastsStore = defineStore('broadcasts', {
     },
     setSelectedGroups(groups: Group[]) {
       this.newBroadcast.selectedGroups = groups;
+    },
+    setGroupSelectionOpen(value: boolean) {
+      this.newBroadcast.groupSelectionOpen = value;
+    },
+    setContactImportOpen(value: boolean) {
+      this.newBroadcast.contactImportOpen = value;
     },
   },
 });

@@ -45,6 +45,8 @@ interface BroadcastsMonthPerformance {
 
 interface NewBroadcastState {
   currentPage: NewBroadcastPage;
+  groupSelectionOpen: boolean;
+  contactImportOpen: boolean;
   selectedGroups: Group[];
 }
 
