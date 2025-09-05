@@ -13,21 +13,27 @@
             v-if="!hasContactImport"
             class="new-broadcast-layout__content-groups"
           >
-        <GroupSelection
-          class="new-broadcast-layout__group-selection"
-          :open="groupSelectionOpen"
-          @update:open="handleGroupSelectionOpen"
-        />
-        <ContactImport
-          :open="contactImportOpen"
-          @update:open="handleContactImportOpen"
-        />
-      </section>
+            <GroupSelection
+              class="new-broadcast-layout__group-selection"
+              :open="groupSelectionOpen"
+              @update:open="handleGroupSelectionOpen"
+            />
+            <ContactImport
+              :open="contactImportOpen"
+              @update:open="handleContactImportOpen"
+            />
+          </section>
 
           <ContactImportProcessing v-if="hasContactImport" />
         </section>
+        <section
+          v-if="isSelectTemplatePage"
+          class="new-broadcast-layout__template"
+        >
+          <TemplateSelection data-test="template-selection" />
+        </section>
       </section>
-      <!-- TODO: Move this into each step page for easier management? -->
+      <!-- TODO: Move this into each step page for easier management? Answer: YES PLEASE -->
       <section class="new-broadcast-layout__content-actions">
         <UnnnicButton
           class="new-broadcast-layout__content-actions-cancel"
@@ -60,6 +66,9 @@ import NewBroadcastHeader from '@/components/NewBroadcast/NewBroadcastHeader.vue
 import GroupSelection from '@/components/NewBroadcast/GroupSelection/GroupSelection.vue';
 import ContactImport from '@/components/NewBroadcast/ContactImport/ContactImport.vue';
 import ContactImportProcessing from '@/components/NewBroadcast/ContactImport/ContactImportProcessing.vue';
+import TemplateSelection from '@/components/NewBroadcast/TemplateSelection/TemplateSelection.vue';
+import { TemplateStatus } from '@/constants/templates';
+
 const router = useRouter();
 
 const broadcastsStore = useBroadcastsStore();
@@ -81,13 +90,31 @@ const isSelectGroupsPage = computed(
   () =>
     broadcastsStore.newBroadcast.currentPage === NewBroadcastPage.SELECT_GROUPS,
 );
+
+const isSelectTemplatePage = computed(
+  () =>
+    broadcastsStore.newBroadcast.currentPage ===
+    NewBroadcastPage.SELECT_TEMPLATE,
+);
 const hasContactImport = computed(() => contactImportStore.import);
 
 const canContinue = computed(() => {
-  return (
-    broadcastsStore.newBroadcast.selectedGroups.length > 0 ||
-    contactImportStore.import
-  );
+  if (isSelectGroupsPage.value) {
+    return (
+      broadcastsStore.newBroadcast.selectedGroups.length > 0 ||
+      contactImportStore.import
+    );
+  }
+
+  if (isSelectTemplatePage.value) {
+    return (
+      broadcastsStore.newBroadcast.selectedTemplate &&
+      broadcastsStore.newBroadcast.selectedTemplate.status ===
+        TemplateStatus.APPROVED
+    );
+  }
+
+  return false;
 });
 
 const canConfirmImport = computed(() => {
@@ -120,8 +147,9 @@ const handleCancel = () => {
   broadcastsStore.setNewBroadcastPage(NewBroadcastPage.SELECT_GROUPS);
 };
 
+// TODO: Refactor this to avoid so many if-elses
 const handleContinue = () => {
-  if (canConfirmImport.value) {
+  if (isSelectGroupsPage.value && canConfirmImport.value) {
     contactImportStore.confirmContactImport(
       projectStore.project.uuid,
       contactImportStore.import!.importId,
@@ -129,6 +157,13 @@ const handleContinue = () => {
     );
 
     broadcastsStore.setNewBroadcastPage(NewBroadcastPage.SELECT_TEMPLATE);
+  } else if (
+    isSelectGroupsPage.value &&
+    broadcastsStore.newBroadcast.selectedGroups.length > 0
+  ) {
+    broadcastsStore.setNewBroadcastPage(NewBroadcastPage.SELECT_TEMPLATE);
+  } else if (isSelectTemplatePage.value) {
+    broadcastsStore.setNewBroadcastPage(NewBroadcastPage.SELECT_VARIABLES);
   }
 };
 
