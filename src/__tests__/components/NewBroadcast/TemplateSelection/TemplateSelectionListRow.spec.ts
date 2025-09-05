@@ -7,13 +7,14 @@ const SELECTOR = {
 } as const;
 
 describe('TemplateSelectionListRow.vue', () => {
-  it('sets data-selected accordingly', () => {
+  it('sets data-selected accordingly', async () => {
     const wrapper = mount(TemplateSelectionListRow, {
       props: { selected: true },
     });
     expect(wrapper.find(SELECTOR.row).attributes('data-selected')).toBe('true');
 
     wrapper.setProps({ selected: false });
+    await wrapper.vm.$nextTick();
     expect(wrapper.find(SELECTOR.row).attributes('data-selected')).toBe(
       'false',
     );
