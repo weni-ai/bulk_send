@@ -1,8 +1,11 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
 import RecentSendsList from '@/components/HomeBulkSend/RecentSendsList.vue';
 import type { BroadcastStatistic } from '@/types/broadcast';
 import { createBroadcast } from '@/__tests__/utils/factories';
+
+// mock debounce to run immediately
+vi.mock('@vueuse/core', () => ({ useDebounceFn: (fn: any) => fn }));
 
 const PAGE_SIZE = 5;
 
@@ -18,7 +21,7 @@ const SELECTOR = {
   sendElement: '[data-test="send-element"]',
   pagination: '[data-test="pagination"]',
   skeleton: '[data-test="skeleton"]',
-  refresh: '[data-test="refresh-btn"]',
+  clearFilters: '[data-test="clear-filters-btn"]',
 } as const;
 
 const stubs = {
@@ -29,7 +32,7 @@ const stubs = {
   UnnnicButton: {
     props: ['text', 'type'],
     template:
-      '<button data-test="refresh-btn" @click="$emit(\'click\')">{{ text }}</button>',
+      '<button data-test="clear-filters-btn" @click="$emit(\'click\')">{{ text }}</button>',
   },
   UnnnicPagination: {
     props: ['max', 'modelValue'],
@@ -99,12 +102,12 @@ describe('RecentSendsList.vue', () => {
     expect(wrapper.emitted('update:page')).toEqual([[2]]);
   });
 
-  it('shows empty state and refresh emits update:page with current page', async () => {
+  it('shows empty state and clear filters emits reset', async () => {
+    vi.useFakeTimers();
     const wrapper = mountWrapper({ recentSends: [], total: 0, page: 3 });
     // empty state renders translation key and refresh button
     expect(wrapper.text()).toContain('home.recent_sends.empty_text');
-    await wrapper.find(SELECTOR.refresh).trigger('click');
-    const emissions = wrapper.emitted('update:page') || [];
-    expect(emissions[emissions.length - 1]).toEqual([3]);
+    await wrapper.find(SELECTOR.clearFilters).trigger('click');
+    expect(wrapper.emitted('reset')).toBeDefined();
   });
 });
