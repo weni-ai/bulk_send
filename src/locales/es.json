@@ -163,6 +163,9 @@
         "title": "Puedes {0} de plantilla para ayudarte a comenzar",
         "title_highlight": "descargar un ejemplo"
       }
+    },
+    "template_preview": {
+      "title": "Vista previa de plantilla"
     }
   },
   "new_broadcast": {
@@ -202,8 +205,27 @@
           "name": "Nombre",
           "date": "Fecha",
           "content": "Contenido",
-          "language": "Idioma"
-        }
+          "language": "Idioma",
+          "status": "Estado",
+          "statuses": {
+            "APPROVED": "Aprobado",
+            "IN_APPEAL": "En apelación",
+            "PENDING": "Pendiente",
+            "REJECTED": "Rechazado",
+            "PENDING_DELETION": "Pendiente de eliminación",
+            "DELETED": "Eliminado",
+            "DISABLED": "Desactivado",
+            "LOCKED": "Bloqueado",
+            "UNSUPPORTED_LANGUAGE": "Idioma no soportado",
+            "PAUSED": "Pausado"
+          }
+        },
+        "preview": {
+          "title": "Vista previa de plantilla",
+          "name": "Vista previa de plantilla:",
+          "missing": "Seleccione una plantilla para visualizar"
+        },
+        "disclaimer": "Solo se pueden seleccionar y enviar plantillas con estado aprobado. Las plantillas pendientes deben esperar a la aprobación de Meta antes de usarse. <a target=\"_blank\" href=\"https://developers.facebook.com/docs/whatsapp/message-templates/guidelines/#approval-process\" class=\"highlight\">Más información en la documentación de Meta</a>"
       },
       "select_variables": {
         "title": "Variables"
