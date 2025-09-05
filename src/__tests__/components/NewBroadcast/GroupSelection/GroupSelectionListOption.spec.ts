@@ -47,10 +47,27 @@ describe('GroupSelectionListOption.vue', () => {
     );
   });
 
-  it('emits update:selected when checkbox toggled', async () => {
+  it('emits update:selected=true when clicking root and selected=false', async () => {
     const wrapper = mountWrapper({ selected: false });
-    const checkbox = wrapper.find(SELECTOR.checkbox);
-    await checkbox.setValue(true);
+    await wrapper.find(SELECTOR.root).trigger('click');
     expect(wrapper.emitted('update:selected')).toEqual([[true]]);
+  });
+
+  it('emits update:selected=false when clicking root and selected=true', async () => {
+    const wrapper = mountWrapper({ selected: true });
+    await wrapper.find(SELECTOR.root).trigger('click');
+    expect(wrapper.emitted('update:selected')).toEqual([[false]]);
+  });
+
+  it('checkbox reflects selected prop', () => {
+    const wrapperSelected = mountWrapper({ selected: true });
+    const checkboxSelected = wrapperSelected.find(SELECTOR.checkbox)
+      .element as HTMLInputElement;
+    expect(checkboxSelected.checked).toBe(true);
+
+    const wrapperUnselected = mountWrapper({ selected: false });
+    const checkboxUnselected = wrapperUnselected.find(SELECTOR.checkbox)
+      .element as HTMLInputElement;
+    expect(checkboxUnselected.checked).toBe(false);
   });
 });

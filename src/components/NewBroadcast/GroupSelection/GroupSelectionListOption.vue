@@ -6,13 +6,13 @@
     }"
     data-test="group-option"
     :data-selected="selected"
+    @click="emitSelectionUpdate"
   >
     <UnnnicCheckbox
       class="group-selection-option__checkbox"
       data-test="group-option-checkbox"
       :modelValue="selected"
       size="sm"
-      @update:model-value="handleCheckboxUpdate"
     />
     <section class="group-selection-option__content">
       <h1
@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   title: string;
   description: string;
   selected: boolean;
@@ -40,8 +40,8 @@ defineProps<{
 
 const emit = defineEmits(['update:selected']);
 
-const handleCheckboxUpdate = (value: boolean) => {
-  emit('update:selected', value);
+const emitSelectionUpdate = () => {
+  emit('update:selected', !props.selected);
 };
 </script>
 
@@ -56,6 +56,7 @@ const handleCheckboxUpdate = (value: boolean) => {
   border: $unnnic-border-width-thinner solid $unnnic-color-neutral-light;
   border-radius: $unnnic-border-radius-sm;
   width: 100%;
+  cursor: pointer;
 
   &:hover {
     border-color: $unnnic-color-neutral-soft;
