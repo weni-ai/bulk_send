@@ -1,0 +1,37 @@
+import request from '@/api/requests';
+import { useProjectStore } from '@/stores/project';
+import type { ContactImportProcessing } from '@/types/contactImport';
+
+export default {
+  async uploadContactImport(formData: FormData) {
+    const { project } = useProjectStore();
+
+    formData.append('project_uuid', project.uuid);
+
+    const response = await request.$http.post(
+      '/api/v2/internals/contacts_import_upload',
+      formData,
+    );
+    return response;
+  },
+  async confirmContactImport(
+    projectUuid: string,
+    importId: number,
+    importData: ContactImportProcessing,
+  ) {
+    const data = {
+      project_uuid: projectUuid,
+      add_to_group: importData.addToGroup,
+      group_mode: importData.groupMode,
+      new_group_name: importData.groupName || null,
+      existing_group: importData.group?.id || null,
+      ...importData.columnsData,
+    };
+
+    const response = await request.$http.post(
+      `/api/v2/internals/contacts_import_confirm/${importId}/`,
+      data,
+    );
+    return response;
+  },
+};
