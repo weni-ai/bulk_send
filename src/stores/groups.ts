@@ -17,5 +17,20 @@ export const useGroupsStore = defineStore('groups', {
       this.groupsCount = response.data.count;
       this.loadingGroups = false;
     },
+    async listAllGroups(projectUuid: string) {
+      this.loadingGroups = true;
+      const page = 1;
+      while (true) {
+        const response = await GroupsAPI.getGroups(projectUuid, {
+          offset: (page - 1) * 100,
+          limit: 100,
+        });
+        this.groups = [...this.groups, ...response.data.results];
+        if (response.data.next === null) {
+          break;
+        }
+      }
+      this.loadingGroups = false;
+    },
   },
 });
