@@ -27,7 +27,7 @@
         :page="groupsPage"
         :pageSize="groupsPageSize"
         :total="groupsTotal"
-        :loading="groupsStore.loadingGroups"
+        :loading="loadingGroups"
         :selectedGroups="selectedGroups"
         @update:page="handlePageUpdate"
         @update:selected-groups="handleSelectedGroupsUpdate"
@@ -70,6 +70,9 @@ const groupsTotal = computed(() => groupsStore.groupsCount);
 const selectedGroups = computed(
   () => broadcastsStore.newBroadcast.selectedGroups,
 );
+const loadingGroups = computed(() => {
+  return groupsStore.loadingGroups;
+});
 
 watch(
   [search, sort, groupsPage],
