@@ -168,14 +168,7 @@ const fetchBroadcastsMonthPerformance = async () => {
     line-height: $unnnic-font-size-body-sm + $unnnic-line-height-md;
 
     :deep(.highlight) {
-      text-decoration: underline;
-      font-weight: $unnnic-font-weight-bold;
-      cursor: pointer;
-
-      border: none;
-      background: none;
-      color: $unnnic-color-neutral-dark;
-      padding: 0;
+      @include disclaimer-highlight;
     }
   }
 
