@@ -163,6 +163,9 @@
         "title": "You can {0} template to help you get started",
         "title_highlight": "download a sample"
       }
+    },
+    "template_preview": {
+      "title": "Template preview"
     }
   },
   "new_broadcast": {
@@ -202,8 +205,27 @@
           "name": "Name",
           "date": "Date",
           "content": "Content",
-          "language": "Language"
-        }
+          "language": "Language",
+          "status": "Status",
+          "statuses": {
+            "APPROVED": "Approved",
+            "IN_APPEAL": "In appeal",
+            "PENDING": "Pending",
+            "REJECTED": "Rejected",
+            "PENDING_DELETION": "Pending deletion",
+            "DELETED": "Deleted",
+            "DISABLED": "Disabled",
+            "LOCKED": "Locked",
+            "UNSUPPORTED_LANGUAGE": "Unsupported language",
+            "PAUSED": "Paused"
+          }
+        },
+        "preview": {
+          "title": "Template preview",
+          "name": "Template preview:",
+          "missing": "Choose a template to preview"
+        },
+        "disclaimer": "Only templates with an approved status can be selected and sent. Pending templates must wait for Meta’s approval before they can be used. <a target=\"_blank\" href=\"https://developers.facebook.com/docs/whatsapp/message-templates/guidelines/#approval-process\" class=\"highlight\">Learn more in Meta’s documentation</a>"
       },
       "select_variables": {
         "title": "Variables"
