@@ -34,9 +34,10 @@
         <p class="send-element-info__value">
           {{ templateName }}
           <button
+            v-if="hasTemplate"
             class="send-element-info__view-template"
             data-test="view-template"
-            @click="handleViewTemplate"
+            @click="() => handleUpdateShowTemplatePreviewModal(true)"
           >
             {{ $t('home.recent_sends.metrics.actions.view_template') }}
           </button>
@@ -59,16 +60,26 @@
         </p>
       </section>
     </section>
+
+    <TemplatePreviewModal
+      v-if="hasTemplate && showTemplatePreviewModal"
+      :modelValue="showTemplatePreviewModal"
+      :templateId="send.template?.id"
+      @update:model-value="handleUpdateShowTemplatePreviewModal"
+    />
   </section>
 </template>
 
 <script setup lang="ts">
+import { ref, computed } from 'vue';
 import type { BroadcastStatistic } from '@/types/broadcast';
 import { BroadcastStatus } from '@/constants/broadcasts';
 import { formatDateWithTimezone } from '@/utils/date';
-import { computed } from 'vue';
+import TemplatePreviewModal from '@/components/modals/TemplatePreviewModal.vue';
 
 const DATE_FORMAT = '[MMM d, h:mm aa]';
+
+const showTemplatePreviewModal = ref(false);
 
 const props = defineProps<{
   send: BroadcastStatistic;
@@ -95,8 +106,12 @@ const groups = computed(() => {
   return props.send.groups.map((group) => group.name).join(', ');
 });
 
-const handleViewTemplate = () => {
-  console.log('view template');
+const hasTemplate = computed(() => {
+  return props.send.template?.id;
+});
+
+const handleUpdateShowTemplatePreviewModal = (value: boolean) => {
+  showTemplatePreviewModal.value = value;
 };
 </script>
 
@@ -160,15 +175,13 @@ const handleViewTemplate = () => {
   }
 
   &__view-template {
+    @include button-reset;
     color: $unnnic-color-neutral-cloudy;
     font-family: Lato;
     font-size: $unnnic-font-size-body-md;
     font-weight: $unnnic-font-weight-bold;
     line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
     text-decoration-line: underline;
-    border: none;
-    background: none;
-    padding: 0;
     cursor: pointer;
     margin-left: $unnnic-spacing-nano;
   }
