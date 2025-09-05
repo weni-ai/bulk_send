@@ -31,6 +31,9 @@
           iconLeft="search-1"
           :placeholder="$t('home.recent_sends.search_placeholder')"
           :modelValue="search"
+          :iconRight="searchClearIcon"
+          iconRightClickable
+          @icon-right-click="handleSearchClear"
           @update:model-value="handleSearchUpdate"
         />
 
@@ -92,6 +95,10 @@ const showMissingRecentSends = computed(
     !isSearching.value,
 );
 
+const searchClearIcon = computed(() => {
+  return search.value !== '' ? 'close' : undefined;
+});
+
 onBeforeMount(() => {
   fetchRecentSends();
 });
@@ -106,6 +113,11 @@ const handleDateRangeUpdate = useDebounceFn((value: DateRange) => {
   dateRange.value = value;
   handlePageUpdate(1);
 }, 500);
+
+const handleSearchClear = () => {
+  search.value = '';
+  isSearching.value = false;
+};
 
 const handleStartNewSend = () => {
   // TODO: implement redirect to new send page
