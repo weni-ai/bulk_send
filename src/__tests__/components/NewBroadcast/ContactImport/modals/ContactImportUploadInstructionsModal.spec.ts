@@ -76,12 +76,16 @@ describe('ContactImportUploadInstructionsModal.vue', () => {
     expect(wrapper.emitted('update:open')?.[0]).toEqual([false]);
   });
 
-  it('calls download sample handler (via console.log) when footer highlight is clicked', async () => {
-    // TODO: Change this when API is ready
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+  it('calls download sample handler when footer highlight is clicked', async () => {
+    const windowOpenSpy = vi
+      .spyOn(window, 'open')
+      .mockImplementation(() => null);
     const wrapper = mountWrapper(true);
     await wrapper.find(SELECTOR.downloadSample).trigger('click');
-    expect(logSpy).toHaveBeenCalledWith('download sample');
-    logSpy.mockRestore();
+    expect(windowOpenSpy).toHaveBeenCalledWith(
+      'https://flows.weni.ai/sitestatic/examples/sample_import.xlsx',
+      '_blank',
+    );
+    windowOpenSpy.mockRestore();
   });
 });
