@@ -2,10 +2,9 @@ import request from '@/api/requests';
 import { useProjectStore } from '@/stores/project';
 import type { TemplateRequestParams } from '@/types/template';
 
-const { project } = useProjectStore();
-
 export default {
   async getTemplates(queryParams: TemplateRequestParams) {
+    const { project } = useProjectStore();
     const params = {
       project_uuid: project.uuid,
       ...queryParams,
@@ -17,6 +16,7 @@ export default {
     return response;
   },
   async getTemplate(templateId: number) {
+    const { project } = useProjectStore();
     const params = {
       project_uuid: project.uuid,
     };

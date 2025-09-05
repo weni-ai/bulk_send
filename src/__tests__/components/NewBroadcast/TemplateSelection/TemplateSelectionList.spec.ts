@@ -10,14 +10,6 @@ vi.mock('vue-i18n', () => ({
   useI18n: () => ({ t: (k: string) => k }),
 }));
 
-// Mock templates API to avoid useProjectStore at import time
-vi.mock('@/api/resources/templates', () => ({
-  default: {
-    getTemplates: vi.fn(),
-    getTemplate: vi.fn(),
-  },
-}));
-
 const STUBS = {
   UnnnicDataTable: {
     props: [

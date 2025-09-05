@@ -10,13 +10,6 @@ vi.mock('vue-router', () => ({
 vi.mock('vue-i18n', () => ({
   useI18n: () => ({ t: (key: string) => key }),
 }));
-vi.mock('@/api/resources/templates', () => ({
-  default: {
-    getTemplates: vi
-      .fn()
-      .mockResolvedValue({ data: { results: [], count: 0 } }),
-  },
-}));
 
 const STUBS = {
   UnnnicButton: {
