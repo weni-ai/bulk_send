@@ -1,5 +1,5 @@
 import type { Group, GroupReference } from '@/types/groups';
-import type { Template } from '@/types/template';
+import type { Template, TemplateReference } from '@/types/template';
 import type { PageRequestParams } from '@/types/requests';
 import { BroadcastStatus, NewBroadcastPage } from '@/constants/broadcasts';
 import { Currency } from '@/constants/currency';
@@ -18,7 +18,7 @@ interface BroadcastStatistic {
   createdOn: Date;
   modifiedOn: Date;
   groups: GroupReference[];
-  template: Template;
+  template: TemplateReference;
   statistics: Statistics;
 }
 
