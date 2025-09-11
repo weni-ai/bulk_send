@@ -3,7 +3,9 @@ import { mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import TemplateSelection from '@/components/NewBroadcast/TemplateSelection/TemplateSelection.vue';
 import { useTemplatesStore } from '@/stores/templates';
-import { PAGE_SIZE } from '@/constants/templates';
+import { useBroadcastsStore } from '@/stores/broadcasts';
+import { NewBroadcastPage } from '@/constants/broadcasts';
+import { PAGE_SIZE, TemplateStatus } from '@/constants/templates';
 
 // i18n stub
 vi.mock('vue-i18n', () => ({ useI18n: () => ({ t: (k: string) => k }) }));
@@ -16,6 +18,8 @@ const SELECTOR = {
   listNext: '[data-test="next"]',
   listSortAsc: '[data-test="sort-asc"]',
   listSortDesc: '[data-test="sort-desc"]',
+  actionsCancel: '[data-test="actions-cancel"]',
+  actionsContinue: '[data-test="actions-continue"]',
 } as const;
 
 const stubs = {
@@ -37,6 +41,12 @@ const stubs = {
       "  <button data-test=\"sort-desc\" @click=\"$emit('update:sort', { header: 'name', order: 'desc' })\">desc</button>\n" +
       '</div>',
   },
+  StepActions: {
+    props: ['disabled'],
+    emits: ['cancel', 'continue'],
+    template:
+      '<div data-test="actions"><button data-test="actions-cancel" @click="$emit(\'cancel\')">cancel</button><button data-test="actions-continue" :disabled="disabled" @click="$emit(\'continue\')">continue</button></div>',
+  },
 } as const;
 
 const mountWithStore = () => {
@@ -46,12 +56,13 @@ const mountWithStore = () => {
   const fetchSpy = vi
     .spyOn(templatesStore, 'fetchTemplates')
     .mockResolvedValue(undefined as any);
+  const broadcastsStore = useBroadcastsStore(pinia);
 
   const wrapper = mount(TemplateSelection, {
     global: { plugins: [pinia], stubs, mocks: { $t: (k: string) => k } },
   });
 
-  return { wrapper, templatesStore, fetchSpy };
+  return { wrapper, templatesStore, fetchSpy, broadcastsStore };
 };
 
 describe('TemplateSelection.vue', () => {
@@ -117,5 +128,64 @@ describe('TemplateSelection.vue', () => {
       name: '',
       order_by: 'name',
     });
+  });
+
+  it('disables continue when template not approved; enables when approved', async () => {
+    const { wrapper, broadcastsStore } = mountWithStore();
+
+    // not approved -> disabled
+    broadcastsStore.setSelectedTemplate({
+      status: TemplateStatus.PENDING,
+    } as any);
+    await wrapper.vm.$nextTick();
+    expect(
+      wrapper.find(SELECTOR.actionsContinue).attributes('disabled'),
+    ).toBeDefined();
+
+    // approved -> enabled
+    broadcastsStore.setSelectedTemplate({
+      status: TemplateStatus.APPROVED,
+    } as any);
+    await wrapper.vm.$nextTick();
+    expect(
+      wrapper.find(SELECTOR.actionsContinue).attributes('disabled'),
+    ).toBeUndefined();
+  });
+
+  it('cancel clears selected template and returns to groups page', async () => {
+    const { wrapper, broadcastsStore } = mountWithStore();
+    broadcastsStore.setSelectedTemplate({
+      status: TemplateStatus.APPROVED,
+    } as any);
+    const setPageSpy = vi
+      .spyOn(broadcastsStore, 'setNewBroadcastPage')
+      .mockImplementation(() => {});
+
+    await wrapper.find(SELECTOR.actionsCancel).trigger('click');
+    expect(broadcastsStore.newBroadcast.selectedTemplate).toBeUndefined();
+    expect(setPageSpy).toHaveBeenCalledWith(NewBroadcastPage.SELECT_GROUPS);
+  });
+
+  it('continue goes to variables when template has variables, else confirm and send', async () => {
+    const { wrapper, broadcastsStore } = mountWithStore();
+    const setPageSpy = vi
+      .spyOn(broadcastsStore, 'setNewBroadcastPage')
+      .mockImplementation(() => {});
+
+    broadcastsStore.setSelectedTemplate({
+      status: TemplateStatus.APPROVED,
+      variableCount: 2,
+    } as any);
+    await wrapper.vm.$nextTick();
+    await wrapper.find(SELECTOR.actionsContinue).trigger('click');
+    expect(setPageSpy).toHaveBeenCalledWith(NewBroadcastPage.SELECT_VARIABLES);
+
+    broadcastsStore.setSelectedTemplate({
+      status: TemplateStatus.APPROVED,
+      variableCount: 0,
+    } as any);
+    await wrapper.vm.$nextTick();
+    await wrapper.find(SELECTOR.actionsContinue).trigger('click');
+    expect(setPageSpy).toHaveBeenCalledWith(NewBroadcastPage.CONFIRM_AND_SEND);
   });
 });
