@@ -159,13 +159,27 @@ describe('ConfirmAndSend.vue', () => {
 
   it('shows modal when import is pending or processing and polls import status', async () => {
     vi.useFakeTimers();
-    const { wrapper, contactImportStore } = mountWrapper();
+    // Seed stores BEFORE mount so onBeforeMount triggers startImportCheck
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    const contactImportStore = useContactImportStore(pinia);
+    const flowsStore = useFlowsStore(pinia);
+    vi.spyOn(flowsStore, 'listAllFlows').mockResolvedValue(undefined as any);
+
     contactImportStore.import = { importId: 99 } as any;
     contactImportStore.contactImportInfo.status = ContactImportStatus.PENDING;
 
     const checkSpy = vi
       .spyOn(contactImportStore, 'checkImportFinished')
       .mockResolvedValue(undefined as any);
+
+    const wrapper = mount(ConfirmAndSend, {
+      global: {
+        plugins: [pinia],
+        stubs: STUBS,
+        mocks: { $t: (k: string) => k },
+      },
+    });
 
     await wrapper.vm.$nextTick();
     expect(wrapper.find(SELECTOR.modal).attributes('data-open')).toBe('true');
