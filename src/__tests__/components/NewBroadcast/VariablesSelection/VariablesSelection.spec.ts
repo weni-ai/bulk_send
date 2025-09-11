@@ -1,0 +1,127 @@
+import { describe, it, expect, vi } from 'vitest';
+import { mount } from '@vue/test-utils';
+import { createPinia, setActivePinia } from 'pinia';
+import VariablesSelection from '@/components/NewBroadcast/VariablesSelection/VariablesSelection.vue';
+import { useContactStore } from '@/stores/contact';
+import { useBroadcastsStore } from '@/stores/broadcasts';
+
+vi.mock('vue-i18n', () => ({
+  useI18n: () => ({ t: (key: string) => key }),
+}));
+
+const STUBS = {
+  UnnnicFormElement: {
+    props: ['label'],
+    template: '<div data-test="form-element"><slot /></div>',
+  },
+  UnnnicSelectSmart: {
+    props: [
+      'options',
+      'modelValue',
+      'placeholder',
+      'isLoading',
+      'autocomplete',
+      'autocompleteClearOnFocus',
+      'enableSearchByValue',
+    ],
+    emits: ['update:model-value'],
+    template: '<select data-test="variable-select"></select>',
+  },
+  UnnnicDisclaimer: {
+    props: ['icon', 'text', 'scheme'],
+    template: '<div data-test="disclaimer">{{ text }}</div>',
+  },
+  TemplateSelectionPreview: {
+    props: ['variablesToReplace'],
+    template:
+      '<div data-test="preview">{{ variablesToReplace.join(",") }}</div>',
+  },
+  VariablesSelectionOverview: {
+    props: ['definedVariables'],
+    template: '<div data-test="overview">{{ definedVariables.length }}</div>',
+  },
+} as const;
+
+const SELECTOR = {
+  formElement: '[data-test="form-element"]',
+  variableSelect: '[data-test="variable-select"]',
+  disclaimer: '[data-test="disclaimer"]',
+  overview: '[data-test="overview"]',
+  preview: '[data-test="preview"]',
+} as const;
+
+const mountWrapper = (variableCount = 2) => {
+  const pinia = createPinia();
+  setActivePinia(pinia);
+  const contactStore = useContactStore(pinia);
+  const broadcastsStore = useBroadcastsStore(pinia);
+
+  // seed contact fields and examples
+  contactStore.contactFields = [
+    { key: 'name', label: 'Name' },
+    { key: 'age', label: 'Age' },
+  ] as any;
+  contactStore.contactFieldsExamples = [
+    { key: 'name', example: 'Alice' },
+    { key: 'age', example: '30' },
+  ] as any;
+
+  // seed selected template and groups
+  broadcastsStore.newBroadcast.selectedTemplate = {
+    variableCount,
+  } as any;
+  broadcastsStore.newBroadcast.selectedGroups = [] as any;
+
+  const wrapper = mount(VariablesSelection, {
+    global: { plugins: [pinia], stubs: STUBS, mocks: { $t: (k: string) => k } },
+  });
+  return { wrapper, contactStore, broadcastsStore };
+};
+
+describe('VariablesSelection.vue', () => {
+  it('renders inputs equal to template variable count', () => {
+    const { wrapper } = mountWrapper(3);
+    const inputs = wrapper.findAll(SELECTOR.formElement);
+    expect(inputs.length).toBe(3);
+  });
+
+  it('initializes variable mapping on mount', () => {
+    const { broadcastsStore } = mountWrapper(2);
+    expect(Object.keys(broadcastsStore.newBroadcast.variableMapping)).toEqual([
+      '0',
+      '1',
+    ]);
+    expect(
+      Object.values(broadcastsStore.newBroadcast.variableMapping).every(
+        (v) => v === undefined,
+      ),
+    ).toBe(true);
+  });
+
+  it('shows overview and disclaimer when at least one variable is mapped', async () => {
+    const { wrapper, broadcastsStore } = mountWrapper(2);
+    broadcastsStore.updateVariableMapping(0, {
+      key: 'name',
+      label: 'Name',
+    } as any);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find(SELECTOR.overview).exists()).toBe(true);
+    expect(wrapper.find(SELECTOR.disclaimer).exists()).toBe(true);
+  });
+
+  it('computes variablesToReplace from contactFieldsExamples matching current mapping order', async () => {
+    const { wrapper, broadcastsStore } = mountWrapper(2);
+    broadcastsStore.updateVariableMapping(0, {
+      key: 'name',
+      label: 'Name',
+    } as any);
+    broadcastsStore.updateVariableMapping(1, {
+      key: 'age',
+      label: 'Age',
+    } as any);
+    await wrapper.vm.$nextTick();
+
+    const preview = wrapper.find(SELECTOR.preview);
+    expect(preview.text()).toBe('Alice,30');
+  });
+});
