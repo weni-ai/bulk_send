@@ -52,6 +52,12 @@
         :variablesToReplace="variablesToReplace"
       />
     </section>
+
+    <StepActions
+      :disabled="!canContinue"
+      @cancel="handleCancel"
+      @continue="handleContinue"
+    />
   </section>
 </template>
 
@@ -62,6 +68,8 @@ import { useBroadcastsStore } from '@/stores/broadcasts';
 import TemplateSelectionPreview from '@/components/NewBroadcast/TemplateSelection/TemplateSelectionPreview.vue';
 import VariablesSelectionOverview from '@/components/NewBroadcast/VariablesSelection/VariablesSelectionOverview.vue';
 import type { SelectOption } from '@/types/select';
+import { NewBroadcastPage } from '@/constants/broadcasts';
+import StepActions from '@/components/NewBroadcast/StepActions.vue';
 
 const contactStore = useContactStore();
 const broadcastsStore = useBroadcastsStore();
@@ -169,6 +177,24 @@ const variableOption = (index: number): ContactFieldOption[] => {
     },
   ];
 };
+
+const canContinue = computed(() => {
+  return (
+    broadcastsStore.newBroadcast.variableMapping &&
+    Object.values(broadcastsStore.newBroadcast.variableMapping).every(
+      (variable) => variable !== undefined,
+    )
+  );
+});
+
+const handleCancel = () => {
+  broadcastsStore.clearVariableMapping();
+  broadcastsStore.setNewBroadcastPage(NewBroadcastPage.SELECT_TEMPLATE);
+};
+
+const handleContinue = () => {
+  broadcastsStore.setNewBroadcastPage(NewBroadcastPage.CONFIRM_AND_SEND);
+};
 </script>
 
 <style scoped lang="scss">
@@ -176,6 +202,7 @@ const variableOption = (index: number): ContactFieldOption[] => {
   display: flex;
   flex-direction: column;
   gap: $unnnic-spacing-sm;
+  flex: 1;
 
   &__title {
     @include unnnic-text-body-lg;

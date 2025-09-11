@@ -82,6 +82,11 @@
         }}
       </p>
     </UnnnicModalDialog>
+    <StepActions
+      :disabled="!canContinue"
+      @cancel="handleCancel"
+      @continue="handleContinue"
+    />
   </section>
 </template>
 
@@ -98,6 +103,8 @@ import ConfirmAndSendAudience from '@/components/NewBroadcast/ConfirmAndSend/Con
 import { ProjectType } from '@/constants/project';
 import type { SelectOption } from '@/types/select';
 import { ContactImportStatus } from '@/types/contactImport';
+import StepActions from '@/components/NewBroadcast/StepActions.vue';
+import { NewBroadcastPage } from '@/constants/broadcasts';
 
 const broadcastsStore = useBroadcastsStore();
 const projectStore = useProjectStore();
@@ -109,6 +116,8 @@ type FlowOption = SelectOption<string>;
 const timeoutId = ref<ReturnType<typeof setTimeout> | undefined>(undefined);
 
 onBeforeMount(() => {
+  clearInputs();
+
   broadcastsStore.setBroadcastName(createInitialBroadcastName());
   flowsStore.listAllFlows();
   startImportCheck();
@@ -213,6 +222,45 @@ const startImportCheck = async () => {
     }, 5000);
   }
 };
+
+const clearInputs = () => {
+  broadcastsStore.setBroadcastName('');
+  broadcastsStore.setSelectedFlow(undefined);
+};
+
+const canContinue = computed(() => {
+  let canConfirm = true;
+  if (contactImportStore.import) {
+    canConfirm =
+      contactImportStore.contactImportInfo.status ===
+      ContactImportStatus.COMPLETE;
+  }
+
+  if (!projectStore.project.brainOn) {
+    canConfirm = canConfirm && !!broadcastsStore.newBroadcast.selectedFlow;
+  }
+
+  return canConfirm && broadcastsStore.newBroadcast.reviewed;
+});
+
+const handleCancel = () => {
+  broadcastsStore.setReviewed(false);
+  broadcastsStore.setSelectedFlow(undefined);
+  broadcastsStore.setBroadcastName('');
+
+  if (
+    broadcastsStore.newBroadcast.selectedTemplate?.variableCount &&
+    broadcastsStore.newBroadcast.selectedTemplate.variableCount > 0
+  ) {
+    broadcastsStore.setNewBroadcastPage(NewBroadcastPage.SELECT_VARIABLES);
+  } else {
+    broadcastsStore.setNewBroadcastPage(NewBroadcastPage.SELECT_TEMPLATE);
+  }
+};
+
+const handleContinue = () => {
+  // TODO: Trigger actual send in future when backend flow is ready
+};
 </script>
 
 <style scoped lang="scss">
@@ -220,6 +268,7 @@ const startImportCheck = async () => {
   display: flex;
   flex-direction: column;
   gap: $unnnic-spacing-sm;
+  flex: 1;
 
   &__content {
     display: flex;
