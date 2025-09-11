@@ -10,6 +10,7 @@ import BroadcastStatisticsAPI from '@/api/resources/broadcasts';
 import { ContactGroupStatus, NewBroadcastPage } from '@/constants/broadcasts';
 import type { Group } from '@/types/groups';
 import type { Template } from '@/types/template';
+import type { ContactField } from '@/types/contacts';
 
 export const useBroadcastsStore = defineStore('broadcasts', {
   state: () => ({
@@ -29,6 +30,7 @@ export const useBroadcastsStore = defineStore('broadcasts', {
       contactImportOpen: false,
       selectedGroups: [],
       selectedTemplate: undefined,
+      variableMapping: {},
     },
   }),
   actions: {
@@ -108,6 +110,12 @@ export const useBroadcastsStore = defineStore('broadcasts', {
     },
     setSelectedTemplate(template?: Template) {
       this.newBroadcast.selectedTemplate = template;
+    },
+    clearVariableMapping() {
+      this.newBroadcast.variableMapping = {};
+    },
+    updateVariableMapping(index: number, value: ContactField | undefined) {
+      this.newBroadcast.variableMapping[index] = value;
     },
   },
 });
