@@ -106,7 +106,7 @@ export const useBroadcastsStore = defineStore('broadcasts', {
     setContactImportOpen(value: boolean) {
       this.newBroadcast.contactImportOpen = value;
     },
-    setSelectedTemplate(template: Template | null) {
+    setSelectedTemplate(template?: Template) {
       this.newBroadcast.selectedTemplate = template;
     },
   },
