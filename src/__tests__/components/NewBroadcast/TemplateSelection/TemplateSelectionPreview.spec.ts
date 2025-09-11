@@ -5,7 +5,7 @@ import { createPinia, setActivePinia } from 'pinia';
 import TemplateSelectionPreview from '@/components/NewBroadcast/TemplateSelection/TemplateSelectionPreview.vue';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import type { Template } from '@/types/template';
-import { TemplateStatus } from '@/constants/templates';
+import { TemplateCategory, TemplateStatus } from '@/constants/templates';
 
 const SELECTOR = {
   title: '[data-test="template-preview-title"]',
@@ -61,13 +61,14 @@ describe('TemplateSelectionPreview.vue', () => {
       uuid: 't-1',
       name: 'Welcome Msg',
       createdOn: '2024-01-01T00:00:00Z',
-      category: 'MARKETING',
+      category: TemplateCategory.MARKETING,
       language: 'en',
       header: { type: 'IMAGE' }, // should be mapped to MEDIA with mediaType IMAGE
       body: { text: 'Hello, world!' },
       footer: { text: 'Bye' },
       buttons: [{ type: 'TEXT', text: 'OK' }],
       status: TemplateStatus.APPROVED,
+      variableCount: 0,
     };
 
     broadcastsStore.setSelectedTemplate(template);
