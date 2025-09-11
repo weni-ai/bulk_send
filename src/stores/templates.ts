@@ -38,18 +38,23 @@ export const useTemplatesStore = defineStore('templates', {
     },
     async getTemplatePricing() {
       this.loadingTemplatePricing = true;
-      const response = await TemplatesAPI.getTemplatePricing();
-      const rates = response.data.rates;
-      this.teplatePricing = {
-        currency: response.data.currency,
-        rates: {
-          marketing: Number(rates.marketing),
-          utility: Number(rates.utility),
-          authentication: Number(rates.authentication),
-          service: Number(rates.service),
-        },
-      };
-      this.loadingTemplatePricing = false;
+      try {
+        const response = await TemplatesAPI.getTemplatePricing();
+        const rates = response.data.rates;
+        this.teplatePricing = {
+          currency: response.data.currency,
+          rates: {
+            marketing: Number(rates.marketing),
+            utility: Number(rates.utility),
+            authentication: Number(rates.authentication),
+            service: Number(rates.service),
+          },
+        };
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.loadingTemplatePricing = false;
+      }
     },
   },
 });

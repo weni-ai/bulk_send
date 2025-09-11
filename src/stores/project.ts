@@ -20,15 +20,25 @@ export const useProjectStore = defineStore('project', {
     },
     async getProjectChannels() {
       this.loadingChannels = true;
-      const response = await ChannelsAPI.listChannels();
-      this.project.channels = response.data.results;
-      this.loadingChannels = false;
+      try {
+        const response = await ChannelsAPI.listChannels();
+        this.project.channels = response.data.results;
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.loadingChannels = false;
+      }
     },
     async getProjectInfo() {
       this.loadingProjectInfo = true;
-      const response = await ProjectsAPI.getProjectInfo();
-      this.project.brainOn = response.data.brain_on;
-      this.loadingProjectInfo = false;
+      try {
+        const response = await ProjectsAPI.getProjectInfo();
+        this.project.brainOn = response.data.brain_on;
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.loadingProjectInfo = false;
+      }
     },
   },
 });
