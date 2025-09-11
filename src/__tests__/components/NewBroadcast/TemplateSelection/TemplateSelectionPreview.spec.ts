@@ -86,7 +86,7 @@ describe('TemplateSelectionPreview.vue', () => {
       .find(SELECTOR.previewComponent)
       .attributes('data-body');
     // {{1}} becomes bold style marker *{{1}}* then replaced with Alice
-    expect(bodyText).toContain('Hello Alice and *{{2}}*');
+    expect(bodyText).toContain('Hello *Alice* and *{{2}}*');
   });
 
   it('maps non-TEXT header to MEDIA, keeps mediaType, and includes footer', async () => {
