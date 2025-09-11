@@ -179,7 +179,7 @@ describe('ConfirmAndSend.vue', () => {
     contactImportStore.contactImportInfo.status = ContactImportStatus.PENDING;
 
     const checkSpy = vi
-      .spyOn(contactImportStore, 'checkImportFinished')
+      .spyOn(contactImportStore, 'getImportInfo')
       .mockResolvedValue(undefined as any);
 
     const wrapper = mount(ConfirmAndSend, {

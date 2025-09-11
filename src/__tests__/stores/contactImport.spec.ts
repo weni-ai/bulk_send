@@ -238,21 +238,29 @@ describe('contactImport store', () => {
     consoleSpy.mockRestore();
   });
 
-  it('checkImportFinished updates contactImportInfo', async () => {
+  it('getImportInfo updates contactImportInfo', async () => {
     const store = useContactImportStore();
     const mocked = ContactImportAPI as Mocked<typeof ContactImportAPI>;
     mocked.getContactImport.mockResolvedValue({
       data: {
-        status: ContactImportStatus.COMPLETE,
-        numCreated: 5,
-        numUpdated: 1,
-        numErrored: 0,
-        errors: [],
-        timeTaken: 12,
+        info: {
+          status: ContactImportStatus.COMPLETE,
+          numCreated: 5,
+          numUpdated: 1,
+          numErrored: 0,
+          errors: [],
+          timeTaken: 12,
+        },
+        group: {
+          id: 1,
+          uuid: 'g',
+          name: 'G',
+          memberCount: 1,
+        },
       },
     } as AxiosResponse);
 
-    await store.checkImportFinished(7);
+    await store.getImportInfo(7);
 
     expect(store.contactImportInfo).toEqual({
       status: ContactImportStatus.COMPLETE,
@@ -261,6 +269,12 @@ describe('contactImport store', () => {
       numErrored: 0,
       errors: [],
       timeTaken: 12,
+    });
+    expect(store.contactImportGroup).toEqual({
+      id: 1,
+      uuid: 'g',
+      name: 'G',
+      memberCount: 1,
     });
   });
 
