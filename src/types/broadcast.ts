@@ -48,7 +48,7 @@ interface NewBroadcastState {
   groupSelectionOpen: boolean;
   contactImportOpen: boolean;
   selectedGroups: Group[];
-  selectedTemplate: Template | null;
+  selectedTemplate?: Template;
 }
 
 export type {
