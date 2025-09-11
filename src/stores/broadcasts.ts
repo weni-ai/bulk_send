@@ -11,6 +11,7 @@ import { ContactGroupStatus, NewBroadcastPage } from '@/constants/broadcasts';
 import type { Group } from '@/types/groups';
 import type { Template } from '@/types/template';
 import type { ContactField } from '@/types/contacts';
+import type { FlowReference } from '@/types/flow';
 
 export const useBroadcastsStore = defineStore('broadcasts', {
   state: () => ({
@@ -31,6 +32,9 @@ export const useBroadcastsStore = defineStore('broadcasts', {
       selectedGroups: [],
       selectedTemplate: undefined,
       variableMapping: {},
+      broadcastName: '',
+      selectedFlow: undefined,
+      reviewed: false,
     },
   }),
   actions: {
@@ -116,6 +120,15 @@ export const useBroadcastsStore = defineStore('broadcasts', {
     },
     updateVariableMapping(index: number, value: ContactField | undefined) {
       this.newBroadcast.variableMapping[index] = value;
+    },
+    setBroadcastName(name: string) {
+      this.newBroadcast.broadcastName = name;
+    },
+    setSelectedFlow(flow?: FlowReference) {
+      this.newBroadcast.selectedFlow = flow;
+    },
+    setReviewed(value: boolean) {
+      this.newBroadcast.reviewed = value;
     },
   },
 });
