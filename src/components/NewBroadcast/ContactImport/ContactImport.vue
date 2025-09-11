@@ -17,7 +17,10 @@
         "
       />
 
-      <ContactImportUpload :disabled="hasSelectedGroups" />
+      <ContactImportUpload
+        :disabled="hasSelectedGroups"
+        @finished="handleUploadFinished"
+      />
     </section>
   </UnnnicCollapse>
 </template>
@@ -33,7 +36,7 @@ defineProps<{
   open: boolean;
 }>();
 
-const emit = defineEmits(['update:open']);
+const emit = defineEmits(['update:open', 'uploaded']);
 
 const selectedGroups = computed(
   () => broadcastsStore.newBroadcast.selectedGroups,
@@ -41,6 +44,10 @@ const selectedGroups = computed(
 
 const handleCollapseUpdate = (value: boolean) => {
   emit('update:open', value);
+};
+
+const handleUploadFinished = () => {
+  emit('uploaded');
 };
 
 const hasSelectedGroups = computed(() => selectedGroups.value.length > 0);

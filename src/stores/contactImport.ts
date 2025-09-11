@@ -1,14 +1,15 @@
 import {
   ContactImportGroupMode,
+  ContactImportStatus,
   type ContactImportColumnsData,
   type ContactImportProcessing,
   type ContactImportState,
 } from '@/types/contactImport';
 import { defineStore } from 'pinia';
 import ContactImportAPI from '@/api/resources/contactImport';
-import { AxiosError } from 'axios';
+import { AxiosError, type AxiosProgressEvent } from 'axios';
 import type { Group } from '@/types/groups';
-import { parseUploadError } from '@/utils/uploadError';
+import { isCanceledUploadError, parseUploadError } from '@/utils/uploadError';
 
 export const useContactImportStore = defineStore('contactImport', {
   state: () =>
@@ -16,6 +17,7 @@ export const useContactImportStore = defineStore('contactImport', {
       import: undefined,
       loadingContactImport: false,
       loadingConfirmContactImport: false,
+      abortController: undefined as AbortController | undefined,
       importProcessing: {
         groupMode: ContactImportGroupMode.NEW,
         addToGroup: true,
@@ -23,15 +25,33 @@ export const useContactImportStore = defineStore('contactImport', {
         group: undefined,
         columnsData: {},
       },
+      contactImportInfo: {
+        status: ContactImportStatus.NOT_VERIFIED,
+        numCreated: 0,
+        numUpdated: 0,
+        numErrored: 0,
+        errors: [],
+        timeTaken: 0,
+      },
     }) as ContactImportState,
   actions: {
-    async uploadContactImport(file: File) {
+    async uploadContactImport(
+      file: File,
+      onUploadProgress?: (progressEvent: AxiosProgressEvent) => void,
+    ) {
       this.loadingContactImport = true;
       try {
         const formData = new FormData();
         formData.append('file', file);
+        // ensure previous controller aborted
+        this.cancelUpload();
+        this.abortController = new AbortController();
 
-        const response = await ContactImportAPI.uploadContactImport(formData);
+        const response = await ContactImportAPI.uploadContactImport(
+          formData,
+          onUploadProgress,
+          this.abortController.signal,
+        );
         if (!response.data) {
           throw new Error('Error while uploading contact import');
         }
@@ -39,13 +59,27 @@ export const useContactImportStore = defineStore('contactImport', {
         this.import = response.data;
         this.import!.file = file;
       } catch (error) {
+        if (isCanceledUploadError(error)) {
+          throw error as AxiosError;
+        }
         if (error instanceof AxiosError) {
           throw parseUploadError(error);
         }
-        throw error;
+        throw error as Error;
       } finally {
         this.loadingContactImport = false;
+        this.abortController = undefined;
       }
+    },
+    cancelUpload() {
+      if (this.abortController) {
+        try {
+          this.abortController.abort();
+        } catch {
+          // noop
+        }
+      }
+      this.abortController = undefined;
     },
     setProcessingGroupMode(groupMode: ContactImportGroupMode) {
       this.importProcessing.groupMode = groupMode;
@@ -80,6 +114,11 @@ export const useContactImportStore = defineStore('contactImport', {
       } finally {
         this.loadingConfirmContactImport = false;
       }
+    },
+    async checkImportFinished(importId: number) {
+      // get updated improt info
+      const response = await ContactImportAPI.getContactImport(importId);
+      this.contactImportInfo = response.data;
     },
     clearImport() {
       this.import = undefined;

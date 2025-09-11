@@ -1,9 +1,14 @@
 import request from '@/api/requests';
 import { useProjectStore } from '@/stores/project';
 import type { ContactImportProcessing } from '@/types/contactImport';
+import type { AxiosProgressEvent } from 'axios';
 
 export default {
-  async uploadContactImport(formData: FormData) {
+  async uploadContactImport(
+    formData: FormData,
+    onUploadProgress?: (progressEvent: AxiosProgressEvent) => void,
+    signal?: AbortSignal,
+  ) {
     const { project } = useProjectStore();
 
     formData.append('project_uuid', project.uuid);
@@ -11,6 +16,10 @@ export default {
     const response = await request.$http.post(
       '/api/v2/internals/contacts_import_upload',
       formData,
+      {
+        onUploadProgress,
+        signal,
+      },
     );
     return response;
   },
