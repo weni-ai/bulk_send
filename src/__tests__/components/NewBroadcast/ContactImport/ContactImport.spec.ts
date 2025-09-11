@@ -20,6 +20,9 @@ const STUBS = {
     template: '<div data-test="disclaimer">{{ text }}</div>',
   },
   ContactImportUpload: {
+    name: 'ContactImportUpload',
+    props: ['disabled'],
+    emits: ['finished'],
     template: '<div data-test="upload" />',
   },
 } as const;
@@ -65,5 +68,31 @@ describe('ContactImport.vue', () => {
     broadcastsStore.setSelectedGroups([]);
     await wrapper.vm.$nextTick();
     expect(wrapper.find(SELECTOR.disclaimer).exists()).toBe(false);
+  });
+
+  it('forwards disabled prop to ContactImportUpload based on selected groups', async () => {
+    const { wrapper, broadcastsStore } = mountWrapper(true);
+    // No groups selected
+    broadcastsStore.setSelectedGroups([]);
+    await wrapper.vm.$nextTick();
+    let upload = wrapper.findComponent({ name: 'ContactImportUpload' });
+    expect(upload.exists()).toBe(true);
+    expect(upload.props('disabled')).toBe(false);
+
+    // With groups selected
+    broadcastsStore.setSelectedGroups([
+      { id: 1, uuid: 'uuid', name: 'G', memberCount: 1 },
+    ] as any);
+    await wrapper.vm.$nextTick();
+    upload = wrapper.findComponent({ name: 'ContactImportUpload' });
+    expect(upload.props('disabled')).toBe(true);
+  });
+
+  it('emits uploaded when ContactImportUpload emits finished', async () => {
+    const { wrapper } = mountWrapper(true);
+    const upload = wrapper.findComponent({ name: 'ContactImportUpload' });
+    upload.vm.$emit('finished');
+    await wrapper.vm.$nextTick();
+    expect(wrapper.emitted('uploaded')).toBeTruthy();
   });
 });

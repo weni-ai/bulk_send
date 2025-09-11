@@ -34,11 +34,19 @@ const STUBS = {
   ContactImportUploadInstructions: {
     template: '<div data-test="instructions" />',
   },
+  ContactImportUploadProgress: {
+    name: 'ContactImportUploadProgress',
+    props: ['fileName', 'fileSize', 'uploadProgress', 'loading'],
+    emits: ['close'],
+    template:
+      '<div data-test="progress"><slot />{{ fileName }}{{ fileSize }}</div>',
+  },
 } as const;
 
 const SELECTOR = {
   dropArea: '[data-test="drop-area"]',
   instructions: '[data-test="instructions"]',
+  progress: '[data-test="progress"]',
 } as const;
 
 const $t = (key: string) => key;
@@ -91,10 +99,100 @@ describe('ContactImportUpload.vue', () => {
     drop.vm.$emit('update:current-files', [file]);
     await wrapper.vm.$nextTick();
 
-    expect(uploadSpy).toHaveBeenCalledWith(file);
+    expect(uploadSpy).toHaveBeenCalledWith(file, expect.any(Function));
     expect(
       wrapper.findComponent({ name: 'UnnnicDropArea' }).props('currentFiles'),
     ).toEqual([file]);
+  });
+
+  it('shows progress component after first progress event and passes props', async () => {
+    const { wrapper, contactImportStore } = mountWrapper();
+    const file = new File(['x'], 'file.csv', { type: 'text/csv' });
+    const uploadSpy = vi
+      .spyOn(contactImportStore, 'uploadContactImport')
+      .mockResolvedValue();
+
+    // Start upload
+    wrapper
+      .findComponent({ name: 'UnnnicDropArea' })
+      .vm.$emit('update:current-files', [file]);
+    await wrapper.vm.$nextTick();
+
+    // Trigger progress to flip UI to uploading state
+    const onProgress = uploadSpy.mock.calls[0][1] as (e: {
+      progress?: number | null;
+    }) => void;
+    onProgress({ progress: 0.5 });
+    await wrapper.vm.$nextTick();
+
+    const progress = wrapper.find(SELECTOR.progress);
+    expect(progress.exists()).toBe(true);
+    const stub = wrapper.findComponent({ name: 'ContactImportUploadProgress' });
+    expect(stub.exists()).toBe(true);
+    expect(stub.props('fileName')).toBe('file.csv');
+    expect(stub.props('fileSize')).toBe(String(file.size));
+    expect(typeof stub.props('uploadProgress')).toBe('number');
+    expect(stub.props('loading')).toBe(false);
+  });
+
+  it('emits close from progress -> cancels upload and returns to drop area', async () => {
+    const { wrapper, contactImportStore } = mountWrapper();
+    const cancelSpy = vi
+      .spyOn(contactImportStore, 'cancelUpload')
+      .mockImplementation(() => {});
+    const file = new File(['x'], 'file.csv', { type: 'text/csv' });
+    vi.spyOn(contactImportStore, 'uploadContactImport').mockResolvedValue();
+
+    // Select file and trigger progress to show progress component
+    wrapper
+      .findComponent({ name: 'UnnnicDropArea' })
+      .vm.$emit('update:current-files', [file]);
+    await wrapper.vm.$nextTick();
+    const onProgress = (contactImportStore.uploadContactImport as any).mock
+      .calls[0][1] as (e: { progress?: number | null }) => void;
+    onProgress({ progress: 0.2 });
+    await wrapper.vm.$nextTick();
+
+    // Emit close from progress component
+    const progress = wrapper.findComponent({
+      name: 'ContactImportUploadProgress',
+    });
+    progress.vm.$emit('close');
+    await wrapper.vm.$nextTick();
+
+    expect(cancelSpy).toHaveBeenCalled();
+    expect(wrapper.find(SELECTOR.dropArea).exists()).toBe(true);
+    // Files cleared
+    expect(
+      wrapper.findComponent({ name: 'UnnnicDropArea' }).props('currentFiles'),
+    ).toEqual([]);
+  });
+
+  it('completes upload and emits finished after delay', async () => {
+    const { wrapper, contactImportStore } = mountWrapper();
+    vi.useFakeTimers();
+    const file = new File(['x'], 'file.csv', { type: 'text/csv' });
+    const uploadSpy = vi
+      .spyOn(contactImportStore, 'uploadContactImport')
+      .mockResolvedValue();
+
+    wrapper
+      .findComponent({ name: 'UnnnicDropArea' })
+      .vm.$emit('update:current-files', [file]);
+    await wrapper.vm.$nextTick();
+    const onProgress = uploadSpy.mock.calls[0][1] as (e: {
+      progress?: number | null;
+    }) => void;
+    // Reach end of network upload
+    onProgress({ progress: 1 });
+    await wrapper.vm.$nextTick();
+
+    // Await completion path and timers
+    await Promise.resolve();
+    vi.advanceTimersByTime(5000);
+
+    expect(wrapper.emitted('finished')).toBeTruthy();
+    vi.useRealTimers();
   });
 
   it('shows alert and clears currentFiles on upload error', async () => {

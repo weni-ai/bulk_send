@@ -44,6 +44,100 @@ describe('contactImport store', () => {
     expect(store.loadingContactImport).toBe(false);
   });
 
+  it('uploadContactImport forwards onUploadProgress and uses AbortSignal', async () => {
+    const store = useContactImportStore();
+    const file = new File(['id,name'], 'contacts.csv', { type: 'text/csv' });
+    const mocked = ContactImportAPI as Mocked<typeof ContactImportAPI>;
+    mocked.uploadContactImport.mockResolvedValue({
+      data: {
+        importId: 3,
+        numRecords: 2,
+        columns: [],
+        fields: [],
+        errors: [],
+        duplicatedContactsCount: 0,
+      },
+    } as AxiosResponse);
+
+    const onUploadProgress = vi.fn();
+    const promise = store.uploadContactImport(file, onUploadProgress);
+
+    expect(mocked.uploadContactImport).toHaveBeenCalledWith(
+      expect.any(FormData),
+      onUploadProgress,
+      expect.any(AbortSignal),
+    );
+    const passedSignal = mocked.uploadContactImport.mock
+      .calls[0][2] as AbortSignal;
+    expect(passedSignal.aborted).toBe(false);
+
+    await promise;
+  });
+
+  it('cancelUpload aborts controller and resets it', () => {
+    const store = useContactImportStore();
+    store.abortController = new AbortController();
+    const abortSpy = vi.spyOn(store.abortController, 'abort');
+
+    store.cancelUpload();
+
+    expect(abortSpy).toHaveBeenCalled();
+    expect(store.abortController).toBeUndefined();
+  });
+
+  it('second upload aborts previous in-flight request', async () => {
+    const store = useContactImportStore();
+    const mocked = ContactImportAPI as Mocked<typeof ContactImportAPI>;
+
+    const createDeferred = () => {
+      let resolve!: (value: AxiosResponse) => void;
+      const promise = new Promise<AxiosResponse>((res) => {
+        resolve = res;
+      });
+      return { promise, resolve };
+    };
+
+    const first = createDeferred();
+    const second = createDeferred();
+    mocked.uploadContactImport
+      .mockReturnValueOnce(first.promise as any)
+      .mockReturnValueOnce(second.promise as any);
+
+    const file1 = new File(['a'], 'a.csv', { type: 'text/csv' });
+    const file2 = new File(['b'], 'b.csv', { type: 'text/csv' });
+
+    const p1 = store.uploadContactImport(file1);
+    const firstSignal = mocked.uploadContactImport.mock
+      .calls[0][2] as AbortSignal;
+    expect(firstSignal.aborted).toBe(false);
+
+    const p2 = store.uploadContactImport(file2);
+    expect(firstSignal.aborted).toBe(true);
+
+    first.resolve({
+      data: {
+        importId: 1,
+        numRecords: 1,
+        columns: [],
+        fields: [],
+        errors: [],
+        duplicatedContactsCount: 0,
+      },
+    } as AxiosResponse);
+    second.resolve({
+      data: {
+        importId: 2,
+        numRecords: 2,
+        columns: [],
+        fields: [],
+        errors: [],
+        duplicatedContactsCount: 0,
+      },
+    } as AxiosResponse);
+
+    await Promise.all([p1, p2]);
+  });
+
   it('uploadContactImport throws parsed error on AxiosError and unsets loading', async () => {
     const store = useContactImportStore();
     const file = new File(['id,name'], 'contacts.csv', { type: 'text/csv' });
