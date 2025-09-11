@@ -27,8 +27,8 @@ export const useBroadcastsStore = defineStore('broadcasts', {
       currentPage: NewBroadcastPage.SELECT_GROUPS,
       groupSelectionOpen: true,
       contactImportOpen: false,
-      selectedGroups: <Group[]>[],
-      selectedTemplate: <Template | null>null,
+      selectedGroups: [],
+      selectedTemplate: undefined,
     },
   }),
   actions: {

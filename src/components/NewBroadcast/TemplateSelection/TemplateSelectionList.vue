@@ -129,7 +129,7 @@ const handleRowClick = (item: TemplateRow) => {
     (template) =>
       template.uuid === item.uuid && template.language === item.language,
   );
-  broadcastsStore.setSelectedTemplate(template ?? null);
+  broadcastsStore.setSelectedTemplate(template);
 };
 
 const handlePageUpdate = (page: number) => {

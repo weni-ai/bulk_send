@@ -22,10 +22,15 @@ const formatTemplateHeaderToPreview = (
   return header;
 };
 
-const formatTemplateToPreview = (template: Template): TemplatePreview => {
+const formatTemplateToPreview = (
+  template: Template,
+  bodyFormatter?: (body: string) => string,
+): TemplatePreview => {
   return {
     ...template,
-    body: template.body.text,
+    body: bodyFormatter
+      ? bodyFormatter(template.body.text)
+      : template.body.text,
     footer: template.footer?.text,
     buttons: template.buttons,
     header: formatTemplateHeaderToPreview(template.header),
