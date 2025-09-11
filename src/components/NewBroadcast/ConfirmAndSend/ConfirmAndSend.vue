@@ -212,9 +212,7 @@ const startImportCheck = async () => {
     return;
   }
 
-  await contactImportStore.checkImportFinished(
-    contactImportStore.import!.importId,
-  );
+  await contactImportStore.getImportInfo(contactImportStore.import.importId);
 
   if (importNotCompleted.value) {
     timeoutId.value = setTimeout(() => {
