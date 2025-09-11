@@ -43,4 +43,17 @@ export default {
     );
     return response;
   },
+  async getContactImport(importId: number) {
+    const { project } = useProjectStore();
+
+    const params = {
+      project_uuid: project.uuid,
+    };
+
+    const response = await request.$http.get(
+      `/api/v2/internals/contacts_import_confirm/${importId}/`,
+      { params },
+    );
+    return response;
+  },
 };

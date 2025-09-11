@@ -69,4 +69,17 @@ describe('api/resources/contactImport', () => {
     );
     expect(result).toEqual({ data: { ok: true } });
   });
+
+  it('getContactImport fetches import data with project_uuid as param', async () => {
+    const httpGet = (requests as any).$http.get as ReturnType<typeof vi.fn>;
+    httpGet.mockResolvedValue({ data: { id: 7 } });
+
+    const response = await ContactImport.getContactImport(7);
+
+    expect(httpGet).toHaveBeenCalledWith(
+      '/api/v2/internals/contacts_import_confirm/7/',
+      { params: { project_uuid: 'proj-abc' } },
+    );
+    expect(response).toEqual({ data: { id: 7 } });
+  });
 });

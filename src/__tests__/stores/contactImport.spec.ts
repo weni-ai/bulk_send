@@ -3,12 +3,16 @@ import { createPinia, setActivePinia } from 'pinia';
 import { useContactImportStore } from '@/stores/contactImport';
 import ContactImportAPI from '@/api/resources/contactImport';
 import { AxiosError, type AxiosResponse } from 'axios';
-import { ContactImportGroupMode } from '@/types/contactImport';
+import {
+  ContactImportGroupMode,
+  ContactImportStatus,
+} from '@/types/contactImport';
 
 vi.mock('@/api/resources/contactImport', () => ({
   default: {
     uploadContactImport: vi.fn(),
     confirmContactImport: vi.fn(),
+    getContactImport: vi.fn(),
   },
 }));
 
@@ -232,6 +236,32 @@ describe('contactImport store', () => {
     expect(consoleSpy).toHaveBeenCalled();
     expect(store.loadingConfirmContactImport).toBe(false);
     consoleSpy.mockRestore();
+  });
+
+  it('checkImportFinished updates contactImportInfo', async () => {
+    const store = useContactImportStore();
+    const mocked = ContactImportAPI as Mocked<typeof ContactImportAPI>;
+    mocked.getContactImport.mockResolvedValue({
+      data: {
+        status: ContactImportStatus.COMPLETE,
+        numCreated: 5,
+        numUpdated: 1,
+        numErrored: 0,
+        errors: [],
+        timeTaken: 12,
+      },
+    } as AxiosResponse);
+
+    await store.checkImportFinished(7);
+
+    expect(store.contactImportInfo).toEqual({
+      status: ContactImportStatus.COMPLETE,
+      numCreated: 5,
+      numUpdated: 1,
+      numErrored: 0,
+      errors: [],
+      timeTaken: 12,
+    });
   });
 
   it('setters update importProcessing fields', () => {

@@ -103,12 +103,11 @@ export const useContactImportStore = defineStore('contactImport', {
     ) {
       this.loadingConfirmContactImport = true;
       try {
-        const response = await ContactImportAPI.confirmContactImport(
+        await ContactImportAPI.confirmContactImport(
           projectUuid,
           importId,
           importData,
         );
-        console.log('Confirm Contact Import Response', response);
       } catch (error) {
         console.error(error); // TODO: Handle error
       } finally {
