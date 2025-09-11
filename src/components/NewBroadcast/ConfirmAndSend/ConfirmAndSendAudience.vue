@@ -1,6 +1,6 @@
 <template>
   <section class="confirm-and-send-audience">
-    <h2>
+    <h2 class="confirm-and-send-audience__title">
       {{ $t('new_broadcast.pages.confirm_and_send.audience.title') }}
     </h2>
 
@@ -98,13 +98,13 @@ const templateUnitCost = computed(() => {
 const cost = computed(() => {
   const totalCost = contactCount.value * templateUnitCost.value;
   const currency = Currency[templatesStore.teplatePricing.currency];
-  return `${currency}${totalCost.toFixed(2)}`;
+  return `${currency}${totalCost.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
 });
 
 const unitCost = computed(() => {
   const currency = Currency[templatesStore.teplatePricing.currency];
 
-  const unitCost = `${currency}${templateUnitCost.value.toFixed(2)}`;
+  const unitCost = `${currency}${templateUnitCost.value.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
 
   return t('new_broadcast.pages.confirm_and_send.audience.unit_cost', {
     unitCost,
