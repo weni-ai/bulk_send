@@ -10,32 +10,34 @@
     >
       {{ title }}
     </h1>
-    <section
-      v-for="(variable, index) in definedVariables"
-      :key="variable.key"
-      class="variables-selection-overview__item"
-      data-test="variables-overview-item"
-    >
-      <p
-        class="variables-selection-overview__item-label"
-        data-test="variables-overview-item-label"
+    <section class="variables-selection-overview__list">
+      <section
+        v-for="(variable, index) in definedVariables"
+        :key="variable.key"
+        class="variables-selection-overview__item"
+        data-test="variables-overview-item"
       >
-        {{
-          $t('new_broadcast.pages.select_variables.variable_label', {
-            index: index + 1,
-          })
-        }}
-      </p>
-      <UnnnicIcon
-        icon="arrow_right_alt"
-        scheme="neutral-dark"
-      />
-      <p
-        class="variables-selection-overview__item-value"
-        data-test="variables-overview-item-value"
-      >
-        {{ variable.label }}
-      </p>
+        <p
+          class="variables-selection-overview__item-label"
+          data-test="variables-overview-item-label"
+        >
+          {{
+            $t('new_broadcast.pages.select_variables.variable_label', {
+              index: index + 1,
+            })
+          }}
+        </p>
+        <UnnnicIcon
+          icon="arrow_right_alt"
+          scheme="neutral-dark"
+        />
+        <p
+          class="variables-selection-overview__item-value"
+          data-test="variables-overview-item-value"
+        >
+          {{ variable.label }}
+        </p>
+      </section>
     </section>
   </section>
 </template>
@@ -63,6 +65,12 @@ defineProps<{
     @include unnnic-text-body-lg;
     font-weight: $unnnic-font-weight-bold;
     color: $unnnic-color-neutral-dark;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: $unnnic-spacing-nano;
   }
 
   &__item {
