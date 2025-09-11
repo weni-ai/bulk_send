@@ -59,8 +59,12 @@ describe('ConfirmAndSendAudience.vue', () => {
 
     const items = wrapper.findAll(SELECTOR.items);
     expect(items.length).toBeGreaterThan(0);
-    // cost = (10+5) * rate(1) = 15.00
-    expect(wrapper.text()).toContain('$15.00');
+    // cost = (10+5) * rate(1) = 15.00 (allow locale comma or dot)
+    const cost = 15.0;
+    const costLocalized = cost.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+    });
+    expect(wrapper.text()).toMatch(new RegExp(`\\$${costLocalized}`));
   });
 
   it('uses contact import info when present', async () => {
@@ -76,8 +80,12 @@ describe('ConfirmAndSendAudience.vue', () => {
     } as any;
     await nextTick();
 
-    // cost = 7 * 2 = 14.00
-    expect(wrapper.text()).toContain('$14.00');
+    // cost = 7 * 2 = 14.00 (allow locale comma or dot)
+    const cost = 14.0;
+    const costLocalized = cost.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+    });
+    expect(wrapper.text()).toMatch(new RegExp(`\\$${costLocalized}`));
     expect(wrapper.text()).toContain('New Group');
   });
 });
