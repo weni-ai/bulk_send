@@ -230,10 +230,35 @@
         "disclaimer": "Only templates with an approved status can be selected and sent. Pending templates must wait for Meta’s approval before they can be used. <a target=\"_blank\" href=\"https://developers.facebook.com/docs/whatsapp/message-templates/guidelines/#approval-process\" class=\"highlight\">Learn more in Meta’s documentation</a>"
       },
       "select_variables": {
-        "title": "Variables"
+        "title": "Variables",
+        "page_title": "Variable mapping",
+        "variable_label": "Variable {'{{'}{index}{'}}'}",
+        "variable_placeholder": "Select the field that matches this variable",
+        "disclaimer": "Check if each field is correctly mapped, this is how your message will look to each contact."
       },
       "confirm_and_send": {
-        "title": "Review and send"
+        "title": "Review and send",
+        "flow_placeholder": "Search",
+        "broadcast_name_placeholder": "Broadcast name",
+        "flow_message": "This flow will be activated if a contact replies to this message",
+        "flow_label": "Select a flow to trigger when a contact replies",
+        "broadcast_name_label": "Name",
+        "audience": {
+          "title": "Audience",
+          "groups": "Groups selected: {0}",
+          "contacts": "Contacts selected: {0}",
+          "cost": "Estimated cost: {0} ({1})",
+          "unit_cost": "Unit: {unitCost} per delivered message"
+        },
+        "variables": {
+          "title": "Variable mapping"
+        },
+        "reviewed_label": "I’ve reviewed the contacts and content. I’m ready to send.",
+        "flow_disclaimer": "Make sure your agent team is ready to handle replies to this content.",
+        "contact_import_pending": {
+          "title": "Contact import in progress ⏳",
+          "content": "Your contact list is being imported.\n\nOnce it’s done, you’ll be able to complete the send.\nIn the meantime, you can review your campaign details."
+        }
       },
       "contact_import": {
         "title": "Import contacts",
@@ -287,6 +312,9 @@
       "actions": {
         "cancel": "Cancel",
         "continue": "Continue"
+      },
+      "select_variables_disabled": {
+        "title": "Variables (no variable to map)"
       }
     }
   }

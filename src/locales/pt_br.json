@@ -229,10 +229,35 @@
         "disclaimer": "Apenas modelos com status aprovado podem ser selecionados e enviados. Modelos pendentes devem aguardar a aprovação da Meta antes de serem utilizados. <a target=\"_blank\" href=\"https://developers.facebook.com/docs/whatsapp/message-templates/guidelines/#approval-process\" class=\"highlight\">Saiba mais na documentação da Meta</a>"
       },
       "select_variables": {
-        "title": "Variáveis"
+        "title": "Variáveis",
+        "page_title": "Mapeamento de variáveis",
+        "variable_label": "Variável {'{{'}{index}{'}}'}",
+        "variable_placeholder": "Selecione o campo que corresponde a esta variável",
+        "disclaimer": "Verifique se cada campo está mapeado corretamente, este é o aspecto que seu mensagem terá para cada contato."
       },
       "confirm_and_send": {
-        "title": "Revisar e enviar"
+        "title": "Revisar e enviar",
+        "flow_placeholder": "Pesquisar",
+        "broadcast_name_placeholder": "Nome do disparo",
+        "flow_message": "Este fluxo será ativado se um contato responder a este mensagem",
+        "flow_label": "Selecione um fluxo para ativar quando um contato responder",
+        "broadcast_name_label": "Nome",
+        "audience": {
+          "title": "Audiência",
+          "groups": "Grupos selecionados: {0}",
+          "contacts": "Contatos selecionados: {0}",
+          "cost": "Custo estimado: {0} ({1})",
+          "unit_cost": "Unidade: {unitCost} por mensagem entregada"
+        },
+        "variables": {
+          "title": "Mapeamento de variáveis"
+        },
+        "reviewed_label": "Revisei os contatos e o conteúdo. Estou pronto para enviar.",
+        "flow_disclaimer": "Certifique-se de que seu time de agentes está pronto para lidar com respostas a este conteúdo.",
+        "contact_import_pending": {
+          "title": "Importação de contatos em progresso ⏳",
+          "content": "Sua lista de contatos está sendo importada.\n\nUma vez concluída, você poderá completar o envio.\nAguarde enquanto você revisa os detalhes da sua campanha."
+        }
       },
       "contact_import": {
         "title": "Importar contatos",
