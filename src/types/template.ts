@@ -1,5 +1,6 @@
 import type { PageRequestParams } from '@/types/requests';
-import type { TemplateStatus } from '@/constants/templates';
+import type { TemplateStatus, TemplateCategory } from '@/constants/templates';
+import type { Currency } from '@/constants/currency';
 
 interface TemplateReference {
   id: number;
@@ -13,15 +14,15 @@ interface TemplateUUIDReference {
 
 interface Template extends TemplateUUIDReference {
   createdOn: string;
-  category: string;
+  category: TemplateCategory;
   language: string;
   header?: TemplateHeader;
   body: TemplateBody;
   footer?: TemplateFooter;
   buttons?: TemplateButton[];
   status: TemplateStatus;
+  variableCount: number;
 }
-
 type TemplateHeader =
   | TemplateHeaderText
   | TemplateHeaderImage
@@ -95,6 +96,16 @@ type TemplatePreviewHeader =
       mediaType: 'IMAGE' | 'VIDEO' | 'DOCUMENT';
     };
 
+interface TemplatePricing {
+  currency: keyof typeof Currency;
+  rates: {
+    marketing: number;
+    utility: number;
+    authentication: number;
+    service: number;
+  };
+}
+
 export type {
   TemplateRequestParams,
   TemplateReference,
@@ -105,4 +116,5 @@ export type {
   TemplateButton,
   TemplatePreview,
   TemplatePreviewHeader,
+  TemplatePricing,
 };
