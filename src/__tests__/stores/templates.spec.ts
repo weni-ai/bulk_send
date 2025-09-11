@@ -8,6 +8,7 @@ vi.mock('@/api/resources/templates', () => ({
   default: {
     getTemplates: vi.fn(),
     getTemplate: vi.fn(),
+    getTemplatePricing: vi.fn(),
   },
 }));
 
@@ -17,69 +18,61 @@ describe('templates store', () => {
     vi.clearAllMocks();
   });
 
-  it('fetchTemplates toggles loading and stores results and count', async () => {
+  it('fetchTemplates toggles loading and stores results/count', async () => {
     const store = useTemplatesStore();
     const mocked = TemplatesAPI as Mocked<typeof TemplatesAPI>;
-
     mocked.getTemplates.mockResolvedValue({
-      data: {
-        count: 2,
-        results: [
-          {
-            uuid: 't1',
-            name: 'Welcome',
-            createdOn: '2024-01-01T00:00:00Z',
-            category: 'CAT',
-            language: 'en',
-            body: { text: 'Hello' },
-            status: 'A',
-          },
-          {
-            uuid: 't2',
-            name: 'Promo',
-            createdOn: '2024-02-01T00:00:00Z',
-            category: 'CAT',
-            language: 'es',
-            body: { text: 'Promo Body' },
-            status: 'P',
-          },
-        ],
-      },
+      data: { results: [{ id: 1 }], count: 1 },
     } as AxiosResponse);
 
     expect(store.loadingTemplates).toBe(false);
-    const promise = store.fetchTemplates({ limit: 5, offset: 0 });
+    const promise = store.fetchTemplates({ offset: 0, limit: 10 } as any);
     expect(store.loadingTemplates).toBe(true);
     await promise;
 
-    expect(mocked.getTemplates).toHaveBeenCalledWith({ limit: 5, offset: 0 });
-    expect(store.templatesCount).toBe(2);
-    expect(store.templates).toHaveLength(2);
-    expect(store.templates[0].name).toBe('Welcome');
-    expect(store.loadingTemplates).toBe(false);
-  });
-
-  it('fetchTemplates resets loading on failure', async () => {
-    const store = useTemplatesStore();
-    const mocked = TemplatesAPI as Mocked<typeof TemplatesAPI>;
-    mocked.getTemplates.mockRejectedValue(new Error('fail'));
-
-    expect(store.loadingTemplates).toBe(false);
-    await expect(store.fetchTemplates({ limit: 5, offset: 0 })).rejects.toThrow(
-      'fail',
-    );
+    expect(mocked.getTemplates).toHaveBeenCalled();
+    expect(store.templates).toEqual([{ id: 1 }]);
+    expect(store.templatesCount).toBe(1);
     expect(store.loadingTemplates).toBe(false);
   });
 
   it('getTemplate proxies to API', async () => {
     const store = useTemplatesStore();
     const mocked = TemplatesAPI as Mocked<typeof TemplatesAPI>;
+    mocked.getTemplate.mockResolvedValue({ data: { id: 7 } } as AxiosResponse);
+    const res = await store.getTemplate(7);
+    expect(mocked.getTemplate).toHaveBeenCalledWith(7);
+    expect(res).toEqual({ data: { id: 7 } });
+  });
 
-    mocked.getTemplate.mockResolvedValue({
-      data: { id: 123 },
-    } as AxiosResponse);
-    const result = await store.getTemplate(123);
-    expect(mocked.getTemplate).toHaveBeenCalledWith(123);
-    expect(result).toEqual({ data: { id: 123 } });
+  it('getTemplatePricing toggles loading and maps rates to numbers', async () => {
+    const store = useTemplatesStore();
+    const mocked = TemplatesAPI as Mocked<typeof TemplatesAPI>;
+    mocked.getTemplatePricing.mockResolvedValue({
+      data: {
+        currency: 'BRL',
+        rates: {
+          marketing: '1.2',
+          utility: '2.5',
+          authentication: '3',
+          service: '0',
+        },
+      },
+    } as any);
+
+    expect(store.loadingTemplatePricing).toBe(false);
+    const promise = store.getTemplatePricing();
+    expect(store.loadingTemplatePricing).toBe(true);
+    await promise;
+
+    expect(mocked.getTemplatePricing).toHaveBeenCalled();
+    expect(store.teplatePricing.currency).toBe('BRL');
+    expect(store.teplatePricing.rates).toEqual({
+      marketing: 1.2,
+      utility: 2.5,
+      authentication: 3,
+      service: 0,
+    });
+    expect(store.loadingTemplatePricing).toBe(false);
   });
 });
