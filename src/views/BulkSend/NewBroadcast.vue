@@ -56,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeMount } from 'vue';
+import { computed, onBeforeMount, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import { useContactImportStore } from '@/stores/contactImport';
@@ -69,7 +69,8 @@ import ContactImport from '@/components/NewBroadcast/ContactImport/ContactImport
 import ContactImportProcessing from '@/components/NewBroadcast/ContactImport/ContactImportProcessing.vue';
 import TemplateSelection from '@/components/NewBroadcast/TemplateSelection/TemplateSelection.vue';
 import { TemplateStatus } from '@/constants/templates';
-import { ContactImportStatus } from '@/types/contactImport';
+
+const router = useRouter();
 
 const broadcastsStore = useBroadcastsStore();
 const contactImportStore = useContactImportStore();
