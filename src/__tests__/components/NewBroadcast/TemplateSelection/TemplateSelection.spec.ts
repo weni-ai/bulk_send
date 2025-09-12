@@ -15,6 +15,8 @@ vi.mock('@vueuse/core', () => ({ useDebounceFn: (fn: any) => fn }));
 
 const SELECTOR = {
   filtersSetSearch: '[data-test="set-search"]',
+  filtersSetChannel: '[data-test="set-channel"]',
+  filtersClearChannel: '[data-test="clear-channel"]',
   listNext: '[data-test="next"]',
   listSortAsc: '[data-test="sort-asc"]',
   listSortDesc: '[data-test="sort-desc"]',
@@ -26,10 +28,14 @@ const stubs = {
   UnnnicDisclaimer: { template: '<div data-test="disclaimer" />' },
   TemplateSelectionPreview: { template: '<div data-test="preview" />' },
   TemplateSelectionFilters: {
-    props: ['search'],
-    emits: ['update:search'],
+    props: ['search', 'channel'],
+    emits: ['update:search', 'update:channel'],
     template:
-      '<div data-test="filters"><button data-test="set-search" @click="$emit(\'update:search\', \'hello\')">set search</button></div>',
+      '<div data-test="filters">\n' +
+      '  <button data-test="set-search" @click="$emit(\'update:search\', \'hello\')">set search</button>\n' +
+      "  <button data-test=\"set-channel\" @click=\"$emit('update:channel', { uuid: 'ch-1', name: 'WAC 1', channel_type: 'WAC' })\">set channel</button>\n" +
+      '  <button data-test="clear-channel" @click="$emit(\'update:channel\', undefined)">clear channel</button>\n' +
+      '</div>',
   },
   TemplateSelectionList: {
     props: ['page', 'pageSize', 'total'],
@@ -127,6 +133,38 @@ describe('TemplateSelection.vue', () => {
       offset: 0,
       name: '',
       order_by: 'name',
+    });
+  });
+
+  it('updates channel filter and fetches with channel uuid', async () => {
+    const { wrapper, fetchSpy } = mountWithStore();
+    fetchSpy.mockClear();
+
+    await wrapper.find(SELECTOR.filtersSetChannel).trigger('click');
+    expect(fetchSpy).toHaveBeenCalledWith({
+      limit: PAGE_SIZE,
+      offset: 0,
+      name: '',
+      order_by: 'name',
+      channel: 'ch-1',
+    });
+  });
+
+  it('clears channel filter and fetches without channel param', async () => {
+    const { wrapper, fetchSpy } = mountWithStore();
+    fetchSpy.mockClear();
+
+    // set then clear
+    await wrapper.find(SELECTOR.filtersSetChannel).trigger('click');
+    fetchSpy.mockClear();
+    await wrapper.find(SELECTOR.filtersClearChannel).trigger('click');
+
+    expect(fetchSpy).toHaveBeenCalledWith({
+      limit: PAGE_SIZE,
+      offset: 0,
+      name: '',
+      order_by: 'name',
+      channel: undefined,
     });
   });
 
