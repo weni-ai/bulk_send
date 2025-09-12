@@ -185,7 +185,7 @@ const handleDownloadSample = () => {
   }
 
   &__list-item::marker {
-    margin-inline-end: 0.5rem;
+    margin-inline-end: $unnnic-spacing-xs;
   }
 
   &__footer-title {
