@@ -133,11 +133,6 @@ export default defineConfig({
           requiredVersion: pkg.dependencies['vue-i18n'],
           eager: true,
         },
-        pinia: {
-          singleton: true,
-          requiredVersion: pkg.dependencies.pinia,
-          eager: true,
-        },
       },
     }),
   ],
