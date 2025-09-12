@@ -6,7 +6,7 @@ import type {
   NewBroadcastState,
 } from '@/types/broadcast';
 
-import BroadcastStatisticsAPI from '@/api/resources/broadcasts';
+import BroadcastsAPI from '@/api/resources/broadcasts';
 import { ContactGroupStatus, NewBroadcastPage } from '@/constants/broadcasts';
 import type { Group } from '@/types/groups';
 import type { Template } from '@/types/template';
@@ -18,6 +18,7 @@ export const useBroadcastsStore = defineStore('broadcasts', {
     loadingBroadcastsStatistics: false,
     loadingBroadcastsMonthPerformance: false,
     loadingCreateGroupFromStatus: false,
+    loadingCreateBroadcast: false,
     broadcastsStatisticsCount: 0,
     broadcastsStatistics: <BroadcastStatistic[]>[],
     broadcastMonthPerformance: <BroadcastsMonthPerformance>{
@@ -44,7 +45,7 @@ export const useBroadcastsStore = defineStore('broadcasts', {
     ) {
       this.loadingBroadcastsStatistics = true;
       try {
-        const response = await BroadcastStatisticsAPI.getBroadcastsStatistics(
+        const response = await BroadcastsAPI.getBroadcastsStatistics(
           projectUuid,
           params,
         );
@@ -64,9 +65,7 @@ export const useBroadcastsStore = defineStore('broadcasts', {
       this.loadingBroadcastsMonthPerformance = true;
       try {
         const response =
-          await BroadcastStatisticsAPI.getBroadcastsMonthPerformance(
-            projectUuid,
-          );
+          await BroadcastsAPI.getBroadcastsMonthPerformance(projectUuid);
 
         const stats = response.data.last30DaysStats;
         const cost = 123; // TODO: calculate cost from the response when API brings the required fields
@@ -88,7 +87,7 @@ export const useBroadcastsStore = defineStore('broadcasts', {
     ) {
       this.loadingCreateGroupFromStatus = true;
       try {
-        const response = await BroadcastStatisticsAPI.createGroupFromStatus(
+        const response = await BroadcastsAPI.createGroupFromStatus(
           projectUuid,
           groupName,
           broadcastID,
@@ -98,6 +97,25 @@ export const useBroadcastsStore = defineStore('broadcasts', {
         return response.data;
       } finally {
         this.loadingCreateGroupFromStatus = false;
+      }
+    },
+    async createBroadcast(
+      name: string,
+      template: Template,
+      variables: string[],
+      groups: string[],
+    ) {
+      this.loadingCreateBroadcast = true;
+      try {
+        const response = await BroadcastsAPI.createBroadcast(
+          name,
+          template,
+          variables,
+          groups,
+        );
+        return response.data;
+      } finally {
+        this.loadingCreateBroadcast = false;
       }
     },
     setNewBroadcastPage(page: NewBroadcastPage) {

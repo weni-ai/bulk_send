@@ -1,6 +1,9 @@
 import request from '@/api/requests';
 import { ContactGroupStatus } from '@/constants/broadcasts';
+import { useProjectStore } from '@/stores/project';
 import type { PageRequestParams } from '@/types/requests';
+import type { CreateBroadcastData } from '@/types/broadcast';
+import type { Template } from '@/types/template';
 
 export default {
   async getBroadcastsStatistics(
@@ -37,6 +40,33 @@ export default {
       },
     );
 
+    return response;
+  },
+  async createBroadcast(
+    name: string,
+    template: Template,
+    variables: string[],
+    groups: string[],
+  ) {
+    const { project } = useProjectStore();
+
+    const data: CreateBroadcastData = {
+      queue: 'template_batch',
+      project: project.uuid,
+      name: name,
+      groups: groups,
+      msg: {
+        template: {
+          uuid: template.uuid,
+          variables: variables,
+        },
+      },
+    };
+
+    const response = await request.$http.post(
+      `/api/v2/internals/whatsapp_broadcasts`,
+      data,
+    );
     return response;
   },
 };
