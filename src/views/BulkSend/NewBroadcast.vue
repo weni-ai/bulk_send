@@ -61,6 +61,7 @@ const uploadFinished = ref(false);
 onBeforeMount(() => {
   broadcastsStore.setNewBroadcastPage(NewBroadcastPage.SELECT_GROUPS);
   projectStore.getProjectInfo();
+  projectStore.getProjectChannels();
   templatesStore.getTemplatePricing();
 });
 
