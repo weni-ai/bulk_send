@@ -21,6 +21,26 @@ const toPosixPath = (filepath: string) =>
 // Target browsers, see: https://github.com/browserslist/browserslist
 const targets = ['chrome >= 87', 'edge >= 88', 'firefox >= 78', 'safari >= 14'];
 
+const sharedPkgs = {
+  vue: {
+    singleton: true,
+    requiredVersion: '^3.0.0',
+    eager: true,
+  },
+  'vue-i18n': {
+    singleton: true,
+    requiredVersion: pkg.dependencies['vue-i18n'],
+    eager: true,
+  },
+}
+
+// Pinia is only shared in development
+process.env.NODE_ENV === 'development' && (sharedPkgs['pinia'] = {
+  singleton: true,
+  requiredVersion: pkg.dependencies.pinia,
+  eager: true,
+})
+
 export default defineConfig({
   context: __dirname,
   devServer: {
@@ -121,19 +141,7 @@ export default defineConfig({
       remotes: {
         connect: `connect@${process.env.MODULE_FEDERATION_CONNECT_URL}/remoteEntry.js`,
       },
-      shared: {
-        // ...pkg,
-        vue: {
-          singleton: true,
-          requiredVersion: '^3.0.0',
-          eager: true,
-        },
-        'vue-i18n': {
-          singleton: true,
-          requiredVersion: pkg.dependencies['vue-i18n'],
-          eager: true,
-        },
-      },
+      shared: sharedPkgs,
     }),
   ],
   optimization: {
