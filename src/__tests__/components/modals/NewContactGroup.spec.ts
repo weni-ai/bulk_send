@@ -5,6 +5,7 @@ import { useBroadcastsStore } from '@/stores/broadcasts';
 import { useProjectStore } from '@/stores/project';
 import { DEFAULT_PROJECT_UUID } from '@/__tests__/utils/constants';
 import NewContactGroup from '@/components/modals/NewContactGroup.vue';
+import unnnic from '@weni/unnnic-system';
 
 // Minimal i18n mock used in script setup and template
 vi.mock('vue-i18n', () => ({
@@ -12,6 +13,12 @@ vi.mock('vue-i18n', () => ({
     t: (key: string) =>
       key.includes('modals.new_contact_group.categories') ? 'Failed' : key,
   }),
+}));
+
+vi.mock('@weni/unnnic-system', () => ({
+  default: {
+    unnnicCallAlert: vi.fn(),
+  },
 }));
 
 const stubs = {
@@ -99,11 +106,36 @@ describe('NewContactGroup.vue', () => {
       'failed',
     );
     expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([false]);
+    expect(unnnic.unnnicCallAlert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        props: expect.objectContaining({ type: 'success' }),
+        seconds: 5,
+      }),
+    );
   });
 
   it('emits close on secondary', async () => {
     const wrapper = mountWrapper();
     await wrapper.find('.modal-stub__secondary').trigger('click');
     expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([false]);
+  });
+
+  it('shows error alert on failure and keeps modal open', async () => {
+    const wrapper = mountWrapper();
+    const broadcastsStore = useBroadcastsStore();
+    vi.spyOn(broadcastsStore, 'createGroupFromStatus').mockRejectedValue(
+      new Error('fail'),
+    );
+
+    await wrapper.find('.modal-stub__primary').trigger('click');
+
+    expect(unnnic.unnnicCallAlert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        props: expect.objectContaining({ type: 'error' }),
+        seconds: 10,
+      }),
+    );
+    // should not emit close on error
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined();
   });
 });
