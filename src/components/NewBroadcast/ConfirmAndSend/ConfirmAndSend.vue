@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <section class="confirm-and-send">
     <h1 class="confirm-and-send__title">
@@ -82,8 +83,60 @@
         }}
       </p>
     </UnnnicModalDialog>
+
+    <UnnnicModalDialog
+      class="confirm-and-send__broadcast-errored-modal"
+      :modelValue="!!broadcastErrored"
+      :title="
+        $t('new_broadcast.pages.confirm_and_send.broadcast_errored.title')
+      "
+      :primaryButtonProps="{
+        text: $t(
+          'new_broadcast.pages.confirm_and_send.broadcast_errored.primary_button',
+        ),
+      }"
+      hideSecondaryButton
+      showActionsDivider
+      @primary-button-click="handleErrorBack"
+    >
+      <p class="confirm-and-send__broadcast-errored-content">
+        {{
+          $t(
+            'new_broadcast.pages.confirm_and_send.broadcast_errored.description',
+            { error: broadcastErrored?.message },
+          )
+        }}
+      </p>
+    </UnnnicModalDialog>
+
+    <UnnnicModalDialog
+      class="confirm-and-send__broadcast-success-modal"
+      :modelValue="broadcastSuccess"
+      :title="
+        $t('new_broadcast.pages.confirm_and_send.broadcast_success.title')
+      "
+      :primaryButtonProps="{
+        text: $t(
+          'new_broadcast.pages.confirm_and_send.broadcast_success.primary_button',
+        ),
+      }"
+      showActionsDivider
+      hideSecondaryButton
+      @primary-button-click="handleSuccessBack"
+    >
+      <p
+        class="confirm-and-send__broadcast-success-content"
+        v-html="
+          $t('new_broadcast.pages.confirm_and_send.broadcast_success.content', {
+            contact_count: contactCount,
+          })
+        "
+      ></p>
+    </UnnnicModalDialog>
+
     <StepActions
       :disabled="!canContinue"
+      :loading="loadingCreateBroadcast"
       @cancel="handleCancel"
       @continue="handleContinue"
     />
@@ -92,6 +145,8 @@
 
 <script setup lang="ts">
 import { computed, onBeforeMount, onBeforeUnmount, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
 import { format } from 'date-fns';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import { useProjectStore } from '@/stores/project';
@@ -105,6 +160,11 @@ import type { SelectOption } from '@/types/select';
 import { ContactImportStatus } from '@/types/contactImport';
 import StepActions from '@/components/NewBroadcast/StepActions.vue';
 import { NewBroadcastPage } from '@/constants/broadcasts';
+import type { ContactField } from '@/types/contacts';
+import type { Template } from '@/types/template';
+
+const { t } = useI18n();
+const router = useRouter();
 
 const broadcastsStore = useBroadcastsStore();
 const projectStore = useProjectStore();
@@ -114,6 +174,8 @@ const contactImportStore = useContactImportStore();
 type FlowOption = SelectOption<string>;
 
 const timeoutId = ref<ReturnType<typeof setTimeout> | undefined>(undefined);
+const broadcastErrored = ref<Error | undefined>(undefined);
+const broadcastSuccess = ref(false);
 
 onBeforeMount(() => {
   clearInputs();
@@ -127,6 +189,10 @@ onBeforeUnmount(() => {
   if (timeoutId.value) {
     clearTimeout(timeoutId.value);
   }
+});
+
+const loadingCreateBroadcast = computed(() => {
+  return broadcastsStore.loadingCreateBroadcast;
 });
 
 const broadcastName = computed(() => {
@@ -184,6 +250,17 @@ const importNotCompleted = computed(() => {
     contactImportStore.contactImportInfo.status ===
       ContactImportStatus.PROCESSING
   );
+});
+
+const contactCount = computed(() => {
+  if (contactImportStore.import) {
+    return contactImportStore.import.numRecords;
+  } else {
+    return broadcastsStore.newBroadcast.selectedGroups.reduce(
+      (acc, group) => acc + group.memberCount,
+      0,
+    );
+  }
 });
 
 const createInitialBroadcastName = () => {
@@ -256,8 +333,101 @@ const handleCancel = () => {
   }
 };
 
-const handleContinue = () => {
-  // TODO: Trigger actual send in future when backend flow is ready
+const handleErrorBack = () => {
+  broadcastErrored.value = undefined;
+};
+
+const handleSuccessBack = () => {
+  broadcastSuccess.value = false;
+  broadcastsStore.resetNewBroadcast();
+  router.push({ name: 'HomeBulkSend' });
+};
+
+const requiresVariables = (template: Template) => {
+  return template.variableCount && template.variableCount > 0;
+};
+
+const handleContinue = async () => {
+  try {
+    const groups = await getSelectedGroups();
+    if (!groups || groups.length === 0) {
+      throw new Error(
+        t('new_broadcast.pages.confirm_and_send.groups_not_found'),
+      );
+    }
+
+    const name = broadcastsStore.newBroadcast.broadcastName.trim();
+    if (!name) {
+      throw new Error(t('new_broadcast.pages.confirm_and_send.name_not_found'));
+    }
+
+    const template = broadcastsStore.newBroadcast.selectedTemplate;
+    if (!template) {
+      throw new Error(
+        t('new_broadcast.pages.confirm_and_send.template_not_found'),
+      );
+    }
+
+    const variables = createVariablesList();
+    if (requiresVariables(template) && (!variables || variables.length === 0)) {
+      throw new Error(
+        t('new_broadcast.pages.confirm_and_send.variables_not_found'),
+      );
+    }
+
+    await broadcastsStore.createBroadcast(name, template, variables, groups);
+    broadcastSuccess.value = true;
+  } catch (error) {
+    if (error instanceof Error) {
+      broadcastErrored.value = error;
+    } else {
+      broadcastErrored.value = new Error(
+        t('new_broadcast.pages.confirm_and_send.unknown_error'),
+      );
+    }
+  }
+};
+
+const getSelectedGroups = async (): Promise<string[]> => {
+  if (contactImportStore.import) {
+    await contactImportStore.getImportInfo(contactImportStore.import.importId);
+
+    if (!contactImportStore.contactImportGroup?.uuid) {
+      throw new Error('Contact import group uuid not found');
+    }
+
+    return [contactImportStore.contactImportGroup.uuid];
+  } else {
+    return broadcastsStore.newBroadcast.selectedGroups.map(
+      (group) => group.uuid,
+    );
+  }
+};
+
+const createVariablesList = () => {
+  const variablesMapping = broadcastsStore.newBroadcast.variableMapping;
+  const variables = [];
+  if (!variablesMapping) {
+    throw new Error('Variables mapping not found');
+  }
+
+  if (hasIncompleteMapping(variablesMapping)) {
+    throw new Error('Variables mapping is not complete');
+  }
+
+  for (let i = 0; i < Object.keys(variablesMapping).length; i++) {
+    variables.push(`@fields.${variablesMapping[i]!.key}`); // TODO: handle @contact.name in the future
+  }
+
+  return variables;
+};
+
+const hasIncompleteMapping = (
+  variablesMapping: Record<number, ContactField | undefined>,
+) => {
+  return Object.values(variablesMapping).some(
+    (variable) => variable === undefined,
+  );
 };
 </script>
 
@@ -300,6 +470,34 @@ const handleContinue = () => {
     @include unnnic-text-body-gt;
     color: $unnnic-color-neutral-cloudy;
     white-space: pre-line;
+  }
+
+  &__broadcast-success-modal,
+  &__broadcast-errored-modal {
+    &:deep(.unnnic-modal-dialog__container__actions) {
+      display: flex;
+      flex: 1;
+
+      button {
+        flex: 1;
+      }
+    }
+  }
+
+  &__broadcast-success-content {
+    @include unnnic-text-body-gt;
+    color: $unnnic-color-neutral-dark;
+    white-space: pre-wrap;
+
+    :deep(.highlight) {
+      font-weight: $unnnic-font-weight-bold;
+    }
+  }
+
+  &__broadcast-errored-content {
+    @include unnnic-text-body-gt;
+    color: $unnnic-color-neutral-dark;
+    white-space: pre-wrap;
   }
 }
 </style>
