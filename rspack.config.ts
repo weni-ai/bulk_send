@@ -32,14 +32,16 @@ const sharedPkgs = {
     requiredVersion: pkg.dependencies['vue-i18n'],
     eager: true,
   },
-}
+};
 
 // Pinia is only shared in development
-process.env.NODE_ENV === 'development' && (sharedPkgs['pinia'] = {
+if (process.env.NODE_ENV === 'development') {
+  sharedPkgs['pinia'] = {
   singleton: true,
   requiredVersion: pkg.dependencies.pinia,
   eager: true,
-})
+  };
+}
 
 export default defineConfig({
   context: __dirname,
