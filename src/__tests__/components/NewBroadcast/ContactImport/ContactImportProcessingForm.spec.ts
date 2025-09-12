@@ -74,10 +74,6 @@ describe('ContactImportProcessingForm.vue', () => {
     expect(contactImportStore.importProcessing.groupMode).toBe(
       ContactImportGroupMode.EXISTING,
     );
-
-    // click IMPORT_WITHOUT_ADDING option
-    await radios[2].trigger('click');
-    expect(contactImportStore.importProcessing.addToGroup).toBe(false);
   });
 
   it('updates group name in store when typing', async () => {

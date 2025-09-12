@@ -95,9 +95,6 @@ const ActionType: Record<string, string> = {
     'new_broadcast.pages.contact_import.processing.form.action_type.create',
   ),
   ADD: t('new_broadcast.pages.contact_import.processing.form.action_type.add'),
-  IMPORT_WITHOUT_ADDING: t(
-    'new_broadcast.pages.contact_import.processing.form.action_type.import_without_adding',
-  ),
 };
 
 const actionType = ref(ActionType.CREATE);
