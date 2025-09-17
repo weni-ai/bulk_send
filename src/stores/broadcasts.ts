@@ -21,6 +21,7 @@ export const useBroadcastsStore = defineStore('broadcasts', {
     loadingBroadcastsMonthPerformance: false,
     loadingCreateGroupFromStatus: false,
     loadingCreateBroadcast: false,
+    loadingUploadMedia: false,
     broadcastsStatisticsCount: 0,
     broadcastsStatistics: <BroadcastStatistic[]>[],
     broadcastMonthPerformance: <BroadcastsMonthPerformance>{
@@ -36,6 +37,9 @@ export const useBroadcastsStore = defineStore('broadcasts', {
       selectedTemplate: undefined,
       variableMapping: {},
       broadcastName: '',
+      headerMediaFileUrl: undefined,
+      headerMediaFile: undefined,
+      headerMediaFileType: undefined,
       selectedFlow: undefined,
       reviewed: false,
     },
@@ -112,6 +116,7 @@ export const useBroadcastsStore = defineStore('broadcasts', {
       template: Template,
       variables: string[],
       groups: string[],
+      attachment?: { url: string; type: string },
     ) {
       this.loadingCreateBroadcast = true;
       try {
@@ -120,10 +125,21 @@ export const useBroadcastsStore = defineStore('broadcasts', {
           template,
           variables,
           groups,
+          attachment,
         );
         return response.data;
       } finally {
         this.loadingCreateBroadcast = false;
+      }
+    },
+    async uploadMedia(file: File) {
+      this.loadingUploadMedia = true;
+      try {
+        const response = await BroadcastsAPI.uploadMedia(file);
+        this.newBroadcast.headerMediaFileUrl = response.data.url;
+        this.newBroadcast.headerMediaFileType = response.data.type;
+      } finally {
+        this.loadingUploadMedia = false;
       }
     },
     setNewBroadcastPage(page: NewBroadcastPage) {
@@ -156,6 +172,12 @@ export const useBroadcastsStore = defineStore('broadcasts', {
     setReviewed(value: boolean) {
       this.newBroadcast.reviewed = value;
     },
+    setHeaderMediaFileUrl(url?: string) {
+      this.newBroadcast.headerMediaFileUrl = url;
+    },
+    setHeaderMediaFile(file?: File) {
+      this.newBroadcast.headerMediaFile = file;
+    },
     resetNewBroadcast() {
       this.newBroadcast = {
         currentPage: NewBroadcastPage.SELECT_GROUPS,
@@ -166,6 +188,7 @@ export const useBroadcastsStore = defineStore('broadcasts', {
         variableMapping: {},
         broadcastName: '',
         selectedFlow: undefined,
+        headerMediaFileUrl: undefined,
         reviewed: false,
       };
     },
