@@ -109,6 +109,7 @@ const handleMediaSelection = async (event: Event) => {
     try {
       await broadcastsStore.uploadMedia(file);
     } catch {
+      broadcastsStore.setHeaderMediaFile(undefined);
       unnnic.unnnicCallAlert({
         props: {
           text: t(
