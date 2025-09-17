@@ -242,7 +242,14 @@
         "disclaimer": "Check if each field is correctly mapped, this is how your message will look to each contact.",
         "actions": {
           "cancel": "Back"
-        }
+        },
+        "header_media_title": "Header upload",
+        "header_media_button": {
+          "IMAGE": "Add image",
+          "VIDEO": "Add video",
+          "DOCUMENT": "Add document"
+        },
+        "header_media_upload_error": "Upload failed, please try again"
       },
       "confirm_and_send": {
         "title": "Review and send",
