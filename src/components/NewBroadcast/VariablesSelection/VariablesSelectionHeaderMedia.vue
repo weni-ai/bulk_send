@@ -192,6 +192,8 @@ const handleMediaOverviewRemove = () => {
   }
 
   &__overview-action {
+    cursor: pointer;
+
     &--spinning {
       animation: spin 1s linear infinite;
     }
