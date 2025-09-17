@@ -55,6 +55,7 @@
 
     <StepActions
       :disabled="!canContinue"
+      :cancelText="$t('new_broadcast.pages.select_variables.actions.cancel')"
       @cancel="handleCancel"
       @continue="handleContinue"
     />
@@ -203,6 +204,7 @@ const handleContinue = () => {
   flex-direction: column;
   gap: $unnnic-spacing-sm;
   flex: 1;
+  overflow: auto;
 
   &__title {
     @include unnnic-text-body-lg;
@@ -213,6 +215,7 @@ const handleContinue = () => {
   &__content {
     display: flex;
     gap: $unnnic-spacing-sm;
+    overflow: auto;
   }
 
   &__variables-list {
