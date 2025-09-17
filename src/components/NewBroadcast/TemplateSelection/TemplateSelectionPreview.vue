@@ -98,7 +98,6 @@ const bodyFormatter = (body: string) => {
   min-height: 432px; // fixed height as set in the design
   width: 409px; // fixed width as set in the design
   height: fit-content;
-                       
   &__header {
     display: flex;
     padding: $unnnic-spacing-ant $unnnic-spacing-sm;

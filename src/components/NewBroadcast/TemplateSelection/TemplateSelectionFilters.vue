@@ -125,7 +125,6 @@ const handleSearchClear = () => {
 };
 
 const handleChannelUpdate = (selectedChannel: ChannelOption[]) => {
-  console.log('handleChannelUpdate', selectedChannel);
   if (!selectedChannel[0] || selectedChannel[0].value === ALL_CHANNELS_VALUE) {
     emit('update:channel', undefined);
     return;

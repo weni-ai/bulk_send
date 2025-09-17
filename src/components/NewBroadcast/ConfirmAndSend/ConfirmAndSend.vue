@@ -330,15 +330,19 @@ const canContinue = computed(() => {
   return canConfirm && broadcastsStore.newBroadcast.reviewed;
 });
 
+const hasVariables = computed(() => {
+  return (
+    broadcastsStore.newBroadcast.selectedTemplate?.variableCount &&
+    broadcastsStore.newBroadcast.selectedTemplate.variableCount > 0
+  );
+});
+
 const handleCancel = () => {
   broadcastsStore.setReviewed(false);
   broadcastsStore.setSelectedFlow(undefined);
   broadcastsStore.setBroadcastName('');
 
-  if (
-    broadcastsStore.newBroadcast.selectedTemplate?.variableCount &&
-    broadcastsStore.newBroadcast.selectedTemplate.variableCount > 0
-  ) {
+  if (hasVariables.value || broadcastsStore.newBroadcast.headerMediaFileUrl) {
     broadcastsStore.setNewBroadcastPage(NewBroadcastPage.SELECT_VARIABLES);
   } else {
     broadcastsStore.setNewBroadcastPage(NewBroadcastPage.SELECT_TEMPLATE);
@@ -387,7 +391,21 @@ const handleContinue = async () => {
       );
     }
 
-    await broadcastsStore.createBroadcast(name, template, variables, groups);
+    let attachment = undefined;
+    if (broadcastsStore.newBroadcast.headerMediaFileUrl) {
+      attachment = {
+        url: broadcastsStore.newBroadcast.headerMediaFileUrl!,
+        type: broadcastsStore.newBroadcast.headerMediaFileType!,
+      };
+    }
+
+    await broadcastsStore.createBroadcast(
+      name,
+      template,
+      variables,
+      groups,
+      attachment,
+    );
     broadcastSuccess.value = true;
   } catch (error) {
     if (error instanceof Error) {

@@ -1,50 +1,57 @@
 <template>
   <section class="variables-selection">
     <section class="variables-selection__content">
-      <section class="variables-selection__variables-list">
-        <h1 class="variables-selection__title">
-          {{ $t('new_broadcast.pages.select_variables.page_title') }}
-        </h1>
-
-        <VariablesSelectionOverview
-          v-if="hasMappedVariable"
-          :definedVariables="definedVariables"
-        />
-
-        <UnnnicFormElement
-          v-for="index in templateVariablesCount"
-          :key="index"
-          class="variables-selection__item"
-          :label="
-            $t('new_broadcast.pages.select_variables.variable_label', {
-              index,
-            })
-          "
+      <section class="variables-selection__main">
+        <section
+          v-if="templateVariablesCount > 0"
+          class="variables-selection__variables-list"
         >
-          <UnnnicSelectSmart
-            :options="contactFields"
-            :modelValue="variableOption(index - 1)"
-            autocomplete
-            autocompleteClearOnFocus
-            enableSearchByValue
-            :isLoading="loadingContactFields"
-            :placeholder="
-              $t('new_broadcast.pages.select_variables.variable_placeholder')
-            "
-            @update:model-value="
-              (event: ContactFieldOption[]) =>
-                handleVariableUpdate(index - 1, event)
-            "
-          />
-        </UnnnicFormElement>
+          <h1 class="variables-selection__title">
+            {{ $t('new_broadcast.pages.select_variables.page_title') }}
+          </h1>
 
-        <UnnnicDisclaimer
-          v-if="hasMappedVariable"
-          class="variables-selection__disclaimer"
-          icon="alert-circle-1-1"
-          scheme="neutral-dark"
-          :text="$t('new_broadcast.pages.select_variables.disclaimer')"
-        />
+          <VariablesSelectionOverview
+            v-if="hasMappedVariable"
+            :definedVariables="definedVariables"
+          />
+
+          <UnnnicFormElement
+            v-for="index in templateVariablesCount"
+            :key="index"
+            class="variables-selection__item"
+            :label="
+              $t('new_broadcast.pages.select_variables.variable_label', {
+                index,
+              })
+            "
+          >
+            <UnnnicSelectSmart
+              :options="contactFields"
+              :modelValue="variableOption(index - 1)"
+              autocomplete
+              autocompleteClearOnFocus
+              enableSearchByValue
+              :isLoading="loadingContactFields"
+              :placeholder="
+                $t('new_broadcast.pages.select_variables.variable_placeholder')
+              "
+              @update:model-value="
+                (event: ContactFieldOption[]) =>
+                  handleVariableUpdate(index - 1, event)
+              "
+            />
+          </UnnnicFormElement>
+
+          <UnnnicDisclaimer
+            v-if="hasMappedVariable"
+            class="variables-selection__disclaimer"
+            icon="alert-circle-1-1"
+            scheme="neutral-dark"
+            :text="$t('new_broadcast.pages.select_variables.disclaimer')"
+          />
+        </section>
+
+        <VariablesSelectionHeaderMedia v-if="hasMediaHeader" />
       </section>
 
       <TemplateSelectionPreview
@@ -68,6 +75,7 @@ import { useContactStore } from '@/stores/contact';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import TemplateSelectionPreview from '@/components/NewBroadcast/TemplateSelection/TemplateSelectionPreview.vue';
 import VariablesSelectionOverview from '@/components/NewBroadcast/VariablesSelection/VariablesSelectionOverview.vue';
+import VariablesSelectionHeaderMedia from '@/components/NewBroadcast/VariablesSelection/VariablesSelectionHeaderMedia.vue';
 import type { SelectOption } from '@/types/select';
 import { NewBroadcastPage } from '@/constants/broadcasts';
 import StepActions from '@/components/NewBroadcast/StepActions.vue';
@@ -131,6 +139,10 @@ const variablesToReplace = computed(() => {
   return examples;
 });
 
+const hasMediaHeader = computed(() => {
+  return broadcastsStore.newBroadcast.selectedTemplate?.header?.type !== 'TEXT';
+});
+
 const fetchContactFields = async () => {
   initializeVariableMapping();
   contactStore.fetchContactFields();
@@ -179,13 +191,32 @@ const variableOption = (index: number): ContactFieldOption[] => {
   ];
 };
 
-const canContinue = computed(() => {
+const hasFilledVariables = computed(() => {
+  if (templateVariablesCount.value === 0) {
+    return true;
+  }
+
   return (
     broadcastsStore.newBroadcast.variableMapping &&
     Object.values(broadcastsStore.newBroadcast.variableMapping).every(
       (variable) => variable !== undefined,
     )
   );
+});
+
+const hasFilledHeaderMedia = computed(() => {
+  if (!hasMediaHeader.value) {
+    return true;
+  }
+
+  return (
+    broadcastsStore.newBroadcast.headerMediaFileUrl &&
+    broadcastsStore.newBroadcast.headerMediaFileUrl !== undefined
+  );
+});
+
+const canContinue = computed(() => {
+  return hasFilledVariables.value && hasFilledHeaderMedia.value;
 });
 
 const handleCancel = () => {
@@ -212,6 +243,13 @@ const handleContinue = () => {
     color: $unnnic-color-neutral-darkest;
   }
 
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: $unnnic-spacing-sm;
+    flex: 1;
+  }
+
   &__content {
     display: flex;
     gap: $unnnic-spacing-sm;
@@ -222,7 +260,6 @@ const handleContinue = () => {
     display: flex;
     flex-direction: column;
     gap: $unnnic-spacing-sm;
-    flex: 1;
   }
 
   &__item-label {
