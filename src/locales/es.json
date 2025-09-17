@@ -228,14 +228,20 @@
           "name": "Vista previa de plantilla:",
           "missing": "Seleccione una plantilla para visualizar"
         },
-        "disclaimer": "Solo se pueden seleccionar y enviar plantillas con estado aprobado. Las plantillas pendientes deben esperar a la aprobación de Meta antes de usarse. <a target=\"_blank\" href=\"https://developers.facebook.com/docs/whatsapp/message-templates/guidelines/#approval-process\" class=\"highlight\">Más información en la documentación de Meta</a>"
+        "disclaimer": "Solo se pueden seleccionar y enviar plantillas con estado aprobado. Las plantillas pendientes deben esperar a la aprobación de Meta antes de usarse. <a target=\"_blank\" href=\"https://developers.facebook.com/docs/whatsapp/message-templates/guidelines/#approval-process\" class=\"highlight\">Más información en la documentación de Meta</a>",
+        "actions": {
+          "cancel": "Volver"
+        }        
       },
       "select_variables": {
         "title": "Variables",
         "page_title": "Mapeo de variables",
         "variable_label": "Variable {'{{'}{index}{'}}'}",
         "variable_placeholder": "Selecciona el campo que coincide con esta variable",
-        "disclaimer": "Revisa si cada campo está correctamente mapeado, este es el aspecto que tendrá tu mensaje para cada contacto."
+        "disclaimer": "Revisa si cada campo está correctamente mapeado, este es el aspecto que tendrá tu mensaje para cada contacto.",
+        "actions": {
+          "cancel": "Volver"
+        }
       },
       "confirm_and_send": {
         "title": "Revisar y enviar",
@@ -274,6 +280,9 @@
           "title": "✅ Envío iniciado con éxito ",
           "content": "Tu mensaje está siendo entregado a {contact_count} contactos, <span class=\"highlight\">este proceso puede tomar unos minutos para completarse</span>.\n\nEl progreso y los resultados aparecerán en tu pantalla de inicio a medida que se entreguen los mensajes.",
           "primary_button": "Volver a la home"
+        },
+        "actions": {
+          "cancel": "Volver"
         }
       },
       "contact_import": {

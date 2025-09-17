@@ -228,14 +228,20 @@
           "name": "Prévia de modelo:",
           "missing": "Selecione um modelo para visualizar"
         },
-        "disclaimer": "Apenas modelos com status aprovado podem ser selecionados e enviados. Modelos pendentes devem aguardar a aprovação da Meta antes de serem utilizados. <a target=\"_blank\" href=\"https://developers.facebook.com/docs/whatsapp/message-templates/guidelines/#approval-process\" class=\"highlight\">Saiba mais na documentação da Meta</a>"
+        "disclaimer": "Apenas modelos com status aprovado podem ser selecionados e enviados. Modelos pendentes devem aguardar a aprovação da Meta antes de serem utilizados. <a target=\"_blank\" href=\"https://developers.facebook.com/docs/whatsapp/message-templates/guidelines/#approval-process\" class=\"highlight\">Saiba mais na documentação da Meta</a>",
+        "actions": {
+          "cancel": "Voltar"
+        }
       },
       "select_variables": {
         "title": "Variáveis",
         "page_title": "Mapeamento de variáveis",
         "variable_label": "Variável {'{{'}{index}{'}}'}",
         "variable_placeholder": "Selecione o campo que corresponde a esta variável",
-        "disclaimer": "Verifique se cada campo está mapeado corretamente, este é o aspecto que seu mensagem terá para cada contato."
+        "disclaimer": "Verifique se cada campo está mapeado corretamente, este é o aspecto que seu mensagem terá para cada contato.",
+        "actions": {
+          "cancel": "Voltar"
+        }
       },
       "confirm_and_send": {
         "title": "Revisar e enviar",
@@ -274,6 +280,9 @@
           "title": "✅ Envio iniciado com sucesso ",
           "content": "Sua mensagem está sendo entregada a {contact_count} contatos, <span class=\"highlight\">este processo pode levar alguns minutos para ser concluído</span>.\n\nO progresso e os resultados aparecerão na sua tela inicial à medida que as mensagens forem entregues.",
           "primary_button": "Voltar para a home"
+        },
+        "actions": {
+          "cancel": "Voltar"
         }
       },
       "contact_import": {
