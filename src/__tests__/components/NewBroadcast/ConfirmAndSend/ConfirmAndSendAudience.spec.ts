@@ -34,7 +34,7 @@ const mountWrapper = () => {
   const templatesStore = useTemplatesStore(pinia);
 
   // default pricing
-  templatesStore.teplatePricing = {
+  templatesStore.templatePricing = {
     currency: 'USD',
     rates: { marketing: 1, utility: 2, authentication: 3, service: 4 },
   } as any;
