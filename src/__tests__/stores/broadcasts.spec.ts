@@ -96,7 +96,10 @@ describe('broadcasts store', () => {
     );
     expect(store.broadcastMonthPerformance.totalSent).toBe(42);
     expect(store.broadcastMonthPerformance.successRate).toBe(0.77);
-    expect(store.broadcastMonthPerformance.estimatedCost).toBe('R$50,40');
+    const cost = 1.2 * 42;
+    expect(store.broadcastMonthPerformance.estimatedCost).toBe(
+      `R$${cost.toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
+    );
     expect(store.loadingBroadcastsMonthPerformance).toBe(false);
   });
 
