@@ -41,6 +41,9 @@ const STUBS = {
     props: ['definedVariables'],
     template: '<div data-test="overview">{{ definedVariables.length }}</div>',
   },
+  VariablesSelectionHeaderMedia: {
+    template: '<div data-test="header-media" />',
+  },
   StepActions: {
     props: ['disabled'],
     emits: ['cancel', 'continue'],
@@ -75,9 +78,18 @@ const mountWrapper = (variableCount = 2) => {
     { key: 'age', example: '30' },
   ] as any;
 
+  // stub async fetches called on mount
+  vi.spyOn(contactStore, 'fetchContactFields').mockResolvedValue(
+    undefined as any,
+  );
+  vi.spyOn(contactStore, 'getContactFieldsExamplesByGroups').mockResolvedValue(
+    undefined as any,
+  );
+
   // seed selected template and groups
   broadcastsStore.newBroadcast.selectedTemplate = {
     variableCount,
+    header: { type: 'TEXT' },
   } as any;
   broadcastsStore.newBroadcast.selectedGroups = [] as any;
 
@@ -190,6 +202,34 @@ describe('VariablesSelection.vue', () => {
       .spyOn(broadcastsStore, 'setNewBroadcastPage')
       .mockImplementation(() => {});
 
+    await wrapper.find(SELECTOR.actionsContinue).trigger('click');
+    expect(setPageSpy).toHaveBeenCalledWith(NewBroadcastPage.CONFIRM_AND_SEND);
+  });
+
+  it('requires header media when header is not TEXT and enables after upload', async () => {
+    const { wrapper, broadcastsStore } = mountWrapper(0);
+    // require media header
+    broadcastsStore.newBroadcast.selectedTemplate = {
+      variableCount: 0,
+      header: { type: 'IMAGE' },
+    } as any;
+    await wrapper.vm.$nextTick();
+
+    // disabled because header media missing
+    expect(
+      wrapper.find(SELECTOR.actionsContinue).attributes('disabled'),
+    ).toBeDefined();
+
+    // set media url
+    broadcastsStore.setHeaderMediaFileUrl('https://cdn.example.com/file.jpg');
+    await wrapper.vm.$nextTick();
+    expect(
+      wrapper.find(SELECTOR.actionsContinue).attributes('disabled'),
+    ).toBeUndefined();
+
+    const setPageSpy = vi
+      .spyOn(broadcastsStore, 'setNewBroadcastPage')
+      .mockImplementation(() => {});
     await wrapper.find(SELECTOR.actionsContinue).trigger('click');
     expect(setPageSpy).toHaveBeenCalledWith(NewBroadcastPage.CONFIRM_AND_SEND);
   });

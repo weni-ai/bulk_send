@@ -226,4 +226,20 @@ describe('TemplateSelection.vue', () => {
     await wrapper.find(SELECTOR.actionsContinue).trigger('click');
     expect(setPageSpy).toHaveBeenCalledWith(NewBroadcastPage.CONFIRM_AND_SEND);
   });
+
+  it('continue goes to variables when header has media even with 0 variables', async () => {
+    const { wrapper, broadcastsStore } = mountWithStore();
+    const setPageSpy = vi
+      .spyOn(broadcastsStore, 'setNewBroadcastPage')
+      .mockImplementation(() => {});
+
+    broadcastsStore.setSelectedTemplate({
+      status: TemplateStatus.APPROVED,
+      variableCount: 0,
+      header: { type: 'IMAGE' },
+    } as any);
+    await wrapper.vm.$nextTick();
+    await wrapper.find(SELECTOR.actionsContinue).trigger('click');
+    expect(setPageSpy).toHaveBeenCalledWith(NewBroadcastPage.SELECT_VARIABLES);
+  });
 });
