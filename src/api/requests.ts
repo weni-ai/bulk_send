@@ -1,4 +1,5 @@
 import axios from 'axios';
+import '@/utils/piniaSetup';
 import type { AxiosInstance } from 'axios';
 import camelcaseKeys from 'camelcase-keys';
 import { useAuthStore } from '@/stores/auth';
