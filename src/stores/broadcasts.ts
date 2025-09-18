@@ -117,6 +117,7 @@ export const useBroadcastsStore = defineStore('broadcasts', {
       variables: string[],
       groups: string[],
       attachment?: { url: string; type: string },
+      flow?: FlowReference,
     ) {
       this.loadingCreateBroadcast = true;
       try {
@@ -126,6 +127,7 @@ export const useBroadcastsStore = defineStore('broadcasts', {
           variables,
           groups,
           attachment,
+          flow,
         );
         return response.data;
       } finally {

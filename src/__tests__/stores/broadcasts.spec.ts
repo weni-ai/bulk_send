@@ -208,6 +208,7 @@ describe('broadcasts store', () => {
     const vars = ['@fields.name'];
     const groups = ['g1'];
     const attachment = { url: 'https://cdn/x.jpg', type: 'image' };
+    const flow = { uuid: 'f1', name: 'Flow 1' } as any;
 
     const promise = store.createBroadcast(
       'My Broadcast',
@@ -215,6 +216,7 @@ describe('broadcasts store', () => {
       vars,
       groups,
       attachment,
+      flow,
     );
     expect(store.loadingCreateBroadcast).toBe(true);
     const result = await promise;
@@ -225,6 +227,7 @@ describe('broadcasts store', () => {
       vars,
       groups,
       attachment,
+      flow,
     );
     expect(result).toEqual({ id: 1 });
     expect(store.loadingCreateBroadcast).toBe(false);
