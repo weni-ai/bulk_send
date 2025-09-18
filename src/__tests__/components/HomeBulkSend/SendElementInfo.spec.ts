@@ -10,10 +10,20 @@ const SELECTOR = {
   viewTemplate: '[data-test="view-template"]',
 } as const;
 
+const STUBS = {
+  TemplatePreviewModal: {
+    props: ['modelValue', 'templateId'],
+    emits: ['update:model-value'],
+    template:
+      '<div v-if="modelValue" data-test="template-modal"><button data-test="close" @click="$emit(\'update:model-value\', false)">close</button></div>',
+  },
+} as const;
+
 const mountWrapper = (props: { send: BroadcastStatistic }) =>
   mount(SendElementInfo, {
     props,
     global: {
+      stubs: STUBS,
       mocks: { $t: () => 'stubbed text' },
     },
   });
@@ -49,10 +59,24 @@ describe('SendElementInfo.vue', () => {
     expect(wrapper.text()).toContain('-');
   });
 
-  it('emits view template action via console.log', () => {
+  it('opens and closes TemplatePreviewModal when view template is clicked', async () => {
     const wrapper = mountWrapper({ send: mockSendSent });
-    const consoleSpy = vi.spyOn(console, 'log');
-    wrapper.find(SELECTOR.viewTemplate).trigger('click');
-    expect(consoleSpy).toHaveBeenCalledWith('view template');
+    expect(wrapper.find('[data-test="template-modal"]').exists()).toBe(false);
+
+    await wrapper.find(SELECTOR.viewTemplate).trigger('click');
+    expect(wrapper.find('[data-test="template-modal"]').exists()).toBe(true);
+
+    await wrapper.find('[data-test="close"]').trigger('click');
+    expect(wrapper.find('[data-test="template-modal"]').exists()).toBe(false);
+  });
+
+  it('hides view template button when send has no template', () => {
+    const wrapper = mountWrapper({
+      send: {
+        ...mockSendSent,
+        template: undefined as any,
+      },
+    });
+    expect(wrapper.find(SELECTOR.viewTemplate).exists()).toBe(false);
   });
 });
