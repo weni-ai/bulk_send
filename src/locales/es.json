@@ -229,10 +229,35 @@
         "disclaimer": "Solo se pueden seleccionar y enviar plantillas con estado aprobado. Las plantillas pendientes deben esperar a la aprobación de Meta antes de usarse. <a target=\"_blank\" href=\"https://developers.facebook.com/docs/whatsapp/message-templates/guidelines/#approval-process\" class=\"highlight\">Más información en la documentación de Meta</a>"
       },
       "select_variables": {
-        "title": "Variables"
+        "title": "Variables",
+        "page_title": "Mapeo de variables",
+        "variable_label": "Variable {'{{'}{index}{'}}'}",
+        "variable_placeholder": "Selecciona el campo que coincide con esta variable",
+        "disclaimer": "Revisa si cada campo está correctamente mapeado, este es el aspecto que tendrá tu mensaje para cada contacto."
       },
       "confirm_and_send": {
-        "title": "Revisar y enviar"
+        "title": "Revisar y enviar",
+        "flow_placeholder": "Buscar",
+        "broadcast_name_placeholder": "Nombre del envío",
+        "flow_message": "Este flujo se activará si un contacto responde a este mensaje",
+        "flow_label": "Selecciona un flujo para activar cuando un contacto responde",
+        "broadcast_name_label": "Nombre",
+        "audience": {
+          "title": "Audiencia",
+          "groups": "Grupos seleccionados: {0}",
+          "contacts": "Contactos seleccionados: {0}",
+          "cost": "Costo estimado: {0} ({1})",
+          "unit_cost": "Unidad: {unitCost} por mensaje entregado"
+        },
+        "variables": {
+          "title": "Mapeo de variables"
+        },
+        "reviewed_label": "He revisado los contactos y el contenido. Estoy listo para enviar.",
+        "flow_disclaimer": "Asegúrate de que tu equipo de agentes esté listo para manejar respuestas a este contenido.",
+        "contact_import_pending": {
+          "title": "Importación de contactos en progreso ⏳",
+          "content": "Tu lista de contactos está siendo importada.\n\nUna vez que esté lista, podrás completar el envío.\nMientras tanto, puedes revisar los detalles de tu campaña."
+        }
       },
       "contact_import": {
         "title": "Importar contactos",
@@ -286,6 +311,9 @@
       "actions": {
         "cancel": "Cancelar",
         "continue": "Continuar"
+      },
+      "select_variables_disabled": {
+        "title": "Variables (no hay variables para mapear)"
       }
     }
   }
