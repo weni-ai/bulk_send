@@ -46,7 +46,7 @@ const stubs = {
   RecentSendsList: {
     name: 'RecentSendsList',
     props: ['loading', 'recentSends', 'page', 'pageSize', 'total'],
-    emits: ['update:page'],
+    emits: ['update:page', 'reset'],
     template:
       '<div data-test="recent-sends-list">RecentSendsList - {{ recentSends.length }}</div>',
   },
@@ -390,5 +390,27 @@ describe('RecentSends.vue', () => {
     await nextTick();
     expect(wrapper.find(SELECTOR.missing).exists()).toBe(true);
     expect(wrapper.find(SELECTOR.content).exists()).toBe(false);
+  });
+
+  it('resets all filters when reset is received from the list', async () => {
+    vi.useFakeTimers();
+    const { wrapper, spy } = mountRecentSends({
+      spy: true,
+      broadcasts: { loading: true },
+    });
+    const defaultRange = createDateRangeFromDaysAgo(DEFAULT_DATE_RANGE_DAYS);
+    const { start: expectedStart, end: expectedEnd } = mkIsoRange(defaultRange);
+
+    const list = wrapper.findComponent({ name: 'RecentSendsList' });
+    list.vm.$emit('reset');
+    await vi.advanceTimersByTimeAsync(500);
+    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenLastCalledWith(DEFAULT_PROJECT_UUID, {
+      offset: 0,
+      limit: PAGE_SIZE,
+      start_date: expectedStart,
+      end_date: expectedEnd,
+      name: '',
+    });
   });
 });

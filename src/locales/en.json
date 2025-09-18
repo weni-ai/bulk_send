@@ -81,7 +81,7 @@
         "SENT": "Finished",
         "FAILED": "Failed"
       },
-      "refresh": "Refresh",
+      "refresh": "Clear filters",
       "empty_text": "We couldn’t find any sends matching your search"
     }
   },
@@ -192,7 +192,8 @@
           "removal_tooltip": "Remove selected groups"
         },
         "no_groups": "We couldn’t find any groups matching your search",
-        "pagination_text": "{currentPageOffset} of {total} groups"
+        "pagination_text": "{currentPageOffset} of {total} groups",
+        "clear_filters": "Clear filters"
       },
       "select_template": {
         "title": "Templates",
