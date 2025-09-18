@@ -292,12 +292,19 @@ const handleContinue = () => {
     flex-direction: column;
     gap: $unnnic-spacing-sm;
     flex: 1;
+    width: 67%;
+  }
+
+  &__preview {
+    width: 33%;
+    height: fit-content;
   }
 
   &__content {
     display: flex;
     gap: $unnnic-spacing-sm;
     overflow: auto;
+    height: 100%;
   }
 
   &__variables-list {

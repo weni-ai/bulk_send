@@ -498,6 +498,11 @@ const hasIncompleteMapping = (
     flex-direction: column;
     flex: 1;
     gap: $unnnic-spacing-sm;
+    width: 67%;
+  }
+
+  &__preview {
+    width: 33%;
   }
 
   &__info {

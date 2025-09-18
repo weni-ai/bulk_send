@@ -178,10 +178,15 @@ const handleSortUpdate = (newSort: { header: string; order: string }) => {
   }
 
   &__templates {
+    width: 67%;
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: $unnnic-spacing-ant;
+  }
+
+  &__preview {
+    width: 33%;
   }
 
   &__disclaimer {
