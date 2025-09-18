@@ -16,6 +16,7 @@
         <UnnnicCheckbox
           size="ant"
           :modelValue="selectAll"
+          :disabled="disabledSelectAll"
           @update:model-value="handleSelectAll"
         />
       </template>
@@ -122,6 +123,10 @@ const fieldTypeOptions = [
 
 const tableRows = ref<Row[]>([]);
 const selectAll: Ref<false | 'less'> = ref('less');
+
+const disabledSelectAll = computed(() => {
+  return tableRows.value.every(disabledItemSelection);
+});
 
 onMounted(() => {
   tableRows.value = initTableRows();
