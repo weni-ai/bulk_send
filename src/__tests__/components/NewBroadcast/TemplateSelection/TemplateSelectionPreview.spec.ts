@@ -1,25 +1,17 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { nextTick } from 'vue';
 import { mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import TemplateSelectionPreview from '@/components/NewBroadcast/TemplateSelection/TemplateSelectionPreview.vue';
 import { useBroadcastsStore } from '@/stores/broadcasts';
-import type { Template } from '@/types/template';
-import { TemplateCategory, TemplateStatus } from '@/constants/templates';
 
-const SELECTOR = {
-  title: '[data-test="template-preview-title"]',
-  name: '[data-test="template-preview-name"]',
-  nameValue: '[data-test="template-preview-name-value"]',
-  content: '[data-test="template-preview-content"]',
-  missing: '[data-test="template-preview-missing"]',
-  preview: '[data-test="template-preview-component"]',
-} as const;
+vi.mock('vue-i18n', () => ({
+  useI18n: () => ({ t: (key: string) => key }),
+}));
 
-const stubs = {
+const STUBS = {
   UnnnicTemplatePreview: {
     props: ['template'],
-    // Expose mapped template data via attributes for assertions
     template:
       '<div\n' +
       '  data-test="template-preview-component"\n' +
@@ -29,62 +21,91 @@ const stubs = {
       '  :data-footer="template && template.footer ? template.footer : \'\'"\n' +
       '/>',
   },
-};
+} as const;
 
-const mountWithStore = () => {
+const SELECTOR = {
+  root: '[data-test="template-preview"]',
+  header: '[data-test="template-preview-header"]',
+  title: '[data-test="template-preview-title"]',
+  name: '[data-test="template-preview-name"]',
+  nameValue: '[data-test="template-preview-name-value"]',
+  content: '[data-test="template-preview-content"]',
+  missing: '[data-test="template-preview-missing"]',
+  previewComponent: '[data-test="template-preview-component"]',
+} as const;
+
+const mountWrapper = (opts?: {
+  withTemplate?: boolean;
+  variables?: (string | undefined)[];
+}) => {
   const pinia = createPinia();
   setActivePinia(pinia);
   const broadcastsStore = useBroadcastsStore(pinia);
+
+  if (opts?.withTemplate) {
+    broadcastsStore.newBroadcast.selectedTemplate = {
+      name: 'Welcome',
+      body: { text: 'Hello {{1}} and {{2}}' },
+      footer: { text: 'Footer' },
+      header: { type: 'TEXT', text: 'Header' },
+      buttons: [],
+    } as any;
+  } else {
+    broadcastsStore.newBroadcast.selectedTemplate = undefined;
+  }
+
   const wrapper = mount(TemplateSelectionPreview, {
-    global: {
-      plugins: [pinia],
-      stubs,
-      mocks: { $t: (key: string) => key },
-    },
+    props: { variablesToReplace: opts?.variables },
+    global: { plugins: [pinia], stubs: STUBS, mocks: { $t: (k: string) => k } },
   });
   return { wrapper, broadcastsStore };
 };
 
 describe('TemplateSelectionPreview.vue', () => {
-  it('renders empty state when no template selected', () => {
-    const { wrapper } = mountWithStore();
+  it('renders title and missing state when no template selected', () => {
+    const { wrapper } = mountWrapper({ withTemplate: false });
     expect(wrapper.find(SELECTOR.title).exists()).toBe(true);
     expect(wrapper.find(SELECTOR.missing).exists()).toBe(true);
-    expect(wrapper.find(SELECTOR.name).exists()).toBe(false);
-    expect(wrapper.find(SELECTOR.preview).exists()).toBe(false);
+    expect(wrapper.find(SELECTOR.previewComponent).exists()).toBe(false);
   });
 
-  it('renders preview with mapped template when a template is selected', async () => {
-    const { wrapper, broadcastsStore } = mountWithStore();
+  it('renders name and UnnnicTemplatePreview when template selected', () => {
+    const { wrapper } = mountWrapper({ withTemplate: true });
+    expect(wrapper.find(SELECTOR.name).exists()).toBe(true);
+    expect(wrapper.find(SELECTOR.nameValue).text()).toBe('Welcome');
+    expect(wrapper.find(SELECTOR.previewComponent).exists()).toBe(true);
+  });
 
-    const template: Template = {
-      uuid: 't-1',
+  it('formats body to bold placeholders and replaces with variables', () => {
+    const { wrapper } = mountWrapper({
+      withTemplate: true,
+      variables: ['Alice', undefined],
+    });
+
+    const bodyText = wrapper
+      .find(SELECTOR.previewComponent)
+      .attributes('data-body');
+    // {{1}} becomes bold style marker *{{1}}* then replaced with Alice
+    expect(bodyText).toContain('Hello *Alice* and *{{2}}*');
+  });
+
+  it('maps non-TEXT header to MEDIA, keeps mediaType, and includes footer', async () => {
+    const { wrapper, broadcastsStore } = mountWrapper({ withTemplate: false });
+
+    broadcastsStore.setSelectedTemplate({
       name: 'Welcome Msg',
-      createdOn: '2024-01-01T00:00:00Z',
-      category: TemplateCategory.MARKETING,
-      language: 'en',
-      header: { type: 'IMAGE' }, // should be mapped to MEDIA with mediaType IMAGE
-      body: { text: 'Hello, world!' },
+      header: { type: 'IMAGE' },
+      body: { text: 'Hello' },
       footer: { text: 'Bye' },
-      buttons: [{ type: 'TEXT', text: 'OK' }],
-      status: TemplateStatus.APPROVED,
-      variableCount: 0,
-    };
+      buttons: [],
+    } as any);
 
-    broadcastsStore.setSelectedTemplate(template);
     await nextTick();
 
-    // name and preview should render
-    expect(wrapper.find(SELECTOR.name).exists()).toBe(true);
-    expect(wrapper.find(SELECTOR.nameValue).text()).toBe('Welcome Msg');
-    const preview = wrapper.find(SELECTOR.preview);
+    const preview = wrapper.find(SELECTOR.previewComponent);
     expect(preview.exists()).toBe(true);
-
-    // header mapping assertions
     expect(preview.attributes('data-header-type')).toBe('MEDIA');
     expect(preview.attributes('data-media-type')).toBe('IMAGE');
-    // body/footer mapping assertions
-    expect(preview.attributes('data-body')).toBe('Hello, world!');
     expect(preview.attributes('data-footer')).toBe('Bye');
   });
 });

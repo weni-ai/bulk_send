@@ -57,6 +57,10 @@ import { computed } from 'vue';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import { formatTemplateToPreview } from '@/utils/templates';
 
+const props = defineProps<{
+  variablesToReplace?: (string | undefined)[];
+}>();
+
 const broadcastsStore = useBroadcastsStore();
 
 const selectedTemplate = computed(() => {
@@ -66,8 +70,22 @@ const selectedTemplate = computed(() => {
 
   const selectedTemplate = broadcastsStore.newBroadcast.selectedTemplate;
 
-  return formatTemplateToPreview(selectedTemplate);
+  return formatTemplateToPreview(selectedTemplate, bodyFormatter);
 });
+
+const bodyFormatter = (body: string) => {
+  let newBody = body.replace(/{{(\d+)}}/g, '*{{$1}}*');
+
+  if (props.variablesToReplace && props.variablesToReplace.length > 0) {
+    props.variablesToReplace.forEach((variable, index) => {
+      if (variable) {
+        newBody = newBody.replace(`{{${index + 1}}}`, variable);
+      }
+    });
+  }
+
+  return newBody;
+};
 </script>
 
 <style scoped lang="scss">
@@ -119,6 +137,21 @@ const selectedTemplate = computed(() => {
 
     @include unnnic-text-body-gt;
     color: $unnnic-color-neutral-cloudy;
+  }
+
+  &__content-preview {
+    :deep(strong) {
+      font-weight: $unnnic-font-weight-bold;
+      color: $unnnic-color-neutral-dark;
+    }
+
+    :deep(i) {
+      font-style: italic;
+    }
+
+    :deep(tt) {
+      font-family: monospace;
+    }
   }
 }
 </style>
