@@ -81,18 +81,15 @@ const templateUnitCost = computed(() => {
     return 0;
   }
 
-  switch (selectedTemplate.category) {
-    case TemplateCategory.MARKETING:
-      return templatesStore.templatePricing.rates.marketing;
-    case TemplateCategory.UTILITY:
-      return templatesStore.templatePricing.rates.utility;
-    case TemplateCategory.AUTHENTICATION:
-      return templatesStore.templatePricing.rates.authentication;
-    case TemplateCategory.SERVICE:
-      return templatesStore.templatePricing.rates.service;
-    default:
-      return 0;
-  }
+  const rates = templatesStore.templatePricing.rates;
+  const categoryToRate = {
+    [TemplateCategory.MARKETING]: rates.marketing,
+    [TemplateCategory.UTILITY]: rates.utility,
+    [TemplateCategory.AUTHENTICATION]: rates.authentication,
+    [TemplateCategory.SERVICE]: rates.service,
+  };
+
+  return categoryToRate[selectedTemplate.category] ?? 0;
 });
 
 const cost = computed(() => {
