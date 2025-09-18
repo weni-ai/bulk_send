@@ -22,7 +22,8 @@ const STUBS = {
   },
   UnnnicDisclaimer: {
     props: ['icon', 'text'],
-    template: '<div data-test="disclaimer">{{ text }}</div>',
+    template:
+      '<button data-test="disclaimer" @click="$emit(\'click\', $event)">{{ text }}</button>',
   },
 } as const;
 
@@ -49,7 +50,7 @@ const mountWrapper = () => {
     fields: [],
     errors: [],
     file: new File(['x'], 'name.csv', { type: 'text/csv' }),
-    duplicatedContactsCount: 3,
+    duplicates: { count: 3, downloadUrl: 'https://example.com/d.csv' },
   } as any;
 
   const listAllGroupsSpy = vi
@@ -78,5 +79,16 @@ describe('ContactImportProcessing.vue', () => {
     // Wait a tick to allow onMounted logic to run
     await wrapper.vm.$nextTick();
     expect(contactImportStore.importProcessing.groupName).toBe('name');
+  });
+
+  it('when disclaimer is clicked, opens duplicates download url in new tab', async () => {
+    const { wrapper } = mountWrapper();
+    // mock window.open
+    const openSpy = vi.spyOn(window, 'open').mockReturnValue(null as any);
+
+    await wrapper.find(SELECTOR.disclaimer).trigger('click');
+    expect(openSpy).toHaveBeenCalledWith('https://example.com/d.csv', '_blank');
+
+    openSpy.mockRestore();
   });
 });

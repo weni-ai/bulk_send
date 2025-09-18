@@ -19,6 +19,7 @@
             },
           )
         "
+        @click="(event: Event) => downloadDuplicates(event)"
       />
     </header>
     <section class="contact-import-processing__content">
@@ -43,7 +44,7 @@ const groupsStore = useGroupsStore();
 const projectStore = useProjectStore();
 
 const duplicatedContactsCount = computed(() => {
-  return contactImportStore.import?.duplicatedContactsCount || 2;
+  return contactImportStore.import?.duplicates.count || 0;
 });
 
 onBeforeMount(() => {
@@ -66,6 +67,14 @@ const listAllGroups = async () => {
     await groupsStore.listAllGroups(projectStore.project.uuid);
   } catch (error) {
     console.error(error); // TODO: handle error
+  }
+};
+
+const downloadDuplicates = (event: Event) => {
+  event.preventDefault();
+  const target = event.target as HTMLElement;
+  if (target.closest('button')) {
+    window.open(contactImportStore.import?.duplicates.downloadUrl, '_blank');
   }
 };
 </script>

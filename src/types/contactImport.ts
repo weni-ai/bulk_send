@@ -8,7 +8,13 @@ export interface ContactImport {
   fields: ContactField[];
   errors: string[];
   file: File;
-  duplicatedContactsCount: number;
+  duplicates: ContactImportDuplicate;
+}
+
+export interface ContactImportDuplicate {
+  count: number;
+  downloadUrl: string;
+  error?: string;
 }
 
 export enum ContactImportColumnType {
@@ -41,10 +47,12 @@ export interface ContactImportColumn {
 export interface ContactImportState {
   loadingContactImport: boolean;
   loadingConfirmContactImport: boolean;
+  loadingGetImportInfo: boolean;
   import?: ContactImport;
   importProcessing: ContactImportProcessing;
   abortController?: AbortController;
   contactImportInfo: ContactImportInfo;
+  contactImportGroup?: Group;
 }
 export interface ContactImportInfo {
   status: ContactImportStatus;

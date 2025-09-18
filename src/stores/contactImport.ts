@@ -17,6 +17,7 @@ export const useContactImportStore = defineStore('contactImport', {
       import: undefined,
       loadingContactImport: false,
       loadingConfirmContactImport: false,
+      loadingGetImportInfo: false,
       abortController: undefined as AbortController | undefined,
       importProcessing: {
         groupMode: ContactImportGroupMode.NEW,
@@ -33,6 +34,7 @@ export const useContactImportStore = defineStore('contactImport', {
         errors: [],
         timeTaken: 0,
       },
+      contactImportGroup: undefined,
     }) as ContactImportState,
   actions: {
     async uploadContactImport(
@@ -110,10 +112,17 @@ export const useContactImportStore = defineStore('contactImport', {
         this.loadingConfirmContactImport = false;
       }
     },
-    async checkImportFinished(importId: number) {
-      // get updated improt info
-      const response = await ContactImportAPI.getContactImport(importId);
-      this.contactImportInfo = response.data;
+    async getImportInfo(importId: number) {
+      this.loadingGetImportInfo = true;
+      try {
+        const response = await ContactImportAPI.getContactImport(importId);
+        this.contactImportInfo = response.data.info;
+        this.contactImportGroup = response.data.group;
+      } catch (error) {
+        console.error(error); // TODO: Handle error
+      } finally {
+        this.loadingGetImportInfo = false;
+      }
     },
     clearImport() {
       this.import = undefined;
