@@ -195,7 +195,6 @@
         },
         "no_groups": "We couldn’t find any groups matching your search",
         "pagination_text": "{currentPageOffset} of {total} groups",
-        "refresh": "Refresh",
         "clear_filters": "Clear filters"
       },
       "select_template": {

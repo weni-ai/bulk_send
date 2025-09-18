@@ -172,7 +172,7 @@ const handleSortUpdate = (newSort: { header: string; order: string }) => {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 10px; // fixed gap as set in the design
+    gap: $unnnic-spacing-ant;
   }
 
   &__disclaimer {
