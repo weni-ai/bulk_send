@@ -483,7 +483,8 @@ const hasIncompleteMapping = (
   }
 
   &__content {
-    display: flex;
+    display: grid;
+    grid-template-columns: 8fr 4fr;
     gap: $unnnic-spacing-sm;
   }
 

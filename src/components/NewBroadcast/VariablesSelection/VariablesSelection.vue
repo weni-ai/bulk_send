@@ -294,10 +294,16 @@ const handleContinue = () => {
     flex: 1;
   }
 
+  &__preview {
+    height: fit-content;
+  }
+
   &__content {
-    display: flex;
+    display: grid;
+    grid-template-columns: 8fr 4fr;
     gap: $unnnic-spacing-sm;
     overflow: auto;
+    height: 100%;
   }
 
   &__variables-list {
