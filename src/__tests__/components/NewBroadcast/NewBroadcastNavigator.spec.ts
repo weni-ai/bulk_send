@@ -52,4 +52,23 @@ describe('NewBroadcastNavigator.vue', () => {
       'new_broadcast.pages.confirm_and_send.title',
     );
   });
+
+  it('disables variables page label when on confirm step and no variables', async () => {
+    const { wrapper, broadcastsStore } = mountWithStore();
+    // Confirm step without selected template (no variableCount)
+    broadcastsStore.setNewBroadcastPage(NewBroadcastPage.CONFIRM_AND_SEND);
+    await nextTick();
+
+    const nav = wrapper.find(SELECTOR.navigator);
+    const pages = nav.attributes('data-pages')?.split('|') as string[];
+    expect(pages[2]).toBe(
+      'new_broadcast.pages.select_variables_disabled.title',
+    );
+
+    // When a template with variables is selected, label reverts to normal
+    broadcastsStore.setSelectedTemplate({ variableCount: 2 } as any);
+    await nextTick();
+    const pages2 = nav.attributes('data-pages')?.split('|') as string[];
+    expect(pages2[2]).toBe('new_broadcast.pages.select_variables.title');
+  });
 });

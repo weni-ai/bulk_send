@@ -1,6 +1,9 @@
 <template>
   <UnnnicNavigator
-    class="new-broadcast-navigator"
+    :class="{
+      'new-broadcast-navigator': true,
+      'new-broadcast-navigator--disabled-variables-page': disabledVariablesPage,
+    }"
     :pages="pages"
     :activePage="currentPage"
   />
@@ -16,21 +19,46 @@ const { t } = useI18n();
 
 const broadcastsStore = useBroadcastsStore();
 
-const getPageLabel = (page: NewBroadcastPage) => {
-  return t(`new_broadcast.pages.${page}.title`);
-};
-
-const pages = Object.values(NewBroadcastPage).map((page) => getPageLabel(page));
+const disabledVariablesPage = computed(() => {
+  return (
+    broadcastsStore.newBroadcast.currentPage ===
+      NewBroadcastPage.CONFIRM_AND_SEND &&
+    !broadcastsStore.newBroadcast.selectedTemplate?.variableCount
+  );
+});
 
 const currentPage = computed(() => {
   return getPageLabel(broadcastsStore.newBroadcast.currentPage);
 });
+
+const pages = computed(() =>
+  Object.values(NewBroadcastPage).map((page) => getPageLabel(page)),
+);
+
+const getPageLabel = (page: NewBroadcastPage) => {
+  if (
+    disabledVariablesPage.value &&
+    page === NewBroadcastPage.SELECT_VARIABLES
+  ) {
+    return t('new_broadcast.pages.select_variables_disabled.title');
+  }
+
+  return t(`new_broadcast.pages.${page}.title`);
+};
 </script>
 
 <style scoped lang="scss">
 .new-broadcast-navigator {
   :deep(.unnnic-navigator-pages__page) {
     max-width: unset;
+  }
+
+  &--disabled-variables-page {
+    :nth-child(3) {
+      :deep(.unnnic-navigator-pages__page-progress) {
+        background-color: $unnnic-color-neutral-clean;
+      }
+    }
   }
 }
 </style>
