@@ -12,7 +12,7 @@ export const useTemplatesStore = defineStore('templates', {
     loadingTemplatePricing: false,
     templates: <Template[]>[],
     templatesCount: 0,
-    teplatePricing: <TemplatePricing>{
+    templatePricing: <TemplatePricing>{
       currency: 'USD',
       rates: {
         marketing: 0,
@@ -41,7 +41,7 @@ export const useTemplatesStore = defineStore('templates', {
       try {
         const response = await TemplatesAPI.getTemplatePricing();
         const rates = response.data.rates;
-        this.teplatePricing = {
+        this.templatePricing = {
           currency: response.data.currency,
           rates: {
             marketing: Number(rates.marketing),

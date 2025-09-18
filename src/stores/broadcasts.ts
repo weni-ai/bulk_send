@@ -12,6 +12,8 @@ import type { Group } from '@/types/groups';
 import type { Template } from '@/types/template';
 import type { ContactField } from '@/types/contacts';
 import type { FlowReference } from '@/types/flow';
+import { useTemplatesStore } from '@/stores/templates';
+import { Currency } from '@/constants/currency';
 
 export const useBroadcastsStore = defineStore('broadcasts', {
   state: () => ({
@@ -23,7 +25,7 @@ export const useBroadcastsStore = defineStore('broadcasts', {
     broadcastsStatistics: <BroadcastStatistic[]>[],
     broadcastMonthPerformance: <BroadcastsMonthPerformance>{
       totalSent: 0,
-      estimatedCost: 0,
+      estimatedCost: '-',
       successRate: 0,
     },
     newBroadcast: <NewBroadcastState>{
@@ -63,16 +65,22 @@ export const useBroadcastsStore = defineStore('broadcasts', {
     },
     async getBroadcastsMonthPerformance(projectUuid: string) {
       this.loadingBroadcastsMonthPerformance = true;
+
+      const templateStore = useTemplatesStore();
+      await templateStore.getTemplatePricing();
+
       try {
         const response =
           await BroadcastsAPI.getBroadcastsMonthPerformance(projectUuid);
 
         const stats = response.data.last30DaysStats;
-        const cost = 123; // TODO: calculate cost from the response when API brings the required fields
+        const cost =
+          templateStore.templatePricing.rates.marketing * stats.totalSent;
+        const currency = Currency[templateStore.templatePricing.currency];
 
         this.broadcastMonthPerformance = {
           totalSent: stats.totalSent,
-          estimatedCost: cost,
+          estimatedCost: `${currency}${cost.toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
           successRate: response.data.successRate30Days,
         };
       } finally {

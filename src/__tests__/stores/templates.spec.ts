@@ -66,8 +66,8 @@ describe('templates store', () => {
     await promise;
 
     expect(mocked.getTemplatePricing).toHaveBeenCalled();
-    expect(store.teplatePricing.currency).toBe('BRL');
-    expect(store.teplatePricing.rates).toEqual({
+    expect(store.templatePricing.currency).toBe('BRL');
+    expect(store.templatePricing.rates).toEqual({
       marketing: 1.2,
       utility: 2.5,
       authentication: 3,

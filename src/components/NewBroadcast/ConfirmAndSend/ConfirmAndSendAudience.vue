@@ -83,13 +83,13 @@ const templateUnitCost = computed(() => {
 
   switch (selectedTemplate.category) {
     case TemplateCategory.MARKETING:
-      return templatesStore.teplatePricing.rates.marketing;
+      return templatesStore.templatePricing.rates.marketing;
     case TemplateCategory.UTILITY:
-      return templatesStore.teplatePricing.rates.utility;
+      return templatesStore.templatePricing.rates.utility;
     case TemplateCategory.AUTHENTICATION:
-      return templatesStore.teplatePricing.rates.authentication;
+      return templatesStore.templatePricing.rates.authentication;
     case TemplateCategory.SERVICE:
-      return templatesStore.teplatePricing.rates.service;
+      return templatesStore.templatePricing.rates.service;
     default:
       return 0;
   }
@@ -97,12 +97,12 @@ const templateUnitCost = computed(() => {
 
 const cost = computed(() => {
   const totalCost = contactCount.value * templateUnitCost.value;
-  const currency = Currency[templatesStore.teplatePricing.currency];
+  const currency = Currency[templatesStore.templatePricing.currency];
   return `${currency}${totalCost.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
 });
 
 const unitCost = computed(() => {
-  const currency = Currency[templatesStore.teplatePricing.currency];
+  const currency = Currency[templatesStore.templatePricing.currency];
 
   const unitCost = `${currency}${templateUnitCost.value.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
 
