@@ -31,31 +31,31 @@
       "metrics": {
         "sent": {
           "label": "Enviadas",
-          "hint": "Mock hint",
+          "hint": "Quantidade de envios processados pela plataforma Weni e encaminhados para a Meta.",
           "category": "Enviadas"
         },
         "delivered": {
           "label": "Entregues",
-          "hint": "Mock hint",
+          "hint": "Mensagens confirmadas como entregues ao dispositivo do usuário. Observação: nem todos os usuários permitem o compartilhamento do status de entrega. Por questões de privacidade, esses casos não entram no cálculo.",
           "category": "Entregues"
         },
         "estimated_cost": {
           "label": "Custo estimado",
-          "hint": "Mock hint"
+          "hint": "Valor estimado considerando o custo unitário de {currency} {cost} por template. Observação: este cálculo não contempla diferentes precificações, variações cambiais ou impostos."
         },
         "read": {
           "label": "Lidas",
-          "hint": "Mock hint",
+          "hint": "Quantidade de mensagens confirmadas como lidas pelo destinatário. Observação: nem todos os usuários permitem o compartilhamento do status de leitura. Por questões de privacidade, esses casos não entram no cálculo.",
           "category": "Lidas"
         },
         "clicked": {
           "label": "Cliques",
-          "hint": "Mock hint",
+          "hint": "Envios que foram aceitos e enviados pela Meta.",
           "category": "Cliques"
         },
         "failed": {
           "label": "Falhas",
-          "hint": "Mock hint",
+          "hint": "Falhas de envio, que podem ocorrer tanto no processamento da Weni quanto na entrega pela Meta. Diversos fatores podem causar falha (ex.: número inválido, usuário sem WhatsApp ativo, instabilidade temporária).",
           "category": "Falhas"
         },
         "actions": {
