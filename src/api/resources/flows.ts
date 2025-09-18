@@ -24,14 +24,10 @@ export default {
     const results = [];
     let url = '/api/v2/internal_flows';
 
-    while (true) {
+    while (url) {
       const response = await request.$http.get(url, { params });
       results.push(...response.data.results);
       url = response.data.next;
-
-      if (url === null) {
-        break;
-      }
     }
 
     return results;
