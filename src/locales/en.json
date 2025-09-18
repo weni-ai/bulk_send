@@ -228,14 +228,20 @@
           "name": "Template preview:",
           "missing": "Choose a template to preview"
         },
-        "disclaimer": "Only templates with an approved status can be selected and sent. Pending templates must wait for Meta’s approval before they can be used. <a target=\"_blank\" href=\"https://developers.facebook.com/docs/whatsapp/message-templates/guidelines/#approval-process\" class=\"highlight\">Learn more in Meta’s documentation</a>"
+        "disclaimer": "Only templates with an approved status can be selected and sent. Pending templates must wait for Meta’s approval before they can be used. <a target=\"_blank\" href=\"https://developers.facebook.com/docs/whatsapp/message-templates/guidelines/#approval-process\" class=\"highlight\">Learn more in Meta’s documentation</a>",
+        "actions": {
+          "cancel": "Back"
+        }
       },
       "select_variables": {
         "title": "Variables",
         "page_title": "Variable mapping",
         "variable_label": "Variable {'{{'}{index}{'}}'}",
         "variable_placeholder": "Select the field that matches this variable",
-        "disclaimer": "Check if each field is correctly mapped, this is how your message will look to each contact."
+        "disclaimer": "Check if each field is correctly mapped, this is how your message will look to each contact.",
+        "actions": {
+          "cancel": "Back"
+        }
       },
       "confirm_and_send": {
         "title": "Review and send",
@@ -274,6 +280,9 @@
           "title": "✅ Send initiated successfully ",
           "content": "Your message is being delivered to {contact_count} contacts, <span class=\"highlight\">this process may take a few minutes to complete</span>.\n\nProgress and results will appear on your home screen as messages are delivered.",
           "primary_button": "Back to home"
+        },
+        "actions": {
+          "cancel": "Back"
         }
       },
       "contact_import": {

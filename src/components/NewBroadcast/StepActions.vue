@@ -6,7 +6,7 @@
       type="tertiary"
       @click="$emit('cancel')"
     >
-      {{ $t('new_broadcast.pages.actions.cancel') }}
+      {{ cancelText || $t('new_broadcast.pages.actions.cancel') }}
     </UnnnicButton>
     <UnnnicButton
       data-test="actions-continue"
@@ -24,6 +24,7 @@
 defineProps<{
   disabled?: boolean;
   loading?: boolean;
+  cancelText?: string;
 }>();
 
 defineEmits<{

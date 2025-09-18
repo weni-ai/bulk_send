@@ -1,44 +1,48 @@
 <template>
   <section class="template-selection">
-    <h1 class="template-selection__title">
-      {{ $t('new_broadcast.pages.select_template.page_title') }}
-    </h1>
+    <section class="template-selection__main">
+      <h1 class="template-selection__title">
+        {{ $t('new_broadcast.pages.select_template.page_title') }}
+      </h1>
 
-    <UnnnicDisclaimer
-      class="template-selection__disclaimer"
-      icon="alert-circle-1-1"
-      scheme="neutral-dark"
-      :text="$t('new_broadcast.pages.select_template.disclaimer')"
-    />
+      <UnnnicDisclaimer
+        class="template-selection__disclaimer"
+        icon="alert-circle-1-1"
+        scheme="neutral-dark"
+        :text="$t('new_broadcast.pages.select_template.disclaimer')"
+      />
 
-    <section class="template-selection__content">
-      <section class="template-selection__templates">
-        <TemplateSelectionFilters
-          class="template-selection__templates-filters"
-          :search="search"
-          :channel="channel"
-          @update:search="handleSearchUpdate"
-          @update:channel="handleChannelUpdate"
-        />
+      <section class="template-selection__content">
+        <section class="template-selection__templates">
+          <TemplateSelectionFilters
+            class="template-selection__templates-filters"
+            :search="search"
+            :channel="channel"
+            @update:search="handleSearchUpdate"
+            @update:channel="handleChannelUpdate"
+          />
 
-        <TemplateSelectionList
-          :page="page"
-          :pageSize="PAGE_SIZE"
-          :total="templatesTotal"
-          class="template-selection__templates-list"
-          @update:page="handlePageUpdate"
-          @update:sort="handleSortUpdate"
-        />
+          <TemplateSelectionList
+            :page="page"
+            :pageSize="PAGE_SIZE"
+            :total="templatesTotal"
+            class="template-selection__templates-list"
+            @update:page="handlePageUpdate"
+            @update:sort="handleSortUpdate"
+          />
+        </section>
+
+        <TemplateSelectionPreview class="template-selection__preview" />
       </section>
-
-      <TemplateSelectionPreview class="template-selection__preview" />
     </section>
-
-    <StepActions
-      :disabled="!canContinue"
-      @cancel="handleCancel"
-      @continue="handleContinue"
-    />
+    <footer class="template-selection__footer">
+      <StepActions
+        :disabled="!canContinue"
+        :cancelText="$t('new_broadcast.pages.select_template.actions.cancel')"
+        @cancel="handleCancel"
+        @continue="handleContinue"
+      />
+    </footer>
   </section>
 </template>
 
@@ -143,6 +147,15 @@ const handleSortUpdate = (newSort: { header: string; order: string }) => {
   flex-direction: column;
   gap: $unnnic-spacing-sm;
   flex: 1;
+  overflow: auto;
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: $unnnic-spacing-sm;
+    flex: 1;
+    overflow: auto;
+  }
 
   &__title {
     @include unnnic-text-body-lg;

@@ -1,142 +1,154 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
   <section class="confirm-and-send">
-    <h1 class="confirm-and-send__title">
-      {{ $t('new_broadcast.pages.confirm_and_send.title') }}
-    </h1>
+    <section class="confirm-and-send__main">
+      <h1 class="confirm-and-send__title">
+        {{ $t('new_broadcast.pages.confirm_and_send.title') }}
+      </h1>
 
-    <section class="confirm-and-send__content">
-      <section class="confirm-and-send__form">
-        <UnnnicFormElement
-          :label="
-            $t('new_broadcast.pages.confirm_and_send.broadcast_name_label')
-          "
-        >
-          <UnnnicInput
-            :modelValue="broadcastName"
-            :placeholder="
-              $t(
-                'new_broadcast.pages.confirm_and_send.broadcast_name_placeholder',
-              )
+      <section class="confirm-and-send__content">
+        <section class="confirm-and-send__form">
+          <UnnnicFormElement
+            :label="
+              $t('new_broadcast.pages.confirm_and_send.broadcast_name_label')
             "
-            @update:model-value="handleBroadcastNameUpdate"
-          />
-        </UnnnicFormElement>
+          >
+            <UnnnicInput
+              :modelValue="broadcastName"
+              :placeholder="
+                $t(
+                  'new_broadcast.pages.confirm_and_send.broadcast_name_placeholder',
+                )
+              "
+              @update:model-value="handleBroadcastNameUpdate"
+            />
+          </UnnnicFormElement>
 
-        <UnnnicFormElement
-          v-if="projectType === ProjectType.FLOW"
-          :label="$t('new_broadcast.pages.confirm_and_send.flow_label')"
-          :message="$t('new_broadcast.pages.confirm_and_send.flow_message')"
-        >
-          <UnnnicSelectSmart
-            :options="projectFlowsOptions"
-            :modelValue="selectedFlowOption"
-            autocomplete
-            autocompleteClearOnFocus
-            enableSearchByValue
-            :placeholder="
-              $t('new_broadcast.pages.confirm_and_send.flow_placeholder')
+          <UnnnicFormElement
+            v-if="projectType === ProjectType.FLOW"
+            :label="$t('new_broadcast.pages.confirm_and_send.flow_label')"
+            :message="$t('new_broadcast.pages.confirm_and_send.flow_message')"
+          >
+            <UnnnicSelectSmart
+              :options="projectFlowsOptions"
+              :modelValue="selectedFlowOption"
+              autocomplete
+              autocompleteClearOnFocus
+              enableSearchByValue
+              :placeholder="
+                $t('new_broadcast.pages.confirm_and_send.flow_placeholder')
+              "
+              :isLoading="loadingFlows"
+              @update:model-value="handleFlowSelectUpdate"
+            />
+          </UnnnicFormElement>
+          <UnnnicDisclaimer
+            v-else
+            icon="alert-circle-1-1"
+            :text="$t('new_broadcast.pages.confirm_and_send.flow_disclaimer')"
+          />
+
+          <section class="confirm-and-send__info">
+            <ConfirmAndSendAudience class="confirm-and-send__audience" />
+
+            <VariablesSelectionOverview
+              v-if="hasMappedVariable"
+              class="confirm-and-send__variables"
+              :title="
+                $t('new_broadcast.pages.confirm_and_send.variables.title')
+              "
+              :definedVariables="definedVariables"
+            />
+          </section>
+
+          <UnnnicCheckbox
+            :modelValue="reviewed"
+            size="md"
+            :textRight="
+              $t('new_broadcast.pages.confirm_and_send.reviewed_label')
             "
-            :isLoading="loadingFlows"
-            @update:model-value="handleFlowSelectUpdate"
-          />
-        </UnnnicFormElement>
-        <UnnnicDisclaimer
-          v-else
-          icon="alert-circle-1-1"
-          :text="$t('new_broadcast.pages.confirm_and_send.flow_disclaimer')"
-        />
-
-        <section class="confirm-and-send__info">
-          <ConfirmAndSendAudience class="confirm-and-send__audience" />
-
-          <VariablesSelectionOverview
-            v-if="hasMappedVariable"
-            class="confirm-and-send__variables"
-            :title="$t('new_broadcast.pages.confirm_and_send.variables.title')"
-            :definedVariables="definedVariables"
+            @update:model-value="handleReviewedUpdate"
           />
         </section>
 
-        <UnnnicCheckbox
-          :modelValue="reviewed"
-          size="md"
-          :textRight="$t('new_broadcast.pages.confirm_and_send.reviewed_label')"
-          @update:model-value="handleReviewedUpdate"
-        />
+        <TemplateSelectionPreview class="confirm-and-send__preview" />
       </section>
 
-      <TemplateSelectionPreview class="confirm-and-send__preview" />
-    </section>
-
-    <UnnnicModalDialog
-      :modelValue="importNotCompleted"
-      :title="
-        $t('new_broadcast.pages.confirm_and_send.contact_import_pending.title')
-      "
-    >
-      <p class="confirm-and-send__contact-import-pending-content">
-        {{
+      <UnnnicModalDialog
+        :modelValue="importNotCompleted"
+        :title="
           $t(
-            'new_broadcast.pages.confirm_and_send.contact_import_pending.content',
+            'new_broadcast.pages.confirm_and_send.contact_import_pending.title',
           )
-        }}
-      </p>
-    </UnnnicModalDialog>
-
-    <UnnnicModalDialog
-      class="confirm-and-send__broadcast-errored-modal"
-      :modelValue="!!broadcastErrored"
-      :title="
-        $t('new_broadcast.pages.confirm_and_send.broadcast_errored.title')
-      "
-      :primaryButtonProps="{
-        text: $t(
-          'new_broadcast.pages.confirm_and_send.broadcast_errored.primary_button',
-        ),
-      }"
-      hideSecondaryButton
-      showActionsDivider
-      @primary-button-click="handleErrorBack"
-    >
-      <p class="confirm-and-send__broadcast-errored-content">
-        {{
-          $t(
-            'new_broadcast.pages.confirm_and_send.broadcast_errored.description',
-            { error: broadcastErrored?.message },
-          )
-        }}
-      </p>
-    </UnnnicModalDialog>
-
-    <UnnnicModalDialog
-      class="confirm-and-send__broadcast-success-modal"
-      :modelValue="broadcastSuccess"
-      :title="
-        $t('new_broadcast.pages.confirm_and_send.broadcast_success.title')
-      "
-      :primaryButtonProps="{
-        text: $t(
-          'new_broadcast.pages.confirm_and_send.broadcast_success.primary_button',
-        ),
-      }"
-      showActionsDivider
-      hideSecondaryButton
-      @primary-button-click="handleSuccessBack"
-    >
-      <p
-        class="confirm-and-send__broadcast-success-content"
-        v-html="
-          $t('new_broadcast.pages.confirm_and_send.broadcast_success.content', {
-            contact_count: contactCount,
-          })
         "
-      ></p>
-    </UnnnicModalDialog>
+      >
+        <p class="confirm-and-send__contact-import-pending-content">
+          {{
+            $t(
+              'new_broadcast.pages.confirm_and_send.contact_import_pending.content',
+            )
+          }}
+        </p>
+      </UnnnicModalDialog>
+
+      <UnnnicModalDialog
+        class="confirm-and-send__broadcast-errored-modal"
+        :modelValue="!!broadcastErrored"
+        :title="
+          $t('new_broadcast.pages.confirm_and_send.broadcast_errored.title')
+        "
+        :primaryButtonProps="{
+          text: $t(
+            'new_broadcast.pages.confirm_and_send.broadcast_errored.primary_button',
+          ),
+        }"
+        hideSecondaryButton
+        showActionsDivider
+        @primary-button-click="handleErrorBack"
+      >
+        <p class="confirm-and-send__broadcast-errored-content">
+          {{
+            $t(
+              'new_broadcast.pages.confirm_and_send.broadcast_errored.description',
+              { error: broadcastErrored?.message },
+            )
+          }}
+        </p>
+      </UnnnicModalDialog>
+
+      <UnnnicModalDialog
+        class="confirm-and-send__broadcast-success-modal"
+        :modelValue="broadcastSuccess"
+        :title="
+          $t('new_broadcast.pages.confirm_and_send.broadcast_success.title')
+        "
+        :primaryButtonProps="{
+          text: $t(
+            'new_broadcast.pages.confirm_and_send.broadcast_success.primary_button',
+          ),
+        }"
+        showActionsDivider
+        hideSecondaryButton
+        @primary-button-click="handleSuccessBack"
+      >
+        <p
+          class="confirm-and-send__broadcast-success-content"
+          v-html="
+            $t(
+              'new_broadcast.pages.confirm_and_send.broadcast_success.content',
+              {
+                contact_count: contactCount,
+              },
+            )
+          "
+        ></p>
+      </UnnnicModalDialog>
+    </section>
 
     <StepActions
       :disabled="!canContinue"
       :loading="loadingCreateBroadcast"
+      :cancelText="$t('new_broadcast.pages.confirm_and_send.actions.cancel')"
       @cancel="handleCancel"
       @continue="handleContinue"
     />
@@ -437,6 +449,15 @@ const hasIncompleteMapping = (
   flex-direction: column;
   gap: $unnnic-spacing-sm;
   flex: 1;
+  overflow: auto;
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: $unnnic-spacing-sm;
+    flex: 1;
+    overflow: auto;
+  }
 
   &__content {
     display: flex;

@@ -119,6 +119,7 @@ const handleContinue = () => {
   flex-direction: column;
   gap: $unnnic-spacing-sm;
   flex: 1;
+  overflow: auto;
 
   &__group-selection::after {
     content: '';
@@ -133,6 +134,7 @@ const handleContinue = () => {
     display: flex;
     flex-direction: column;
     gap: $unnnic-spacing-sm;
+    overflow: auto;
   }
 }
 </style>

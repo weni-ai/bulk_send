@@ -102,6 +102,7 @@ const handleBack = () => {
     flex-direction: column;
     gap: $unnnic-spacing-sm;
     flex: 1;
+    overflow: auto;
   }
 
   &__contacts,
@@ -111,6 +112,7 @@ const handleBack = () => {
     display: flex;
     flex-direction: column;
     flex: 1;
+    overflow: auto;
   }
 }
 </style>
