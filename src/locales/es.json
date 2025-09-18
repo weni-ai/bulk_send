@@ -248,7 +248,8 @@
           "VIDEO": "Agregar video",
           "DOCUMENT": "Agregar documento"
         },
-        "header_media_upload_error": "Error al subir, por favor intenta nuevamente"
+        "header_media_upload_error": "Error al subir, por favor intenta nuevamente",
+        "name_field_label": "Nombre"
       },
       "confirm_and_send": {
         "title": "Revisar y enviar",

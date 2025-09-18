@@ -248,7 +248,8 @@
           "VIDEO": "Adicionar vídeo",
           "DOCUMENT": "Adicionar documento"
         },
-        "header_media_upload_error": "Upload falhou, por favor tente novamente"
+        "header_media_upload_error": "Upload falhou, por favor tente novamente",
+        "name_field_label": "Nome"
       },
       "confirm_and_send": {
         "title": "Revisar e enviar",

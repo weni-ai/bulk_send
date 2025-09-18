@@ -1,5 +1,7 @@
 import type { CoreStatistics } from '@/types/broadcast';
 
+const NAME_FIELD_VALUE = 'NAME_FIELD_VALUE';
+
 enum BroadcastStatus {
   QUEUED = 'Q',
   SENT = 'S',
@@ -21,4 +23,9 @@ enum NewBroadcastPage {
   CONFIRM_AND_SEND = 'confirm_and_send',
 }
 
-export { BroadcastStatus, ContactGroupStatus, NewBroadcastPage };
+export {
+  BroadcastStatus,
+  ContactGroupStatus,
+  NewBroadcastPage,
+  NAME_FIELD_VALUE,
+};

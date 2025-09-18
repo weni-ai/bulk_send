@@ -31,6 +31,8 @@
               autocomplete
               autocompleteClearOnFocus
               enableSearchByValue
+              orderedByIndex
+              :selectFirst="false"
               :isLoading="loadingContactFields"
               :placeholder="
                 $t('new_broadcast.pages.select_variables.variable_placeholder')
@@ -71,32 +73,48 @@
 
 <script setup lang="ts">
 import { onBeforeMount, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useContactStore } from '@/stores/contact';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import TemplateSelectionPreview from '@/components/NewBroadcast/TemplateSelection/TemplateSelectionPreview.vue';
 import VariablesSelectionOverview from '@/components/NewBroadcast/VariablesSelection/VariablesSelectionOverview.vue';
 import VariablesSelectionHeaderMedia from '@/components/NewBroadcast/VariablesSelection/VariablesSelectionHeaderMedia.vue';
-import type { SelectOption } from '@/types/select';
-import { NewBroadcastPage } from '@/constants/broadcasts';
+import { NewBroadcastPage, NAME_FIELD_VALUE } from '@/constants/broadcasts';
 import StepActions from '@/components/NewBroadcast/StepActions.vue';
+import {
+  ContactFieldType,
+  type ContactField,
+  type ContactFieldOption,
+} from '@/types/contacts';
 
 const contactStore = useContactStore();
 const broadcastsStore = useBroadcastsStore();
-
-type ContactFieldOption = SelectOption<string>;
+const { t } = useI18n();
 
 onBeforeMount(() => {
   fetchContactFields();
 });
 
+const nameFieldOption: ContactFieldOption = {
+  label: t('new_broadcast.pages.select_variables.name_field_label'),
+  value: NAME_FIELD_VALUE,
+};
+
 const contactFields = computed(() => {
-  return contactStore.contactFields.map(
+  const fields = contactStore.contactFields.map(
     (field) =>
       <ContactFieldOption>{
         label: field.label,
         value: field.key,
       },
   );
+
+  // always add name field if not loading anymore
+  if (!contactStore.loadingContactFields) {
+    fields.unshift(nameFieldOption);
+  }
+
+  return fields;
 });
 
 const loadingContactFields = computed(() => {
@@ -127,7 +145,9 @@ const variablesToReplace = computed(() => {
   const fieldsKeys = Object.values(
     broadcastsStore.newBroadcast.variableMapping,
   ).map((variable) => variable?.key);
+
   const examples: (string | undefined)[] = [];
+
   fieldsKeys.forEach((key) => {
     const field = contactStore.contactFieldsExamples.find(
       (field) => field.key === key,
@@ -145,7 +165,10 @@ const hasMediaHeader = computed(() => {
 
 const fetchContactFields = async () => {
   initializeVariableMapping();
-  contactStore.fetchContactFields();
+
+  if (contactStore.contactFields.length === 0) {
+    contactStore.fetchContactFields();
+  }
 
   if (broadcastsStore.newBroadcast.selectedGroups.length > 0) {
     contactStore.getContactFieldsExamplesByGroups(
@@ -155,6 +178,10 @@ const fetchContactFields = async () => {
 };
 
 const initializeVariableMapping = () => {
+  if (Object.keys(broadcastsStore.newBroadcast.variableMapping).length > 0) {
+    return;
+  }
+
   const variableCount = templateVariablesCount.value;
   for (let i = 0; i < variableCount; i++) {
     broadcastsStore.updateVariableMapping(i, undefined);
@@ -162,12 +189,29 @@ const initializeVariableMapping = () => {
 };
 
 const handleVariableUpdate = (key: number, newValue: ContactFieldOption[]) => {
-  if (newValue.length === 0) {
+  if (!newValue || newValue.length === 0) {
     broadcastsStore.updateVariableMapping(key, undefined);
     return;
   }
 
+  // check if the value is the same as the old value
+  const oldValue = variableMapping.value[key];
+  if (oldValue?.key === newValue[0].value) {
+    return;
+  }
+
   const newFieldKey = newValue[0];
+
+  if (newFieldKey.value === NAME_FIELD_VALUE) {
+    const nameField: ContactField = {
+      label: nameFieldOption.label,
+      key: newFieldKey.value,
+      valueType: ContactFieldType.TEXT,
+    };
+
+    broadcastsStore.updateVariableMapping(key, nameField);
+    return;
+  }
 
   const field = contactStore.contactFields.find(
     (field) => field.key === newFieldKey.value,

@@ -7,12 +7,13 @@ import { useProjectStore } from '@/stores/project';
 import { useFlowsStore } from '@/stores/flows';
 import { useContactImportStore } from '@/stores/contactImport';
 import { ContactImportStatus } from '@/types/contactImport';
-import { NewBroadcastPage } from '@/constants/broadcasts';
+import { NAME_FIELD_VALUE, NewBroadcastPage } from '@/constants/broadcasts';
 
 vi.mock('vue-i18n', () => ({
   useI18n: () => ({ t: (key: string) => key }),
 }));
-vi.mock('vue-router', () => ({ useRouter: () => ({ push: vi.fn() }) }));
+const routerPush = vi.fn();
+vi.mock('vue-router', () => ({ useRouter: () => ({ push: routerPush }) }));
 
 const STUBS = {
   UnnnicFormElement: {
@@ -439,5 +440,118 @@ describe('ConfirmAndSend.vue', () => {
     expect(createSpy).toHaveBeenCalledTimes(1);
     const args = (createSpy as any).mock.calls[0];
     expect(args[3]).toEqual(['grp-123']);
+  });
+
+  it('sets initial broadcast name when template exists before mount', () => {
+    // midday UTC to avoid timezone shifting the date
+    vi.setSystemTime(new Date('2024-06-15T12:00:00Z'));
+
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    const broadcastsStore = useBroadcastsStore(pinia);
+    const flowsStore = useFlowsStore(pinia);
+    vi.spyOn(flowsStore, 'listAllFlows').mockResolvedValue(undefined as any);
+
+    broadcastsStore.setSelectedTemplate({ name: 'Welcome' } as any);
+
+    mount(ConfirmAndSend, {
+      global: {
+        plugins: [pinia],
+        stubs: STUBS,
+        mocks: { $t: (k: string) => k },
+      },
+    });
+
+    expect(broadcastsStore.newBroadcast.broadcastName).toBe('Welcome_15_06');
+  });
+
+  it('createBroadcast receives variables from mapping (name + custom fields)', async () => {
+    const { wrapper, broadcastsStore } = mountWrapper();
+
+    broadcastsStore.setReviewed(true);
+    broadcastsStore.setSelectedFlow({ uuid: 'f1', name: 'Flow 1' } as any);
+    broadcastsStore.setBroadcastName('Vars Mapping');
+    broadcastsStore.setSelectedTemplate({
+      name: 'Tpl',
+      variableCount: 2,
+    } as any);
+    broadcastsStore.setSelectedGroups([{ uuid: 'g1', memberCount: 5 } as any]);
+
+    broadcastsStore.updateVariableMapping(0, {
+      key: NAME_FIELD_VALUE,
+      label: 'Name',
+    } as any);
+    broadcastsStore.updateVariableMapping(1, {
+      key: 'age',
+      label: 'Age',
+    } as any);
+
+    const createSpy = vi
+      .spyOn(broadcastsStore, 'createBroadcast')
+      .mockResolvedValue(undefined as any);
+
+    await wrapper.vm.$nextTick();
+    await wrapper.find(SELECTOR.actionsContinue).trigger('click');
+
+    expect(createSpy).toHaveBeenCalledTimes(1);
+    const args = (createSpy as any).mock.calls[0];
+    expect(args[2]).toEqual(['@contact.name', '@fields.age']);
+  });
+
+  it('shows error when variable mapping is incomplete', async () => {
+    const { wrapper, broadcastsStore } = mountWrapper();
+
+    broadcastsStore.setReviewed(true);
+    broadcastsStore.setSelectedFlow({ uuid: 'f1', name: 'Flow 1' } as any);
+    broadcastsStore.setBroadcastName('Incomplete Vars');
+    broadcastsStore.setSelectedTemplate({
+      name: 'Tpl',
+      variableCount: 2,
+    } as any);
+    broadcastsStore.setSelectedGroups([{ uuid: 'g1', memberCount: 5 } as any]);
+
+    // one mapped, one explicitly undefined
+    broadcastsStore.updateVariableMapping(0, {
+      key: NAME_FIELD_VALUE,
+      label: 'Name',
+    } as any);
+    broadcastsStore.updateVariableMapping(1, undefined);
+
+    await wrapper.vm.$nextTick();
+    await wrapper.find(SELECTOR.actionsContinue).trigger('click');
+
+    const errorModal = wrapper.findAll(SELECTOR.modal)[1];
+    expect(errorModal.attributes('data-open')).toBe('true');
+  });
+
+  it('success primary resets store and navigates home', async () => {
+    const { wrapper, broadcastsStore } = mountWrapper();
+    broadcastsStore.setReviewed(true);
+    broadcastsStore.setSelectedFlow({ uuid: 'f1', name: 'Flow 1' } as any);
+    broadcastsStore.setBroadcastName('Go Home');
+    broadcastsStore.setSelectedTemplate({
+      name: 'Tpl',
+      variableCount: 0,
+    } as any);
+    broadcastsStore.setSelectedGroups([{ uuid: 'g1', memberCount: 1 } as any]);
+
+    vi.spyOn(broadcastsStore, 'createBroadcast').mockResolvedValue(
+      undefined as any,
+    );
+
+    await wrapper.vm.$nextTick();
+    await wrapper.find(SELECTOR.actionsContinue).trigger('click');
+
+    const successModal = wrapper.findAll(SELECTOR.modal)[2];
+    expect(successModal.attributes('data-open')).toBe('true');
+
+    await successModal.find(SELECTOR.primaryButton).trigger('click');
+
+    expect(routerPush).toHaveBeenCalledWith({ name: 'HomeBulkSend' });
+    expect(broadcastsStore.newBroadcast.currentPage).toBe(
+      NewBroadcastPage.SELECT_GROUPS,
+    );
+    expect(broadcastsStore.newBroadcast.reviewed).toBe(false);
+    expect(broadcastsStore.newBroadcast.selectedFlow).toBeUndefined();
   });
 });

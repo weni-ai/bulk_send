@@ -249,7 +249,8 @@
           "VIDEO": "Add video",
           "DOCUMENT": "Add document"
         },
-        "header_media_upload_error": "Upload failed, please try again"
+        "header_media_upload_error": "Upload failed, please try again",
+        "name_field_label": "Name"
       },
       "confirm_and_send": {
         "title": "Review and send",
