@@ -1,13 +1,19 @@
 import { describe, it, expect, vi, beforeEach, type Mocked } from 'vitest';
 import { createPinia, setActivePinia } from 'pinia';
 import { useProjectStore } from '@/stores/project';
-import Channels from '@/api/resources/channels';
+import ChannelsAPI from '@/api/resources/channels';
+import ProjectsAPI from '@/api/resources/projects';
 import type { AxiosResponse } from 'axios';
 
-// Mock API module used by the store
 vi.mock('@/api/resources/channels', () => ({
   default: {
     listChannels: vi.fn(),
+  },
+}));
+
+vi.mock('@/api/resources/projects', () => ({
+  default: {
+    getProjectInfo: vi.fn(),
   },
 }));
 
@@ -17,27 +23,45 @@ describe('project store', () => {
     vi.clearAllMocks();
   });
 
-  it('getProjectChannels loads channels and toggles loading flag', async () => {
+  it('setProjectUuid sets uuid on project', () => {
     const store = useProjectStore();
+    store.setProjectUuid('proj-123');
+    expect(store.project.uuid).toBe('proj-123');
+  });
 
-    const mockResults = [
-      { uuid: '1', name: 'WAC 1', channel_type: 'WAC' },
-      { uuid: '2', name: 'SMS 1', channel_type: 'SMS' },
-    ];
-
-    const mockedChannels = Channels as Mocked<typeof Channels>;
-    mockedChannels.listChannels.mockResolvedValue({
-      data: { results: mockResults },
+  it('getProjectChannels toggles loading and stores channels', async () => {
+    const store = useProjectStore();
+    const mocked = ChannelsAPI as Mocked<typeof ChannelsAPI>;
+    mocked.listChannels.mockResolvedValue({
+      data: { results: [{ uuid: 'ch1', channeltype: 'WA' }] },
     } as AxiosResponse);
 
     expect(store.loadingChannels).toBe(false);
-
     const promise = store.getProjectChannels();
     expect(store.loadingChannels).toBe(true);
     await promise;
 
-    expect(mockedChannels.listChannels).toHaveBeenCalledTimes(1);
-    expect(store.project.channels).toEqual(mockResults);
+    expect(mocked.listChannels).toHaveBeenCalled();
+    expect(store.project.channels).toEqual([
+      { uuid: 'ch1', channeltype: 'WA' },
+    ]);
     expect(store.loadingChannels).toBe(false);
+  });
+
+  it('getProjectInfo toggles loading and stores brainOn', async () => {
+    const store = useProjectStore();
+    const mocked = ProjectsAPI as Mocked<typeof ProjectsAPI>;
+    mocked.getProjectInfo.mockResolvedValue({
+      data: { brain_on: true },
+    } as AxiosResponse);
+
+    expect(store.loadingProjectInfo).toBe(false);
+    const promise = store.getProjectInfo();
+    expect(store.loadingProjectInfo).toBe(true);
+    await promise;
+
+    expect(mocked.getProjectInfo).toHaveBeenCalled();
+    expect(store.project.brainOn).toBe(true);
+    expect(store.loadingProjectInfo).toBe(false);
   });
 });
