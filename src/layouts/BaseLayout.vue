@@ -10,5 +10,6 @@
 .base-layout {
   height: 100%;
   padding: $unnnic-spacing-sm;
+  overflow: auto;
 }
 </style>
