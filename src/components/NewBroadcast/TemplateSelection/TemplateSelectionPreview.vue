@@ -77,8 +77,6 @@ const selectedTemplate = computed(() => {
   box-sizing: border-box;
   border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
   border-radius: $unnnic-border-radius-md;
-  min-height: 432px; // fixed height as set in the design
-  width: 409px; // fixed width as set in the design
 
   &__header {
     display: flex;
