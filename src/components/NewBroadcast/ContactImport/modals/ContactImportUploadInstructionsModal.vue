@@ -152,7 +152,8 @@ const handleModalUpdate = (value: boolean) => {
 };
 
 const handleDownloadSample = () => {
-  console.log('download sample'); // TODO: Implement download sample when API is ready
+  const link = 'https://flows.weni.ai/sitestatic/examples/sample_import.xlsx';
+  window.open(link, '_blank');
 };
 </script>
 
