@@ -7,6 +7,7 @@ import { useProjectStore } from '@/stores/project';
 import { useFlowsStore } from '@/stores/flows';
 import { useContactImportStore } from '@/stores/contactImport';
 import { ContactImportStatus } from '@/types/contactImport';
+import { NewBroadcastPage } from '@/constants/broadcasts';
 
 vi.mock('vue-i18n', () => ({
   useI18n: () => ({ t: (key: string) => key }),
@@ -53,6 +54,12 @@ const STUBS = {
   TemplateSelectionPreview: {
     template: '<div data-test="template-preview" />',
   },
+  StepActions: {
+    props: ['disabled'],
+    emits: ['cancel', 'continue'],
+    template:
+      '<div data-test="actions"><button data-test="actions-cancel" @click="$emit(\'cancel\')">cancel</button><button data-test="actions-continue" :disabled="disabled" @click="$emit(\'continue\')">continue</button></div>',
+  },
 } as const;
 
 const SELECTOR = {
@@ -64,6 +71,8 @@ const SELECTOR = {
   variablesOverview: '[data-test="variables-overview"]',
   reviewed: '[data-test="reviewed"]',
   modal: '[data-test="modal"]',
+  actionsCancel: '[data-test="actions-cancel"]',
+  actionsContinue: '[data-test="actions-continue"]',
 } as const;
 
 const mountWrapper = () => {
@@ -188,5 +197,76 @@ describe('ConfirmAndSend.vue', () => {
     expect(checkSpy).toHaveBeenCalledTimes(1);
     await vi.advanceTimersByTimeAsync(5000);
     expect(checkSpy).toHaveBeenCalledTimes(2);
+  });
+
+  it('disables/enables continue based on reviewed, flow (when required), and import status', async () => {
+    const { wrapper, broadcastsStore, projectStore, contactImportStore } =
+      mountWrapper();
+
+    // initial: not reviewed -> disabled
+    expect(
+      wrapper.find(SELECTOR.actionsContinue).attributes('disabled'),
+    ).toBeDefined();
+
+    // reviewed but FLOW project without selected flow -> still disabled
+    broadcastsStore.setReviewed(true);
+    await wrapper.vm.$nextTick();
+    expect(
+      wrapper.find(SELECTOR.actionsContinue).attributes('disabled'),
+    ).toBeDefined();
+
+    // select a flow -> enabled when no import present
+    broadcastsStore.setSelectedFlow({ uuid: 'f1', name: 'Flow 1' } as any);
+    await wrapper.vm.$nextTick();
+    expect(
+      wrapper.find(SELECTOR.actionsContinue).attributes('disabled'),
+    ).toBeUndefined();
+
+    // if import exists and not complete -> disabled
+    contactImportStore.import = { importId: 1 } as any;
+    contactImportStore.contactImportInfo.status = ContactImportStatus.PENDING;
+    await wrapper.vm.$nextTick();
+    expect(
+      wrapper.find(SELECTOR.actionsContinue).attributes('disabled'),
+    ).toBeDefined();
+
+    // mark complete -> enabled
+    contactImportStore.contactImportInfo.status = ContactImportStatus.COMPLETE;
+    await wrapper.vm.$nextTick();
+    expect(
+      wrapper.find(SELECTOR.actionsContinue).attributes('disabled'),
+    ).toBeUndefined();
+
+    // AB project (no flow required): clear flow and keep reviewed
+    projectStore.project.brainOn = true;
+    broadcastsStore.setSelectedFlow(undefined);
+    await wrapper.vm.$nextTick();
+    expect(
+      wrapper.find(SELECTOR.actionsContinue).attributes('disabled'),
+    ).toBeUndefined();
+  });
+
+  it('cancel resets inputs and navigates back correctly depending on template variables', async () => {
+    const { wrapper, broadcastsStore } = mountWrapper();
+    broadcastsStore.setReviewed(true);
+    broadcastsStore.setSelectedFlow({ uuid: 'f1', name: 'Flow 1' } as any);
+    broadcastsStore.setBroadcastName('Hello');
+
+    const setPageSpy = vi
+      .spyOn(broadcastsStore, 'setNewBroadcastPage')
+      .mockImplementation(() => {});
+
+    // case: has variables -> go back to variables
+    broadcastsStore.setSelectedTemplate({ variableCount: 2 } as any);
+    await wrapper.find(SELECTOR.actionsCancel).trigger('click');
+    expect(broadcastsStore.newBroadcast.reviewed).toBe(false);
+    expect(broadcastsStore.newBroadcast.selectedFlow).toBeUndefined();
+    expect(broadcastsStore.newBroadcast.broadcastName).toBe('');
+    expect(setPageSpy).toHaveBeenCalledWith(NewBroadcastPage.SELECT_VARIABLES);
+
+    // case: no variables -> go back to template selection
+    broadcastsStore.setSelectedTemplate({ variableCount: 0 } as any);
+    await wrapper.find(SELECTOR.actionsCancel).trigger('click');
+    expect(setPageSpy).toHaveBeenCalledWith(NewBroadcastPage.SELECT_TEMPLATE);
   });
 });

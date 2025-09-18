@@ -4,6 +4,7 @@ import { createPinia, setActivePinia } from 'pinia';
 import VariablesSelection from '@/components/NewBroadcast/VariablesSelection/VariablesSelection.vue';
 import { useContactStore } from '@/stores/contact';
 import { useBroadcastsStore } from '@/stores/broadcasts';
+import { NewBroadcastPage } from '@/constants/broadcasts';
 
 vi.mock('vue-i18n', () => ({
   useI18n: () => ({ t: (key: string) => key }),
@@ -40,6 +41,12 @@ const STUBS = {
     props: ['definedVariables'],
     template: '<div data-test="overview">{{ definedVariables.length }}</div>',
   },
+  StepActions: {
+    props: ['disabled'],
+    emits: ['cancel', 'continue'],
+    template:
+      '<div data-test="actions"><button data-test="actions-cancel" @click="$emit(\'cancel\')">cancel</button><button data-test="actions-continue" :disabled="disabled" @click="$emit(\'continue\')">continue</button></div>',
+  },
 } as const;
 
 const SELECTOR = {
@@ -48,6 +55,8 @@ const SELECTOR = {
   disclaimer: '[data-test="disclaimer"]',
   overview: '[data-test="overview"]',
   preview: '[data-test="preview"]',
+  actionsCancel: '[data-test="actions-cancel"]',
+  actionsContinue: '[data-test="actions-continue"]',
 } as const;
 
 const mountWrapper = (variableCount = 2) => {
@@ -123,5 +132,65 @@ describe('VariablesSelection.vue', () => {
 
     const preview = wrapper.find(SELECTOR.preview);
     expect(preview.text()).toBe('Alice,30');
+  });
+
+  it('disables continue until all variables are mapped', async () => {
+    const { wrapper, broadcastsStore } = mountWrapper(2);
+    // initially all undefined
+    expect(
+      wrapper.find(SELECTOR.actionsContinue).attributes('disabled'),
+    ).toBeDefined();
+
+    broadcastsStore.updateVariableMapping(0, {
+      key: 'name',
+      label: 'Name',
+    } as any);
+    await wrapper.vm.$nextTick();
+    expect(
+      wrapper.find(SELECTOR.actionsContinue).attributes('disabled'),
+    ).toBeDefined();
+
+    broadcastsStore.updateVariableMapping(1, {
+      key: 'age',
+      label: 'Age',
+    } as any);
+    await wrapper.vm.$nextTick();
+    expect(
+      wrapper.find(SELECTOR.actionsContinue).attributes('disabled'),
+    ).toBeUndefined();
+  });
+
+  it('cancel clears mapping and returns to template page', async () => {
+    const { wrapper, broadcastsStore } = mountWrapper(1);
+    broadcastsStore.updateVariableMapping(0, {
+      key: 'name',
+      label: 'Name',
+    } as any);
+    const setPageSpy = vi
+      .spyOn(broadcastsStore, 'setNewBroadcastPage')
+      .mockImplementation(() => {});
+
+    await wrapper.find(SELECTOR.actionsCancel).trigger('click');
+    expect(
+      Object.values(broadcastsStore.newBroadcast.variableMapping).every(
+        (v) => v === undefined,
+      ),
+    ).toBe(true);
+    expect(setPageSpy).toHaveBeenCalledWith(NewBroadcastPage.SELECT_TEMPLATE);
+  });
+
+  it('continue proceeds to confirm and send page', async () => {
+    const { wrapper, broadcastsStore } = mountWrapper(1);
+    broadcastsStore.updateVariableMapping(0, {
+      key: 'name',
+      label: 'Name',
+    } as any);
+    await wrapper.vm.$nextTick();
+    const setPageSpy = vi
+      .spyOn(broadcastsStore, 'setNewBroadcastPage')
+      .mockImplementation(() => {});
+
+    await wrapper.find(SELECTOR.actionsContinue).trigger('click');
+    expect(setPageSpy).toHaveBeenCalledWith(NewBroadcastPage.CONFIRM_AND_SEND);
   });
 });

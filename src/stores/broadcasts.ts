@@ -130,5 +130,18 @@ export const useBroadcastsStore = defineStore('broadcasts', {
     setReviewed(value: boolean) {
       this.newBroadcast.reviewed = value;
     },
+    resetNewBroadcast() {
+      this.newBroadcast = {
+        currentPage: NewBroadcastPage.SELECT_GROUPS,
+        groupSelectionOpen: true,
+        contactImportOpen: false,
+        selectedGroups: [],
+        selectedTemplate: undefined,
+        variableMapping: {},
+        broadcastName: '',
+        selectedFlow: undefined,
+        reviewed: false,
+      };
+    },
   },
 });

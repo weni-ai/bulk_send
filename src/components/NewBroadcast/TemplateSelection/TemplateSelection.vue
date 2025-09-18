@@ -31,6 +31,12 @@
 
       <TemplateSelectionPreview class="template-selection__preview" />
     </section>
+
+    <StepActions
+      :disabled="!canContinue"
+      @cancel="handleCancel"
+      @continue="handleContinue"
+    />
   </section>
 </template>
 
@@ -39,11 +45,16 @@ import { ref, onBeforeMount, computed, watch } from 'vue';
 import { useDebounceFn } from '@vueuse/core';
 import { PAGE_SIZE } from '@/constants/templates';
 import { useTemplatesStore } from '@/stores/templates';
+import { useBroadcastsStore } from '@/stores/broadcasts';
+import { NewBroadcastPage } from '@/constants/broadcasts';
 import TemplateSelectionFilters from '@/components/NewBroadcast/TemplateSelection/TemplateSelectionFilters.vue';
 import TemplateSelectionList from '@/components/NewBroadcast/TemplateSelection/TemplateSelectionList.vue';
 import TemplateSelectionPreview from '@/components/NewBroadcast/TemplateSelection/TemplateSelectionPreview.vue';
+import StepActions from '@/components/NewBroadcast/StepActions.vue';
+import { TemplateStatus } from '@/constants/templates';
 
 const templatesStore = useTemplatesStore();
+const broadcastsStore = useBroadcastsStore();
 
 const search = ref('');
 const page = ref(1);
@@ -65,6 +76,27 @@ watch([page], () => {
 });
 
 const templatesTotal = computed(() => templatesStore.templatesCount);
+
+const isApproved = () =>
+  broadcastsStore.newBroadcast.selectedTemplate &&
+  broadcastsStore.newBroadcast.selectedTemplate.status ===
+    TemplateStatus.APPROVED;
+
+const canContinue = computed(() => !!isApproved());
+
+const handleCancel = () => {
+  broadcastsStore.setSelectedTemplate(undefined);
+  broadcastsStore.setNewBroadcastPage(NewBroadcastPage.SELECT_GROUPS);
+};
+
+const handleContinue = () => {
+  const selectedTemplate = broadcastsStore.newBroadcast.selectedTemplate;
+  if (selectedTemplate?.variableCount && selectedTemplate.variableCount > 0) {
+    broadcastsStore.setNewBroadcastPage(NewBroadcastPage.SELECT_VARIABLES);
+  } else {
+    broadcastsStore.setNewBroadcastPage(NewBroadcastPage.CONFIRM_AND_SEND);
+  }
+};
 
 const fetchTemplates = () => {
   const params = {
@@ -100,6 +132,7 @@ const handleSortUpdate = (newSort: { header: string; order: string }) => {
   display: flex;
   flex-direction: column;
   gap: $unnnic-spacing-sm;
+  flex: 1;
 
   &__title {
     @include unnnic-text-body-lg;
