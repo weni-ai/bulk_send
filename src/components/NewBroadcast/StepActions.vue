@@ -12,6 +12,7 @@
       data-test="actions-continue"
       class="step-actions__continue"
       :disabled="disabled"
+      :loading="loading"
       @click="$emit('continue')"
     >
       {{ $t('new_broadcast.pages.actions.continue') }}
@@ -22,6 +23,7 @@
 <script setup lang="ts">
 defineProps<{
   disabled?: boolean;
+  loading?: boolean;
 }>();
 
 defineEmits<{

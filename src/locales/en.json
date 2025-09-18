@@ -257,6 +257,21 @@
         "contact_import_pending": {
           "title": "Contact import in progress ⏳",
           "content": "Your contact list is being imported.\n\nOnce it’s done, you’ll be able to complete the send.\nIn the meantime, you can review your campaign details."
+        },
+        "unknown_error": "An unknown error occured while trying to create the broadcast, please refresh the page",
+        "variables_not_found": "incomplete variables",
+        "template_not_found": "missing selected template",
+        "name_not_found": "missing broadcast name",
+        "groups_not_found": "missing groups or import",
+        "broadcast_errored": {
+          "title": "❌ Something went wrong",
+          "primary_button": "Back",
+          "description": "We couldn’t start your send due to {error}.\nNo messages have been delivered.\n\nYou can return to the review screen to check your setup and try again."
+        },
+        "broadcast_success": {
+          "title": "✅ Send initiated successfully ",
+          "content": "Your message is being delivered to {contact_count} contacts, <span class=\"highlight\">this process may take a few minutes to complete</span>.\n\nProgress and results will appear on your home screen as messages are delivered.",
+          "primary_button": "Back to home"
         }
       },
       "contact_import": {

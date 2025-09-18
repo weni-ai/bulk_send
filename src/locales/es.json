@@ -257,6 +257,21 @@
         "contact_import_pending": {
           "title": "Importación de contactos en progreso ⏳",
           "content": "Tu lista de contactos está siendo importada.\n\nUna vez que esté lista, podrás completar el envío.\nMientras tanto, puedes revisar los detalles de tu campaña."
+        },
+        "unknown_error": "Ocurrió un error desconocido al intentar crear el envío, por favor actualiza la página",
+        "variables_not_found": "variables incompletas",
+        "template_not_found": "plantilla seleccionada faltante",
+        "name_not_found": "nombre del envío faltante",
+        "groups_not_found": "grupos o importación faltantes",
+        "broadcast_errored": {
+          "title": "❌ Algo salió mal",
+          "primary_button": "Volver",
+          "description": "No pudimos iniciar tu envío debido a {error}.\nNo se han entregado mensajes.\n\nPuedes volver a la pantalla de revisión para verificar tu configuración y probar nuevamente."
+        },
+        "broadcast_success": {
+          "title": "✅ Envío iniciado con éxito ",
+          "content": "Tu mensaje está siendo entregado a {contact_count} contactos, <span class=\"highlight\">este proceso puede tomar unos minutos para completarse</span>.\n\nEl progreso y los resultados aparecerán en tu pantalla de inicio a medida que se entreguen los mensajes.",
+          "primary_button": "Volver a la home"
         }
       },
       "contact_import": {

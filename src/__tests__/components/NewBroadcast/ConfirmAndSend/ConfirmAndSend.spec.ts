@@ -12,6 +12,7 @@ import { NewBroadcastPage } from '@/constants/broadcasts';
 vi.mock('vue-i18n', () => ({
   useI18n: () => ({ t: (key: string) => key }),
 }));
+vi.mock('vue-router', () => ({ useRouter: () => ({ push: vi.fn() }) }));
 
 const STUBS = {
   UnnnicFormElement: {
@@ -40,8 +41,17 @@ const STUBS = {
       '<button data-test="reviewed" :data-checked="modelValue" @click="$emit(\'update:model-value\', !modelValue)">{{ textRight }}</button>',
   },
   UnnnicModalDialog: {
-    props: ['modelValue', 'title'],
-    template: '<div data-test="modal" :data-open="modelValue"><slot /></div>',
+    inheritAttrs: true,
+    props: [
+      'modelValue',
+      'title',
+      'primaryButtonProps',
+      'hideSecondaryButton',
+      'showActionsDivider',
+    ],
+    emits: ['primary-button-click'],
+    template:
+      '<div data-test="modal" :data-open="modelValue"><slot /><button data-test="primary" @click="$emit(\'primary-button-click\')">primary</button></div>',
   },
   ConfirmAndSendAudience: {
     template: '<div data-test="audience" />',
@@ -55,10 +65,10 @@ const STUBS = {
     template: '<div data-test="template-preview" />',
   },
   StepActions: {
-    props: ['disabled'],
+    props: ['disabled', 'loading'],
     emits: ['cancel', 'continue'],
     template:
-      '<div data-test="actions"><button data-test="actions-cancel" @click="$emit(\'cancel\')">cancel</button><button data-test="actions-continue" :disabled="disabled" @click="$emit(\'continue\')">continue</button></div>',
+      '<div data-test="actions"><button data-test="actions-cancel" @click="$emit(\'cancel\')">cancel</button><button data-test="actions-continue" :disabled="disabled || loading" @click="$emit(\'continue\')">continue</button></div>',
   },
 } as const;
 
@@ -73,6 +83,9 @@ const SELECTOR = {
   modal: '[data-test="modal"]',
   actionsCancel: '[data-test="actions-cancel"]',
   actionsContinue: '[data-test="actions-continue"]',
+  // we'll index modals instead of relying on forwarded class attrs
+  // index 0: import pending; 1: error; 2: success
+  primaryButton: '[data-test="primary"]',
 } as const;
 
 const mountWrapper = () => {
@@ -178,7 +191,7 @@ describe('ConfirmAndSend.vue', () => {
     contactImportStore.import = { importId: 99 } as any;
     contactImportStore.contactImportInfo.status = ContactImportStatus.PENDING;
 
-    const checkSpy = vi
+    const getSpy = vi
       .spyOn(contactImportStore, 'getImportInfo')
       .mockResolvedValue(undefined as any);
 
@@ -191,12 +204,15 @@ describe('ConfirmAndSend.vue', () => {
     });
 
     await wrapper.vm.$nextTick();
-    expect(wrapper.find(SELECTOR.modal).attributes('data-open')).toBe('true');
+    // import not completed modal (first modal)
+    expect(wrapper.findAll(SELECTOR.modal)[0].attributes('data-open')).toBe(
+      'true',
+    );
 
     // called immediately and again after 5s
-    expect(checkSpy).toHaveBeenCalledTimes(1);
+    expect(getSpy).toHaveBeenCalledTimes(1);
     await vi.advanceTimersByTimeAsync(5000);
-    expect(checkSpy).toHaveBeenCalledTimes(2);
+    expect(getSpy).toHaveBeenCalledTimes(2);
   });
 
   it('disables/enables continue based on reviewed, flow (when required), and import status', async () => {
@@ -268,5 +284,49 @@ describe('ConfirmAndSend.vue', () => {
     broadcastsStore.setSelectedTemplate({ variableCount: 0 } as any);
     await wrapper.find(SELECTOR.actionsCancel).trigger('click');
     expect(setPageSpy).toHaveBeenCalledWith(NewBroadcastPage.SELECT_TEMPLATE);
+  });
+
+  it('continue shows error modal when there are no groups selected', async () => {
+    const { wrapper, broadcastsStore } = mountWrapper();
+    // enable continue gate
+    broadcastsStore.setReviewed(true);
+    broadcastsStore.setSelectedFlow({ uuid: 'f1', name: 'Flow 1' } as any);
+    await wrapper.vm.$nextTick();
+    await wrapper.find(SELECTOR.actionsContinue).trigger('click');
+
+    // error modal should be open
+    const errorModal = wrapper.findAll(SELECTOR.modal)[1];
+    expect(errorModal.attributes('data-open')).toBe('true');
+    await errorModal.find(SELECTOR.primaryButton).trigger('click');
+    expect((wrapper.vm as any).broadcastErrored).toBeUndefined();
+  });
+
+  it('successful continue creates broadcast, shows success modal, and primary returns home', async () => {
+    const { wrapper, broadcastsStore } = mountWrapper();
+    // prep state
+    broadcastsStore.setReviewed(true);
+    broadcastsStore.setSelectedFlow({ uuid: 'f1', name: 'Flow 1' } as any);
+    broadcastsStore.setBroadcastName('My Broadcast');
+    broadcastsStore.setSelectedTemplate({
+      name: 'Welcome',
+      variableCount: 0,
+    } as any);
+    // select groups (non-import path)
+    broadcastsStore.setSelectedGroups([{ uuid: 'g1', memberCount: 10 } as any]);
+
+    const createSpy = vi
+      .spyOn(broadcastsStore, 'createBroadcast')
+      .mockResolvedValue(undefined as any);
+
+    await wrapper.vm.$nextTick();
+    await wrapper.find(SELECTOR.actionsContinue).trigger('click');
+
+    expect(createSpy).toHaveBeenCalled();
+    // success modal should be open (third modal)
+    const successModal = wrapper.findAll(SELECTOR.modal)[2];
+    expect(successModal.attributes('data-open')).toBe('true');
+    // click primary to go home
+    await successModal.find(SELECTOR.primaryButton).trigger('click');
+    expect((wrapper.vm as any).broadcastSuccess).toBe(false);
   });
 });

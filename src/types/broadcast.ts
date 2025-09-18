@@ -57,6 +57,19 @@ interface NewBroadcastState {
   reviewed: boolean;
 }
 
+interface CreateBroadcastData {
+  queue: 'template_batch';
+  project: string;
+  name: string;
+  groups: string[];
+  msg: {
+    template: {
+      uuid: string;
+      variables: string[];
+    };
+  };
+}
+
 export type {
   BroadcastStatistic,
   CoreStatistics,
@@ -64,4 +77,5 @@ export type {
   BroadcastsMonthPerformance,
   BroadcastStatisticsParams,
   NewBroadcastState,
+  CreateBroadcastData,
 };
