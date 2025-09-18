@@ -4,6 +4,7 @@ import type { PageRequestParams } from '@/types/requests';
 import { BroadcastStatus, NewBroadcastPage } from '@/constants/broadcasts';
 import { Currency } from '@/constants/currency';
 import type { ContactField } from './contacts';
+import type { FlowReference } from './flow';
 
 interface BroadcastStatisticsParams extends PageRequestParams {
   start_date?: string;
@@ -51,6 +52,9 @@ interface NewBroadcastState {
   selectedGroups: Group[];
   selectedTemplate?: Template;
   variableMapping: Record<number, ContactField | undefined>;
+  broadcastName: string;
+  selectedFlow?: FlowReference;
+  reviewed: boolean;
 }
 
 export type {
