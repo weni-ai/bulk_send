@@ -483,7 +483,8 @@ const hasIncompleteMapping = (
   }
 
   &__content {
-    display: flex;
+    display: grid;
+    grid-template-columns: 8fr 4fr;
     gap: $unnnic-spacing-sm;
   }
 
@@ -498,11 +499,6 @@ const hasIncompleteMapping = (
     flex-direction: column;
     flex: 1;
     gap: $unnnic-spacing-sm;
-    width: 67%;
-  }
-
-  &__preview {
-    width: 33%;
   }
 
   &__info {
