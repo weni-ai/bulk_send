@@ -4,6 +4,9 @@ import { useBroadcastsStore } from '@/stores/broadcasts';
 import Broadcasts from '@/api/resources/broadcasts';
 import type { AxiosResponse } from 'axios';
 import type { BroadcastStatistic } from '@/types/broadcast';
+import { NewBroadcastPage } from '@/constants/broadcasts';
+import { TemplateStatus } from '@/constants/templates';
+import { createGroup } from '../utils/factories';
 
 // Mock API module used by the store
 vi.mock('@/api/resources/broadcasts', () => ({
@@ -119,6 +122,67 @@ describe('broadcasts store', () => {
       'failed',
     );
     expect(result).toEqual({ id: 7 });
+    expect(store.loadingCreateGroupFromStatus).toBe(false);
+  });
+
+  it('setter actions update newBroadcast state accordingly', () => {
+    const store = useBroadcastsStore();
+
+    // page
+    store.setNewBroadcastPage(NewBroadcastPage.CONFIRM_AND_SEND);
+    expect(store.newBroadcast.currentPage).toBe(
+      NewBroadcastPage.CONFIRM_AND_SEND,
+    );
+
+    // open/close toggles
+    store.setGroupSelectionOpen(false);
+    expect(store.newBroadcast.groupSelectionOpen).toBe(false);
+    store.setContactImportOpen(true);
+    expect(store.newBroadcast.contactImportOpen).toBe(true);
+
+    // selected groups
+    const groups = [createGroup({ id: 1 }), createGroup({ id: 2 })];
+    store.setSelectedGroups(groups as any);
+    expect(store.newBroadcast.selectedGroups).toEqual(groups);
+
+    // selected template
+    const template = {
+      uuid: 't-1',
+      name: 'Welcome',
+      createdOn: '2024-01-01T00:00:00Z',
+      category: 'CAT',
+      language: 'en',
+      body: { text: 'Hello' },
+      status: TemplateStatus.APPROVED,
+    } as any;
+    store.setSelectedTemplate(template);
+    expect(store.newBroadcast.selectedTemplate).toEqual(template);
+  });
+
+  it('loading flags are reset to false when API calls fail', async () => {
+    const store = useBroadcastsStore();
+    const mocked = Broadcasts as Mocked<typeof Broadcasts>;
+
+    mocked.getBroadcastsStatistics.mockRejectedValue(new Error('fail-stats'));
+    await expect(
+      store.getBroadcastsStatistics('proj', { offset: 0, limit: 5 }),
+    ).rejects.toThrow('fail-stats');
+    expect(store.loadingBroadcastsStatistics).toBe(false);
+
+    mocked.getBroadcastsMonthPerformance.mockRejectedValue(
+      new Error('fail-month'),
+    );
+    await expect(store.getBroadcastsMonthPerformance('proj')).rejects.toThrow(
+      'fail-month',
+    );
+    expect(store.loadingBroadcastsMonthPerformance).toBe(false);
+
+    mocked.createGroupFromStatus.mockRejectedValue(
+      new Error('fail-create-group'),
+    );
+    await expect(
+      store.createGroupFromStatus('proj', 'G', 1, 'failed'),
+    ).rejects.toThrow('fail-create-group');
     expect(store.loadingCreateGroupFromStatus).toBe(false);
   });
 });
