@@ -4,14 +4,20 @@
     data-test="upload-instructions"
   >
     <I18nT
-      class="contact-import-upload-instructions__text"
+      :class="{
+        'contact-import-upload-instructions__text': true,
+        'contact-import-upload-instructions__text--disabled': disabled,
+      }"
       keypath="new_broadcast.pages.contact_import.upload_instructions.text"
       tag="p"
     >
       <button
-        class="contact-import-upload-instructions__button"
+        :class="{
+          'contact-import-upload-instructions__button': true,
+          'contact-import-upload-instructions__button--disabled': disabled,
+        }"
         data-test="open-modal"
-        @click="openInstructionsModal = true"
+        @click="() => handleModalUpdate(true)"
       >
         {{
           $t('new_broadcast.pages.contact_import.upload_instructions.button')
@@ -32,7 +38,12 @@ import ContactImportUploadInstructionsModal from '@/components/NewBroadcast/Cont
 
 const openInstructionsModal = ref(false);
 
+const props = defineProps<{
+  disabled: boolean;
+}>();
+
 const handleModalUpdate = (value: boolean) => {
+  if (props.disabled) return;
   openInstructionsModal.value = value;
 };
 </script>
@@ -55,6 +66,11 @@ const handleModalUpdate = (value: boolean) => {
     color: $unnnic-color-neutral-dark;
     text-decoration: underline;
     cursor: pointer;
+  }
+
+  &__text--disabled,
+  &__button--disabled {
+    color: $unnnic-color-neutral-clean;
   }
 }
 </style>
