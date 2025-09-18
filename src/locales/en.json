@@ -143,7 +143,7 @@
         "header_2": "Description",
         "header_3": "Example",
         "header_description": {
-          "name": "Full contact name",
+          "name": "Contact’s full name",
           "urn_tel": "Phone number with country code",
           "urn_whatsapp": "WhatsApp number (with country code)",
           "field_team": "Custom field (e.g. team name)"
