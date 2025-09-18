@@ -171,7 +171,7 @@ import { ProjectType } from '@/constants/project';
 import type { SelectOption } from '@/types/select';
 import { ContactImportStatus } from '@/types/contactImport';
 import StepActions from '@/components/NewBroadcast/StepActions.vue';
-import { NewBroadcastPage } from '@/constants/broadcasts';
+import { NAME_FIELD_VALUE, NewBroadcastPage } from '@/constants/broadcasts';
 import type { ContactField } from '@/types/contacts';
 import type { Template } from '@/types/template';
 
@@ -330,15 +330,19 @@ const canContinue = computed(() => {
   return canConfirm && broadcastsStore.newBroadcast.reviewed;
 });
 
+const hasVariables = computed(() => {
+  return (
+    broadcastsStore.newBroadcast.selectedTemplate?.variableCount &&
+    broadcastsStore.newBroadcast.selectedTemplate.variableCount > 0
+  );
+});
+
 const handleCancel = () => {
   broadcastsStore.setReviewed(false);
   broadcastsStore.setSelectedFlow(undefined);
   broadcastsStore.setBroadcastName('');
 
-  if (
-    broadcastsStore.newBroadcast.selectedTemplate?.variableCount &&
-    broadcastsStore.newBroadcast.selectedTemplate.variableCount > 0
-  ) {
+  if (hasVariables.value || broadcastsStore.newBroadcast.headerMediaFileUrl) {
     broadcastsStore.setNewBroadcastPage(NewBroadcastPage.SELECT_VARIABLES);
   } else {
     broadcastsStore.setNewBroadcastPage(NewBroadcastPage.SELECT_TEMPLATE);
@@ -387,7 +391,21 @@ const handleContinue = async () => {
       );
     }
 
-    await broadcastsStore.createBroadcast(name, template, variables, groups);
+    let attachment = undefined;
+    if (broadcastsStore.newBroadcast.headerMediaFileUrl) {
+      attachment = {
+        url: broadcastsStore.newBroadcast.headerMediaFileUrl!,
+        type: broadcastsStore.newBroadcast.headerMediaFileType!,
+      };
+    }
+
+    await broadcastsStore.createBroadcast(
+      name,
+      template,
+      variables,
+      groups,
+      attachment,
+    );
     broadcastSuccess.value = true;
   } catch (error) {
     if (error instanceof Error) {
@@ -428,7 +446,12 @@ const createVariablesList = () => {
   }
 
   for (let i = 0; i < Object.keys(variablesMapping).length; i++) {
-    variables.push(`@fields.${variablesMapping[i]!.key}`); // TODO: handle @contact.name in the future
+    if (variablesMapping[i]!.key === NAME_FIELD_VALUE) {
+      variables.push(`@contact.name`);
+      continue;
+    }
+
+    variables.push(`@fields.${variablesMapping[i]!.key}`);
   }
 
   return variables;

@@ -241,7 +241,15 @@
         "disclaimer": "Verifique se cada campo está mapeado corretamente, este é o aspecto que seu mensagem terá para cada contato.",
         "actions": {
           "cancel": "Voltar"
-        }
+        },
+        "header_media_title": "Upload de cabeçalho",
+        "header_media_button": {
+          "IMAGE": "Adicionar imagem",
+          "VIDEO": "Adicionar vídeo",
+          "DOCUMENT": "Adicionar documento"
+        },
+        "header_media_upload_error": "Upload falhou, por favor tente novamente",
+        "name_field_label": "Nome"
       },
       "confirm_and_send": {
         "title": "Revisar e enviar",

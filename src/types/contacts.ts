@@ -1,3 +1,5 @@
+import type { SelectOption } from '@/types/select';
+
 export enum ContactFieldType {
   TEXT = 'T',
   NUMBER = 'N',
@@ -16,3 +18,5 @@ export interface ContactField {
 export interface ContactFieldWithExample extends ContactField {
   example: string;
 }
+
+export type ContactFieldOption = SelectOption<string>;

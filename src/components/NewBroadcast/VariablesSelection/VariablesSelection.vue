@@ -1,50 +1,59 @@
 <template>
   <section class="variables-selection">
     <section class="variables-selection__content">
-      <section class="variables-selection__variables-list">
-        <h1 class="variables-selection__title">
-          {{ $t('new_broadcast.pages.select_variables.page_title') }}
-        </h1>
-
-        <VariablesSelectionOverview
-          v-if="hasMappedVariable"
-          :definedVariables="definedVariables"
-        />
-
-        <UnnnicFormElement
-          v-for="index in templateVariablesCount"
-          :key="index"
-          class="variables-selection__item"
-          :label="
-            $t('new_broadcast.pages.select_variables.variable_label', {
-              index,
-            })
-          "
+      <section class="variables-selection__main">
+        <section
+          v-if="templateVariablesCount > 0"
+          class="variables-selection__variables-list"
         >
-          <UnnnicSelectSmart
-            :options="contactFields"
-            :modelValue="variableOption(index - 1)"
-            autocomplete
-            autocompleteClearOnFocus
-            enableSearchByValue
-            :isLoading="loadingContactFields"
-            :placeholder="
-              $t('new_broadcast.pages.select_variables.variable_placeholder')
-            "
-            @update:model-value="
-              (event: ContactFieldOption[]) =>
-                handleVariableUpdate(index - 1, event)
-            "
-          />
-        </UnnnicFormElement>
+          <h1 class="variables-selection__title">
+            {{ $t('new_broadcast.pages.select_variables.page_title') }}
+          </h1>
 
-        <UnnnicDisclaimer
-          v-if="hasMappedVariable"
-          class="variables-selection__disclaimer"
-          icon="alert-circle-1-1"
-          scheme="neutral-dark"
-          :text="$t('new_broadcast.pages.select_variables.disclaimer')"
-        />
+          <VariablesSelectionOverview
+            v-if="hasMappedVariable"
+            :definedVariables="definedVariables"
+          />
+
+          <UnnnicFormElement
+            v-for="index in templateVariablesCount"
+            :key="index"
+            class="variables-selection__item"
+            :label="
+              $t('new_broadcast.pages.select_variables.variable_label', {
+                index,
+              })
+            "
+          >
+            <UnnnicSelectSmart
+              :options="contactFields"
+              :modelValue="variableOption(index - 1)"
+              autocomplete
+              autocompleteClearOnFocus
+              enableSearchByValue
+              orderedByIndex
+              :selectFirst="false"
+              :isLoading="loadingContactFields"
+              :placeholder="
+                $t('new_broadcast.pages.select_variables.variable_placeholder')
+              "
+              @update:model-value="
+                (event: ContactFieldOption[]) =>
+                  handleVariableUpdate(index - 1, event)
+              "
+            />
+          </UnnnicFormElement>
+
+          <UnnnicDisclaimer
+            v-if="hasMappedVariable"
+            class="variables-selection__disclaimer"
+            icon="alert-circle-1-1"
+            scheme="neutral-dark"
+            :text="$t('new_broadcast.pages.select_variables.disclaimer')"
+          />
+        </section>
+
+        <VariablesSelectionHeaderMedia v-if="hasMediaHeader" />
       </section>
 
       <TemplateSelectionPreview
@@ -64,31 +73,48 @@
 
 <script setup lang="ts">
 import { onBeforeMount, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useContactStore } from '@/stores/contact';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import TemplateSelectionPreview from '@/components/NewBroadcast/TemplateSelection/TemplateSelectionPreview.vue';
 import VariablesSelectionOverview from '@/components/NewBroadcast/VariablesSelection/VariablesSelectionOverview.vue';
-import type { SelectOption } from '@/types/select';
-import { NewBroadcastPage } from '@/constants/broadcasts';
+import VariablesSelectionHeaderMedia from '@/components/NewBroadcast/VariablesSelection/VariablesSelectionHeaderMedia.vue';
+import { NewBroadcastPage, NAME_FIELD_VALUE } from '@/constants/broadcasts';
 import StepActions from '@/components/NewBroadcast/StepActions.vue';
+import {
+  ContactFieldType,
+  type ContactField,
+  type ContactFieldOption,
+} from '@/types/contacts';
 
 const contactStore = useContactStore();
 const broadcastsStore = useBroadcastsStore();
-
-type ContactFieldOption = SelectOption<string>;
+const { t } = useI18n();
 
 onBeforeMount(() => {
   fetchContactFields();
 });
 
+const nameFieldOption: ContactFieldOption = {
+  label: t('new_broadcast.pages.select_variables.name_field_label'),
+  value: NAME_FIELD_VALUE,
+};
+
 const contactFields = computed(() => {
-  return contactStore.contactFields.map(
+  const fields = contactStore.contactFields.map(
     (field) =>
       <ContactFieldOption>{
         label: field.label,
         value: field.key,
       },
   );
+
+  // always add name field if not loading anymore
+  if (!contactStore.loadingContactFields) {
+    fields.unshift(nameFieldOption);
+  }
+
+  return fields;
 });
 
 const loadingContactFields = computed(() => {
@@ -119,7 +145,9 @@ const variablesToReplace = computed(() => {
   const fieldsKeys = Object.values(
     broadcastsStore.newBroadcast.variableMapping,
   ).map((variable) => variable?.key);
+
   const examples: (string | undefined)[] = [];
+
   fieldsKeys.forEach((key) => {
     const field = contactStore.contactFieldsExamples.find(
       (field) => field.key === key,
@@ -131,9 +159,16 @@ const variablesToReplace = computed(() => {
   return examples;
 });
 
+const hasMediaHeader = computed(() => {
+  return broadcastsStore.newBroadcast.selectedTemplate?.header?.type !== 'TEXT';
+});
+
 const fetchContactFields = async () => {
   initializeVariableMapping();
-  contactStore.fetchContactFields();
+
+  if (contactStore.contactFields.length === 0) {
+    contactStore.fetchContactFields();
+  }
 
   if (broadcastsStore.newBroadcast.selectedGroups.length > 0) {
     contactStore.getContactFieldsExamplesByGroups(
@@ -143,6 +178,10 @@ const fetchContactFields = async () => {
 };
 
 const initializeVariableMapping = () => {
+  if (Object.keys(broadcastsStore.newBroadcast.variableMapping).length > 0) {
+    return;
+  }
+
   const variableCount = templateVariablesCount.value;
   for (let i = 0; i < variableCount; i++) {
     broadcastsStore.updateVariableMapping(i, undefined);
@@ -150,12 +189,29 @@ const initializeVariableMapping = () => {
 };
 
 const handleVariableUpdate = (key: number, newValue: ContactFieldOption[]) => {
-  if (newValue.length === 0) {
+  if (!newValue || newValue.length === 0) {
     broadcastsStore.updateVariableMapping(key, undefined);
     return;
   }
 
+  // check if the value is the same as the old value
+  const oldValue = variableMapping.value[key];
+  if (oldValue?.key === newValue[0].value) {
+    return;
+  }
+
   const newFieldKey = newValue[0];
+
+  if (newFieldKey.value === NAME_FIELD_VALUE) {
+    const nameField: ContactField = {
+      label: nameFieldOption.label,
+      key: newFieldKey.value,
+      valueType: ContactFieldType.TEXT,
+    };
+
+    broadcastsStore.updateVariableMapping(key, nameField);
+    return;
+  }
 
   const field = contactStore.contactFields.find(
     (field) => field.key === newFieldKey.value,
@@ -179,13 +235,32 @@ const variableOption = (index: number): ContactFieldOption[] => {
   ];
 };
 
-const canContinue = computed(() => {
+const hasFilledVariables = computed(() => {
+  if (templateVariablesCount.value === 0) {
+    return true;
+  }
+
   return (
     broadcastsStore.newBroadcast.variableMapping &&
     Object.values(broadcastsStore.newBroadcast.variableMapping).every(
       (variable) => variable !== undefined,
     )
   );
+});
+
+const hasFilledHeaderMedia = computed(() => {
+  if (!hasMediaHeader.value) {
+    return true;
+  }
+
+  return (
+    broadcastsStore.newBroadcast.headerMediaFileUrl &&
+    broadcastsStore.newBroadcast.headerMediaFileUrl !== undefined
+  );
+});
+
+const canContinue = computed(() => {
+  return hasFilledVariables.value && hasFilledHeaderMedia.value;
 });
 
 const handleCancel = () => {
@@ -212,6 +287,13 @@ const handleContinue = () => {
     color: $unnnic-color-neutral-darkest;
   }
 
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: $unnnic-spacing-sm;
+    flex: 1;
+  }
+
   &__content {
     display: flex;
     gap: $unnnic-spacing-sm;
@@ -222,7 +304,6 @@ const handleContinue = () => {
     display: flex;
     flex-direction: column;
     gap: $unnnic-spacing-sm;
-    flex: 1;
   }
 
   &__item-label {

@@ -47,6 +47,7 @@ export default {
     template: Template,
     variables: string[],
     groups: string[],
+    attachment?: { url: string; type: string },
   ) {
     const { project } = useProjectStore();
 
@@ -63,9 +64,30 @@ export default {
       },
     };
 
+    if (attachment) {
+      data.msg.attachments = [`${attachment.type}:${attachment.url}`];
+    }
+
     const response = await request.$http.post(
       `/api/v2/internals/whatsapp_broadcasts`,
       data,
+    );
+    return response;
+  },
+  async uploadMedia(file: File) {
+    const { project } = useProjectStore();
+    const headers = {
+      'Content-Type': 'multipart/form-data',
+    };
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('project_uuid', project.uuid);
+
+    const response = await request.$http.post(
+      `/api/v2/internals/broadcasts/upload_media`,
+      formData,
+      { headers },
     );
     return response;
   },

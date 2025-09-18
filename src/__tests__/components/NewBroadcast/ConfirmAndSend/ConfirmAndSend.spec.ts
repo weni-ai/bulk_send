@@ -7,12 +7,13 @@ import { useProjectStore } from '@/stores/project';
 import { useFlowsStore } from '@/stores/flows';
 import { useContactImportStore } from '@/stores/contactImport';
 import { ContactImportStatus } from '@/types/contactImport';
-import { NewBroadcastPage } from '@/constants/broadcasts';
+import { NAME_FIELD_VALUE, NewBroadcastPage } from '@/constants/broadcasts';
 
 vi.mock('vue-i18n', () => ({
   useI18n: () => ({ t: (key: string) => key }),
 }));
-vi.mock('vue-router', () => ({ useRouter: () => ({ push: vi.fn() }) }));
+const routerPush = vi.fn();
+vi.mock('vue-router', () => ({ useRouter: () => ({ push: routerPush }) }));
 
 const STUBS = {
   UnnnicFormElement: {
@@ -328,5 +329,229 @@ describe('ConfirmAndSend.vue', () => {
     // click primary to go home
     await successModal.find(SELECTOR.primaryButton).trigger('click');
     expect((wrapper.vm as any).broadcastSuccess).toBe(false);
+  });
+
+  it('successful continue passes attachment when header media exists', async () => {
+    const { wrapper, broadcastsStore } = mountWrapper();
+    broadcastsStore.setReviewed(true);
+    broadcastsStore.setSelectedFlow({ uuid: 'f1', name: 'Flow 1' } as any);
+    broadcastsStore.setBroadcastName('With Media');
+    broadcastsStore.setSelectedTemplate({
+      name: 'Welcome',
+      variableCount: 0,
+    } as any);
+    broadcastsStore.setSelectedGroups([{ uuid: 'g1', memberCount: 10 } as any]);
+    broadcastsStore.setHeaderMediaFileUrl('https://cdn.example.com/file.jpg');
+    // headerMediaFileType doesn't have a setter; set directly
+    (broadcastsStore as any).newBroadcast.headerMediaFileType = 'image';
+
+    const createSpy = vi
+      .spyOn(broadcastsStore, 'createBroadcast')
+      .mockResolvedValue(undefined as any);
+
+    await wrapper.vm.$nextTick();
+    await wrapper.find(SELECTOR.actionsContinue).trigger('click');
+
+    expect(createSpy).toHaveBeenCalledTimes(1);
+    const args = (createSpy as any).mock.calls[0];
+    expect(args[4]).toEqual({
+      url: 'https://cdn.example.com/file.jpg',
+      type: 'image',
+    });
+  });
+
+  it('cancel goes to variables page when only header media is present', async () => {
+    const { wrapper, broadcastsStore } = mountWrapper();
+    // No variables on template
+    broadcastsStore.setSelectedTemplate({ variableCount: 0 } as any);
+    broadcastsStore.setHeaderMediaFileUrl('https://cdn.example.com/file.jpg');
+    (broadcastsStore as any).newBroadcast.headerMediaFileType = 'image';
+
+    const setPageSpy = vi
+      .spyOn(broadcastsStore, 'setNewBroadcastPage')
+      .mockImplementation(() => {});
+
+    await wrapper.find(SELECTOR.actionsCancel).trigger('click');
+    expect(setPageSpy).toHaveBeenCalledWith(NewBroadcastPage.SELECT_VARIABLES);
+  });
+
+  it('continue shows error modal when variables are required but none are provided', async () => {
+    const { wrapper, broadcastsStore } = mountWrapper();
+    broadcastsStore.setReviewed(true);
+    broadcastsStore.setSelectedFlow({ uuid: 'f1', name: 'Flow 1' } as any);
+    broadcastsStore.setBroadcastName('Needs Vars');
+    // Requires variables
+    broadcastsStore.setSelectedTemplate({
+      name: 'Tpl',
+      variableCount: 2,
+    } as any);
+    broadcastsStore.setSelectedGroups([{ uuid: 'g1', memberCount: 10 } as any]);
+
+    await wrapper.vm.$nextTick();
+    await wrapper.find(SELECTOR.actionsContinue).trigger('click');
+
+    const errorModal = wrapper.findAll(SELECTOR.modal)[1];
+    expect(errorModal.attributes('data-open')).toBe('true');
+  });
+
+  it('continue uses import group uuid when import is present', async () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    const broadcastsStore = useBroadcastsStore(pinia);
+    const projectStore = useProjectStore(pinia);
+    const flowsStore = useFlowsStore(pinia);
+    const contactImportStore = useContactImportStore(pinia);
+
+    projectStore.project.brainOn = false;
+    flowsStore.flows = [{ uuid: 'f1', name: 'Flow 1' } as any];
+    vi.spyOn(flowsStore, 'listAllFlows').mockResolvedValue(undefined as any);
+
+    // import path prepared before mount
+    contactImportStore.import = { importId: 123 } as any;
+    contactImportStore.contactImportInfo.status = ContactImportStatus.COMPLETE;
+    contactImportStore.contactImportGroup = { uuid: 'grp-123' } as any;
+    vi.spyOn(contactImportStore, 'getImportInfo').mockResolvedValue(
+      undefined as any,
+    );
+
+    const wrapper = mount(ConfirmAndSend, {
+      global: {
+        plugins: [pinia],
+        stubs: STUBS,
+        mocks: { $t: (k: string) => k },
+      },
+    });
+
+    broadcastsStore.setReviewed(true);
+    broadcastsStore.setSelectedFlow({ uuid: 'f1', name: 'Flow 1' } as any);
+    broadcastsStore.setBroadcastName('Import Broadcast');
+    broadcastsStore.setSelectedTemplate({
+      name: 'Tpl',
+      variableCount: 0,
+    } as any);
+
+    const createSpy = vi
+      .spyOn(broadcastsStore, 'createBroadcast')
+      .mockResolvedValue(undefined as any);
+
+    await wrapper.vm.$nextTick();
+    await wrapper.find(SELECTOR.actionsContinue).trigger('click');
+
+    expect(createSpy).toHaveBeenCalledTimes(1);
+    const args = (createSpy as any).mock.calls[0];
+    expect(args[3]).toEqual(['grp-123']);
+  });
+
+  it('sets initial broadcast name when template exists before mount', () => {
+    // midday UTC to avoid timezone shifting the date
+    vi.setSystemTime(new Date('2024-06-15T12:00:00Z'));
+
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    const broadcastsStore = useBroadcastsStore(pinia);
+    const flowsStore = useFlowsStore(pinia);
+    vi.spyOn(flowsStore, 'listAllFlows').mockResolvedValue(undefined as any);
+
+    broadcastsStore.setSelectedTemplate({ name: 'Welcome' } as any);
+
+    mount(ConfirmAndSend, {
+      global: {
+        plugins: [pinia],
+        stubs: STUBS,
+        mocks: { $t: (k: string) => k },
+      },
+    });
+
+    expect(broadcastsStore.newBroadcast.broadcastName).toBe('Welcome_15_06');
+  });
+
+  it('createBroadcast receives variables from mapping (name + custom fields)', async () => {
+    const { wrapper, broadcastsStore } = mountWrapper();
+
+    broadcastsStore.setReviewed(true);
+    broadcastsStore.setSelectedFlow({ uuid: 'f1', name: 'Flow 1' } as any);
+    broadcastsStore.setBroadcastName('Vars Mapping');
+    broadcastsStore.setSelectedTemplate({
+      name: 'Tpl',
+      variableCount: 2,
+    } as any);
+    broadcastsStore.setSelectedGroups([{ uuid: 'g1', memberCount: 5 } as any]);
+
+    broadcastsStore.updateVariableMapping(0, {
+      key: NAME_FIELD_VALUE,
+      label: 'Name',
+    } as any);
+    broadcastsStore.updateVariableMapping(1, {
+      key: 'age',
+      label: 'Age',
+    } as any);
+
+    const createSpy = vi
+      .spyOn(broadcastsStore, 'createBroadcast')
+      .mockResolvedValue(undefined as any);
+
+    await wrapper.vm.$nextTick();
+    await wrapper.find(SELECTOR.actionsContinue).trigger('click');
+
+    expect(createSpy).toHaveBeenCalledTimes(1);
+    const args = (createSpy as any).mock.calls[0];
+    expect(args[2]).toEqual(['@contact.name', '@fields.age']);
+  });
+
+  it('shows error when variable mapping is incomplete', async () => {
+    const { wrapper, broadcastsStore } = mountWrapper();
+
+    broadcastsStore.setReviewed(true);
+    broadcastsStore.setSelectedFlow({ uuid: 'f1', name: 'Flow 1' } as any);
+    broadcastsStore.setBroadcastName('Incomplete Vars');
+    broadcastsStore.setSelectedTemplate({
+      name: 'Tpl',
+      variableCount: 2,
+    } as any);
+    broadcastsStore.setSelectedGroups([{ uuid: 'g1', memberCount: 5 } as any]);
+
+    // one mapped, one explicitly undefined
+    broadcastsStore.updateVariableMapping(0, {
+      key: NAME_FIELD_VALUE,
+      label: 'Name',
+    } as any);
+    broadcastsStore.updateVariableMapping(1, undefined);
+
+    await wrapper.vm.$nextTick();
+    await wrapper.find(SELECTOR.actionsContinue).trigger('click');
+
+    const errorModal = wrapper.findAll(SELECTOR.modal)[1];
+    expect(errorModal.attributes('data-open')).toBe('true');
+  });
+
+  it('success primary resets store and navigates home', async () => {
+    const { wrapper, broadcastsStore } = mountWrapper();
+    broadcastsStore.setReviewed(true);
+    broadcastsStore.setSelectedFlow({ uuid: 'f1', name: 'Flow 1' } as any);
+    broadcastsStore.setBroadcastName('Go Home');
+    broadcastsStore.setSelectedTemplate({
+      name: 'Tpl',
+      variableCount: 0,
+    } as any);
+    broadcastsStore.setSelectedGroups([{ uuid: 'g1', memberCount: 1 } as any]);
+
+    vi.spyOn(broadcastsStore, 'createBroadcast').mockResolvedValue(
+      undefined as any,
+    );
+
+    await wrapper.vm.$nextTick();
+    await wrapper.find(SELECTOR.actionsContinue).trigger('click');
+
+    const successModal = wrapper.findAll(SELECTOR.modal)[2];
+    expect(successModal.attributes('data-open')).toBe('true');
+
+    await successModal.find(SELECTOR.primaryButton).trigger('click');
+
+    expect(routerPush).toHaveBeenCalledWith({ name: 'HomeBulkSend' });
+    expect(broadcastsStore.newBroadcast.currentPage).toBe(
+      NewBroadcastPage.SELECT_GROUPS,
+    );
+    expect(broadcastsStore.newBroadcast.reviewed).toBe(false);
+    expect(broadcastsStore.newBroadcast.selectedFlow).toBeUndefined();
   });
 });

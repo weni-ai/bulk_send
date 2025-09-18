@@ -15,6 +15,8 @@ vi.mock('@/api/resources/broadcasts', () => ({
     getBroadcastsStatistics: vi.fn(),
     getBroadcastsMonthPerformance: vi.fn(),
     createGroupFromStatus: vi.fn(),
+    createBroadcast: vi.fn(),
+    uploadMedia: vi.fn(),
   },
 }));
 
@@ -77,6 +79,9 @@ describe('broadcasts store', () => {
     const templateStore = useTemplatesStore();
     templateStore.templatePricing.rates.marketing = 1.2;
     templateStore.templatePricing.currency = 'BRL';
+    const pricingSpy = vi
+      .spyOn(templateStore, 'getTemplatePricing')
+      .mockResolvedValue(undefined as any);
 
     const mocked = Broadcasts as Mocked<typeof Broadcasts>;
     mocked.getBroadcastsMonthPerformance.mockResolvedValue({
@@ -100,6 +105,7 @@ describe('broadcasts store', () => {
     expect(store.broadcastMonthPerformance.estimatedCost).toBe(
       `R$${cost.toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
     );
+    expect(pricingSpy).toHaveBeenCalled();
     expect(store.loadingBroadcastsMonthPerformance).toBe(false);
   });
 
@@ -190,5 +196,54 @@ describe('broadcasts store', () => {
       store.createGroupFromStatus('proj', 'G', 1, 'failed'),
     ).rejects.toThrow('fail-create-group');
     expect(store.loadingCreateGroupFromStatus).toBe(false);
+  });
+
+  it('createBroadcast forwards args to API and toggles loading flag', async () => {
+    const store = useBroadcastsStore();
+    const mocked = Broadcasts as Mocked<typeof Broadcasts>;
+    mocked.createBroadcast.mockResolvedValue({ data: { id: 1 } } as any);
+
+    expect(store.loadingCreateBroadcast).toBe(false);
+    const tpl = { uuid: 'tpl-1' } as any;
+    const vars = ['@fields.name'];
+    const groups = ['g1'];
+    const attachment = { url: 'https://cdn/x.jpg', type: 'image' };
+
+    const promise = store.createBroadcast(
+      'My Broadcast',
+      tpl,
+      vars,
+      groups,
+      attachment,
+    );
+    expect(store.loadingCreateBroadcast).toBe(true);
+    const result = await promise;
+
+    expect(mocked.createBroadcast).toHaveBeenCalledWith(
+      'My Broadcast',
+      tpl,
+      vars,
+      groups,
+      attachment,
+    );
+    expect(result).toEqual({ id: 1 });
+    expect(store.loadingCreateBroadcast).toBe(false);
+  });
+
+  it('uploadMedia stores returned url and type, toggling loading flag', async () => {
+    const store = useBroadcastsStore();
+    const mocked = Broadcasts as Mocked<typeof Broadcasts>;
+    mocked.uploadMedia.mockResolvedValue({
+      data: { url: 'https://cdn/y.pdf', type: 'document' },
+    } as any);
+
+    expect(store.loadingUploadMedia).toBe(false);
+    const blob = new Blob(['x'], { type: 'application/pdf' });
+    const promise = store.uploadMedia(blob as unknown as File);
+    expect(store.loadingUploadMedia).toBe(true);
+    await promise;
+    expect(store.newBroadcast.headerMediaFileUrl).toBe('https://cdn/y.pdf');
+    expect(store.newBroadcast.headerMediaFileType).toBe('document');
+    expect(store.loadingUploadMedia).toBe(false);
   });
 });

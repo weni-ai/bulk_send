@@ -97,9 +97,18 @@ const handleCancel = () => {
   broadcastsStore.setNewBroadcastPage(NewBroadcastPage.SELECT_GROUPS);
 };
 
-const handleContinue = () => {
+const shouldGoToVariablesPage = computed(() => {
   const selectedTemplate = broadcastsStore.newBroadcast.selectedTemplate;
-  if (selectedTemplate?.variableCount && selectedTemplate.variableCount > 0) {
+  const hasVariables =
+    selectedTemplate?.variableCount && selectedTemplate.variableCount > 0;
+
+  const hasMediaHeader =
+    selectedTemplate?.header?.type && selectedTemplate?.header?.type !== 'TEXT';
+  return hasVariables || hasMediaHeader;
+});
+
+const handleContinue = () => {
+  if (shouldGoToVariablesPage.value) {
     broadcastsStore.setNewBroadcastPage(NewBroadcastPage.SELECT_VARIABLES);
   } else {
     broadcastsStore.setNewBroadcastPage(NewBroadcastPage.CONFIRM_AND_SEND);

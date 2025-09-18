@@ -52,6 +52,9 @@ interface NewBroadcastState {
   selectedGroups: Group[];
   selectedTemplate?: Template;
   variableMapping: Record<number, ContactField | undefined>;
+  headerMediaFileUrl?: string;
+  headerMediaFile?: File;
+  headerMediaFileType?: string;
   broadcastName: string;
   selectedFlow?: FlowReference;
   reviewed: boolean;
@@ -67,6 +70,7 @@ interface CreateBroadcastData {
       uuid: string;
       variables: string[];
     };
+    attachments?: string[];
   };
 }
 

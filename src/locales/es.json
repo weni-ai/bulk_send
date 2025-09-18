@@ -241,7 +241,15 @@
         "disclaimer": "Revisa si cada campo está correctamente mapeado, este es el aspecto que tendrá tu mensaje para cada contacto.",
         "actions": {
           "cancel": "Volver"
-        }
+        },
+        "header_media_title": "Carga de encabezado",
+        "header_media_button": {
+          "IMAGE": "Agregar imagen",
+          "VIDEO": "Agregar video",
+          "DOCUMENT": "Agregar documento"
+        },
+        "header_media_upload_error": "Error al subir, por favor intenta nuevamente",
+        "name_field_label": "Nombre"
       },
       "confirm_and_send": {
         "title": "Revisar y enviar",
@@ -282,7 +290,7 @@
           "primary_button": "Volver a la home"
         },
         "actions": {
-          "cancel": "Volver"
+          "cancel": "Back"
         }
       },
       "contact_import": {

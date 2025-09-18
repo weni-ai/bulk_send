@@ -74,4 +74,66 @@ describe('api/resources/broadcasts', () => {
     );
     expect(result).toEqual({ data: { id: 1 } });
   });
+
+  it('calls POST /whatsapp_broadcasts with template variables and optional attachment', async () => {
+    const httpPost = (requests as any).$http.post as ReturnType<typeof vi.fn>;
+    httpPost.mockResolvedValue({ data: { id: 99 } });
+
+    const template = { uuid: 'tpl-1' } as any;
+    const variables = ['@fields.name'];
+    const groups = ['g1', 'g2'];
+
+    // without attachment
+    let result = await Broadcasts.createBroadcast(
+      'My BC',
+      template,
+      variables,
+      groups,
+    );
+    expect(httpPost).toHaveBeenCalledWith(
+      '/api/v2/internals/whatsapp_broadcasts',
+      expect.objectContaining({
+        queue: 'template_batch',
+        name: 'My BC',
+        msg: { template: { uuid: 'tpl-1', variables } },
+        groups,
+      }),
+    );
+    expect(result).toEqual({ data: { id: 99 } });
+
+    // with attachment
+    httpPost.mockClear();
+    result = await Broadcasts.createBroadcast(
+      'My BC',
+      template,
+      variables,
+      groups,
+      { url: 'https://cdn/file.jpg', type: 'image' },
+    );
+    expect(httpPost).toHaveBeenCalledWith(
+      '/api/v2/internals/whatsapp_broadcasts',
+      expect.objectContaining({
+        msg: {
+          template: { uuid: 'tpl-1', variables },
+          attachments: ['image:https://cdn/file.jpg'],
+        },
+      }),
+    );
+    expect(result).toEqual({ data: { id: 99 } });
+  });
+
+  it('calls POST /broadcasts/upload_media with FormData including project_uuid', async () => {
+    const httpPost = (requests as any).$http.post as ReturnType<typeof vi.fn>;
+    httpPost.mockResolvedValue({ data: { url: 'u', type: 'image' } });
+
+    const file = new Blob(['x'], { type: 'image/jpeg' }) as unknown as File;
+    const result = await Broadcasts.uploadMedia(file);
+
+    expect(httpPost).toHaveBeenCalledWith(
+      '/api/v2/internals/broadcasts/upload_media',
+      expect.any(FormData),
+      { headers: { 'Content-Type': 'multipart/form-data' } },
+    );
+    expect(result).toEqual({ data: { url: 'u', type: 'image' } });
+  });
 });
