@@ -13,4 +13,11 @@ enum TemplateStatus {
   PAUSED = 'T',
 }
 
-export { PAGE_SIZE, TemplateStatus };
+enum TemplateCategory {
+  MARKETING = 'MARKETING',
+  UTILITY = 'UTILITY',
+  AUTHENTICATION = 'AUTHENTICATION',
+  SERVICE = 'SERVICE',
+}
+
+export { PAGE_SIZE, TemplateStatus, TemplateCategory };

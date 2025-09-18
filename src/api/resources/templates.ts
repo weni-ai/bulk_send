@@ -28,4 +28,15 @@ export default {
       },
     );
   },
+  async getTemplatePricing() {
+    const { project } = useProjectStore();
+    const params = {
+      project_uuid: project.uuid,
+    };
+
+    const response = await request.$http.get('/api/v2/billing_pricing', {
+      params,
+    });
+    return response;
+  },
 };
