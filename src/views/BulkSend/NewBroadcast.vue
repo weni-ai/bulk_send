@@ -10,7 +10,7 @@
           class="new-broadcast-layout__contacts"
         >
           <section
-            v-if="!hasContactImport"
+            v-if="!hasContactImport || !uploadFinished"
             class="new-broadcast-layout__content-groups"
           >
             <GroupSelection
@@ -21,10 +21,11 @@
             <ContactImport
               :open="contactImportOpen"
               @update:open="handleContactImportOpen"
+              @uploaded="handleUploaded"
             />
           </section>
 
-          <ContactImportProcessing v-if="hasContactImport" />
+          <ContactImportProcessing v-if="hasContactImport && uploadFinished" />
         </section>
         <section
           v-if="isSelectTemplatePage"
@@ -55,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeMount } from 'vue';
+import { computed, onBeforeMount, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import { useContactImportStore } from '@/stores/contactImport';
@@ -74,6 +75,8 @@ const router = useRouter();
 const broadcastsStore = useBroadcastsStore();
 const contactImportStore = useContactImportStore();
 const projectStore = useProjectStore();
+
+const uploadFinished = ref(false);
 
 onBeforeMount(() => {
   broadcastsStore.setNewBroadcastPage(NewBroadcastPage.SELECT_GROUPS);
@@ -102,7 +105,7 @@ const canContinue = computed(() => {
   if (isSelectGroupsPage.value) {
     return (
       broadcastsStore.newBroadcast.selectedGroups.length > 0 ||
-      contactImportStore.import
+      (contactImportStore.import && uploadFinished.value)
     );
   }
 
@@ -132,6 +135,10 @@ const handleGroupSelectionOpen = (value: boolean) => {
 const handleContactImportOpen = (value: boolean) => {
   broadcastsStore.setContactImportOpen(value);
   broadcastsStore.setGroupSelectionOpen(!value);
+};
+
+const handleUploaded = () => {
+  uploadFinished.value = true;
 };
 
 const handleCancel = () => {
@@ -170,6 +177,7 @@ const handleContinue = () => {
 const handleBack = () => {
   broadcastsStore.setNewBroadcastPage(NewBroadcastPage.SELECT_GROUPS);
   contactImportStore.clearImport();
+  uploadFinished.value = false;
 };
 </script>
 

@@ -1,4 +1,4 @@
-import type { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 
 export const parseUploadError = (error: AxiosError): Error => {
   const responseData = error.response?.data as { error?: string };
@@ -20,4 +20,8 @@ export const parseUploadError = (error: AxiosError): Error => {
   }
 
   return new Error('Unknown error while uploading contact import');
+};
+
+export const isCanceledUploadError = (error: unknown): boolean => {
+  return error instanceof AxiosError && error.code === 'ERR_CANCELED';
 };

@@ -22,11 +22,20 @@ export enum ContactImportGroupMode {
   EXISTING = 'E',
 }
 
+export enum ContactImportStatus {
+  NOT_VERIFIED = 'N',
+  PENDING = 'P',
+  PROCESSING = 'O',
+  COMPLETE = 'C',
+  FAILED = 'F',
+}
+
 export interface ContactImportColumn {
   header: string;
   type: ContactImportColumnType;
   matchedField?: string;
   suggestedType?: ContactFieldType;
+  example?: string;
 }
 
 export interface ContactImportState {
@@ -34,6 +43,16 @@ export interface ContactImportState {
   loadingConfirmContactImport: boolean;
   import?: ContactImport;
   importProcessing: ContactImportProcessing;
+  abortController?: AbortController;
+  contactImportInfo: ContactImportInfo;
+}
+export interface ContactImportInfo {
+  status: ContactImportStatus;
+  numCreated: number;
+  numUpdated: number;
+  numErrored: number;
+  errors: string[];
+  timeTaken: number;
 }
 
 export interface ContactImportProcessing {
