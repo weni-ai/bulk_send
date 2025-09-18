@@ -171,7 +171,7 @@ import { ProjectType } from '@/constants/project';
 import type { SelectOption } from '@/types/select';
 import { ContactImportStatus } from '@/types/contactImport';
 import StepActions from '@/components/NewBroadcast/StepActions.vue';
-import { NewBroadcastPage } from '@/constants/broadcasts';
+import { NAME_FIELD_VALUE, NewBroadcastPage } from '@/constants/broadcasts';
 import type { ContactField } from '@/types/contacts';
 import type { Template } from '@/types/template';
 
@@ -446,7 +446,12 @@ const createVariablesList = () => {
   }
 
   for (let i = 0; i < Object.keys(variablesMapping).length; i++) {
-    variables.push(`@fields.${variablesMapping[i]!.key}`); // TODO: handle @contact.name in the future
+    if (variablesMapping[i]!.key === NAME_FIELD_VALUE) {
+      variables.push(`@contact.name`);
+      continue;
+    }
+
+    variables.push(`@fields.${variablesMapping[i]!.key}`);
   }
 
   return variables;
