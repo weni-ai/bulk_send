@@ -38,6 +38,7 @@
 </template>
 
 <script setup lang="ts">
+import unnnic from '@weni/unnnic-system';
 import { ref, computed } from 'vue';
 import type { ContactGroupStatus } from '@/constants/broadcasts';
 import { useBroadcastsStore } from '@/stores/broadcasts';
@@ -77,16 +78,32 @@ const handlePrimaryButtonClick = async () => {
   if (!props.category) {
     return;
   }
+  try {
+    await broadcastsStore.createGroupFromStatus(
+      projectStore.project.uuid,
+      groupName.value,
+      props.broadcastID,
+      props.category,
+    );
 
-  await broadcastsStore.createGroupFromStatus(
-    projectStore.project.uuid,
-    groupName.value,
-    props.broadcastID,
-    props.category,
-  );
+    emit('update:modelValue', false);
 
-  emit('update:modelValue', false);
-  // TODO: check with design if we need to show a success message
+    unnnic.unnnicCallAlert({
+      props: {
+        text: t('modals.new_contact_group.success_alert'),
+        type: 'success',
+      },
+      seconds: 5,
+    });
+  } catch {
+    unnnic.unnnicCallAlert({
+      props: {
+        text: t('modals.new_contact_group.error_alert'),
+        type: 'error',
+      },
+      seconds: 10,
+    });
+  }
 };
 
 const handleSecondaryButtonClick = () => {

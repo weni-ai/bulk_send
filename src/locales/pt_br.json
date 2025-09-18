@@ -100,7 +100,9 @@
         "delivered": "Entregues",
         "read": "Lidas",
         "failed": "Falhas"
-      }
+      },
+      "success_alert": "Grupo criado com sucesso",
+      "error_alert": "Erro ao criar o grupo, por favor tente novamente"
     },
     "activate_mmlite": {
       "buttons": {

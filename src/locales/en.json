@@ -100,7 +100,9 @@
         "delivered": "Delivered",
         "read": "Read",
         "failed": "Failed"
-      }
+      },
+      "success_alert": "Group created successfully",
+      "error_alert": "Group creation failed, please try again"
     },
     "activate_mmlite": {
       "buttons": {
