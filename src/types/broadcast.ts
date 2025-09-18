@@ -3,6 +3,7 @@ import type { Template, TemplateReference } from '@/types/template';
 import type { PageRequestParams } from '@/types/requests';
 import { BroadcastStatus, NewBroadcastPage } from '@/constants/broadcasts';
 import { Currency } from '@/constants/currency';
+import type { ContactField } from './contacts';
 
 interface BroadcastStatisticsParams extends PageRequestParams {
   start_date?: string;
@@ -49,6 +50,7 @@ interface NewBroadcastState {
   contactImportOpen: boolean;
   selectedGroups: Group[];
   selectedTemplate?: Template;
+  variableMapping: Record<number, ContactField | undefined>;
 }
 
 export type {
