@@ -326,6 +326,9 @@
       "actions": {
         "cancel": "Cancelar",
         "continue": "Continuar"
+      },
+      "select_variables_disabled": {
+        "title": "Variáveis (nenhuma variável para mapear)"
       }
     }
   }
