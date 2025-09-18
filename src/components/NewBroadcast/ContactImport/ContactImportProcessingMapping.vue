@@ -157,7 +157,7 @@ const initTableRows = () => {
         selected: true,
         columnHeader: column.header,
         mapToField: getMapToField(column),
-        sample: 'find sample', // TODO: get sample from API when ready
+        sample: column.example || '-',
         type: fieldType,
         mandatory: mandatory,
         columnType: column.type,
@@ -203,7 +203,7 @@ const getMapToField = (column: ContactImportColumn) => {
 const fieldTypeMap = computed(() => {
   return contactImportStore.import?.fields.reduce(
     (acc, field) => {
-      acc[field.key] = field.type;
+      acc[field.key] = field.valueType;
       return acc;
     },
     {} as Record<string, ContactFieldType>,

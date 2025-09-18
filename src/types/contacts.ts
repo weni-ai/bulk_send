@@ -10,5 +10,9 @@ export enum ContactFieldType {
 export interface ContactField {
   key: string;
   label: string;
-  type: ContactFieldType;
+  valueType: ContactFieldType;
+}
+
+export interface ContactFieldWithExample extends ContactField {
+  example: string;
 }
