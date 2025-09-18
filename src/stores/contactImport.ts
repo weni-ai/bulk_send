@@ -72,12 +72,8 @@ export const useContactImportStore = defineStore('contactImport', {
       }
     },
     cancelUpload() {
-      if (this.abortController) {
-        try {
-          this.abortController.abort();
-        } catch {
-          // noop
-        }
+      if (this.abortController && !this.abortController.signal.aborted) {
+        this.abortController.abort();
       }
       this.abortController = undefined;
     },
