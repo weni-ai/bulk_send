@@ -163,6 +163,9 @@
         "title": "Você pode {0} de modelo para ajudar você a começar",
         "title_highlight": "baixar um exemplo"
       }
+    },
+    "template_preview": {
+      "title": "Prévia de modelo"
     }
   },
   "new_broadcast": {
@@ -202,8 +205,27 @@
           "name": "Nome",
           "date": "Data",
           "content": "Conteúdo",
-          "language": "Idioma"
-        }
+          "language": "Idioma",
+          "status": "Status",
+          "statuses": {
+            "APPROVED": "Aprovado",
+            "IN_APPEAL": "Em apelo",
+            "PENDING": "Pendente",
+            "REJECTED": "Rejeitado",
+            "PENDING_DELETION": "Pendente de exclusão",
+            "DELETED": "Excluído",
+            "DISABLED": "Desativado",
+            "LOCKED": "Bloqueado",
+            "UNSUPPORTED_LANGUAGE": "Idioma não suportado",
+            "PAUSED": "Pausado"
+          }
+        },
+        "preview": {
+          "title": "Prévia de modelo",
+          "name": "Prévia de modelo:",
+          "missing": "Selecione um modelo para visualizar"
+        },
+        "disclaimer": "Apenas modelos com status aprovado podem ser selecionados e enviados. Modelos pendentes devem aguardar a aprovação da Meta antes de serem utilizados. <a target=\"_blank\" href=\"https://developers.facebook.com/docs/whatsapp/message-templates/guidelines/#approval-process\" class=\"highlight\">Saiba mais na documentação da Meta</a>"
       },
       "select_variables": {
         "title": "Variáveis"
