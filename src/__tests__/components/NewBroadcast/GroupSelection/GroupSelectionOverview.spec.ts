@@ -12,8 +12,7 @@ vi.mock('vue-i18n', () => ({
       if (key.endsWith('overview.total_value')) return `${params?.total}`;
       if (key.endsWith('overview.cost_label')) return 'Cost';
       if (key.endsWith('overview.cost_value')) {
-        const cost = Number(params?.cost).toFixed(2);
-        return `${params?.currency}${cost} (x${params?.templateMultiplier})`;
+        return `${params?.currency}${params?.cost} (x${params?.templateMultiplier})`;
       }
       return key;
     },
@@ -61,14 +60,27 @@ describe('GroupSelectionOverview.vue', () => {
 
     // Cost uses USD symbol and 0.12 multiplier from component (formatted)
     // cost = 15 * 0.12 = 1.80
-    expect(wrapper.find(SELECTOR.costValue).text()).toContain('$1.80 (x0.12)');
+    const cost = 1.8;
+    const costLocalized = cost.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+    });
+    expect(wrapper.find(SELECTOR.costValue).text()).toContain(
+      `$${costLocalized} (x0.12)`,
+    );
   });
 
   it('renders zero state when no groups selected', () => {
     const wrapper = mountWrapper([]);
     expect(wrapper.find(SELECTOR.title).text()).toContain('Selected: 0');
     expect(wrapper.find(SELECTOR.totalValue).text()).toBe('0');
-    expect(wrapper.find(SELECTOR.costValue).text()).toContain('$0.00 (x0.12)');
+
+    const cost = 0;
+    const costLocalized = cost.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+    });
+    expect(wrapper.find(SELECTOR.costValue).text()).toContain(
+      `$${costLocalized} (x0.12)`,
+    );
   });
 
   it('emits remove when clicking the removal control', async () => {

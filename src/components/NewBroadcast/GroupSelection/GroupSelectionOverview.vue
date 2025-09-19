@@ -82,7 +82,7 @@ const totalText = computed(() => {
 
 const costText = computed(() => {
   return t('new_broadcast.pages.select_groups.overview.cost_value', {
-    cost: cost.value,
+    cost: cost.value.toLocaleString(undefined, { minimumFractionDigits: 2 }),
     currency: Currency[templateCurrency],
     templateMultiplier,
   });
