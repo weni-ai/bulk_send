@@ -25,7 +25,7 @@
       @update:model-value="handleChannelUpdate"
     />
 
-    <UnnnicButton
+    <!-- <UnnnicButton
       class="template-selection-filters__new-template"
       size="small"
       type="secondary"
@@ -33,7 +33,7 @@
       :text="$t('new_broadcast.pages.select_template.filters.new_tamplate')"
       data-test="new-template"
       @click="handleNewTemplate"
-    />
+    /> -->
   </section>
 </template>
 
@@ -115,10 +115,6 @@ const channelOption = computed(() => {
 const handleSearchUpdate = useDebounceFn((value: string) => {
   emit('update:search', value);
 }, 400);
-
-const handleNewTemplate = () => {
-  console.log('new template'); // TODO: Add when integrations is done
-};
 
 const handleSearchClear = () => {
   emit('update:search', '');

@@ -77,13 +77,6 @@ describe('TemplateSelectionFilters.vue', () => {
     expect(emissions[emissions.length - 1]).toEqual(['']);
   });
 
-  it('renders new template button (click handler noop)', async () => {
-    const wrapper = mountWrapper();
-    const btn = wrapper.find(SELECTOR.newTemplate);
-    expect(btn.exists()).toBe(true);
-    await btn.trigger('click');
-  });
-
   it('emits update:channel when a channel is selected', async () => {
     const wrapper = mountWrapper('', undefined);
     await wrapper.find(SELECTOR.setChannel).trigger('click');
