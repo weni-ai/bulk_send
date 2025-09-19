@@ -58,6 +58,7 @@ const SELECTOR = {
   disclaimer: '[data-test="disclaimer"]',
   overview: '[data-test="overview"]',
   preview: '[data-test="preview"]',
+  headerMedia: '[data-test="header-media"]',
   actionsCancel: '[data-test="actions-cancel"]',
   actionsContinue: '[data-test="actions-continue"]',
 } as const;
@@ -287,5 +288,25 @@ describe('VariablesSelection.vue', () => {
       .mockImplementation(() => {});
     await wrapper.find(SELECTOR.actionsContinue).trigger('click');
     expect(setPageSpy).toHaveBeenCalledWith(NewBroadcastPage.CONFIRM_AND_SEND);
+  });
+
+  it('does not render header media section when template header is null', async () => {
+    const { wrapper, broadcastsStore } = mountWrapper(0);
+
+    // first, set a media header so the section is rendered
+    broadcastsStore.newBroadcast.selectedTemplate = {
+      variableCount: 0,
+      header: { type: 'IMAGE' },
+    } as any;
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find(SELECTOR.headerMedia).exists()).toBe(true);
+
+    // then set header to null and ensure the section (and its button) disappears
+    broadcastsStore.newBroadcast.selectedTemplate = {
+      variableCount: 0,
+      header: null,
+    } as any;
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find(SELECTOR.headerMedia).exists()).toBe(false);
   });
 });
