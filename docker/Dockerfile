@@ -35,17 +35,17 @@ COPY . ./
 
 RUN npm run build
 
-FROM ${OLD_IMAGE} AS old_css
+# FROM ${OLD_IMAGE} AS old_css
 
 FROM nginxinc/nginx-unprivileged:1.25-alpine
-ARG OLD_IMAGE=${OLD_IMAGE}
+# ARG OLD_IMAGE=${OLD_IMAGE}
 ARG KEEP_DAYS
 
 COPY --chown=nginx:nginx docker/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY --chown=nginx:nginx docker/nginx/headers /usr/share/nginx/html/headers
 COPY --chown=nginx:nginx docker/file_handler.sh /
 COPY --from=builder --chown=nginx:nginx /app/dist /usr/share/nginx/html/bulk-send/
-COPY --from=old_css --chown=nginx:nginx /usr/share/nginx/html/bulk-send/assets/all.tx[t] /usr/share/nginx/html/bulk-send/assets/*.css /usr/share/nginx/html/bulk-send/assets/
+# COPY --from=old_css --chown=nginx:nginx /usr/share/nginx/html/bulk-send/assets/all.tx[t] /usr/share/nginx/html/bulk-send/assets/*.css /usr/share/nginx/html/bulk-send/assets/
 
 COPY docker-entrypoint.sh /
 
