@@ -71,6 +71,7 @@ import type { DateRange } from '@/types/recentSends';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import { useProjectStore } from '@/stores/project';
 import { endOfDay, startOfDay } from 'date-fns';
+import router from '@/router';
 
 const broadcastsStore = useBroadcastsStore();
 const projectStore = useProjectStore();
@@ -127,8 +128,7 @@ const handleReset = () => {
 };
 
 const handleStartNewSend = () => {
-  // TODO: implement redirect to new send page
-  console.log('handleStartNewSend');
+  router.push('/broadcast/create');
 };
 
 const fetchRecentSends = async () => {
