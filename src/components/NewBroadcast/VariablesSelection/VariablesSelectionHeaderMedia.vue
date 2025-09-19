@@ -74,9 +74,9 @@ const mediaHeaderType = computed(() => {
 const mediaHeaderAcceptedFormats = computed(() => {
   switch (mediaHeaderType.value) {
     case 'IMAGE':
-      return 'image/*';
+      return 'image/png,image/jpeg,image/jpg';
     case 'VIDEO':
-      return 'video/*';
+      return 'video/mp4';
     case 'DOCUMENT':
       return 'application/pdf';
     default:
