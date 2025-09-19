@@ -399,12 +399,18 @@ const handleContinue = async () => {
       };
     }
 
+    const flow = broadcastsStore.newBroadcast.selectedFlow;
+    if (projectType.value === ProjectType.FLOW && !flow) {
+      throw new Error(t('new_broadcast.pages.confirm_and_send.flow_not_found'));
+    }
+
     await broadcastsStore.createBroadcast(
       name,
       template,
       variables,
       groups,
       attachment,
+      flow,
     );
     broadcastSuccess.value = true;
   } catch (error) {

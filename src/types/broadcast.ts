@@ -65,6 +65,7 @@ interface CreateBroadcastData {
   project: string;
   name: string;
   groups: string[];
+  trigger_flow_uuid?: string;
   msg: {
     template: {
       uuid: string;

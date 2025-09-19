@@ -554,4 +554,29 @@ describe('ConfirmAndSend.vue', () => {
     expect(broadcastsStore.newBroadcast.reviewed).toBe(false);
     expect(broadcastsStore.newBroadcast.selectedFlow).toBeUndefined();
   });
+
+  it('forwards selected flow to createBroadcast as last argument', async () => {
+    const { wrapper, broadcastsStore } = mountWrapper();
+    const selectedFlow = { uuid: 'f1', name: 'Flow 1' } as any;
+
+    broadcastsStore.setReviewed(true);
+    broadcastsStore.setSelectedFlow(selectedFlow);
+    broadcastsStore.setBroadcastName('With Flow');
+    broadcastsStore.setSelectedTemplate({
+      name: 'Tpl',
+      variableCount: 0,
+    } as any);
+    broadcastsStore.setSelectedGroups([{ uuid: 'g1', memberCount: 10 } as any]);
+
+    const createSpy = vi
+      .spyOn(broadcastsStore, 'createBroadcast')
+      .mockResolvedValue(undefined as any);
+
+    await wrapper.vm.$nextTick();
+    await wrapper.find(SELECTOR.actionsContinue).trigger('click');
+
+    expect(createSpy).toHaveBeenCalledTimes(1);
+    const args = (createSpy as any).mock.calls[0];
+    expect(args[5]).toEqual(selectedFlow);
+  });
 });

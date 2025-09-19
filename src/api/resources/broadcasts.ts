@@ -4,6 +4,7 @@ import { useProjectStore } from '@/stores/project';
 import type { PageRequestParams } from '@/types/requests';
 import type { CreateBroadcastData } from '@/types/broadcast';
 import type { Template } from '@/types/template';
+import type { FlowReference } from '@/types/flow';
 
 export default {
   async getBroadcastsStatistics(
@@ -48,6 +49,7 @@ export default {
     variables: string[],
     groups: string[],
     attachment?: { url: string; type: string },
+    flow?: FlowReference,
   ) {
     const { project } = useProjectStore();
 
@@ -66,6 +68,10 @@ export default {
 
     if (attachment) {
       data.msg.attachments = [`${attachment.type}:${attachment.url}`];
+    }
+
+    if (flow) {
+      data.trigger_flow_uuid = flow.uuid;
     }
 
     const response = await request.$http.post(

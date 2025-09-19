@@ -291,7 +291,8 @@
         },
         "actions": {
           "cancel": "Back"
-        }
+        },
+        "flow_not_found": "Missing selected flow"
       },
       "contact_import": {
         "title": "Import contacts",
