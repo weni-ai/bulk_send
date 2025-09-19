@@ -58,7 +58,7 @@
 
       <TemplateSelectionPreview
         class="variables-selection__preview"
-        :variablesToReplace="variablesToReplace"
+        :replaceVariables="true"
       />
     </section>
 
@@ -139,24 +139,6 @@ const hasMappedVariable = computed(() => {
   return Object.values(broadcastsStore.newBroadcast.variableMapping).some(
     (mapping) => mapping !== undefined,
   );
-});
-
-const variablesToReplace = computed(() => {
-  const fieldsKeys = Object.values(
-    broadcastsStore.newBroadcast.variableMapping,
-  ).map((variable) => variable?.key);
-
-  const examples: (string | undefined)[] = [];
-
-  fieldsKeys.forEach((key) => {
-    const field = contactStore.contactFieldsExamples.find(
-      (field) => field.key === key,
-    );
-
-    examples.push(field?.example);
-  });
-
-  return examples;
 });
 
 const hasMediaHeader = computed(() => {
