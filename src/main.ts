@@ -60,16 +60,22 @@ export default async function mountBulkSendApp({
     });
   }
 
+  if (sharedStore && isFederatedModule) {
+    console.log(
+      '[BulkSend - main.ts] Mounting app federated',
+      sharedStore.current.project.uuid,
+    );
+    moduleStorage.setItem('authToken', sharedStore.auth.token);
+    moduleStorage.setItem('projectUuid', sharedStore.current.project.uuid);
+  }
+
   app.mount(`#${containerId}`);
   appRef = app;
 
   return { app: appRef, router };
 }
 
-if (sharedStore && isFederatedModule) {
-  moduleStorage.setItem('authToken', sharedStore.auth.token);
-  moduleStorage.setItem('projectUuid', sharedStore.current.project.uuid);
-} else {
+if (!(sharedStore && isFederatedModule)) {
   console.log('[BulkSend - main.ts] Mounting app not federated');
   mountBulkSendApp();
 }
