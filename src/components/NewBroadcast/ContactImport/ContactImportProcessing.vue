@@ -44,7 +44,7 @@ const groupsStore = useGroupsStore();
 const projectStore = useProjectStore();
 
 const duplicatedContactsCount = computed(() => {
-  return contactImportStore.import?.duplicates.count || 0;
+  return contactImportStore.import?.duplicates?.count || 0;
 });
 
 onBeforeMount(() => {
@@ -74,7 +74,7 @@ const downloadDuplicates = (event: Event) => {
   event.preventDefault();
   const target = event.target as HTMLElement;
   if (target.closest('button')) {
-    window.open(contactImportStore.import?.duplicates.downloadUrl, '_blank');
+    window.open(contactImportStore.import?.duplicates?.downloadUrl, '_blank');
   }
 };
 </script>
