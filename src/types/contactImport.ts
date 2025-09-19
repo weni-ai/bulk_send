@@ -8,7 +8,7 @@ export interface ContactImport {
   fields: ContactField[];
   errors: string[];
   file: File;
-  duplicates: ContactImportDuplicate;
+  duplicates?: ContactImportDuplicate;
 }
 
 export interface ContactImportDuplicate {
