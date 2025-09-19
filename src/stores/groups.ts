@@ -19,7 +19,7 @@ export const useGroupsStore = defineStore('groups', {
     },
     async listAllGroups(projectUuid: string) {
       this.loadingGroups = true;
-      const page = 1;
+      let page = 1;
       while (true) {
         const response = await GroupsAPI.getGroups(projectUuid, {
           offset: (page - 1) * 100,
@@ -29,6 +29,7 @@ export const useGroupsStore = defineStore('groups', {
         if (response.data.next === null) {
           break;
         }
+        page += 1;
       }
       this.loadingGroups = false;
     },
