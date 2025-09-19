@@ -7,7 +7,7 @@ export default {
     const { project } = useProjectStore();
 
     const params = {
-      project_uuid: project.uuid,
+      project: project.uuid,
     };
 
     const response = await request.$http.get(
