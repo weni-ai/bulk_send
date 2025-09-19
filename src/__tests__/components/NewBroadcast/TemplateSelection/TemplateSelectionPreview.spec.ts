@@ -4,6 +4,7 @@ import { mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import TemplateSelectionPreview from '@/components/NewBroadcast/TemplateSelection/TemplateSelectionPreview.vue';
 import { useBroadcastsStore } from '@/stores/broadcasts';
+import { useContactStore } from '@/stores/contact';
 
 vi.mock('vue-i18n', () => ({
   useI18n: () => ({ t: (key: string) => key }),
@@ -36,11 +37,13 @@ const SELECTOR = {
 
 const mountWrapper = (opts?: {
   withTemplate?: boolean;
+  replaceVariables?: boolean;
   variables?: (string | undefined)[];
 }) => {
   const pinia = createPinia();
   setActivePinia(pinia);
   const broadcastsStore = useBroadcastsStore(pinia);
+  const contactStore = useContactStore(pinia);
 
   if (opts?.withTemplate) {
     broadcastsStore.newBroadcast.selectedTemplate = {
@@ -54,11 +57,22 @@ const mountWrapper = (opts?: {
     broadcastsStore.newBroadcast.selectedTemplate = undefined;
   }
 
+  // seed mapping and examples for replacement tests
+  broadcastsStore.newBroadcast.variableMapping = {
+    0: { key: 'name', label: 'Name' } as any,
+    1: { key: 'age', label: 'Age' } as any,
+  } as any;
+
+  contactStore.contactFieldsExamples = [
+    { key: 'name', example: opts?.variables?.[0] } as any,
+    { key: 'age', example: opts?.variables?.[1] } as any,
+  ] as any;
+
   const wrapper = mount(TemplateSelectionPreview, {
-    props: { variablesToReplace: opts?.variables },
+    props: { replaceVariables: opts?.replaceVariables },
     global: { plugins: [pinia], stubs: STUBS, mocks: { $t: (k: string) => k } },
   });
-  return { wrapper, broadcastsStore };
+  return { wrapper, broadcastsStore, contactStore };
 };
 
 describe('TemplateSelectionPreview.vue', () => {
@@ -79,6 +93,7 @@ describe('TemplateSelectionPreview.vue', () => {
   it('formats body to bold placeholders and replaces with variables', () => {
     const { wrapper } = mountWrapper({
       withTemplate: true,
+      replaceVariables: true,
       variables: ['Alice', undefined],
     });
 
@@ -107,5 +122,29 @@ describe('TemplateSelectionPreview.vue', () => {
     expect(preview.attributes('data-header-type')).toBe('MEDIA');
     expect(preview.attributes('data-media-type')).toBe('IMAGE');
     expect(preview.attributes('data-footer')).toBe('Bye');
+  });
+
+  it('does not replace variables when replaceVariables is false', () => {
+    const { wrapper } = mountWrapper({
+      withTemplate: true,
+      variables: ['Alice', undefined],
+    });
+
+    const bodyText = wrapper
+      .find(SELECTOR.previewComponent)
+      .attributes('data-body');
+    expect(bodyText).toContain('Hello *{{1}}* and *{{2}}*');
+  });
+
+  it('does not replace variables when variablesToReplace is empty', () => {
+    const { wrapper } = mountWrapper({
+      withTemplate: true,
+      variables: [],
+    });
+
+    const bodyText = wrapper
+      .find(SELECTOR.previewComponent)
+      .attributes('data-body');
+    expect(bodyText).toContain('Hello *{{1}}* and *{{2}}*');
   });
 });

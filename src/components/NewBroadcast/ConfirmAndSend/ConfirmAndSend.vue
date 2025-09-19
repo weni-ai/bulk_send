@@ -71,7 +71,10 @@
           />
         </section>
 
-        <TemplateSelectionPreview class="confirm-and-send__preview" />
+        <TemplateSelectionPreview
+          class="confirm-and-send__preview"
+          :replaceVariables="true"
+        />
       </section>
 
       <UnnnicModalDialog

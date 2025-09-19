@@ -55,13 +55,15 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useBroadcastsStore } from '@/stores/broadcasts';
+import { useContactStore } from '@/stores/contact';
 import { formatTemplateToPreview } from '@/utils/templates';
 
-const props = defineProps<{
-  variablesToReplace?: (string | undefined)[];
-}>();
-
 const broadcastsStore = useBroadcastsStore();
+const contactStore = useContactStore();
+
+const props = defineProps<{
+  replaceVariables?: boolean;
+}>();
 
 const selectedTemplate = computed(() => {
   if (!broadcastsStore.newBroadcast.selectedTemplate) {
@@ -69,15 +71,41 @@ const selectedTemplate = computed(() => {
   }
 
   const selectedTemplate = broadcastsStore.newBroadcast.selectedTemplate;
-
+  console.log('selectedTemplate', selectedTemplate.body.text);
   return formatTemplateToPreview(selectedTemplate, bodyFormatter);
+});
+
+const variablesToReplace = computed(() => {
+  const fieldsKeys = Object.values(
+    broadcastsStore.newBroadcast.variableMapping,
+  ).map((variable) => variable?.key);
+
+  const examples: (string | undefined)[] = [];
+
+  fieldsKeys.forEach((key) => {
+    const field = contactStore.contactFieldsExamples.find(
+      (field) => field.key === key,
+    );
+
+    examples.push(field?.example);
+  });
+
+  return examples;
+});
+
+const canReplaceVariables = computed(() => {
+  return (
+    props.replaceVariables &&
+    variablesToReplace.value &&
+    variablesToReplace.value.length > 0
+  );
 });
 
 const bodyFormatter = (body: string) => {
   let newBody = body.replace(/{{(\d+)}}/g, '*{{$1}}*');
 
-  if (props.variablesToReplace && props.variablesToReplace.length > 0) {
-    props.variablesToReplace.forEach((variable, index) => {
+  if (canReplaceVariables.value) {
+    variablesToReplace.value.forEach((variable, index) => {
       if (variable) {
         newBody = newBody.replace(`{{${index + 1}}}`, variable);
       }

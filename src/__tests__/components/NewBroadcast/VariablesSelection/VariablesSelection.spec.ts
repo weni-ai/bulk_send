@@ -33,9 +33,8 @@ const STUBS = {
     template: '<div data-test="disclaimer">{{ text }}</div>',
   },
   TemplateSelectionPreview: {
-    props: ['variablesToReplace'],
-    template:
-      '<div data-test="preview">{{ variablesToReplace.join(",") }}</div>',
+    props: ['replaceVariables'],
+    template: '<div data-test="preview">template preview</div>',
   },
   VariablesSelectionOverview: {
     props: ['definedVariables'],
@@ -139,22 +138,6 @@ describe('VariablesSelection.vue', () => {
     await wrapper.vm.$nextTick();
     expect(wrapper.find(SELECTOR.overview).exists()).toBe(true);
     expect(wrapper.find(SELECTOR.disclaimer).exists()).toBe(true);
-  });
-
-  it('computes variablesToReplace from contactFieldsExamples matching current mapping order', async () => {
-    const { wrapper, broadcastsStore } = mountWrapper(2);
-    broadcastsStore.updateVariableMapping(0, {
-      key: 'name',
-      label: 'Name',
-    } as any);
-    broadcastsStore.updateVariableMapping(1, {
-      key: 'age',
-      label: 'Age',
-    } as any);
-    await wrapper.vm.$nextTick();
-
-    const preview = wrapper.find(SELECTOR.preview);
-    expect(preview.text()).toBe('Alice,30');
   });
 
   it('fetches contact fields when store is empty on mount', () => {
