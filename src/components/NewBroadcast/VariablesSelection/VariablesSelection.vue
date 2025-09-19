@@ -160,7 +160,10 @@ const variablesToReplace = computed(() => {
 });
 
 const hasMediaHeader = computed(() => {
-  return broadcastsStore.newBroadcast.selectedTemplate?.header?.type !== 'TEXT';
+  return (
+    broadcastsStore.newBroadcast.selectedTemplate?.header &&
+    broadcastsStore.newBroadcast.selectedTemplate?.header.type !== 'TEXT'
+  );
 });
 
 const fetchContactFields = async () => {
