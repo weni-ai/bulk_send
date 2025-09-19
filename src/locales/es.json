@@ -1,6 +1,6 @@
 {
   "home": {
-    "title": "Envío masivo",
+    "title": "Enviar Plantillas",
     "description": "Envía mensajes de marketing masivos a tus contactos",
     "new_send": "Nuevo envío",
     "mmlite_disclaimer": "Cambia a la API Lite de MM ahora para acelerar tu crecimiento y obtener control total sobre la entrega. <button class=\"highlight\">Ver más</button>",
@@ -231,7 +231,7 @@
         "disclaimer": "Solo se pueden seleccionar y enviar plantillas con estado aprobado. Las plantillas pendientes deben esperar a la aprobación de Meta antes de usarse. <a target=\"_blank\" href=\"https://developers.facebook.com/docs/whatsapp/message-templates/guidelines/#approval-process\" class=\"highlight\">Más información en la documentación de Meta</a>",
         "actions": {
           "cancel": "Volver"
-        }        
+        }
       },
       "select_variables": {
         "title": "Variables",
