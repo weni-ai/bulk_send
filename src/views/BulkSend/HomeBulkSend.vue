@@ -81,6 +81,10 @@ const showMMLiteSection = computed(() => {
 
 const showActivateMMLiteModal = ref(false);
 
+const formattedSuccessRate = computed(() => {
+  return `${broadcastsStore.broadcastMonthPerformance.successRate}%`;
+});
+
 const generalPerformanceData = computed(() => [
   {
     label: t('home.general_performance.total_sent.label'),
@@ -94,7 +98,7 @@ const generalPerformanceData = computed(() => [
   },
   {
     label: t('home.general_performance.success_rate.label'),
-    value: broadcastsStore.broadcastMonthPerformance.successRate,
+    value: formattedSuccessRate.value,
     hint: t('home.general_performance.success_rate.hint'),
   },
 ]);
