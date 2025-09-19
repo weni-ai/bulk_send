@@ -40,6 +40,7 @@ describe('groups store', () => {
     expect(store.loadingGroups).toBe(false);
   });
 
+  // TODO: this test is not working as expected, it should test if the page is being incremented too
   it('listAllGroups paginates until next is null and aggregates results', async () => {
     const store = useGroupsStore();
     const mocked = GroupsAPI as Mocked<typeof GroupsAPI>;
