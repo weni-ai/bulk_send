@@ -52,7 +52,7 @@ describe('project store', () => {
     const store = useProjectStore();
     const mocked = ProjectsAPI as Mocked<typeof ProjectsAPI>;
     mocked.getProjectInfo.mockResolvedValue({
-      data: { brain_on: true },
+      data: { brainOn: true },
     } as AxiosResponse);
 
     expect(store.loadingProjectInfo).toBe(false);
