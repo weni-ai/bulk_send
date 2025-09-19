@@ -71,7 +71,6 @@ const selectedTemplate = computed(() => {
   }
 
   const selectedTemplate = broadcastsStore.newBroadcast.selectedTemplate;
-  console.log('selectedTemplate', selectedTemplate.body.text);
   return formatTemplateToPreview(selectedTemplate, bodyFormatter);
 });
 
