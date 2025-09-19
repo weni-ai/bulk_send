@@ -22,7 +22,7 @@ describe('api/resources/contacts', () => {
     const result = await Contacts.getContactFields();
 
     expect(httpGet).toHaveBeenCalledWith('/api/v2/internals/contacts_fields', {
-      params: { project_uuid: 'proj-abc' },
+      params: { project: 'proj-abc' },
     });
     expect(result).toEqual({ data: { results: [] } });
   });
