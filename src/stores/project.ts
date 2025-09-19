@@ -33,7 +33,7 @@ export const useProjectStore = defineStore('project', {
       this.loadingProjectInfo = true;
       try {
         const response = await ProjectsAPI.getProjectInfo();
-        this.project.brainOn = response.data.brain_on;
+        this.project.brainOn = response.data.brainOn;
       } catch (error) {
         console.error(error);
       } finally {
