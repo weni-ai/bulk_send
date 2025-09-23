@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.2.1] - 2025-09-23
+
+### Fixed
+- refactor: replace toPercentage utility with toLocalizedFloat for cost formatting across components
+
 ## [1.2.0] - 2025-09-23
 
 ### Added
