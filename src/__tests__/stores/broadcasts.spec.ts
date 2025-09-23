@@ -8,7 +8,7 @@ import { NewBroadcastPage } from '@/constants/broadcasts';
 import { TemplateStatus } from '@/constants/templates';
 import { createGroup } from '../utils/factories';
 import { useTemplatesStore } from '@/stores/templates';
-import { toPercentage } from '@/utils/percentage';
+import { toLocalizedFloat } from '@/utils/number';
 
 // Mock API module used by the store
 vi.mock('@/api/resources/broadcasts', () => ({
@@ -104,7 +104,7 @@ describe('broadcasts store', () => {
     expect(store.broadcastMonthPerformance.successRate).toBe(0.77);
     const cost = 1.2 * 42;
     expect(store.broadcastMonthPerformance.estimatedCost).toBe(
-      `R$${toPercentage(cost)}`,
+      `R$${toLocalizedFloat(cost)}`,
     );
     expect(pricingSpy).toHaveBeenCalled();
     expect(store.loadingBroadcastsMonthPerformance).toBe(false);

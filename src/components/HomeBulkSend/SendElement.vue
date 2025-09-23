@@ -58,7 +58,7 @@ import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { getEnumKeyByValue } from '@/utils/enum';
 import { Currency } from '@/constants/currency';
-import { toPercentage } from '@/utils/percentage';
+import { toLocalizedFloat, toPercentage } from '@/utils/number';
 const { t } = useI18n();
 
 const props = defineProps<{
@@ -204,7 +204,7 @@ const processedPercentage = computed(() => {
 
 const estimatedCost = computed(() => {
   const currency = Currency[props.send.statistics.currency];
-  const value = toPercentage(props.send.statistics.cost);
+  const value = toLocalizedFloat(props.send.statistics.cost);
   return `${currency}${value}`;
 });
 </script>

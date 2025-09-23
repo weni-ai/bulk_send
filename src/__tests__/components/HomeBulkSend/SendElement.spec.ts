@@ -5,7 +5,7 @@ import type { BroadcastStatistic } from '@/types/broadcast';
 import { BroadcastStatus } from '@/constants/broadcasts';
 import { createBroadcast } from '@/__tests__/utils/factories';
 import { nextTick } from 'vue';
-import { toPercentage } from '@/utils/percentage';
+import { toPercentage } from '@/utils/number';
 
 vi.mock('vue-i18n', () => ({
   useI18n: () => ({ t: (key: string) => key }),

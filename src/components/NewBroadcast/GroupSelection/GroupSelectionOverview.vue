@@ -56,7 +56,7 @@ import { computed } from 'vue';
 import type { Group } from '@/types/groups';
 import { Currency } from '@/constants/currency';
 import { useI18n } from 'vue-i18n';
-import { toPercentage } from '@/utils/percentage';
+import { toLocalizedFloat } from '@/utils/number';
 
 const { t } = useI18n();
 
@@ -83,7 +83,7 @@ const totalText = computed(() => {
 
 const costText = computed(() => {
   return t('new_broadcast.pages.select_groups.overview.cost_value', {
-    cost: toPercentage(cost.value),
+    cost: toLocalizedFloat(cost.value),
     currency: Currency[templateCurrency],
     templateMultiplier,
   });

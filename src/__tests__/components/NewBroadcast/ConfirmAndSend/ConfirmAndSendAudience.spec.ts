@@ -7,7 +7,7 @@ import { useBroadcastsStore } from '@/stores/broadcasts';
 import { useContactImportStore } from '@/stores/contactImport';
 import { useTemplatesStore } from '@/stores/templates';
 import { TemplateCategory } from '@/constants/templates';
-import { toPercentage } from '@/utils/percentage';
+import { toLocalizedFloat } from '@/utils/number';
 
 vi.mock('vue-i18n', () => ({
   useI18n: () => ({
@@ -62,7 +62,7 @@ describe('ConfirmAndSendAudience.vue', () => {
     expect(items.length).toBeGreaterThan(0);
     // cost = (10+5) * rate(1) = 15.00 (allow locale comma or dot)
     const cost = 15.0;
-    const costLocalized = toPercentage(cost);
+    const costLocalized = toLocalizedFloat(cost);
     expect(wrapper.text()).toMatch(new RegExp(`\\$${costLocalized}`));
   });
 
@@ -81,7 +81,7 @@ describe('ConfirmAndSendAudience.vue', () => {
 
     // cost = 7 * 2 = 14.00 (allow locale comma or dot)
     const cost = 14.0;
-    const costLocalized = toPercentage(cost);
+    const costLocalized = toLocalizedFloat(cost);
     expect(wrapper.text()).toMatch(new RegExp(`\\$${costLocalized}`));
     expect(wrapper.text()).toContain('New Group');
   });

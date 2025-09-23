@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils';
 import GroupSelectionOverview from '@/components/NewBroadcast/GroupSelection/GroupSelectionOverview.vue';
 import type { Group } from '@/types/groups';
 import { createGroup } from '@/__tests__/utils/factories';
-import { toPercentage } from '@/utils/percentage';
+import { toLocalizedFloat } from '@/utils/number';
 
 vi.mock('vue-i18n', () => ({
   useI18n: () => ({
@@ -62,7 +62,7 @@ describe('GroupSelectionOverview.vue', () => {
     // Cost uses USD symbol and 0.12 multiplier from component (formatted)
     // cost = 15 * 0.12 = 1.80
     const cost = 1.8;
-    const costLocalized = toPercentage(cost);
+    const costLocalized = toLocalizedFloat(cost);
     expect(wrapper.find(SELECTOR.costValue).text()).toContain(
       `$${costLocalized} (x0.12)`,
     );
@@ -74,7 +74,7 @@ describe('GroupSelectionOverview.vue', () => {
     expect(wrapper.find(SELECTOR.totalValue).text()).toBe('0');
 
     const cost = 0;
-    const costLocalized = toPercentage(cost);
+    const costLocalized = toLocalizedFloat(cost);
     expect(wrapper.find(SELECTOR.costValue).text()).toContain(
       `$${costLocalized} (x0.12)`,
     );
