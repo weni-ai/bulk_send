@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.0] - 2025-09-23
+
+### Added
+- feat: implement toPercentage utility for consistent cost and percentages
+- feat: add channel and locale property to CreateBroadcastData
+
 ## [1.1.0] - 2025-09-19
 
 ### Added
