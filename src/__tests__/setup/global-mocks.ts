@@ -24,6 +24,14 @@ vi.mock('@/api/requests', () => {
   };
 });
 
+vi.mock('@/utils/plugins/i18n', () => ({
+  default: {
+    global: {
+      locale: 'en',
+    },
+  },
+}));
+
 // Reset all mocks between tests to avoid cross-test interference
 afterEach(() => {
   vi.clearAllMocks();

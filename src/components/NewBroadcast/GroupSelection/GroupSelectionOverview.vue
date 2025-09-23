@@ -56,6 +56,7 @@ import { computed } from 'vue';
 import type { Group } from '@/types/groups';
 import { Currency } from '@/constants/currency';
 import { useI18n } from 'vue-i18n';
+import { toPercentage } from '@/utils/percentage';
 
 const { t } = useI18n();
 
@@ -82,7 +83,7 @@ const totalText = computed(() => {
 
 const costText = computed(() => {
   return t('new_broadcast.pages.select_groups.overview.cost_value', {
-    cost: cost.value.toLocaleString(undefined, { minimumFractionDigits: 2 }),
+    cost: toPercentage(cost.value),
     currency: Currency[templateCurrency],
     templateMultiplier,
   });

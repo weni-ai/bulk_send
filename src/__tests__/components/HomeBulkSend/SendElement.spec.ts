@@ -5,6 +5,7 @@ import type { BroadcastStatistic } from '@/types/broadcast';
 import { BroadcastStatus } from '@/constants/broadcasts';
 import { createBroadcast } from '@/__tests__/utils/factories';
 import { nextTick } from 'vue';
+import { toPercentage } from '@/utils/percentage';
 
 vi.mock('vue-i18n', () => ({
   useI18n: () => ({ t: (key: string) => key }),
@@ -118,15 +119,19 @@ describe('SendElement.vue', () => {
     );
 
     // Delivered percentage and subValue
+    const deliveredPercentage = toPercentage(90);
     expect(byLabel['home.recent_sends.metrics.delivered.label'].value).toBe(
-      '90%',
+      deliveredPercentage,
     );
     expect(byLabel['home.recent_sends.metrics.delivered.label'].subValue).toBe(
       '9',
     );
 
     // Failed percentage
-    expect(byLabel['home.recent_sends.metrics.failed.label'].value).toBe('10%');
+    const failedPercentage = toPercentage(10);
+    expect(byLabel['home.recent_sends.metrics.failed.label'].value).toBe(
+      failedPercentage,
+    );
     expect(byLabel['home.recent_sends.metrics.failed.label'].subValue).toBe(
       '1',
     );
