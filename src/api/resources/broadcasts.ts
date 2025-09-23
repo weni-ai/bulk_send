@@ -63,6 +63,7 @@ export default {
         template: {
           uuid: template.uuid,
           variables: variables,
+          locale: template.language,
         },
       },
     };

@@ -96,7 +96,7 @@ describe('api/resources/broadcasts', () => {
         queue: 'template_batch',
         name: 'My BC',
         channel: 'channel-1',
-        msg: { template: { uuid: 'tpl-1', variables } },
+        msg: { template: { uuid: 'tpl-1', variables, locale: 'en' } },
         groups,
       }),
     );
@@ -115,7 +115,7 @@ describe('api/resources/broadcasts', () => {
       '/api/v2/internals/whatsapp_broadcasts',
       expect.objectContaining({
         msg: {
-          template: { uuid: 'tpl-1', variables },
+          template: { uuid: 'tpl-1', variables, locale: 'en' },
           attachments: ['image:https://cdn/file.jpg'],
         },
       }),

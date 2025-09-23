@@ -71,6 +71,7 @@ interface CreateBroadcastData {
     template: {
       uuid: string;
       variables: string[];
+      locale: string;
     };
     attachments?: string[];
   };
