@@ -22,6 +22,7 @@ interface Template extends TemplateUUIDReference {
   buttons?: TemplateButton[];
   status: TemplateStatus;
   variableCount: number;
+  channel: string;
 }
 type TemplateHeader =
   | TemplateHeaderText

@@ -79,7 +79,7 @@ describe('api/resources/broadcasts', () => {
     const httpPost = (requests as any).$http.post as ReturnType<typeof vi.fn>;
     httpPost.mockResolvedValue({ data: { id: 99 } });
 
-    const template = { uuid: 'tpl-1' } as any;
+    const template = { uuid: 'tpl-1', channel: 'channel-1' } as any;
     const variables = ['@fields.name'];
     const groups = ['g1', 'g2'];
 
@@ -95,6 +95,7 @@ describe('api/resources/broadcasts', () => {
       expect.objectContaining({
         queue: 'template_batch',
         name: 'My BC',
+        channel: 'channel-1',
         msg: { template: { uuid: 'tpl-1', variables } },
         groups,
       }),
