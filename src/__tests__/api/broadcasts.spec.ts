@@ -79,7 +79,11 @@ describe('api/resources/broadcasts', () => {
     const httpPost = (requests as any).$http.post as ReturnType<typeof vi.fn>;
     httpPost.mockResolvedValue({ data: { id: 99 } });
 
-    const template = { uuid: 'tpl-1', channel: 'channel-1' } as any;
+    const template = {
+      uuid: 'tpl-1',
+      channel: 'channel-1',
+      language: 'en',
+    } as any;
     const variables = ['@fields.name'];
     const groups = ['g1', 'g2'];
 
