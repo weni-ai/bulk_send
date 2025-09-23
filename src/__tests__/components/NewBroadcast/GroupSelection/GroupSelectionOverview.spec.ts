@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils';
 import GroupSelectionOverview from '@/components/NewBroadcast/GroupSelection/GroupSelectionOverview.vue';
 import type { Group } from '@/types/groups';
 import { createGroup } from '@/__tests__/utils/factories';
-import { toPercentage, toLocalizedFloat } from '@/utils/number';
+import { toLocalizedFloat } from '@/utils/number';
 
 vi.mock('vue-i18n', () => ({
   useI18n: () => ({

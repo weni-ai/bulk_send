@@ -7,7 +7,7 @@ import { useBroadcastsStore } from '@/stores/broadcasts';
 import { useContactImportStore } from '@/stores/contactImport';
 import { useTemplatesStore } from '@/stores/templates';
 import { TemplateCategory } from '@/constants/templates';
-import { toPercentage, toLocalizedFloat } from '@/utils/number';
+import { toLocalizedFloat } from '@/utils/number';
 
 vi.mock('vue-i18n', () => ({
   useI18n: () => ({
