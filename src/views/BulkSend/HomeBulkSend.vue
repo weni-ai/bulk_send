@@ -57,6 +57,7 @@ import { useProjectStore } from '@/stores/project';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import type { Channel } from '@/types/channel';
 import { useI18n } from 'vue-i18n';
+import { toPercentage } from '@/utils/percentage';
 
 const { t } = useI18n();
 
@@ -82,7 +83,7 @@ const showMMLiteSection = computed(() => {
 const showActivateMMLiteModal = ref(false);
 
 const formattedSuccessRate = computed(() => {
-  return `${broadcastsStore.broadcastMonthPerformance.successRate}%`;
+  return toPercentage(broadcastsStore.broadcastMonthPerformance.successRate);
 });
 
 const generalPerformanceData = computed(() => [

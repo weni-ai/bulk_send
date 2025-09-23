@@ -14,6 +14,7 @@ import type { ContactField } from '@/types/contacts';
 import type { FlowReference } from '@/types/flow';
 import { useTemplatesStore } from '@/stores/templates';
 import { Currency } from '@/constants/currency';
+import { toPercentage } from '@/utils/percentage';
 
 export const useBroadcastsStore = defineStore('broadcasts', {
   state: () => ({
@@ -84,7 +85,7 @@ export const useBroadcastsStore = defineStore('broadcasts', {
 
         this.broadcastMonthPerformance = {
           totalSent: stats.totalSent,
-          estimatedCost: `${currency}${cost.toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
+          estimatedCost: `${currency}${toPercentage(cost)}`,
           successRate: response.data.successRate30Days,
         };
       } finally {
