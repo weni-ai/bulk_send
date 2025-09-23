@@ -57,7 +57,7 @@ import { useProjectStore } from '@/stores/project';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import type { Channel } from '@/types/channel';
 import { useI18n } from 'vue-i18n';
-import { toPercentage } from '@/utils/percentage';
+import { toPercentage } from '@/utils/number';
 
 const { t } = useI18n();
 

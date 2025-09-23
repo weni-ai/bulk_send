@@ -47,7 +47,7 @@ import { useContactImportStore } from '@/stores/contactImport';
 import { useTemplatesStore } from '@/stores/templates';
 import { Currency } from '@/constants/currency';
 import { TemplateCategory } from '@/constants/templates';
-import { toPercentage } from '@/utils/percentage';
+import { toLocalizedFloat } from '@/utils/number';
 
 const { t } = useI18n();
 const broadcastsStore = useBroadcastsStore();
@@ -96,13 +96,13 @@ const templateUnitCost = computed(() => {
 const cost = computed(() => {
   const totalCost = contactCount.value * templateUnitCost.value;
   const currency = Currency[templatesStore.templatePricing.currency];
-  return `${currency}${toPercentage(totalCost)}`;
+  return `${currency}${toLocalizedFloat(totalCost)}`;
 });
 
 const unitCost = computed(() => {
   const currency = Currency[templatesStore.templatePricing.currency];
 
-  const unitCost = `${currency}${toPercentage(templateUnitCost.value)}`;
+  const unitCost = `${currency}${toLocalizedFloat(templateUnitCost.value)}`;
 
   return t('new_broadcast.pages.confirm_and_send.audience.unit_cost', {
     unitCost,
