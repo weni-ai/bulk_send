@@ -58,10 +58,12 @@ export default {
       project: project.uuid,
       name: name,
       groups: groups,
+      channel: template.channel,
       msg: {
         template: {
           uuid: template.uuid,
           variables: variables,
+          locale: template.language,
         },
       },
     };
