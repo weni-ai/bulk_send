@@ -15,7 +15,7 @@ import { moduleStorage } from './utils/storage';
 
 import { safeImport, isFederatedModule } from './utils/moduleFederation';
 
-const { useSharedStore } = await safeImport(
+const { useSharedStore } = safeImport(
   () => import('connect/sharedStore'),
   'connect/sharedStore',
 );
