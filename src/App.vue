@@ -22,28 +22,23 @@ const sharedStore = ref(null);
 onBeforeMount(async () => {
   updateTokenAndProject();
 
-  // Non-blocking import
-  safeImport(() => import('connect/sharedStore'), 'connect/sharedStore')
-    .then(({ useSharedStore }) => {
-      if (useSharedStore && isFederatedModule) {
-        try {
-          sharedStore.value = useSharedStore();
-        } catch (error) {
-          console.error(
-            '[BulkSend - App.vue] Error initializing shared store:',
-            error,
-          );
-        }
-      } else {
-        console.log('[BulkSend - App.vue] Not federated module');
-      }
-    })
-    .catch((error) => {
+  const { useSharedStore } = safeImport(
+    () => import('connect/sharedStore'),
+    'connect/sharedStore',
+  );
+
+  if (useSharedStore && isFederatedModule) {
+    try {
+      sharedStore.value = useSharedStore();
+    } catch (error) {
       console.error(
-        '[BulkSend - App.vue] Error loading shared store module:',
+        '[BulkSend - App.vue] Error initializing shared store:',
         error,
       );
-    });
+    }
+  } else {
+    console.log('[BulkSend - App.vue] Not federated module');
+  }
 });
 
 const updateTokenAndProject = () => {
