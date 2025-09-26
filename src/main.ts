@@ -15,12 +15,17 @@ import { moduleStorage } from './utils/storage';
 
 import { safeImport, isFederatedModule } from './utils/moduleFederation';
 
-const { useSharedStore } = await safeImport(
-  () => import('connect/sharedStore'),
-  'connect/sharedStore',
-);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let sharedStore: any = null;
 
-const sharedStore = useSharedStore?.();
+if (isFederatedModule) {
+  const { useSharedStore } = await safeImport(
+    () => import('connect/sharedStore'),
+    'connect/sharedStore',
+  );
+
+  sharedStore = useSharedStore?.();
+}
 
 interface MountBulkSendAppOptions {
   containerId?: string;
@@ -60,7 +65,7 @@ export default async function mountBulkSendApp({
     });
   }
 
-  if (sharedStore && isFederatedModule) {
+  if (sharedStore) {
     console.log(
       '[BulkSend - main.ts] Mounting app federated',
       sharedStore.current.project.uuid,
@@ -75,7 +80,7 @@ export default async function mountBulkSendApp({
   return { app: appRef, router };
 }
 
-if (!(sharedStore && isFederatedModule)) {
+if (!sharedStore) {
   console.log('[BulkSend - main.ts] Mounting app not federated');
   mountBulkSendApp();
 }

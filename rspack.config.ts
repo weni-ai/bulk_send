@@ -34,15 +34,6 @@ const sharedPkgs = {
   },
 };
 
-// Pinia is only shared in development
-if (process.env.NODE_ENV === 'development') {
-  sharedPkgs['pinia'] = {
-    singleton: true,
-    requiredVersion: pkg.dependencies.pinia,
-    eager: true,
-  };
-}
-
 export default defineConfig({
   context: __dirname,
   devServer: {
