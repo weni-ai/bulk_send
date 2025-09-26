@@ -42,11 +42,14 @@ export function safeAsyncComponent(importFn: () => Promise<any>) {
  * Safe import for files
  * @param {Function} importFn - The import function (e.g., () => import('remote/locales/en'))
  * @param {string} importPath - The import path for logging purposes
- * @returns {Object} - The imported object or empty object
+ * @returns {Promise<Object>} - The imported object or empty object
  */
-export function safeImport(importFn: () => any, importPath: string) {
+export async function safeImport(
+  importFn: () => Promise<any>,
+  importPath: string,
+) {
   try {
-    const module = importFn();
+    const module = await importFn();
     return module.default || module;
   } catch (error: any) {
     console.error(
