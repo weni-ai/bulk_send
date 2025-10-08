@@ -55,14 +55,17 @@ import RecentSends from '@/components/HomeBulkSend/RecentSends.vue';
 import ActivateMMLiteModal from '@/components/modals/ActivateMMLite.vue';
 import { useProjectStore } from '@/stores/project';
 import { useBroadcastsStore } from '@/stores/broadcasts';
+import { useTemplatesStore } from '@/stores/templates';
 import type { Channel } from '@/types/channel';
 import { useI18n } from 'vue-i18n';
-import { toPercentage } from '@/utils/number';
+import { toLocalizedFloat, toPercentage } from '@/utils/number';
+import { Currency } from '@/constants/currency';
 
 const { t } = useI18n();
 
 const projectStore = useProjectStore();
 const broadcastsStore = useBroadcastsStore();
+const templateStore = useTemplatesStore();
 
 const showMMLiteSection = computed(() => {
   if (projectStore.project.channels.length === 0) {
@@ -86,6 +89,15 @@ const formattedSuccessRate = computed(() => {
   return toPercentage(broadcastsStore.broadcastMonthPerformance.successRate);
 });
 
+const formattedEstimatedCost = computed(() => {
+  const cost =
+    templateStore.templatePricing.rates.marketing *
+    broadcastsStore.broadcastMonthPerformance.totalSent;
+  const currency = Currency[templateStore.templatePricing.currency];
+
+  return `${currency}${toLocalizedFloat(cost)}`;
+});
+
 const generalPerformanceData = computed(() => [
   {
     label: t('home.general_performance.total_sent.label'),
@@ -94,7 +106,7 @@ const generalPerformanceData = computed(() => [
   },
   {
     label: t('home.general_performance.estimated_total_cost.label'),
-    value: broadcastsStore.broadcastMonthPerformance.estimatedCost,
+    value: formattedEstimatedCost.value,
     hint: t('home.general_performance.estimated_total_cost.hint'),
   },
   {
@@ -131,6 +143,7 @@ const fetchProjectChannels = async () => {
 
 const fetchBroadcastsMonthPerformance = async () => {
   try {
+    await templateStore.getTemplatePricing();
     await broadcastsStore.getBroadcastsMonthPerformance(
       projectStore.project.uuid,
     );

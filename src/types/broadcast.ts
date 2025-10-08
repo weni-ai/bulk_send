@@ -41,7 +41,6 @@ interface Statistics extends CoreStatistics {
 
 interface BroadcastsMonthPerformance {
   totalSent: number;
-  estimatedCost: string;
   successRate: number;
 }
 

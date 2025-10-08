@@ -1,7 +1,7 @@
 import i18n from '@/utils/plugins/i18n';
 
 const toLocalizedFloat = (value: number): string => {
-  return value.toLocaleString(i18n.global.locale || undefined, {
+  return value.toLocaleString(i18n.global.locale.value || undefined, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
