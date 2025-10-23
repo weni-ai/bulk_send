@@ -19,6 +19,7 @@ import { toLocalizedFloat } from '@/utils/number';
 export const useBroadcastsStore = defineStore('broadcasts', {
   state: () => ({
     loadingBroadcastsStatistics: false,
+    loadingHasBroadcastsStatistics: false,
     loadingBroadcastsMonthPerformance: false,
     loadingCreateGroupFromStatus: false,
     loadingCreateBroadcast: false,
@@ -66,6 +67,22 @@ export const useBroadcastsStore = defineStore('broadcasts', {
         );
       } finally {
         this.loadingBroadcastsStatistics = false;
+      }
+    },
+    async hasBroadcastsStatistics(projectUuid: string) {
+      this.loadingHasBroadcastsStatistics = true;
+      try {
+        const params = {
+          offset: 0,
+          limit: 1,
+        };
+        const response = await BroadcastsAPI.getBroadcastsStatistics(
+          projectUuid,
+          params,
+        );
+        return response.data.results.length > 0;
+      } finally {
+        this.loadingHasBroadcastsStatistics = false;
       }
     },
     async getBroadcastsMonthPerformance(projectUuid: string) {
