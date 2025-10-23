@@ -65,7 +65,7 @@ const broadcastsStore = useBroadcastsStore();
 
 const search = ref('');
 const page = ref(1);
-const sort = ref('name');
+const sort = ref('date');
 const channel = ref<Channel | undefined>(undefined);
 
 onBeforeMount(() => {
