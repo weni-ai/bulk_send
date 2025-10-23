@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { PAGE_SIZE, DEFAULT_DATE_RANGE_DAYS } from '@/constants/recentSends';
-import { mount } from '@vue/test-utils';
+import { flushPromises, mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import RecentSends from '@/components/HomeBulkSend/RecentSends.vue';
 import { useBroadcastsStore } from '@/stores/broadcasts';
@@ -147,7 +147,7 @@ describe('RecentSends.vue', () => {
       spy: true,
     });
 
-    await nextTick();
+    await flushPromises();
 
     expect(hasSpy).toHaveBeenCalledWith(DEFAULT_PROJECT_UUID);
     expect(spy).toBeDefined();
@@ -159,7 +159,7 @@ describe('RecentSends.vue', () => {
 
   it('fetches on mount with default page, date range and empty search', async () => {
     const { spy, hasSpy } = mountRecentSends({ spy: true, hasSends: true });
-    await nextTick();
+    await flushPromises();
     expect(spy).toBeDefined();
     expect(spy).toHaveBeenCalledTimes(1);
     expect(hasSpy).toHaveBeenCalledWith(DEFAULT_PROJECT_UUID);
@@ -196,7 +196,7 @@ describe('RecentSends.vue', () => {
     await searchInput.trigger('input');
 
     await vi.advanceTimersByTimeAsync(500);
-    await nextTick();
+    await flushPromises();
 
     const defaultRange = createDateRangeFromDaysAgo(DEFAULT_DATE_RANGE_DAYS);
     const { start: expectedStart, end: expectedEnd } = mkIsoRange(defaultRange);
@@ -224,7 +224,7 @@ describe('RecentSends.vue', () => {
 
     // Simulate request completed, but still searching; empty state should remain hidden
     broadcastsStore.loadingBroadcastsStatistics = false;
-    await nextTick();
+    await flushPromises();
 
     expect(wrapper.find(SELECTOR.missing).exists()).toBe(false);
     expect(wrapper.find(SELECTOR.content).exists()).toBe(true);
@@ -241,7 +241,7 @@ describe('RecentSends.vue', () => {
     await datePicker.trigger('change');
 
     await vi.advanceTimersByTimeAsync(500);
-    await nextTick();
+    await flushPromises();
 
     const { start: expectedStart, end: expectedEnd } =
       mkIsoRange(TEST_DATE_RANGE);
@@ -267,14 +267,14 @@ describe('RecentSends.vue', () => {
       broadcasts: { statistics: [createBroadcast()], count: 10 },
       spy: true,
     });
-    await nextTick();
+    await flushPromises();
     expect(spy).toBeDefined();
     // First call on mount
     expect(spy).toHaveBeenCalledTimes(1);
     // Emit pagination update from the list
     const list = wrapper.findComponent({ name: 'RecentSendsList' });
     list.vm.$emit('update:page', 2);
-    await nextTick();
+    await flushPromises();
     // Second call with updated offset
     expect(spy).toHaveBeenCalledTimes(2);
     const defaultRange = createDateRangeFromDaysAgo(DEFAULT_DATE_RANGE_DAYS);
@@ -306,7 +306,7 @@ describe('RecentSends.vue', () => {
     await searchInput.trigger('input');
 
     await vi.advanceTimersByTimeAsync(500);
-    await nextTick();
+    await flushPromises();
 
     const defaultRange = createDateRangeFromDaysAgo(DEFAULT_DATE_RANGE_DAYS);
     const { start: expectedStart, end: expectedEnd } = mkIsoRange(defaultRange);
@@ -328,11 +328,11 @@ describe('RecentSends.vue', () => {
       spy: true,
       broadcasts: { statistics: [createBroadcast()], count: 20 },
     });
-    await nextTick();
+    await flushPromises();
     // Go to page 3
     const list = wrapper.findComponent({ name: 'RecentSendsList' });
     list.vm.$emit('update:page', 3);
-    await nextTick();
+    await flushPromises();
     expect(spy).toHaveBeenCalledTimes(2);
 
     // Type a search which should reset page to 1
@@ -340,7 +340,7 @@ describe('RecentSends.vue', () => {
     await searchInput.setValue('abc');
     await searchInput.trigger('input');
     await vi.advanceTimersByTimeAsync(500);
-    await nextTick();
+    await flushPromises();
 
     const defaultRange = createDateRangeFromDaysAgo(DEFAULT_DATE_RANGE_DAYS);
     const { start: expectedStart, end: expectedEnd } = mkIsoRange(defaultRange);
@@ -384,8 +384,9 @@ describe('RecentSends.vue', () => {
     const { wrapper, spy, broadcastsStore } = mountRecentSends({
       spy: true,
       broadcasts: { loading: true },
+      hasSends: false,
     });
-    await nextTick();
+    await flushPromises();
 
     // Start typing to show clear icon and create searching state
     const searchInput = wrapper.find(SELECTOR.search);
@@ -429,7 +430,7 @@ describe('RecentSends.vue', () => {
     const list = wrapper.findComponent({ name: 'RecentSendsList' });
     list.vm.$emit('reset');
     await vi.advanceTimersByTimeAsync(500);
-    await nextTick();
+    await flushPromises();
     expect(spy).toHaveBeenCalledTimes(2);
     expect(spy).toHaveBeenLastCalledWith(DEFAULT_PROJECT_UUID, {
       offset: 0,
@@ -443,7 +444,7 @@ describe('RecentSends.vue', () => {
   it('does not fetch and hides filters when project has no sends', async () => {
     vi.useFakeTimers();
     const { wrapper, spy } = mountRecentSends({ hasSends: false, spy: true });
-    await nextTick();
+    await flushPromises();
     expect(spy).not.toHaveBeenCalled();
 
     // Filters should not be rendered when missing state is shown
