@@ -50,8 +50,14 @@ const mountWrapper = (search = '', channel?: any) => {
   const projectStore = useProjectStore(pinia);
   // seed channels to show the dropdown (only WAC are considered)
   projectStore.project.channels = [
-    { uuid: 'ch-1', name: 'WAC 1', channel_type: 'WAC' },
-    { uuid: 'ch-2', name: 'WAC 2', channel_type: 'WAC' },
+    { uuid: 'ch-1', name: 'WAC 1', channelType: 'WAC' },
+    { uuid: 'ch-2', name: 'WAC 2', channelType: 'WAC' },
+    {
+      uuid: 'ch-3',
+      name: 'Demo',
+      channelType: 'WAC',
+      phoneNumber: '558231420933',
+    },
   ] as any;
 
   const wrapper = mount(TemplateSelectionFilters, {
@@ -81,7 +87,7 @@ describe('TemplateSelectionFilters.vue', () => {
     const wrapper = mountWrapper('', undefined);
     await wrapper.find(SELECTOR.setChannel).trigger('click');
     expect(wrapper.emitted('update:channel')?.[0]).toEqual([
-      { uuid: 'ch-1', name: 'WAC 1', channel_type: 'WAC' },
+      { uuid: 'ch-1', name: 'WAC 1', channelType: 'WAC' },
     ]);
   });
 
@@ -91,5 +97,12 @@ describe('TemplateSelectionFilters.vue', () => {
     // the component maps [] to undefined when emitting upward
     // our stub directly emits [], parent maps it to undefined → emitted value should be undefined
     expect(wrapper.emitted('update:channel')?.[0]).toEqual([undefined]);
+  });
+
+  it('does not show WENI demo number in the channels list', () => {
+    const wrapper = mountWrapper('', undefined);
+    expect(wrapper.vm.channels.length).toBe(2);
+    expect(wrapper.vm.channels[0].name).toBe('WAC 1');
+    expect(wrapper.vm.channels[1].name).toBe('WAC 2');
   });
 });
