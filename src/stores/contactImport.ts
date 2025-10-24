@@ -136,3 +136,5 @@ export const useContactImportStore = defineStore('contactImport', {
     },
   },
 });
+
+export type ContactImportStore = ReturnType<typeof useContactImportStore>;

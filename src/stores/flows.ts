@@ -23,3 +23,5 @@ export const useFlowsStore = defineStore('flows', () => {
 
   return { flows, fetchFlows, loadingFlows, listAllFlows };
 });
+
+export type FlowsStore = ReturnType<typeof useFlowsStore>;

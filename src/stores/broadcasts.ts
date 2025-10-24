@@ -203,3 +203,5 @@ export const useBroadcastsStore = defineStore('broadcasts', {
     },
   },
 });
+
+export type BroadcastsStore = ReturnType<typeof useBroadcastsStore>;
