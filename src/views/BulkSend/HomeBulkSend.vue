@@ -74,7 +74,7 @@ const showMMLiteSection = computed(() => {
   );
 
   const hasWhatsappChannel = projectStore.project.channels.some(
-    (channel: Channel) => channel.channel_type === 'WAC',
+    (channel: Channel) => channel.channelType === 'WAC',
   );
 
   return hasWhatsappChannel && !hasMMLiteChannel;

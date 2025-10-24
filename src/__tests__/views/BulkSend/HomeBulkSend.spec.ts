@@ -15,7 +15,7 @@ const $t = vi.fn((key) => key);
 
 describe('HomeBulkSend.vue', () => {
   const DEFAULT_PROJECT_UUID = 'proj-123';
-  const DEFAULT_CHANNELS = [{ uuid: '1', name: 'WAC 1', channel_type: 'WAC' }];
+  const DEFAULT_CHANNELS = [{ uuid: '1', name: 'WAC 1', channelType: 'WAC' }];
   const SELECTOR = {
     header: '[data-test="home-header"]',
     metricsTable: '[data-test="metrics-table"]',
@@ -113,7 +113,7 @@ describe('HomeBulkSend.vue', () => {
 
   it('shows MMLite disclaimer when there is WAC but no MMLite channel', () => {
     const { wrapper } = mountWrapper({
-      channels: [{ uuid: '1', name: 'WAC 1', channel_type: 'WAC' }],
+      channels: [{ uuid: '1', name: 'WAC 1', channelType: 'WAC' }],
     });
 
     expect(wrapper.find(SELECTOR.mmliteDisclaimer).exists()).toBe(true);
@@ -122,8 +122,8 @@ describe('HomeBulkSend.vue', () => {
   it('hides MMLite disclaimer when MMLite channel exists', () => {
     const { wrapper } = mountWrapper({
       channels: [
-        { uuid: '1', name: 'WAC 1', channel_type: 'WAC' },
-        { uuid: '2', name: 'WAC MMLite', channel_type: 'WAC', MMLite: true },
+        { uuid: '1', name: 'WAC 1', channelType: 'WAC' },
+        { uuid: '2', name: 'WAC MMLite', channelType: 'WAC', MMLite: true },
       ],
     });
 
