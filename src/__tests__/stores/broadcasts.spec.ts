@@ -73,6 +73,46 @@ describe('broadcasts store', () => {
     expect(store.loadingBroadcastsStatistics).toBe(false);
   });
 
+  it('hasBroadcastsStatistics returns true when API has results and toggles loading flag', async () => {
+    const store = useBroadcastsStore();
+    const mocked = Broadcasts as Mocked<typeof Broadcasts>;
+    mocked.getBroadcastsStatistics.mockResolvedValue({
+      data: { count: 2, results: [{}] },
+    } as AxiosResponse);
+
+    expect(store.loadingHasBroadcastsStatistics).toBe(false);
+    const promise = store.hasBroadcastsStatistics('proj-123');
+    expect(store.loadingHasBroadcastsStatistics).toBe(true);
+    const has = await promise;
+
+    expect(mocked.getBroadcastsStatistics).toHaveBeenCalledWith('proj-123', {
+      offset: 0,
+      limit: 1,
+    });
+    expect(has).toBe(true);
+    expect(store.loadingHasBroadcastsStatistics).toBe(false);
+  });
+
+  it('hasBroadcastsStatistics returns false when API has no results and toggles loading flag', async () => {
+    const store = useBroadcastsStore();
+    const mocked = Broadcasts as Mocked<typeof Broadcasts>;
+    mocked.getBroadcastsStatistics.mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as AxiosResponse);
+
+    expect(store.loadingHasBroadcastsStatistics).toBe(false);
+    const promise = store.hasBroadcastsStatistics('proj-xyz');
+    expect(store.loadingHasBroadcastsStatistics).toBe(true);
+    const has = await promise;
+
+    expect(mocked.getBroadcastsStatistics).toHaveBeenCalledWith('proj-xyz', {
+      offset: 0,
+      limit: 1,
+    });
+    expect(has).toBe(false);
+    expect(store.loadingHasBroadcastsStatistics).toBe(false);
+  });
+
   it('getBroadcastsMonthPerformance loads and stores month stats, toggling loading flag', async () => {
     const store = useBroadcastsStore();
 

@@ -77,6 +77,7 @@ const broadcastsStore = useBroadcastsStore();
 const projectStore = useProjectStore();
 
 const isSearching = ref(false);
+const hasSend = ref(true);
 const recentSendsData = computed(() => broadcastsStore.broadcastsStatistics);
 const loadingRecentSends = computed(
   () => broadcastsStore.loadingBroadcastsStatistics,
@@ -92,6 +93,7 @@ const dateRange = ref<DateRange>(
 );
 const showMissingRecentSends = computed(
   () =>
+    !hasSend.value &&
     !recentSendsData.value.length &&
     !loadingRecentSends.value &&
     !isSearching.value,
@@ -131,7 +133,16 @@ const handleStartNewSend = () => {
   router.push('/broadcast/create');
 };
 
+const checkIfHasSend = async () => {
+  hasSend.value = await broadcastsStore.hasBroadcastsStatistics(
+    projectStore.project.uuid,
+  );
+};
+
 const fetchRecentSends = async () => {
+  await checkIfHasSend();
+  if (!hasSend.value) return;
+
   const startDate = getDateInUTC(new Date(dateRange.value.start));
   const endDate = getDateInUTC(new Date(dateRange.value.end));
   try {
