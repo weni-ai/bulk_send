@@ -70,12 +70,16 @@ const emitSelectionUpdate = () => {
   &__content {
     display: flex;
     flex-direction: column;
+    overflow: hidden;
   }
 
   &__title {
     @include unnnic-text-body-gt;
     font-weight: $unnnic-font-weight-bold;
     color: $unnnic-color-neutral-darkest;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &__description {
