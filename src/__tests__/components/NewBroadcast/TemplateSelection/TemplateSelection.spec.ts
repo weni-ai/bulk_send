@@ -33,7 +33,7 @@ const stubs = {
     template:
       '<div data-test="filters">\n' +
       '  <button data-test="set-search" @click="$emit(\'update:search\', \'hello\')">set search</button>\n' +
-      "  <button data-test=\"set-channel\" @click=\"$emit('update:channel', { uuid: 'ch-1', name: 'WAC 1', channel_type: 'WAC' })\">set channel</button>\n" +
+      "  <button data-test=\"set-channel\" @click=\"$emit('update:channel', { uuid: 'ch-1', name: 'WAC 1', channelType: 'WAC' })\">set channel</button>\n" +
       '  <button data-test="clear-channel" @click="$emit(\'update:channel\', undefined)">clear channel</button>\n' +
       '</div>',
   },

@@ -48,6 +48,7 @@ const projectStore = useProjectStore();
 
 type ChannelOption = SelectOption<string>;
 const ALL_CHANNELS_VALUE = 'ALL';
+const WENI_DEMO_NUMBER = '558231420933';
 
 const props = defineProps<{
   search: string;
@@ -58,7 +59,8 @@ const emit = defineEmits(['update:search', 'update:channel']);
 
 const channels = computed(() => {
   return projectStore.project.channels.filter(
-    (channel) => channel.channel_type === 'WAC',
+    (channel) =>
+      channel.channelType === 'WAC' && channel.phoneNumber !== WENI_DEMO_NUMBER,
   );
 });
 
@@ -131,6 +133,10 @@ const handleChannelUpdate = (selectedChannel: ChannelOption[]) => {
   );
   emit('update:channel', channel);
 };
+
+defineExpose({
+  channels,
+});
 </script>
 
 <style scoped lang="scss">

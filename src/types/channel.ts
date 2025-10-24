@@ -1,10 +1,10 @@
 interface Channel {
   uuid: string;
   name: string;
-  channel_type: string;
+  channelType: string;
   MMLite?: boolean;
   waba?: string;
-  phone_number?: string;
+  phoneNumber?: string;
 }
 
 export type { Channel };
