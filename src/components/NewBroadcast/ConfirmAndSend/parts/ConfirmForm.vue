@@ -59,7 +59,6 @@ useI18n();
 </script>
 
 <style scoped lang="scss">
-/* Presentational only; parent provides container layout styles */
 .confirm-and-send-form {
   display: flex;
   flex-direction: column;
