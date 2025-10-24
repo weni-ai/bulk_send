@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.3.0] - 2025-10-24
+
+### Added
+- feat: handle language switch
+
+### Fixed
+- fix: display recent sends filters
+- fix: channelType porperty and channel selection
+
+### Changed
+- feat: change sorting order from 'name' to 'date' in TemplateSelection
+- refactor: GroupSelectionList layout to grid
+
 ## [1.2.1] - 2025-09-23
 
 ### Fixed
