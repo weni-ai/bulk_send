@@ -13,6 +13,7 @@ const languages = {
 const messages = Object.assign(languages);
 
 export default createI18n({
+  legacy: false,
   locale: 'en',
   fallbackLocale: 'en',
   messages,

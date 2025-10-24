@@ -7,8 +7,6 @@ import type { BroadcastStatistic } from '@/types/broadcast';
 import { NewBroadcastPage } from '@/constants/broadcasts';
 import { TemplateStatus } from '@/constants/templates';
 import { createGroup } from '../utils/factories';
-import { useTemplatesStore } from '@/stores/templates';
-import { toLocalizedFloat } from '@/utils/number';
 
 // Mock API module used by the store
 vi.mock('@/api/resources/broadcasts', () => ({
@@ -77,12 +75,6 @@ describe('broadcasts store', () => {
 
   it('getBroadcastsMonthPerformance loads and stores month stats, toggling loading flag', async () => {
     const store = useBroadcastsStore();
-    const templateStore = useTemplatesStore();
-    templateStore.templatePricing.rates.marketing = 1.2;
-    templateStore.templatePricing.currency = 'BRL';
-    const pricingSpy = vi
-      .spyOn(templateStore, 'getTemplatePricing')
-      .mockResolvedValue(undefined as any);
 
     const mocked = Broadcasts as Mocked<typeof Broadcasts>;
     mocked.getBroadcastsMonthPerformance.mockResolvedValue({
@@ -102,11 +94,6 @@ describe('broadcasts store', () => {
     );
     expect(store.broadcastMonthPerformance.totalSent).toBe(42);
     expect(store.broadcastMonthPerformance.successRate).toBe(0.77);
-    const cost = 1.2 * 42;
-    expect(store.broadcastMonthPerformance.estimatedCost).toBe(
-      `R$${toLocalizedFloat(cost)}`,
-    );
-    expect(pricingSpy).toHaveBeenCalled();
     expect(store.loadingBroadcastsMonthPerformance).toBe(false);
   });
 

@@ -4,6 +4,7 @@ import HomeBulkSend from '@/views/BulkSend/HomeBulkSend.vue';
 import { createPinia, setActivePinia } from 'pinia';
 import { useProjectStore } from '@/stores/project';
 import { useBroadcastsStore } from '@/stores/broadcasts';
+import { useTemplatesStore } from '@/stores/templates';
 
 // Mock useI18n to avoid installing i18n plugin
 vi.mock('vue-i18n', () => ({
@@ -49,6 +50,7 @@ describe('HomeBulkSend.vue', () => {
       channels?: Array<any>;
       stubProjectAction?: boolean;
       stubBroadcastAction?: boolean;
+      stubTemplatesAction?: boolean;
       projectUuid?: string;
       loadingMonthPerformance?: boolean;
     } = {},
@@ -57,6 +59,7 @@ describe('HomeBulkSend.vue', () => {
     setActivePinia(pinia);
     const projectStore = useProjectStore(pinia);
     const broadcastsStore = useBroadcastsStore(pinia);
+    const templatesStore = useTemplatesStore(pinia);
 
     projectStore.project.uuid = options.projectUuid ?? DEFAULT_PROJECT_UUID;
     projectStore.project.channels = options.channels ?? DEFAULT_CHANNELS;
@@ -73,6 +76,10 @@ describe('HomeBulkSend.vue', () => {
             .spyOn(broadcastsStore, 'getBroadcastsMonthPerformance')
             .mockResolvedValue()
         : undefined;
+    const templatesPricingSpy =
+      options.stubTemplatesAction !== false
+        ? vi.spyOn(templatesStore, 'getTemplatePricing').mockResolvedValue()
+        : undefined;
 
     const wrapper = mount(HomeBulkSend, {
       global: {
@@ -82,7 +89,14 @@ describe('HomeBulkSend.vue', () => {
       },
     });
 
-    return { wrapper, projectStore, broadcastsStore, projectSpy, broadcastSpy };
+    return {
+      wrapper,
+      projectStore,
+      broadcastsStore,
+      projectSpy,
+      broadcastSpy,
+      templatesPricingSpy,
+    };
   };
 
   afterEach(() => {
@@ -107,7 +121,10 @@ describe('HomeBulkSend.vue', () => {
   });
 
   it('calls getBroadcastsMonthPerformance on mount with project uuid', async () => {
-    const { broadcastSpy } = mountWrapper({ projectUuid: 'proj-xyz' });
+    const { wrapper, broadcastSpy } = mountWrapper({
+      projectUuid: 'proj-xyz',
+    });
+    await wrapper.vm.$nextTick();
     expect(broadcastSpy).toHaveBeenCalledWith('proj-xyz');
   });
 
