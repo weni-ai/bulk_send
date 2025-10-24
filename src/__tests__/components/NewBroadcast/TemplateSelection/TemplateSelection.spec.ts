@@ -83,7 +83,7 @@ describe('TemplateSelection.vue', () => {
       limit: PAGE_SIZE,
       offset: 0,
       name: '',
-      order_by: 'name',
+      order_by: 'date',
     });
   });
 
@@ -95,7 +95,7 @@ describe('TemplateSelection.vue', () => {
       limit: PAGE_SIZE,
       offset: PAGE_SIZE * (2 - 1),
       name: '',
-      order_by: 'name',
+      order_by: 'date',
     });
   });
 
@@ -110,7 +110,7 @@ describe('TemplateSelection.vue', () => {
       limit: PAGE_SIZE,
       offset: 0, // reset to page 1
       name: 'hello',
-      order_by: 'name',
+      order_by: 'date',
     });
   });
 
@@ -145,7 +145,7 @@ describe('TemplateSelection.vue', () => {
       limit: PAGE_SIZE,
       offset: 0,
       name: '',
-      order_by: 'name',
+      order_by: 'date',
       channel: 'ch-1',
     });
   });
@@ -163,7 +163,7 @@ describe('TemplateSelection.vue', () => {
       limit: PAGE_SIZE,
       offset: 0,
       name: '',
-      order_by: 'name',
+      order_by: 'date',
       channel: undefined,
     });
   });
