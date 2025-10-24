@@ -46,7 +46,6 @@ const getFirstSelected = (wrapper: VueWrapper): Group[] => {
 const mountWithStore = (options: {
   groups: ReturnType<typeof createGroup>[];
   selectedGroups?: ReturnType<typeof createGroup>[];
-  maxColumns?: number;
   page?: number;
   pageSize?: number;
   total?: number;
@@ -60,7 +59,6 @@ const mountWithStore = (options: {
   const wrapper = mount(GroupSelectionList, {
     props: {
       selectedGroups: options.selectedGroups ?? [],
-      maxColumns: options.maxColumns ?? 3,
       page: options.page ?? 1,
       pageSize: options.pageSize ?? 5,
       total: options.total ?? options.groups.length,
@@ -84,22 +82,6 @@ describe('GroupSelectionList.vue', () => {
     const wrapper = mountWithStore({ groups: [], loading: true });
     expect(wrapper.find(SELECTOR.loading).exists()).toBe(true);
     expect(wrapper.find(SELECTOR.content).exists()).toBe(false);
-  });
-
-  it('renders groups into rows according to maxColumns', () => {
-    const groups = [
-      createGroup({ id: 1, name: 'G1', memberCount: 10 }),
-      createGroup({ id: 2, name: 'G2', memberCount: 20 }),
-      createGroup({ id: 3, name: 'G3', memberCount: 30 }),
-      createGroup({ id: 4, name: 'G4', memberCount: 40 }),
-      createGroup({ id: 5, name: 'G5', memberCount: 50 }),
-    ];
-    const wrapper = mountWithStore({ groups, maxColumns: 3 });
-
-    const rows = wrapper.findAll(SELECTOR.row);
-    expect(rows).toHaveLength(2);
-    expect(rows[0].findAll(SELECTOR.option)).toHaveLength(3);
-    expect(rows[1].findAll(SELECTOR.option)).toHaveLength(2);
   });
 
   it('emits update:selected-groups when toggling a non-selected group', async () => {

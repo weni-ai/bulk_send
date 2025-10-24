@@ -19,25 +19,18 @@
       class="group-selection-list__content"
       data-test="group-list-content"
     >
-      <section
-        v-for="(row, rowIndex) in rows"
-        :key="rowIndex"
-        class="group-selection-list__row"
-        data-test="group-list-row"
-      >
-        <GroupSelectionOption
-          v-for="group in row"
-          :key="group.id"
-          :title="group.name"
-          :description="
-            $t('new_broadcast.pages.select_groups.group_count', {
-              count: group.memberCount,
-            })
-          "
-          :selected="group.selected"
-          @update:selected="handleGroupSelectionUpdate(group)"
-        />
-      </section>
+      <GroupSelectionOption
+        v-for="group in groups"
+        :key="group.id"
+        :title="group.name"
+        :description="
+          $t('new_broadcast.pages.select_groups.group_count', {
+            count: group.memberCount,
+          })
+        "
+        :selected="group.selected"
+        @update:selected="handleGroupSelectionUpdate(group)"
+      />
     </section>
     <GroupSelectionListEmpty
       v-if="showEmptyList"
@@ -69,7 +62,6 @@ interface GroupWithSelected extends Group {
 
 const props = defineProps<{
   selectedGroups: Group[];
-  maxColumns: number;
   page: number;
   pageSize: number;
   total: number;
@@ -93,17 +85,6 @@ const groups: ComputedRef<GroupWithSelected[]> = computed(() => {
       (selectedGroup) => selectedGroup.id === group.id,
     ),
   }));
-});
-
-const rows: ComputedRef<GroupWithSelected[][]> = computed(() => {
-  return groups.value.reduce((acc, item, index) => {
-    if (index % props.maxColumns === 0) {
-      acc.push([item]);
-    } else {
-      acc[acc.length - 1].push(item);
-    }
-    return acc;
-  }, [] as GroupWithSelected[][]);
 });
 
 const handlePageUpdate = (newPage: number) => {
@@ -137,13 +118,8 @@ const isGroupSelected = (group: Group) => {
 <style scoped lang="scss">
 .group-selection-list {
   &__content {
-    display: flex;
-    flex-direction: column;
-    gap: $unnnic-spacing-sm;
-  }
-
-  &__row {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: $unnnic-spacing-sm;
   }
 

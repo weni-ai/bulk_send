@@ -23,7 +23,6 @@
       />
       <GroupSelectionList
         class="group-selection__list"
-        :maxColumns="3"
         :page="groupsPage"
         :pageSize="groupsPageSize"
         :total="groupsTotal"

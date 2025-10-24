@@ -36,14 +36,7 @@ const stubs = {
       '<div data-test="filters"><button data-test="set-search" @click="$emit(\'update:search\', \'abc\')">set search</button><button data-test="set-sort" @click="$emit(\'update:sort\', \'Desc\')">set sort</button></div>',
   },
   GroupSelectionList: {
-    props: [
-      'maxColumns',
-      'page',
-      'pageSize',
-      'total',
-      'loading',
-      'selectedGroups',
-    ],
+    props: ['page', 'pageSize', 'total', 'loading', 'selectedGroups'],
     emits: ['update:page', 'update:selected-groups'],
     template:
       '<div data-test="list" :data-page="page" :data-total="total" :data-selected-count="selectedGroups.length"><button data-test="next" @click="$emit(\'update:page\', page + 1)">next</button><button data-test="select" @click="$emit(\'update:selected-groups\', [{ id: 1, uuid: \'u1\', name: \'G1\', memberCount: 10 }])">select</button></div>',
