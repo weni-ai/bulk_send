@@ -19,8 +19,9 @@ const STUBS = {
   },
 } as const;
 
-const mountWrapper = () =>
+const mountWrapper = (disabled = false) =>
   mount(ContactImportUploadInstructions, {
+    props: { disabled },
     global: { stubs: STUBS, mocks: { $t: (key: string) => key } },
   });
 
@@ -46,6 +47,14 @@ describe('ContactImportUploadInstructions.vue', () => {
     const wrapper = mountWrapper();
     await wrapper.find(SELECTOR.openModal).trigger('click');
     await wrapper.find(SELECTOR.close).trigger('click');
+    expect(
+      wrapper.find(SELECTOR.instructionsModal).attributes('data-open'),
+    ).toBe('false');
+  });
+
+  it('does not open the instructions modal when disabled', async () => {
+    const wrapper = mountWrapper(true);
+    await wrapper.find(SELECTOR.openModal).trigger('click');
     expect(
       wrapper.find(SELECTOR.instructionsModal).attributes('data-open'),
     ).toBe('false');

@@ -7,10 +7,18 @@ const SELECTOR = {
   text: '[data-test="empty-text"]',
 } as const;
 
+const stubs = {
+  UnnnicButton: {
+    props: ['type', 'disabled'],
+    template: '<button data-test="unnnic-button"><slot /></button>',
+  },
+} as const;
+
 describe('GroupSelectionListEmpty.vue', () => {
   it('renders empty state text', () => {
     const wrapper = mount(GroupSelectionListEmpty, {
       global: {
+        stubs,
         mocks: { $t: (key: string) => key },
       },
     });
