@@ -14,3 +14,7 @@ declare module '*.svg' {
   const content: VueConstructor<Vue>;
   export default content;
 }
+
+declare module '*/hotjar.js' {
+  export default function (userEmail: string): void;
+}

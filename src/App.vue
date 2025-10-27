@@ -15,12 +15,14 @@ import { useProjectStore } from '@/stores/project';
 import { moduleStorage } from '@/utils/storage';
 import { useI18n } from 'vue-i18n';
 import moment from 'moment';
+import initHotjar from '@/utils/plugins/hotjar.js';
 
 const authStore = useAuthStore();
 const projectStore = useProjectStore();
 const { locale } = useI18n();
 
-const sharedStore = ref(null);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const sharedStore: any = ref(null);
 
 onBeforeMount(async () => {
   updateTokenAndProject();
@@ -54,8 +56,8 @@ const updateTokenAndProject = () => {
   projectStore.setProjectUuid(moduleStorage.getItem('projectUuid') || '');
 };
 
-// @ts-expect-error sharedStore.value is not typed
 const language = computed(() => sharedStore.value?.user.language || 'en');
+const userEmail = computed(() => sharedStore.value?.user.email || undefined);
 
 watch(
   language,
@@ -67,6 +69,12 @@ watch(
   },
   { immediate: true },
 );
+
+watch(userEmail, (newUserEmail: string) => {
+  if (newUserEmail) {
+    initHotjar(newUserEmail);
+  }
+});
 </script>
 
 <style lang="scss" scoped>
