@@ -14,6 +14,13 @@ const SELECTOR = {
   itemValue: '[data-test="variables-overview-item-value"]',
 } as const;
 
+const stubs = {
+  UnnnicIcon: {
+    props: ['icon', 'scheme'],
+    template: '<i data-test="icon"></i>',
+  },
+} as const;
+
 describe('VariablesSelectionOverview.vue', () => {
   it('renders title when provided and lists defined variables', () => {
     const wrapper = mount(VariablesSelectionOverview, {
@@ -24,7 +31,7 @@ describe('VariablesSelectionOverview.vue', () => {
           { key: 'age', label: 'Age' },
         ] as any,
       },
-      global: { mocks: { $t: (k: string) => k } },
+      global: { stubs, mocks: { $t: (k: string) => k } },
     });
 
     expect(wrapper.find(SELECTOR.root).exists()).toBe(true);
@@ -40,7 +47,7 @@ describe('VariablesSelectionOverview.vue', () => {
       props: {
         definedVariables: [{ key: 'name', label: 'Name' }] as any,
       },
-      global: { mocks: { $t: (k: string) => k } },
+      global: { stubs, mocks: { $t: (k: string) => k } },
     });
     expect(wrapper.find(SELECTOR.title).exists()).toBe(false);
   });

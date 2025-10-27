@@ -1,6 +1,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { useUploadProgress } from '@/composables/useUploadProgress';
 
+// mock onBeforeUnmount for this composable
+vi.mock('vue', async (importOriginal) => ({
+  ...(await importOriginal()),
+  onBeforeUnmount: vi.fn(),
+}));
+
 describe('useUploadProgress', () => {
   beforeEach(() => {
     vi.useFakeTimers();

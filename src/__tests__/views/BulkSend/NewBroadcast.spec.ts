@@ -3,6 +3,8 @@ import { mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import NewBroadcast from '@/views/BulkSend/NewBroadcast.vue';
 import { useBroadcastsStore } from '@/stores/broadcasts';
+import { useProjectStore } from '@/stores/project';
+import { useTemplatesStore } from '@/stores/templates';
 
 vi.mock('vue-router', () => ({
   useRouter: () => ({ back: vi.fn() }),
@@ -43,13 +45,35 @@ const mountWrapper = () => {
   const pinia = createPinia();
   setActivePinia(pinia);
   const broadcastsStore = useBroadcastsStore(pinia);
+  const projectStore = useProjectStore(pinia);
+  const templatesStore = useTemplatesStore(pinia);
+
   const setPageSpy = vi
     .spyOn(broadcastsStore, 'setNewBroadcastPage')
     .mockImplementation(() => {});
+
+  const getProjectInfoSpy = vi
+    .spyOn(projectStore, 'getProjectInfo')
+    .mockResolvedValue();
+
+  const getProjectChannelsSpy = vi
+    .spyOn(projectStore, 'getProjectChannels')
+    .mockResolvedValue();
+
+  const getTemplatePricingSpy = vi
+    .spyOn(templatesStore, 'getTemplatePricing')
+    .mockResolvedValue();
+
   const wrapper = mount(NewBroadcast, {
     global: { plugins: [pinia], stubs: STUBS, mocks: { $t: (k: string) => k } },
   });
-  return { wrapper, setPageSpy };
+  return {
+    wrapper,
+    setPageSpy,
+    getProjectInfoSpy,
+    getProjectChannelsSpy,
+    getTemplatePricingSpy,
+  };
 };
 
 const SELECTOR = {
