@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.0] - 2025-10-27
+
+### Changed
+- Refactor: ConfirmAndSend component
+- chore: update dependencies
+- test: enhance unit tests to remove console warnings
+
+### Added
+- feat: integrate Hotjar tracking
+
 ## [1.3.0] - 2025-10-24
 
 ### Added
