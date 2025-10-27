@@ -42,3 +42,5 @@ export const useProjectStore = defineStore('project', {
     },
   },
 });
+
+export type ProjectStore = ReturnType<typeof useProjectStore>;
