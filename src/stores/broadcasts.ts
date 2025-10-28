@@ -46,8 +46,10 @@ export const useBroadcastsStore = defineStore('broadcasts', {
     async getBroadcastsStatistics(
       projectUuid: string,
       params: BroadcastStatisticsParams,
+      shouldLoad = true,
     ) {
-      this.loadingBroadcastsStatistics = true;
+      this.loadingBroadcastsStatistics = shouldLoad;
+
       try {
         const response = await BroadcastsAPI.getBroadcastsStatistics(
           projectUuid,

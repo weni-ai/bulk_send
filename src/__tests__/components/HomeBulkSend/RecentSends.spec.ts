@@ -3,6 +3,7 @@ import { PAGE_SIZE, DEFAULT_DATE_RANGE_DAYS } from '@/constants/recentSends';
 import { flushPromises, mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import RecentSends from '@/components/HomeBulkSend/RecentSends.vue';
+import { POLLING_DELAY_MS } from '@/constants/recentSends';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import { useProjectStore } from '@/stores/project';
 import { createBroadcast } from '@/__tests__/utils/factories';
@@ -134,8 +135,11 @@ describe('RecentSends.vue', () => {
     vi.restoreAllMocks();
   });
 
-  it('renders core UI elements', () => {
-    const { wrapper } = mountRecentSends();
+  it('renders core UI elements', async () => {
+    vi.useFakeTimers();
+    const { wrapper } = mountRecentSends({ spy: true });
+    await vi.advanceTimersByTimeAsync(500);
+    await flushPromises();
 
     expect(wrapper.find(SELECTOR.root).exists()).toBe(true);
     expect(wrapper.find(SELECTOR.title).exists()).toBe(true);
@@ -158,7 +162,12 @@ describe('RecentSends.vue', () => {
   });
 
   it('fetches on mount with default page, date range and empty search', async () => {
-    const { spy, hasSpy } = mountRecentSends({ spy: true, hasSends: true });
+    vi.useFakeTimers();
+    const { spy, hasSpy } = mountRecentSends({
+      spy: true,
+      hasSends: true,
+    });
+    await vi.advanceTimersByTimeAsync(500);
     await flushPromises();
     expect(spy).toBeDefined();
     expect(spy).toHaveBeenCalledTimes(1);
@@ -167,17 +176,27 @@ describe('RecentSends.vue', () => {
     const defaultRange = createDateRangeFromDaysAgo(DEFAULT_DATE_RANGE_DAYS);
     const { start: expectedStart, end: expectedEnd } = mkIsoRange(defaultRange);
 
-    expect(spy).toHaveBeenCalledWith(DEFAULT_PROJECT_UUID, {
-      offset: 0,
-      limit: PAGE_SIZE,
-      start_date: expectedStart,
-      end_date: expectedEnd,
-      name: '',
-    });
+    expect(spy).toHaveBeenCalledWith(
+      DEFAULT_PROJECT_UUID,
+      {
+        offset: 0,
+        limit: PAGE_SIZE,
+        start_date: expectedStart,
+        end_date: expectedEnd,
+        name: '',
+      },
+      true,
+    );
   });
 
-  it('propagates loading state to the list', () => {
-    const { wrapper } = mountRecentSends({ broadcasts: { loading: true } });
+  it('propagates loading state to the list', async () => {
+    vi.useFakeTimers();
+    const { wrapper } = mountRecentSends({
+      broadcasts: { loading: true },
+      spy: true,
+    });
+    await vi.advanceTimersByTimeAsync(500);
+    await flushPromises();
     expect(wrapper.find(SELECTOR.content).exists()).toBe(true);
     const list = wrapper.findComponent({ name: 'RecentSendsList' });
     expect(list.exists()).toBe(true);
@@ -201,13 +220,17 @@ describe('RecentSends.vue', () => {
     const defaultRange = createDateRangeFromDaysAgo(DEFAULT_DATE_RANGE_DAYS);
     const { start: expectedStart, end: expectedEnd } = mkIsoRange(defaultRange);
 
-    expect(spy).toHaveBeenLastCalledWith(DEFAULT_PROJECT_UUID, {
-      offset: 0,
-      limit: PAGE_SIZE,
-      start_date: expectedStart,
-      end_date: expectedEnd,
-      name: 'test search',
-    });
+    expect(spy).toHaveBeenLastCalledWith(
+      DEFAULT_PROJECT_UUID,
+      {
+        offset: 0,
+        limit: PAGE_SIZE,
+        start_date: expectedStart,
+        end_date: expectedEnd,
+        name: 'test search',
+      },
+      true,
+    );
   });
 
   it('suppresses empty state while searching', async () => {
@@ -246,27 +269,36 @@ describe('RecentSends.vue', () => {
     const { start: expectedStart, end: expectedEnd } =
       mkIsoRange(TEST_DATE_RANGE);
 
-    expect(spy).toHaveBeenLastCalledWith(DEFAULT_PROJECT_UUID, {
-      offset: 0,
-      limit: PAGE_SIZE,
-      start_date: expectedStart,
-      end_date: expectedEnd,
-      name: '',
-    });
+    expect(spy).toHaveBeenLastCalledWith(
+      DEFAULT_PROJECT_UUID,
+      {
+        offset: 0,
+        limit: PAGE_SIZE,
+        start_date: expectedStart,
+        end_date: expectedEnd,
+        name: '',
+      },
+      true,
+    );
   });
 
   it('displays list when data exists', async () => {
+    vi.useFakeTimers();
     const { wrapper } = mountRecentSends({
       broadcasts: { statistics: [createBroadcast()], count: 1 },
     });
+    await vi.advanceTimersByTimeAsync(500);
+    await flushPromises();
     expect(wrapper.find(SELECTOR.list).exists()).toBe(true);
   });
 
   it('paginates and fetches the next page', async () => {
+    vi.useFakeTimers();
     const { wrapper, spy } = mountRecentSends({
       broadcasts: { statistics: [createBroadcast()], count: 10 },
       spy: true,
     });
+    await vi.advanceTimersByTimeAsync(500);
     await flushPromises();
     expect(spy).toBeDefined();
     // First call on mount
@@ -279,13 +311,17 @@ describe('RecentSends.vue', () => {
     expect(spy).toHaveBeenCalledTimes(2);
     const defaultRange = createDateRangeFromDaysAgo(DEFAULT_DATE_RANGE_DAYS);
     const { start: expectedStart, end: expectedEnd } = mkIsoRange(defaultRange);
-    expect(spy).toHaveBeenLastCalledWith(DEFAULT_PROJECT_UUID, {
-      offset: (2 - 1) * PAGE_SIZE,
-      limit: PAGE_SIZE,
-      start_date: expectedStart,
-      end_date: expectedEnd,
-      name: '',
-    });
+    expect(spy).toHaveBeenLastCalledWith(
+      DEFAULT_PROJECT_UUID,
+      {
+        offset: (2 - 1) * PAGE_SIZE,
+        limit: PAGE_SIZE,
+        start_date: expectedStart,
+        end_date: expectedEnd,
+        name: '',
+      },
+      true,
+    );
   });
 
   it('collapses rapid search typing into a single debounced API call', async () => {
@@ -313,13 +349,17 @@ describe('RecentSends.vue', () => {
 
     // 1 initial call + 1 debounced call
     expect(spy).toHaveBeenCalledTimes(2);
-    expect(spy).toHaveBeenLastCalledWith(DEFAULT_PROJECT_UUID, {
-      offset: 0,
-      limit: PAGE_SIZE,
-      start_date: expectedStart,
-      end_date: expectedEnd,
-      name: 'test',
-    });
+    expect(spy).toHaveBeenLastCalledWith(
+      DEFAULT_PROJECT_UUID,
+      {
+        offset: 0,
+        limit: PAGE_SIZE,
+        start_date: expectedStart,
+        end_date: expectedEnd,
+        name: 'test',
+      },
+      true,
+    );
   });
 
   it('resets to page 1 on search from a later page', async () => {
@@ -328,6 +368,7 @@ describe('RecentSends.vue', () => {
       spy: true,
       broadcasts: { statistics: [createBroadcast()], count: 20 },
     });
+    await vi.advanceTimersByTimeAsync(500);
     await flushPromises();
     // Go to page 3
     const list = wrapper.findComponent({ name: 'RecentSendsList' });
@@ -347,13 +388,17 @@ describe('RecentSends.vue', () => {
 
     // Third call uses offset 0 (page 1)
     expect(spy).toHaveBeenCalledTimes(3);
-    expect(spy).toHaveBeenLastCalledWith(DEFAULT_PROJECT_UUID, {
-      offset: 0,
-      limit: PAGE_SIZE,
-      start_date: expectedStart,
-      end_date: expectedEnd,
-      name: 'abc',
-    });
+    expect(spy).toHaveBeenLastCalledWith(
+      DEFAULT_PROJECT_UUID,
+      {
+        offset: 0,
+        limit: PAGE_SIZE,
+        start_date: expectedStart,
+        end_date: expectedEnd,
+        name: 'abc',
+      },
+      true,
+    );
   });
 
   it('shows clear icon only when there is search text', async () => {
@@ -432,13 +477,17 @@ describe('RecentSends.vue', () => {
     await vi.advanceTimersByTimeAsync(500);
     await flushPromises();
     expect(spy).toHaveBeenCalledTimes(2);
-    expect(spy).toHaveBeenLastCalledWith(DEFAULT_PROJECT_UUID, {
-      offset: 0,
-      limit: PAGE_SIZE,
-      start_date: expectedStart,
-      end_date: expectedEnd,
-      name: '',
-    });
+    expect(spy).toHaveBeenLastCalledWith(
+      DEFAULT_PROJECT_UUID,
+      {
+        offset: 0,
+        limit: PAGE_SIZE,
+        start_date: expectedStart,
+        end_date: expectedEnd,
+        name: '',
+      },
+      true,
+    );
   });
 
   it('does not fetch and hides filters when project has no sends', async () => {
@@ -450,5 +499,123 @@ describe('RecentSends.vue', () => {
     // Filters should not be rendered when missing state is shown
     expect(wrapper.find(SELECTOR.search).exists()).toBe(false);
     expect(wrapper.find(SELECTOR.date).exists()).toBe(false);
+  });
+
+  it('polls again when statistics change and uses shouldLoad=false subsequently', async () => {
+    vi.useFakeTimers();
+    const { spy, broadcastsStore } = mountRecentSends({
+      spy: true,
+      hasSends: true,
+    });
+    expect(spy).toBeDefined();
+
+    let call = 0;
+    if (spy) {
+      spy.mockImplementation(async () => {
+        call++;
+        const base = createBroadcast();
+        const sentValue = call === 1 ? 1 : call === 2 ? 2 : 2;
+        broadcastsStore.broadcastsStatistics = [
+          {
+            ...base,
+            statistics: { ...base.statistics, sent: sentValue },
+          },
+        ];
+        broadcastsStore.broadcastsStatisticsCount =
+          broadcastsStore.broadcastsStatistics.length;
+      });
+    }
+
+    await vi.advanceTimersByTimeAsync(0);
+    await flushPromises();
+
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy!.mock.calls[0][2]).toBe(true);
+
+    await vi.advanceTimersByTimeAsync(POLLING_DELAY_MS);
+    await flushPromises();
+
+    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy!.mock.calls[1][2]).toBe(false);
+
+    // Third poll occurs because statistics changed between first and second calls
+    await vi.advanceTimersByTimeAsync(POLLING_DELAY_MS);
+    await flushPromises();
+    expect(spy).toHaveBeenCalledTimes(3);
+  });
+
+  it('stops after second call when statistics remain unchanged', async () => {
+    vi.useFakeTimers();
+    const { spy, broadcastsStore } = mountRecentSends({
+      spy: true,
+      hasSends: true,
+    });
+    expect(spy).toBeDefined();
+
+    if (spy) {
+      spy.mockImplementation(async () => {
+        const base = createBroadcast();
+        broadcastsStore.broadcastsStatistics = [
+          { ...base, statistics: { ...base.statistics, sent: 5 } },
+        ];
+        broadcastsStore.broadcastsStatisticsCount =
+          broadcastsStore.broadcastsStatistics.length;
+      });
+    }
+
+    await vi.advanceTimersByTimeAsync(0);
+    await flushPromises();
+    expect(spy).toHaveBeenCalledTimes(1);
+
+    await vi.advanceTimersByTimeAsync(POLLING_DELAY_MS);
+    await flushPromises();
+    // Second call happens to compare with baseline
+    expect(spy).toHaveBeenCalledTimes(2);
+    // No further polling since stats did not change between call 1 and 2
+    await vi.advanceTimersByTimeAsync(POLLING_DELAY_MS);
+    await flushPromises();
+    expect(spy).toHaveBeenCalledTimes(2);
+  });
+
+  it('continues polling while statistics keep changing', async () => {
+    vi.useFakeTimers();
+    const { spy, broadcastsStore } = mountRecentSends({
+      spy: true,
+      hasSends: true,
+    });
+    expect(spy).toBeDefined();
+
+    let call = 0;
+    if (spy) {
+      spy.mockImplementation(async () => {
+        call++;
+        const base = createBroadcast();
+        const sentValue = call <= 3 ? call : 3; // change for first 3 calls, then stabilize
+        broadcastsStore.broadcastsStatistics = [
+          { ...base, statistics: { ...base.statistics, sent: sentValue } },
+        ];
+        broadcastsStore.broadcastsStatisticsCount =
+          broadcastsStore.broadcastsStatistics.length;
+      });
+    }
+
+    await vi.advanceTimersByTimeAsync(0);
+    await flushPromises();
+
+    await vi.advanceTimersByTimeAsync(POLLING_DELAY_MS);
+    await flushPromises();
+
+    await vi.advanceTimersByTimeAsync(POLLING_DELAY_MS);
+    await flushPromises();
+
+    // A fourth call occurs where stats stabilize
+    await vi.advanceTimersByTimeAsync(POLLING_DELAY_MS);
+    await flushPromises();
+
+    expect(spy).toHaveBeenCalledTimes(4);
+    expect(spy!.mock.calls[0][2]).toBe(true);
+    expect(spy!.mock.calls[1][2]).toBe(false);
+    expect(spy!.mock.calls[2][2]).toBe(false);
+    expect(spy!.mock.calls[3][2]).toBe(false);
   });
 });
