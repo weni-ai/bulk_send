@@ -64,6 +64,8 @@ watch(
   (newLanguage: string) => {
     if (!newLanguage) return;
 
+    console.log('[DEBUG] sharedStore', sharedStore.value);
+
     locale.value = newLanguage;
     moment.locale(newLanguage);
   },
@@ -71,7 +73,9 @@ watch(
 );
 
 watch(userEmail, (newUserEmail: string) => {
+  console.log('newUserEmail', newUserEmail);
   if (newUserEmail) {
+    console.log('initHotjar');
     initHotjar(newUserEmail);
   }
 });
