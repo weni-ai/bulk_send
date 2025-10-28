@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.0] - 2025-10-28
+
+### Added
+- feat: enhance RecentSends component with polling logic
+
+### Changed
+- chore: update @weni/unnnic-system to version 3.5.0
+
 ## [1.4.0] - 2025-10-27
 
 ### Changed
