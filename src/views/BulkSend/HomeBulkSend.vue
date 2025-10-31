@@ -48,11 +48,6 @@
 
 <script setup lang="ts">
 import { computed, ref, onBeforeMount } from 'vue';
-import BulkSendHomeLayout from '@/layouts/BulkSend/BulkSendHomeLayout.vue';
-import HomeHeader from '@/components/HomeBulkSend/HomeHeader.vue';
-import MetricsTable from '@/components/MetricsTable.vue';
-import RecentSends from '@/components/HomeBulkSend/RecentSends.vue';
-import ActivateMMLiteModal from '@/components/modals/ActivateMMLite.vue';
 import { useProjectStore } from '@/stores/project';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import { useTemplatesStore } from '@/stores/templates';

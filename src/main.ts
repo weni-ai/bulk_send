@@ -5,7 +5,6 @@ import * as Sentry from '@sentry/vue';
 import './styles/global.scss';
 import '@weni/unnnic-system/dist/style.css';
 
-import Unnnic from './utils/plugins/UnnnicSystem';
 import i18n from './utils/plugins/i18n';
 
 import App from './App.vue';
@@ -46,7 +45,6 @@ export default async function mountBulkSendApp({
   app.use(pinia);
   app.use(router);
   app.use(i18n);
-  app.use(Unnnic);
 
   if (isFederatedModule && initialRoute) await router.replace(initialRoute);
 
