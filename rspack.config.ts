@@ -141,7 +141,7 @@ export default defineConfig({
       dirs: [path.resolve(__dirname, 'src/')],
       extensions: ['vue', 'ts'],
       dts: true,
-      globs: ['**/*.vue', '**/*.ts'],
+      globs: ['src/**/*.vue', 'src/**/*.ts'],
       resolvers: [
         (componentName) => {
           if (componentName.startsWith('Unnnic')) {
