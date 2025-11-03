@@ -66,7 +66,11 @@ import { useDebounceFn } from '@vueuse/core';
 import MissingRecentSends from '@/components/HomeBulkSend/MissingRecentSends.vue';
 import RecentSendsList from '@/components/HomeBulkSend/RecentSendsList.vue';
 import { createDateRangeFromDaysAgo, getDateInUTC } from '@/utils/date';
-import { DEFAULT_DATE_RANGE_DAYS, PAGE_SIZE } from '@/constants/recentSends';
+import {
+  DEFAULT_DATE_RANGE_DAYS,
+  PAGE_SIZE,
+  POLLING_DELAY_MS,
+} from '@/constants/recentSends';
 import type { DateRange } from '@/types/recentSends';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import { useProjectStore } from '@/stores/project';
@@ -103,9 +107,51 @@ const searchClearIcon = computed(() => {
   return search.value !== '' ? 'close' : undefined;
 });
 
-onBeforeMount(() => {
-  fetchRecentSends();
+// Snapshot of last seen statistics per broadcast id
+const lastStatsById = ref<Record<number, string> | null>(null);
+
+onBeforeMount(async () => {
+  await checkIfHasSend();
+  if (hasSend.value) {
+    startPollingQueuedBroadcast(0, true);
+  }
 });
+
+const startPollingQueuedBroadcast = (delay: number, loading: boolean) => {
+  setTimeout(async () => {
+    await fetchRecentSends(loading);
+    const currentStats: Record<number, string> = {};
+    for (const send of recentSendsData.value) {
+      currentStats[send.id] = JSON.stringify(send.statistics);
+    }
+
+    // If this is the first snapshot, set it and schedule another poll to detect changes
+    if (lastStatsById.value === null) {
+      lastStatsById.value = currentStats;
+      startPollingQueuedBroadcast(POLLING_DELAY_MS, false);
+      return;
+    }
+
+    // Detect if any current send has statistics changed since last snapshot
+    let hasChanged = false;
+    for (const idStr of Object.keys(currentStats)) {
+      const id = Number(idStr);
+      const prev = lastStatsById.value[id];
+      const curr = currentStats[id];
+      if (prev === undefined || prev !== curr) {
+        hasChanged = true;
+        break;
+      }
+    }
+
+    // Update snapshot
+    lastStatsById.value = currentStats;
+
+    if (hasChanged) {
+      startPollingQueuedBroadcast(POLLING_DELAY_MS, false);
+    }
+  }, delay);
+};
 
 const handleSearchUpdate = useDebounceFn((value: string) => {
   search.value = value;
@@ -139,10 +185,7 @@ const checkIfHasSend = async () => {
   );
 };
 
-const fetchRecentSends = async () => {
-  await checkIfHasSend();
-  if (!hasSend.value) return;
-
+const fetchRecentSends = async (shouldLoad = true) => {
   const startDate = getDateInUTC(new Date(dateRange.value.start));
   const endDate = getDateInUTC(new Date(dateRange.value.end));
   try {
@@ -154,7 +197,11 @@ const fetchRecentSends = async () => {
       name: search.value.trim(),
     };
 
-    broadcastsStore.getBroadcastsStatistics(projectStore.project.uuid, params);
+    await broadcastsStore.getBroadcastsStatistics(
+      projectStore.project.uuid,
+      params,
+      shouldLoad,
+    );
   } catch (error) {
     console.error(error); // TODO: check with design if we need to show an error message to the user
   }

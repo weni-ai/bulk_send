@@ -208,6 +208,11 @@ const isSelected = (item: TemplateRow) => {
   &__table:deep(.unnnic-data-table__body-row--loading) {
     display: flex;
     flex: 1;
+    justify-content: center;
+  }
+
+  &__table:deep(.unnnic-data-table__body-cell--loading) {
+    height: $unnnic-icon-size-10;
   }
 
   &__table--loading:deep(.unnnic-data-table__body) {
