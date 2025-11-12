@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import ChannelsAPI from '@/api/resources/channels';
-import ProjectsAPI from '@/api/resources/projects';
+import ChannelsAPI from '@/api/resources/flows/channels';
+import ProjectsAPI from '@/api/resources/flows/projects';
 import type { Channel } from '@/types/channel';
 import type { Project } from '@/types/project';
 

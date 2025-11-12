@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Channels from '@/api/resources/channels';
+import Channels from '@/api/resources/flows/channels';
 import requests from '@/api/requests';
 import { createPinia, setActivePinia } from 'pinia';
 import { useProjectStore } from '@/stores/project';
 
-describe('api/resources/channels', () => {
+describe('api/resources/flows/channels', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
   });

@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import Contacts from '@/api/resources/contacts';
+import Contacts from '@/api/resources/flows/contacts';
 import requests from '@/api/requests';
 import { createPinia, setActivePinia } from 'pinia';
 import { useProjectStore } from '@/stores/project';
 
-describe('api/resources/contacts', () => {
+describe('api/resources/flows/contacts', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
     const projectStore = useProjectStore();
