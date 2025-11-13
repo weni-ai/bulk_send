@@ -4,6 +4,7 @@ import { rspack } from '@rspack/core';
 import type { SwcLoaderOptions } from '@rspack/core';
 import HtmlRspackPlugin from 'html-rspack-plugin';
 import { VueLoaderPlugin } from 'vue-loader';
+import UnpluginVueComponents from 'unplugin-vue-components/rspack';
 import { resolve } from 'path';
 import path from 'path';
 import dotenv from 'dotenv';
@@ -135,6 +136,23 @@ export default defineConfig({
         connect: `connect@${process.env.MODULE_FEDERATION_CONNECT_URL}/remoteEntry.js`,
       },
       shared: sharedPkgs,
+    }),
+    UnpluginVueComponents({
+      dirs: [path.resolve(__dirname, 'src/')],
+      extensions: ['vue', 'ts'],
+      dts: true,
+      globs: ['src/**/*.vue', 'src/**/*.ts'],
+      resolvers: [
+        (componentName) => {
+          if (componentName.startsWith('Unnnic')) {
+            return {
+              name: componentName,
+              from: '@weni/unnnic-system',
+            };
+          }
+          return null;
+        },
+      ],
     }),
   ],
   optimization: {
