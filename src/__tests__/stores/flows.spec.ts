@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach, type Mocked } from 'vitest';
 import { createPinia, setActivePinia } from 'pinia';
 import { useFlowsStore } from '@/stores/flows';
-import FlowsAPI from '@/api/resources/flows';
+import FlowsAPI from '@/api/resources/flows/flows';
 import type { AxiosResponse } from 'axios';
 
-vi.mock('@/api/resources/flows', () => ({
+vi.mock('@/api/resources/flows/flows', () => ({
   default: {
     getFlows: vi.fn(),
     listAllFlows: vi.fn(),

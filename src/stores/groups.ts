@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import GroupsAPI from '@/api/resources/groups';
+import GroupsAPI from '@/api/resources/flows/groups';
 import type { Group } from '@/types/groups';
 import type { PageRequestParams } from '@/types/requests';
 

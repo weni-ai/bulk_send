@@ -4,7 +4,7 @@ import {
   type ContactField,
   type ContactFieldWithExample,
 } from '@/types/contacts';
-import ContactAPI from '@/api/resources/contacts';
+import ContactAPI from '@/api/resources/flows/contacts';
 import type { Group } from '@/types/groups';
 
 export const useContactStore = defineStore('contact', () => {
