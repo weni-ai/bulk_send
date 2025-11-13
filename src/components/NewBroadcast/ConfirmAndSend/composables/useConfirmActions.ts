@@ -44,10 +44,6 @@ export function useConfirmActions(args: {
         ContactImportStatus.COMPLETE;
     }
 
-    if (!projectStore.project.brainOn) {
-      canConfirm = canConfirm && !!broadcastsStore.newBroadcast.selectedFlow;
-    }
-
     return canConfirm && broadcastsStore.newBroadcast.reviewed;
   });
 
