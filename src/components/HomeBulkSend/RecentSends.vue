@@ -48,7 +48,7 @@
       </section>
 
       <RecentSendsList
-        :loading="loadingRecentSends"
+        :loading="showLoading"
         :recentSends="recentSendsData"
         :page="recentSendsPage"
         :pageSize="recentSendsPageSize"
@@ -91,6 +91,9 @@ const recentSendsPageSize = PAGE_SIZE;
 const recentSendsTotal = computed(
   () => broadcastsStore.broadcastsStatisticsCount,
 );
+const loadingHasBroadcastsStatistics = computed(
+  () => broadcastsStore.loadingHasBroadcastsStatistics,
+);
 const search = ref('');
 const dateRange = ref<DateRange>(
   createDateRangeFromDaysAgo(DEFAULT_DATE_RANGE_DAYS),
@@ -99,12 +102,16 @@ const showMissingRecentSends = computed(
   () =>
     !hasSend.value &&
     !recentSendsData.value.length &&
-    !loadingRecentSends.value &&
+    !showLoading.value &&
     !isSearching.value,
 );
 
 const searchClearIcon = computed(() => {
   return search.value !== '' ? 'close' : undefined;
+});
+
+const showLoading = computed(() => {
+  return loadingRecentSends.value || loadingHasBroadcastsStatistics.value;
 });
 
 // Snapshot of last seen statistics per broadcast id
