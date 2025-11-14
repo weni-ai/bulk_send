@@ -5,7 +5,8 @@
     "cypress.config.*",
     "nightwatch.conf.*",
     "playwright.config.*",
-    "eslint.config.*"
+    "eslint.config.*",
+    "rspack.config.*"
   ],
   "compilerOptions": {
     "noEmit": true,

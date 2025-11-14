@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach, type Mocked } from 'vitest';
 import { createPinia, setActivePinia } from 'pinia';
 import { useTemplatesStore } from '@/stores/templates';
-import TemplatesAPI from '@/api/resources/templates';
+import TemplatesAPI from '@/api/resources/flows/templates';
 import type { AxiosResponse } from 'axios';
 
-vi.mock('@/api/resources/templates', () => ({
+vi.mock('@/api/resources/flows/templates', () => ({
   default: {
     getTemplates: vi.fn(),
     getTemplate: vi.fn(),

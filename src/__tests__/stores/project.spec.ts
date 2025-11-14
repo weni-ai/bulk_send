@@ -1,17 +1,17 @@
 import { describe, it, expect, vi, beforeEach, type Mocked } from 'vitest';
 import { createPinia, setActivePinia } from 'pinia';
 import { useProjectStore } from '@/stores/project';
-import ChannelsAPI from '@/api/resources/channels';
-import ProjectsAPI from '@/api/resources/projects';
+import ChannelsAPI from '@/api/resources/flows/channels';
+import ProjectsAPI from '@/api/resources/flows/projects';
 import type { AxiosResponse } from 'axios';
 
-vi.mock('@/api/resources/channels', () => ({
+vi.mock('@/api/resources/flows/channels', () => ({
   default: {
     listChannels: vi.fn(),
   },
 }));
 
-vi.mock('@/api/resources/projects', () => ({
+vi.mock('@/api/resources/flows/projects', () => ({
   default: {
     getProjectInfo: vi.fn(),
   },

@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach, type Mocked } from 'vitest';
 import { createPinia, setActivePinia } from 'pinia';
 import { useContactStore } from '@/stores/contact';
-import ContactsAPI from '@/api/resources/contacts';
+import ContactsAPI from '@/api/resources/flows/contacts';
 import type { AxiosResponse } from 'axios';
 
-vi.mock('@/api/resources/contacts', () => ({
+vi.mock('@/api/resources/flows/contacts', () => ({
   default: {
     getContactFields: vi.fn(),
     getContactFieldsExamplesByGroups: vi.fn(),

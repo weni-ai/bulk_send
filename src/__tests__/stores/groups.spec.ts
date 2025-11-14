@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach, type Mocked } from 'vitest';
 import { createPinia, setActivePinia } from 'pinia';
 import { useGroupsStore } from '@/stores/groups';
-import GroupsAPI from '@/api/resources/groups';
+import GroupsAPI from '@/api/resources/flows/groups';
 import type { AxiosResponse } from 'axios';
 
-vi.mock('@/api/resources/groups', () => ({
+vi.mock('@/api/resources/flows/groups', () => ({
   default: {
     getGroups: vi.fn(),
   },
