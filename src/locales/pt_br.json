@@ -168,6 +168,14 @@
     },
     "template_preview": {
       "title": "Prévia de modelo"
+    },
+    "channel_selection": {
+      "title": "Seu projeto tem mais de um número de WhatsApp",
+      "description": "Selecione o número que será usado como remetente para este modelo",
+      "buttons": {
+        "primary": "Continuar",
+        "secondary": "Cancelar"
+      }
     }
   },
   "new_broadcast": {
@@ -202,7 +210,8 @@
         "page_title": "Selecionar mensagem do modelo",
         "filters": {
           "new_tamplate": "Novo modelo",
-          "search_placeholder": "Pesquisar modelo"
+          "search_placeholder": "Pesquisar modelo",
+          "channel_not_found": "Não foi possível redirecionar para a criação de modelo, UUID do canal faltando"
         },
         "table": {
           "name": "Nome",
@@ -252,18 +261,19 @@
         "name_field_label": "Nome"
       },
       "confirm_and_send": {
-        "title": "Revisar e enviar",
+        "title": "Revisar & enviar",
         "flow_placeholder": "Pesquisar",
         "broadcast_name_placeholder": "Nome do disparo",
         "flow_message": "Este fluxo será ativado se um contato responder a este mensagem",
         "flow_label": "Selecione um fluxo para ativar quando um contato responder",
         "broadcast_name_label": "Nome",
-        "audience": {
-          "title": "Audiência",
+        "details": {
+          "title": "Detalhes",
           "groups": "Grupos selecionados: {0}",
           "contacts": "Contatos selecionados: {0}",
           "cost": "Custo estimado: {0} ({1})",
-          "unit_cost": "Unidade: {unitCost} por mensagem entregada"
+          "unit_cost": "Unidade: {unitCost} por mensagem entregada",
+          "channel": "Número do remetente: {0}"
         },
         "variables": {
           "title": "Mapeamento de variáveis"

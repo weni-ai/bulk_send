@@ -82,27 +82,4 @@ describe('TemplateSelectionFilters.vue', () => {
     const emissions = wrapper.emitted('update:search') || [];
     expect(emissions[emissions.length - 1]).toEqual(['']);
   });
-
-  it('emits update:channel when a channel is selected', async () => {
-    const wrapper = mountWrapper('', undefined);
-    await wrapper.find(SELECTOR.setChannel).trigger('click');
-    expect(wrapper.emitted('update:channel')?.[0]).toEqual([
-      { uuid: 'ch-1', name: 'WAC 1', channelType: 'WAC' },
-    ]);
-  });
-
-  it('emits undefined for channel when cleared', async () => {
-    const wrapper = mountWrapper('', { uuid: 'ch-1', name: 'WAC 1' });
-    await wrapper.find(SELECTOR.clearChannel).trigger('click');
-    // the component maps [] to undefined when emitting upward
-    // our stub directly emits [], parent maps it to undefined → emitted value should be undefined
-    expect(wrapper.emitted('update:channel')?.[0]).toEqual([undefined]);
-  });
-
-  it('does not show WENI demo number in the channels list', () => {
-    const wrapper = mountWrapper('', undefined);
-    expect(wrapper.vm.channels.length).toBe(2);
-    expect(wrapper.vm.channels[0].name).toBe('WAC 1');
-    expect(wrapper.vm.channels[1].name).toBe('WAC 2');
-  });
 });

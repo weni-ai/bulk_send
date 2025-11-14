@@ -237,12 +237,14 @@ describe('broadcasts store', () => {
     const groups = ['g1'];
     const attachment = { url: 'https://cdn/x.jpg', type: 'image' };
     const flow = { uuid: 'f1', name: 'Flow 1' } as any;
+    const channel = { uuid: 'ch-1', name: 'WAC 1' } as any;
 
     const promise = store.createBroadcast(
       'My Broadcast',
       tpl,
       vars,
       groups,
+      channel,
       attachment,
       flow,
     );
@@ -254,6 +256,7 @@ describe('broadcasts store', () => {
       tpl,
       vars,
       groups,
+      channel,
       attachment,
       flow,
     );

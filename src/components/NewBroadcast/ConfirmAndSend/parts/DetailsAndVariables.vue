@@ -1,6 +1,6 @@
 <template>
   <section class="confirm-and-send__info">
-    <ConfirmAndSendAudience class="confirm-and-send__audience" />
+    <ConfirmAndSendDetails class="confirm-and-send__details" />
 
     <VariablesSelectionOverview
       v-if="hasMappedVariable"
@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 import VariablesSelectionOverview from '@/components/NewBroadcast/VariablesSelection/VariablesSelectionOverview.vue';
-import ConfirmAndSendAudience from '@/components/NewBroadcast/ConfirmAndSend/ConfirmAndSendAudience.vue';
+import ConfirmAndSendDetails from '@/components/NewBroadcast/ConfirmAndSend/ConfirmAndSendDetails.vue';
 import type { ContactField } from '@/types/contacts';
 
 defineProps<{
@@ -31,7 +31,7 @@ useI18n();
   gap: $unnnic-spacing-sm;
 }
 
-.confirm-and-send__audience,
+.confirm-and-send__details,
 .confirm-and-send__variables {
   flex: 1;
 }

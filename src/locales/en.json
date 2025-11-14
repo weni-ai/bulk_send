@@ -168,6 +168,14 @@
     },
     "template_preview": {
       "title": "Template preview"
+    },
+    "channel_selection": {
+      "title": "Your project has more than one WhatsApp number",
+      "description": "Select the number that will be used as the sender for this template",
+      "buttons": {
+        "primary": "Continue",
+        "secondary": "Cancel"
+      }
     }
   },
   "new_broadcast": {
@@ -202,7 +210,8 @@
         "page_title": "Select template message",
         "filters": {
           "new_tamplate": "New template",
-          "search_placeholder": "Search template"
+          "search_placeholder": "Search template",
+          "channel_not_found": "Could not redirect to template creation, missing Channel UUID"
         },
         "table": {
           "name": "Name",
@@ -252,18 +261,19 @@
         "name_field_label": "Name"
       },
       "confirm_and_send": {
-        "title": "Review and send",
+        "title": "Review & send",
         "flow_placeholder": "Search",
         "broadcast_name_placeholder": "Broadcast name",
         "flow_message": "This flow will be activated if a contact replies to this message",
         "flow_label": "Select a flow to trigger when a contact replies",
         "broadcast_name_label": "Name",
-        "audience": {
-          "title": "Audience",
+        "details": {
+          "title": "Details",
           "groups": "Groups selected: {0}",
           "contacts": "Contacts selected: {0}",
           "cost": "Estimated cost: {0} ({1})",
-          "unit_cost": "Unit: {unitCost} per delivered message"
+          "unit_cost": "Unit: {unitCost} per delivered message",
+          "channel": "Sender number: {0}"
         },
         "variables": {
           "title": "Variable mapping"

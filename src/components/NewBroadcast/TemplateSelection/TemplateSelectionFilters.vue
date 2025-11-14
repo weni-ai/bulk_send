@@ -15,17 +15,7 @@
       @update:model-value="handleSearchUpdate"
     />
 
-    <UnnnicSelectSmart
-      v-if="hasMultipleChannels"
-      class="template-selection-filters__channel"
-      :modelValue="channelOption"
-      :options="channelsOptions"
-      :isLoading="loadingChannels"
-      size="sm"
-      @update:model-value="handleChannelUpdate"
-    />
-
-    <!-- <UnnnicButton
+    <UnnnicButton
       class="template-selection-filters__new-template"
       size="small"
       type="secondary"
@@ -33,85 +23,29 @@
       :text="$t('new_broadcast.pages.select_template.filters.new_tamplate')"
       data-test="new-template"
       @click="handleNewTemplate"
-    /> -->
+    />
   </section>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useDebounceFn } from '@vueuse/core';
-import { useProjectStore } from '@/stores/project';
-import type { SelectOption } from '@/types/select';
-import type { Channel } from '@/types/channel';
+import { useBroadcastsStore } from '@/stores/broadcasts';
+import { unnnicCallAlert } from '@weni/unnnic-system';
+import { useI18n } from 'vue-i18n';
 
-const projectStore = useProjectStore();
+const { t } = useI18n();
 
-type ChannelOption = SelectOption<string>;
-const ALL_CHANNELS_VALUE = 'ALL';
-const WENI_DEMO_NUMBER = '558231420933';
+const broadcastsStore = useBroadcastsStore();
 
 const props = defineProps<{
   search: string;
-  channel?: Channel;
 }>();
 
-const emit = defineEmits(['update:search', 'update:channel']);
-
-const channels = computed(() => {
-  return projectStore.project.channels.filter(
-    (channel) =>
-      channel.channelType === 'WAC' && channel.phoneNumber !== WENI_DEMO_NUMBER,
-  );
-});
+const emit = defineEmits(['update:search']);
 
 const searchClearIcon = computed(() => {
   return props.search !== '' ? 'close' : undefined;
-});
-
-const hasMultipleChannels = computed(() => {
-  return channels.value.length > 1;
-});
-
-const loadingChannels = computed(() => {
-  return projectStore.loadingChannels;
-});
-
-const channelsOptions = computed(() => {
-  const channelsOptionsList = channels.value.map((channel) => ({
-    label: channel.name,
-    value: channel.uuid,
-  }));
-
-  const options = [
-    {
-      label: 'All channels',
-      value: ALL_CHANNELS_VALUE,
-    },
-    ...channelsOptionsList,
-  ];
-
-  return options;
-});
-
-const channelOption = computed(() => {
-  if (!props.channel) {
-    return [
-      {
-        label: 'All channels',
-        value: ALL_CHANNELS_VALUE,
-      },
-    ];
-  }
-
-  const option = channelsOptions.value.find(
-    (option) => option.value === props.channel?.uuid,
-  );
-
-  if (!option) {
-    return [];
-  }
-
-  return [option];
 });
 
 const handleSearchUpdate = useDebounceFn((value: string) => {
@@ -122,21 +56,28 @@ const handleSearchClear = () => {
   emit('update:search', '');
 };
 
-const handleChannelUpdate = (selectedChannel: ChannelOption[]) => {
-  if (!selectedChannel[0] || selectedChannel[0].value === ALL_CHANNELS_VALUE) {
-    emit('update:channel', undefined);
+const handleNewTemplate = () => {
+  const channelAppUuid = broadcastsStore.newBroadcast.channel?.appUuid;
+  if (!channelAppUuid) {
+    unnnicCallAlert({
+      props: {
+        text: t(
+          'new_broadcast.pages.select_template.filters.channel_not_found',
+        ),
+        type: 'error',
+      },
+      seconds: 10,
+    });
     return;
   }
-
-  const channel = channels.value.find(
-    (channel) => channel.uuid === selectedChannel[0].value,
+  window.parent.postMessage(
+    {
+      event: 'redirect',
+      path: `integrations:apps/my/wpp-cloud/${channelAppUuid}/templates/create`,
+    },
+    '*',
   );
-  emit('update:channel', channel);
 };
-
-defineExpose({
-  channels,
-});
 </script>
 
 <style scoped lang="scss">

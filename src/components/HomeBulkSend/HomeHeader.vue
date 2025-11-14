@@ -5,17 +5,26 @@
       <p class="header__description">{{ $t('home.description') }}</p>
     </section>
 
-    <RouterLink to="/broadcast/create">
-      <UnnnicButton
-        :text="$t('home.new_send')"
-        type="primary"
-        iconLeft="add-1"
-      />
-    </RouterLink>
+    <NewSendButton
+      :text="$t('home.new_send')"
+      type="primary"
+      iconLeft="add-1"
+      :loading="!loadedChannels"
+    />
   </header>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { computed } from 'vue';
+import { useProjectStore } from '@/stores/project';
+import NewSendButton from '@/components/NewSendButton.vue';
+
+const projectStore = useProjectStore();
+
+const loadedChannels = computed(() => {
+  return projectStore.loadedChannels;
+});
+</script>
 
 <style scoped lang="scss">
 .header {

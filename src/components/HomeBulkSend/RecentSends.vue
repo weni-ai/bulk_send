@@ -13,7 +13,6 @@
     <MissingRecentSends
       v-if="showMissingRecentSends"
       class="recent-sends__missing-recent-sends"
-      @start-new-send="handleStartNewSend"
     />
 
     <section
@@ -75,7 +74,6 @@ import type { DateRange } from '@/types/recentSends';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import { useProjectStore } from '@/stores/project';
 import { endOfDay, startOfDay } from 'date-fns';
-import router from '@/router';
 
 const broadcastsStore = useBroadcastsStore();
 const projectStore = useProjectStore();
@@ -180,10 +178,6 @@ const handleReset = () => {
   search.value = '';
   dateRange.value = createDateRangeFromDaysAgo(DEFAULT_DATE_RANGE_DAYS);
   handlePageUpdate(1);
-};
-
-const handleStartNewSend = () => {
-  router.push('/broadcast/create');
 };
 
 const checkIfHasSend = async () => {

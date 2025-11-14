@@ -3,11 +3,10 @@ import { mount, VueWrapper } from '@vue/test-utils';
 import MissingRecentSends from '@/components/HomeBulkSend/MissingRecentSends.vue';
 
 const stubs = {
-  UnnnicButton: {
-    props: ['text', 'type'],
-    emits: ['click'],
+  NewSendButton: {
+    props: ['text', 'type', 'iconLeft', 'loading'],
     template:
-      '<button class="unnnic-button-stub" :data-type="type" @click="$emit(\'click\')">{{ text }}</button>',
+      '<button class="new-send-button-stub" :data-type="type">{{ text }}</button>',
   },
 };
 
@@ -30,13 +29,10 @@ describe('MissingRecentSends.vue', () => {
     expect(wrapper.find('.missing-recent-sends').exists()).toBe(true);
   });
 
-  it('should emit "start-new-send" event when button is clicked', async () => {
+  it('renders NewSendButton stub with expected props', () => {
     const wrapper = mountWrapper();
-
-    const button = wrapper.find('.unnnic-button-stub');
-    await button.trigger('click');
-
-    expect(wrapper.emitted('start-new-send')).toBeTruthy();
-    expect(wrapper.emitted('start-new-send')).toHaveLength(1);
+    const btn = wrapper.find('.new-send-button-stub');
+    expect(btn.exists()).toBe(true);
+    expect(btn.attributes('data-type')).toBe('secondary');
   });
 });

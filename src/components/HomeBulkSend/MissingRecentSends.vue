@@ -12,22 +12,15 @@
         {{ $t('home.no_recent_sends.subtitle') }}
       </p>
     </section>
-    <UnnnicButton
+    <NewSendButton
       :text="$t('home.no_recent_sends.button')"
       type="secondary"
-      @click="handleButtonClick"
     />
   </section>
 </template>
 
 <script setup lang="ts">
 import campaignIcon from '@/assets/images/campaign.svg';
-
-const emit = defineEmits(['start-new-send']);
-
-const handleButtonClick = () => {
-  emit('start-new-send');
-};
 </script>
 
 <style lang="scss" scoped>

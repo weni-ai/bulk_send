@@ -1,39 +1,49 @@
 <template>
-  <section class="confirm-and-send-audience">
-    <h2 class="confirm-and-send-audience__title">
-      {{ $t('new_broadcast.pages.confirm_and_send.audience.title') }}
+  <section class="confirm-and-send-details">
+    <h2 class="confirm-and-send-details__title">
+      {{ $t('new_broadcast.pages.confirm_and_send.details.title') }}
     </h2>
 
     <I18nT
-      class="confirm-and-send-audience__item"
-      keypath="new_broadcast.pages.confirm_and_send.audience.groups"
+      class="confirm-and-send-details__item"
+      keypath="new_broadcast.pages.confirm_and_send.details.groups"
       tag="p"
     >
-      <span class="confirm-and-send-audience__value">
+      <span class="confirm-and-send-details__value">
         {{ groupsNames }}
       </span>
     </I18nT>
 
     <I18nT
-      class="confirm-and-send-audience__item"
-      keypath="new_broadcast.pages.confirm_and_send.audience.contacts"
+      class="confirm-and-send-details__item"
+      keypath="new_broadcast.pages.confirm_and_send.details.contacts"
       tag="p"
     >
-      <span class="confirm-and-send-audience__value">
+      <span class="confirm-and-send-details__value">
         {{ contactCount }}
       </span>
     </I18nT>
 
     <I18nT
-      class="confirm-and-send-audience__item"
-      keypath="new_broadcast.pages.confirm_and_send.audience.cost"
+      class="confirm-and-send-details__item"
+      keypath="new_broadcast.pages.confirm_and_send.details.cost"
       tag="p"
     >
-      <span class="confirm-and-send-audience__value">
+      <span class="confirm-and-send-details__value">
         {{ cost }}
       </span>
-      <span class="confirm-and-send-audience__value">
+      <span class="confirm-and-send-details__value">
         {{ unitCost }}
+      </span>
+    </I18nT>
+
+    <I18nT
+      class="confirm-and-send-details__item"
+      keypath="new_broadcast.pages.confirm_and_send.details.channel"
+      tag="p"
+    >
+      <span class="confirm-and-send-details__value">
+        {{ channelName }}
       </span>
     </I18nT>
   </section>
@@ -104,14 +114,18 @@ const unitCost = computed(() => {
 
   const unitCost = `${currency}${toLocalizedFloat(templateUnitCost.value)}`;
 
-  return t('new_broadcast.pages.confirm_and_send.audience.unit_cost', {
+  return t('new_broadcast.pages.confirm_and_send.details.unit_cost', {
     unitCost,
   });
+});
+
+const channelName = computed(() => {
+  return broadcastsStore.newBroadcast.channel?.name;
 });
 </script>
 
 <style scoped lang="scss">
-.confirm-and-send-audience {
+.confirm-and-send-details {
   display: flex;
   flex-direction: column;
   gap: $unnnic-spacing-xs;

@@ -5,9 +5,11 @@ import NewBroadcast from '@/views/BulkSend/NewBroadcast.vue';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import { useProjectStore } from '@/stores/project';
 import { useTemplatesStore } from '@/stores/templates';
+import { CHANNEL_MOCK } from '@/__tests__/mocks/channel';
 
 vi.mock('vue-router', () => ({
   useRouter: () => ({ back: vi.fn() }),
+  useRoute: () => ({ params: { channelUuid: CHANNEL_MOCK.uuid } }),
 }));
 vi.mock('vue-i18n', () => ({
   useI18n: () => ({ t: (key: string) => key }),
