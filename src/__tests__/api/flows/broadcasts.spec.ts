@@ -96,7 +96,6 @@ describe('api/resources/flows/broadcasts', () => {
     } as any;
     const variables = ['@fields.name'];
     const groups = ['g1', 'g2'];
-    const channel = { uuid: 'ch-1', name: 'WAC 1' } as any;
 
     // without attachment
     let result = await Broadcasts.createBroadcast(
@@ -104,14 +103,13 @@ describe('api/resources/flows/broadcasts', () => {
       template,
       variables,
       groups,
-      channel,
     );
     expect(httpPost).toHaveBeenCalledWith(
       '/api/v2/internals/whatsapp_broadcasts',
       expect.objectContaining({
         queue: 'template_batch',
         name: 'My BC',
-        channel: 'ch-1',
+        channel: 'channel-1',
         msg: { template: { uuid: 'tpl-1', variables, locale: 'en' } },
         groups,
       }),
@@ -125,7 +123,6 @@ describe('api/resources/flows/broadcasts', () => {
       template,
       variables,
       groups,
-      channel,
       { url: 'https://cdn/file.jpg', type: 'image' },
     );
     expect(httpPost).toHaveBeenCalledWith(
