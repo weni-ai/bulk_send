@@ -3,8 +3,9 @@ import type { Template, TemplateReference } from '@/types/template';
 import type { PageRequestParams } from '@/types/requests';
 import { BroadcastStatus, NewBroadcastPage } from '@/constants/broadcasts';
 import { Currency } from '@/constants/currency';
-import type { ContactField } from './contacts';
-import type { FlowReference } from './flow';
+import type { ContactField } from '@/types/contacts';
+import type { FlowReference } from '@/types/flow';
+import type { Channel } from '@/types/channel';
 
 interface BroadcastStatisticsParams extends PageRequestParams {
   start_date?: string;
@@ -57,6 +58,7 @@ interface NewBroadcastState {
   broadcastName: string;
   selectedFlow?: FlowReference;
   reviewed: boolean;
+  channel?: Channel;
 }
 
 interface CreateBroadcastData {

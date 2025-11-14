@@ -17,9 +17,7 @@
           <TemplateSelectionFilters
             class="template-selection__templates-filters"
             :search="search"
-            :channel="channel"
             @update:search="handleSearchUpdate"
-            @update:channel="handleChannelUpdate"
           />
 
           <TemplateSelectionList
@@ -58,7 +56,6 @@ import TemplateSelectionList from '@/components/NewBroadcast/TemplateSelection/T
 import TemplateSelectionPreview from '@/components/NewBroadcast/TemplateSelection/TemplateSelectionPreview.vue';
 import StepActions from '@/components/NewBroadcast/StepActions.vue';
 import { TemplateStatus } from '@/constants/templates';
-import type { Channel } from '@/types/channel';
 
 const templatesStore = useTemplatesStore();
 const broadcastsStore = useBroadcastsStore();
@@ -66,14 +63,13 @@ const broadcastsStore = useBroadcastsStore();
 const search = ref('');
 const page = ref(1);
 const sort = ref('date');
-const channel = ref<Channel | undefined>(undefined);
 
 onBeforeMount(() => {
   fetchTemplates();
 });
 
 watch(
-  [search, sort, channel],
+  [search, sort],
   useDebounceFn(() => {
     fetchTemplates();
   }, 300),
@@ -121,7 +117,7 @@ const fetchTemplates = () => {
     offset: (page.value - 1) * PAGE_SIZE,
     name: search.value,
     order_by: sort.value,
-    channel: channel.value?.uuid,
+    channel: broadcastsStore.newBroadcast.channel!.uuid,
   };
 
   templatesStore.fetchTemplates(params);
@@ -130,11 +126,6 @@ const fetchTemplates = () => {
 const handleSearchUpdate = (value: string) => {
   page.value = 1;
   search.value = value;
-};
-
-const handleChannelUpdate = (value: Channel | undefined) => {
-  page.value = 1;
-  channel.value = value;
 };
 
 const handlePageUpdate = (value: number) => {

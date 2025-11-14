@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import ContactImport from '@/api/resources/contactImport';
-import requests from '@/api/requests';
+import ContactImport from '@/api/resources/flows/contactImport';
+import requests from '@/api/resources/flows/requests';
 import { createPinia, setActivePinia } from 'pinia';
 import { useProjectStore } from '@/stores/project';
 
-describe('api/resources/contactImport', () => {
+describe('api/resources/flows/contactImport', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
 
@@ -16,8 +16,10 @@ describe('api/resources/contactImport', () => {
   });
 
   it('uploadContactImport appends project_uuid and posts form data with config', async () => {
-    const httpPost = (requests as any).$http.post as ReturnType<typeof vi.fn>;
-    httpPost.mockResolvedValue({ data: { ok: true } });
+    const httpPost = vi.fn().mockResolvedValue({ data: { ok: true } });
+    vi.spyOn(requests as any, '$http', 'get').mockReturnValue({
+      post: httpPost,
+    } as any);
 
     const formData = new FormData();
     formData.append('file', new File(['x'], 'x.csv'));
@@ -46,8 +48,10 @@ describe('api/resources/contactImport', () => {
   });
 
   it('confirmContactImport posts mapped data to confirm endpoint', async () => {
-    const httpPost = (requests as any).$http.post as ReturnType<typeof vi.fn>;
-    httpPost.mockResolvedValue({ data: { ok: true } });
+    const httpPost = vi.fn().mockResolvedValue({ data: { ok: true } });
+    vi.spyOn(requests as any, '$http', 'get').mockReturnValue({
+      post: httpPost,
+    } as any);
 
     const result = await ContactImport.confirmContactImport('proj-xyz', 7, {
       addToGroup: true,
@@ -71,8 +75,10 @@ describe('api/resources/contactImport', () => {
   });
 
   it('getContactImport fetches import data with project_uuid as param', async () => {
-    const httpGet = (requests as any).$http.get as ReturnType<typeof vi.fn>;
-    httpGet.mockResolvedValue({ data: { id: 7 } });
+    const httpGet = vi.fn().mockResolvedValue({ data: { id: 7 } });
+    vi.spyOn(requests as any, '$http', 'get').mockReturnValue({
+      get: httpGet,
+    } as any);
 
     const response = await ContactImport.getContactImport(7);
 

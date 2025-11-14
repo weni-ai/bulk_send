@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, type Mocked } from 'vitest';
 import { createPinia, setActivePinia } from 'pinia';
 import { useBroadcastsStore } from '@/stores/broadcasts';
-import Broadcasts from '@/api/resources/broadcasts';
+import Broadcasts from '@/api/resources/flows/broadcasts';
 import type { AxiosResponse } from 'axios';
 import type { BroadcastStatistic } from '@/types/broadcast';
 import { NewBroadcastPage } from '@/constants/broadcasts';
@@ -9,7 +9,7 @@ import { TemplateStatus } from '@/constants/templates';
 import { createGroup } from '../utils/factories';
 
 // Mock API module used by the store
-vi.mock('@/api/resources/broadcasts', () => ({
+vi.mock('@/api/resources/flows/broadcasts', () => ({
   default: {
     getBroadcastsStatistics: vi.fn(),
     getBroadcastsMonthPerformance: vi.fn(),
@@ -237,12 +237,14 @@ describe('broadcasts store', () => {
     const groups = ['g1'];
     const attachment = { url: 'https://cdn/x.jpg', type: 'image' };
     const flow = { uuid: 'f1', name: 'Flow 1' } as any;
+    const channel = { uuid: 'ch-1', name: 'WAC 1' } as any;
 
     const promise = store.createBroadcast(
       'My Broadcast',
       tpl,
       vars,
       groups,
+      channel,
       attachment,
       flow,
     );
@@ -254,6 +256,7 @@ describe('broadcasts store', () => {
       tpl,
       vars,
       groups,
+      channel,
       attachment,
       flow,
     );

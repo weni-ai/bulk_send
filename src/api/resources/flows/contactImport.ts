@@ -1,4 +1,4 @@
-import request from '@/api/requests';
+import request from '@/api/resources/flows/requests';
 import { useProjectStore } from '@/stores/project';
 import type { ContactImportProcessing } from '@/types/contactImport';
 import type { AxiosProgressEvent } from 'axios';

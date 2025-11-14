@@ -6,7 +6,7 @@ import {
   type ContactImportState,
 } from '@/types/contactImport';
 import { defineStore } from 'pinia';
-import ContactImportAPI from '@/api/resources/contactImport';
+import ContactImportAPI from '@/api/resources/flows/contactImport';
 import { AxiosError, type AxiosProgressEvent } from 'axios';
 import type { Group } from '@/types/groups';
 import { isCanceledUploadError, parseUploadError } from '@/utils/uploadError';

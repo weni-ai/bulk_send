@@ -1,11 +1,15 @@
 import { describe, it, expect, vi } from 'vitest';
-import Groups from '@/api/resources/groups';
-import requests from '@/api/requests';
+import Groups from '@/api/resources/flows/groups';
+import requests from '@/api/resources/flows/requests';
 
-describe('api/resources/groups', () => {
+describe('api/resources/flows/groups', () => {
   it('getGroups calls endpoint with merged params including project uuid', async () => {
-    const httpGet = (requests as any).$http.get as ReturnType<typeof vi.fn>;
-    httpGet.mockResolvedValue({ data: { count: 0, results: [] } });
+    const httpGet = vi
+      .fn()
+      .mockResolvedValue({ data: { count: 0, results: [] } });
+    vi.spyOn(requests as any, '$http', 'get').mockReturnValue({
+      get: httpGet,
+    } as any);
 
     const params = { limit: 9, offset: 0, name: 'A', order: 'name' };
     const response = await Groups.getGroups('project-123', params as any);

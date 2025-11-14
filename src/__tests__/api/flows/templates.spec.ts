@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import Templates from '@/api/resources/templates';
-import requests from '@/api/requests';
+import Templates from '@/api/resources/flows/templates';
+import requests from '@/api/resources/flows/requests';
 import { createPinia, setActivePinia } from 'pinia';
 import { useProjectStore } from '@/stores/project';
 
-describe('api/resources/templates', () => {
+describe('api/resources/flows/templates', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
     const projectStore = useProjectStore();
@@ -16,8 +16,12 @@ describe('api/resources/templates', () => {
   });
 
   it('getTemplates calls endpoint with project uuid and query params', async () => {
-    const httpGet = (requests as any).$http.get as ReturnType<typeof vi.fn>;
-    httpGet.mockResolvedValue({ data: { results: [], count: 0 } });
+    const httpGet = vi
+      .fn()
+      .mockResolvedValue({ data: { results: [], count: 0 } });
+    vi.spyOn(requests as any, '$http', 'get').mockReturnValue({
+      get: httpGet,
+    } as any);
 
     const params = { offset: 5, limit: 10, name: 'promo' } as any;
     const res = await Templates.getTemplates(params);
@@ -29,8 +33,10 @@ describe('api/resources/templates', () => {
   });
 
   it('getTemplate calls endpoint with project uuid', async () => {
-    const httpGet = (requests as any).$http.get as ReturnType<typeof vi.fn>;
-    httpGet.mockResolvedValue({ data: { id: 7 } });
+    const httpGet = vi.fn().mockResolvedValue({ data: { id: 7 } });
+    vi.spyOn(requests as any, '$http', 'get').mockReturnValue({
+      get: httpGet,
+    } as any);
 
     const res = await Templates.getTemplate(7);
     expect(httpGet).toHaveBeenCalledWith('/api/v2/templates/translations/7', {
@@ -40,8 +46,12 @@ describe('api/resources/templates', () => {
   });
 
   it('getTemplatePricing calls billing endpoint with project uuid', async () => {
-    const httpGet = (requests as any).$http.get as ReturnType<typeof vi.fn>;
-    httpGet.mockResolvedValue({ data: { currency: 'USD', rates: {} } });
+    const httpGet = vi
+      .fn()
+      .mockResolvedValue({ data: { currency: 'USD', rates: {} } });
+    vi.spyOn(requests as any, '$http', 'get').mockReturnValue({
+      get: httpGet,
+    } as any);
 
     const res = await Templates.getTemplatePricing();
     expect(httpGet).toHaveBeenCalledWith('/api/v2/billing_pricing', {

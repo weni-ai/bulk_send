@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Channels from '@/api/resources/channels';
-import requests from '@/api/requests';
+import Channels from '@/api/resources/flows/channels';
+import requests from '@/api/resources/flows/requests';
 import { createPinia, setActivePinia } from 'pinia';
 import { useProjectStore } from '@/stores/project';
 
-describe('api/resources/channels', () => {
+describe('api/resources/flows/channels', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
   });
@@ -13,8 +13,10 @@ describe('api/resources/channels', () => {
     const projectStore = useProjectStore();
     projectStore.setProjectUuid('project-123');
 
-    const httpGet = (requests as any).$http.get as ReturnType<typeof vi.fn>;
-    httpGet.mockResolvedValue({ data: { results: [] } });
+    const httpGet = vi.fn().mockResolvedValue({ data: { results: [] } });
+    vi.spyOn(requests as any, '$http', 'get').mockReturnValue({
+      get: httpGet,
+    } as any);
 
     const response = await Channels.listChannels();
 

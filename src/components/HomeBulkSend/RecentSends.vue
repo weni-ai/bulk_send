@@ -13,7 +13,6 @@
     <MissingRecentSends
       v-if="showMissingRecentSends"
       class="recent-sends__missing-recent-sends"
-      @start-new-send="handleStartNewSend"
     />
 
     <section
@@ -48,7 +47,7 @@
       </section>
 
       <RecentSendsList
-        :loading="loadingRecentSends"
+        :loading="showLoading"
         :recentSends="recentSendsData"
         :page="recentSendsPage"
         :pageSize="recentSendsPageSize"
@@ -75,7 +74,6 @@ import type { DateRange } from '@/types/recentSends';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import { useProjectStore } from '@/stores/project';
 import { endOfDay, startOfDay } from 'date-fns';
-import router from '@/router';
 
 const broadcastsStore = useBroadcastsStore();
 const projectStore = useProjectStore();
@@ -91,6 +89,9 @@ const recentSendsPageSize = PAGE_SIZE;
 const recentSendsTotal = computed(
   () => broadcastsStore.broadcastsStatisticsCount,
 );
+const loadingHasBroadcastsStatistics = computed(
+  () => broadcastsStore.loadingHasBroadcastsStatistics,
+);
 const search = ref('');
 const dateRange = ref<DateRange>(
   createDateRangeFromDaysAgo(DEFAULT_DATE_RANGE_DAYS),
@@ -99,12 +100,16 @@ const showMissingRecentSends = computed(
   () =>
     !hasSend.value &&
     !recentSendsData.value.length &&
-    !loadingRecentSends.value &&
+    !showLoading.value &&
     !isSearching.value,
 );
 
 const searchClearIcon = computed(() => {
   return search.value !== '' ? 'close' : undefined;
+});
+
+const showLoading = computed(() => {
+  return loadingRecentSends.value || loadingHasBroadcastsStatistics.value;
 });
 
 // Snapshot of last seen statistics per broadcast id
@@ -173,10 +178,6 @@ const handleReset = () => {
   search.value = '';
   dateRange.value = createDateRangeFromDaysAgo(DEFAULT_DATE_RANGE_DAYS);
   handlePageUpdate(1);
-};
-
-const handleStartNewSend = () => {
-  router.push('/broadcast/create');
 };
 
 const checkIfHasSend = async () => {

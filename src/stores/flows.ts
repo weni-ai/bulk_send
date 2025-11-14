@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
-import FlowsAPI from '@/api/resources/flows';
+import FlowsAPI from '@/api/resources/flows/flows';
 import type { FlowReference } from '@/types/flow';
 
 export const useFlowsStore = defineStore('flows', () => {
