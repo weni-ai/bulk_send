@@ -3,7 +3,9 @@ import { createPinia, setActivePinia } from 'pinia';
 import { useProjectStore } from '@/stores/project';
 import ChannelsAPI from '@/api/resources/flows/channels';
 import ProjectsAPI from '@/api/resources/flows/projects';
+import AppsAPI from '@/api/resources/integrations/apps';
 import type { AxiosResponse } from 'axios';
+import { CHANNEL_MOCK } from '@/__tests__/mocks/channel';
 
 vi.mock('@/api/resources/flows/channels', () => ({
   default: {
@@ -14,6 +16,12 @@ vi.mock('@/api/resources/flows/channels', () => ({
 vi.mock('@/api/resources/flows/projects', () => ({
   default: {
     getProjectInfo: vi.fn(),
+  },
+}));
+
+vi.mock('@/api/resources/integrations/apps', () => ({
+  default: {
+    listApps: vi.fn(),
   },
 }));
 
@@ -33,7 +41,12 @@ describe('project store', () => {
     const store = useProjectStore();
     const mocked = ChannelsAPI as Mocked<typeof ChannelsAPI>;
     mocked.listChannels.mockResolvedValue({
-      data: { results: [{ uuid: 'ch1', channeltype: 'WA' }] },
+      data: { results: [CHANNEL_MOCK] },
+    } as AxiosResponse);
+
+    const mockedApps = AppsAPI as Mocked<typeof AppsAPI>;
+    mockedApps.listApps.mockResolvedValue({
+      data: [{ flowObjectUuid: CHANNEL_MOCK.uuid, uuid: CHANNEL_MOCK.appUuid }],
     } as AxiosResponse);
 
     expect(store.loadingChannels).toBe(false);
@@ -42,9 +55,8 @@ describe('project store', () => {
     await promise;
 
     expect(mocked.listChannels).toHaveBeenCalled();
-    expect(store.project.channels).toEqual([
-      { uuid: 'ch1', channeltype: 'WA' },
-    ]);
+    expect(mockedApps.listApps).toHaveBeenCalled();
+    expect(store.project.channels).toEqual([CHANNEL_MOCK]);
     expect(store.loadingChannels).toBe(false);
   });
 
