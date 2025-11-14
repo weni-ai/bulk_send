@@ -1,15 +1,17 @@
-import request from '@/api/resources/flows/requests';
+import request from '@/api/resources/integrations/requests';
 import { useProjectStore } from '@/stores/project';
 
 export default {
-  async getProjectInfo() {
+  async listApps() {
     const { project } = useProjectStore();
 
     const params = {
+      configured: true,
       project_uuid: project.uuid,
     };
 
-    const response = await request.$http.get('/api/v2/projects', { params });
+    const response = await request.$http.get('/api/v1/my-apps/', { params });
+
     return response;
   },
 };

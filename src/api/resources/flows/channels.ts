@@ -1,4 +1,4 @@
-import request from '@/api/requests';
+import request from '@/api/resources/flows/requests';
 import { useProjectStore } from '@/stores/project';
 
 // TODO: refactor to get project as a parameter instead of using the store, keeping the api resources with minimal dependencies
