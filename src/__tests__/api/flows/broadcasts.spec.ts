@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import Broadcasts from '@/api/resources/flows/broadcasts';
-import requests from '@/api/requests';
+import requests from '@/api/resources/flows/requests';
 import { createPinia, setActivePinia } from 'pinia';
 
 describe('api/resources/flows/broadcasts', () => {
@@ -12,8 +12,12 @@ describe('api/resources/flows/broadcasts', () => {
   });
 
   it('calls GET /broadcasts-statistics with project uuid and params', async () => {
-    const httpGet = (requests as any).$http.get as ReturnType<typeof vi.fn>;
-    httpGet.mockResolvedValue({ data: { count: 1, results: [] } });
+    const httpGet = vi
+      .fn()
+      .mockResolvedValue({ data: { count: 1, results: [] } });
+    vi.spyOn(requests as any, '$http', 'get').mockReturnValue({
+      get: httpGet,
+    } as any);
 
     const projectUuid = 'proj-123';
     const params = { offset: 5, limit: 10 } as any;
@@ -31,10 +35,12 @@ describe('api/resources/flows/broadcasts', () => {
   });
 
   it('calls GET /broadcasts-statistics-stats with project uuid', async () => {
-    const httpGet = (requests as any).$http.get as ReturnType<typeof vi.fn>;
-    httpGet.mockResolvedValue({
+    const httpGet = vi.fn().mockResolvedValue({
       data: { last30DaysStats: {}, successRate: 0 },
     });
+    vi.spyOn(requests as any, '$http', 'get').mockReturnValue({
+      get: httpGet,
+    } as any);
 
     const projectUuid = 'proj-xyz';
     const result = await Broadcasts.getBroadcastsMonthPerformance(projectUuid);
@@ -49,8 +55,10 @@ describe('api/resources/flows/broadcasts', () => {
   });
 
   it('calls POST /contact_groups with project uuid and mapped status', async () => {
-    const httpPost = (requests as any).$http.post as ReturnType<typeof vi.fn>;
-    httpPost.mockResolvedValue({ data: { id: 1 } });
+    const httpPost = vi.fn().mockResolvedValue({ data: { id: 1 } });
+    vi.spyOn(requests as any, '$http', 'get').mockReturnValue({
+      post: httpPost,
+    } as any);
 
     const projectUuid = 'proj-123';
     const groupName = 'Failed - Promo';
@@ -76,8 +84,10 @@ describe('api/resources/flows/broadcasts', () => {
   });
 
   it('calls POST /whatsapp_broadcasts with template variables and optional attachment', async () => {
-    const httpPost = (requests as any).$http.post as ReturnType<typeof vi.fn>;
-    httpPost.mockResolvedValue({ data: { id: 99 } });
+    const httpPost = vi.fn().mockResolvedValue({ data: { id: 99 } });
+    vi.spyOn(requests as any, '$http', 'get').mockReturnValue({
+      post: httpPost,
+    } as any);
 
     const template = {
       uuid: 'tpl-1',
@@ -86,6 +96,7 @@ describe('api/resources/flows/broadcasts', () => {
     } as any;
     const variables = ['@fields.name'];
     const groups = ['g1', 'g2'];
+    const channel = { uuid: 'ch-1', name: 'WAC 1' } as any;
 
     // without attachment
     let result = await Broadcasts.createBroadcast(
@@ -93,13 +104,14 @@ describe('api/resources/flows/broadcasts', () => {
       template,
       variables,
       groups,
+      channel,
     );
     expect(httpPost).toHaveBeenCalledWith(
       '/api/v2/internals/whatsapp_broadcasts',
       expect.objectContaining({
         queue: 'template_batch',
         name: 'My BC',
-        channel: 'channel-1',
+        channel: 'ch-1',
         msg: { template: { uuid: 'tpl-1', variables, locale: 'en' } },
         groups,
       }),
@@ -113,6 +125,7 @@ describe('api/resources/flows/broadcasts', () => {
       template,
       variables,
       groups,
+      channel,
       { url: 'https://cdn/file.jpg', type: 'image' },
     );
     expect(httpPost).toHaveBeenCalledWith(
@@ -128,8 +141,12 @@ describe('api/resources/flows/broadcasts', () => {
   });
 
   it('calls POST /broadcasts/upload_media with FormData including project_uuid', async () => {
-    const httpPost = (requests as any).$http.post as ReturnType<typeof vi.fn>;
-    httpPost.mockResolvedValue({ data: { url: 'u', type: 'image' } });
+    const httpPost = vi
+      .fn()
+      .mockResolvedValue({ data: { url: 'u', type: 'image' } });
+    vi.spyOn(requests as any, '$http', 'get').mockReturnValue({
+      post: httpPost,
+    } as any);
 
     const file = new Blob(['x'], { type: 'image/jpeg' }) as unknown as File;
     const result = await Broadcasts.uploadMedia(file);

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import Projects from '@/api/resources/flows/projects';
-import requests from '@/api/requests';
+import requests from '@/api/resources/flows/requests';
 import { createPinia, setActivePinia } from 'pinia';
 import { useProjectStore } from '@/stores/project';
 
@@ -15,8 +15,10 @@ describe('api/resources/flows/projects', () => {
   });
 
   it('getProjectInfo calls /api/v2/projects with project_uuid', async () => {
-    const httpGet = (requests as any).$http.get as ReturnType<typeof vi.fn>;
-    httpGet.mockResolvedValue({ data: { brain_on: false } });
+    const httpGet = vi.fn().mockResolvedValue({ data: { brain_on: false } });
+    vi.spyOn(requests as any, '$http', 'get').mockReturnValue({
+      get: httpGet,
+    } as any);
 
     const res = await Projects.getProjectInfo();
     expect(httpGet).toHaveBeenCalledWith('/api/v2/projects', {
