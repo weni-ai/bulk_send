@@ -73,7 +73,7 @@ const handleNewTemplate = () => {
   window.parent.postMessage(
     {
       event: 'redirect',
-      path: `integrations:apps/my/wpp-cloud/${channelAppUuid}/templates`,
+      path: `integrations:apps/my/wpp-cloud/${channelAppUuid}/templates/create`,
     },
     '*',
   );
