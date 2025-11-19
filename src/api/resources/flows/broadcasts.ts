@@ -1,4 +1,4 @@
-import request from '@/api/requests';
+import request from '@/api/resources/flows/requests';
 import { ContactGroupStatus } from '@/constants/broadcasts';
 import { useProjectStore } from '@/stores/project';
 import type { PageRequestParams } from '@/types/requests';

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import Flows from '@/api/resources/flows/flows';
-import requests from '@/api/requests';
+import requests from '@/api/resources/flows/requests';
 import { createPinia, setActivePinia } from 'pinia';
 import { useProjectStore } from '@/stores/project';
 
@@ -15,8 +15,10 @@ describe('api/resources/flows/flows', () => {
   });
 
   it('getFlows calls endpoint with project uuid', async () => {
-    const httpGet = (requests as any).$http.get as ReturnType<typeof vi.fn>;
-    httpGet.mockResolvedValue({ data: { results: [] } });
+    const httpGet = vi.fn().mockResolvedValue({ data: { results: [] } });
+    vi.spyOn(requests as any, '$http', 'get').mockReturnValue({
+      get: httpGet,
+    } as any);
 
     const res = await Flows.getFlows();
     expect(httpGet).toHaveBeenCalledWith('/api/v2/internal_flows', {
@@ -26,8 +28,8 @@ describe('api/resources/flows/flows', () => {
   });
 
   it('listAllFlows paginates until next is null and returns aggregated results', async () => {
-    const httpGet = (requests as any).$http.get as ReturnType<typeof vi.fn>;
-    httpGet
+    const httpGet = vi
+      .fn()
       .mockResolvedValueOnce({
         data: {
           results: [{ uuid: 'f1', name: 'F1' }],
@@ -40,6 +42,9 @@ describe('api/resources/flows/flows', () => {
           next: null,
         },
       });
+    vi.spyOn(requests as any, '$http', 'get').mockReturnValue({
+      get: httpGet,
+    } as any);
 
     const res = await Flows.listAllFlows();
     expect(httpGet).toHaveBeenCalledTimes(2);

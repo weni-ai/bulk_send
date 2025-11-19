@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import Contacts from '@/api/resources/flows/contacts';
-import requests from '@/api/requests';
+import requests from '@/api/resources/flows/requests';
 import { createPinia, setActivePinia } from 'pinia';
 import { useProjectStore } from '@/stores/project';
 
@@ -16,8 +16,10 @@ describe('api/resources/flows/contacts', () => {
   });
 
   it('calls GET /contacts_fields with project uuid', async () => {
-    const httpGet = (requests as any).$http.get as ReturnType<typeof vi.fn>;
-    httpGet.mockResolvedValue({ data: { results: [] } });
+    const httpGet = vi.fn().mockResolvedValue({ data: { results: [] } });
+    vi.spyOn(requests as any, '$http', 'get').mockReturnValue({
+      get: httpGet,
+    } as any);
 
     const result = await Contacts.getContactFields();
 
@@ -28,8 +30,10 @@ describe('api/resources/flows/contacts', () => {
   });
 
   it('calls GET /groups_contact_fields with project uuid and comma-joined group ids', async () => {
-    const httpGet = (requests as any).$http.get as ReturnType<typeof vi.fn>;
-    httpGet.mockResolvedValue({ data: { results: [] } });
+    const httpGet = vi.fn().mockResolvedValue({ data: { results: [] } });
+    vi.spyOn(requests as any, '$http', 'get').mockReturnValue({
+      get: httpGet,
+    } as any);
 
     const groups = [
       { id: 10, uuid: 'g10', name: 'G10', memberCount: 1 },
