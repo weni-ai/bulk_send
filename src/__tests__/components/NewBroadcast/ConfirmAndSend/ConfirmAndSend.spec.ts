@@ -216,7 +216,7 @@ describe('ConfirmAndSend.vue', () => {
     expect(getSpy).toHaveBeenCalledTimes(2);
   });
 
-  it('disables/enables continue based on reviewed, flow (when required), and import status', async () => {
+  it('disables/enables continue based on reviewed and import status', async () => {
     const { wrapper, broadcastsStore, projectStore, contactImportStore } =
       mountWrapper();
 
@@ -225,15 +225,8 @@ describe('ConfirmAndSend.vue', () => {
       wrapper.find(SELECTOR.actionsContinue).attributes('disabled'),
     ).toBeDefined();
 
-    // reviewed but FLOW project without selected flow -> still disabled
+    // reviewed -> enabled when no import present
     broadcastsStore.setReviewed(true);
-    await wrapper.vm.$nextTick();
-    expect(
-      wrapper.find(SELECTOR.actionsContinue).attributes('disabled'),
-    ).toBeDefined();
-
-    // select a flow -> enabled when no import present
-    broadcastsStore.setSelectedFlow({ uuid: 'f1', name: 'Flow 1' } as any);
     await wrapper.vm.$nextTick();
     expect(
       wrapper.find(SELECTOR.actionsContinue).attributes('disabled'),
@@ -254,13 +247,20 @@ describe('ConfirmAndSend.vue', () => {
       wrapper.find(SELECTOR.actionsContinue).attributes('disabled'),
     ).toBeUndefined();
 
-    // AB project (no flow required): clear flow and keep reviewed
+    // AB project: clear flow and keep reviewed -> still enabled
     projectStore.project.brainOn = true;
     broadcastsStore.setSelectedFlow(undefined);
     await wrapper.vm.$nextTick();
     expect(
       wrapper.find(SELECTOR.actionsContinue).attributes('disabled'),
     ).toBeUndefined();
+
+    // AB project: unreviewed -> disabled
+    broadcastsStore.setReviewed(false);
+    await wrapper.vm.$nextTick();
+    expect(
+      wrapper.find(SELECTOR.actionsContinue).attributes('disabled'),
+    ).toBeDefined();
   });
 
   it('cancel resets inputs and navigates back correctly depending on template variables', async () => {

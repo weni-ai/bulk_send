@@ -1,14 +1,14 @@
 import { describe, it, expect, vi, beforeEach, type Mocked } from 'vitest';
 import { createPinia, setActivePinia } from 'pinia';
 import { useContactImportStore } from '@/stores/contactImport';
-import ContactImportAPI from '@/api/resources/contactImport';
+import ContactImportAPI from '@/api/resources/flows/contactImport';
 import { AxiosError, type AxiosResponse } from 'axios';
 import {
   ContactImportGroupMode,
   ContactImportStatus,
 } from '@/types/contactImport';
 
-vi.mock('@/api/resources/contactImport', () => ({
+vi.mock('@/api/resources/flows/contactImport', () => ({
   default: {
     uploadContactImport: vi.fn(),
     confirmContactImport: vi.fn(),

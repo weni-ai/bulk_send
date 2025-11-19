@@ -6,7 +6,7 @@ import type {
   NewBroadcastState,
 } from '@/types/broadcast';
 
-import BroadcastsAPI from '@/api/resources/broadcasts';
+import BroadcastsAPI from '@/api/resources/flows/broadcasts';
 import { ContactGroupStatus, NewBroadcastPage } from '@/constants/broadcasts';
 import type { Group } from '@/types/groups';
 import type { Template } from '@/types/template';

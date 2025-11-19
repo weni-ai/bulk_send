@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.6.0] - 2025-11-13
+
+### Fixed
+- Fix recent sends loading
+
+### Added
+- Add unplugin-vue-components and remove manual Unnnic component declaration
+
+### Changed
+- Move API resources to a new 'flows' directory and update imports accordingly
+- Optional flow selection
+
 ## [1.5.0] - 2025-10-28
 
 ### Added

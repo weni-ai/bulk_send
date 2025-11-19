@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import Broadcasts from '@/api/resources/broadcasts';
+import Broadcasts from '@/api/resources/flows/broadcasts';
 import requests from '@/api/requests';
 import { createPinia, setActivePinia } from 'pinia';
 
-describe('api/resources/broadcasts', () => {
+describe('api/resources/flows/broadcasts', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
   });
