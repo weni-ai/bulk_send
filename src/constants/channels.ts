@@ -1,0 +1,3 @@
+const WENI_DEMO_NUMBER = '558231420933';
+
+export { WENI_DEMO_NUMBER };
