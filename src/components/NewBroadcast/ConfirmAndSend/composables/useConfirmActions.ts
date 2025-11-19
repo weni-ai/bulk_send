@@ -1,5 +1,4 @@
 import { computed, ref } from 'vue';
-import { ProjectType } from '@/constants/project';
 import { NewBroadcastPage } from '@/constants/broadcasts';
 import type { Template } from '@/types/template';
 import type { ContactField } from '@/types/contacts';
@@ -21,7 +20,7 @@ export function useConfirmActions(args: {
   contactImportStore: ContactImportStore;
   projectStore: ProjectStore;
 }) {
-  const { t, broadcastsStore, contactImportStore, projectStore } = args;
+  const { t, broadcastsStore, contactImportStore } = args;
   const router = useRouter();
 
   const broadcastErrored = ref<Error | undefined>(undefined);
@@ -31,10 +30,6 @@ export function useConfirmActions(args: {
     return broadcastsStore.loadingCreateBroadcast;
   });
 
-  const projectType = computed<ProjectType>(() => {
-    return projectStore.project.brainOn ? ProjectType.AB : ProjectType.FLOW;
-  });
-
   const canContinue = computed(() => {
     let canConfirm = true;
 
@@ -42,10 +37,6 @@ export function useConfirmActions(args: {
       canConfirm =
         contactImportStore.contactImportInfo.status ===
         ContactImportStatus.COMPLETE;
-    }
-
-    if (!projectStore.project.brainOn) {
-      canConfirm = canConfirm && !!broadcastsStore.newBroadcast.selectedFlow;
     }
 
     return canConfirm && broadcastsStore.newBroadcast.reviewed;
@@ -132,6 +123,13 @@ export function useConfirmActions(args: {
         );
       }
 
+      const channel = broadcastsStore.newBroadcast.channel;
+      if (!channel) {
+        throw new Error(
+          t('new_broadcast.pages.confirm_and_send.channel_not_found'),
+        );
+      }
+
       const variablesMapping: Record<number, ContactField | undefined> =
         broadcastsStore.newBroadcast.variableMapping;
       const variables = createVariablesList(variablesMapping);
@@ -154,17 +152,13 @@ export function useConfirmActions(args: {
       }
 
       const flow = broadcastsStore.newBroadcast.selectedFlow;
-      if (projectType.value === ProjectType.FLOW && !flow) {
-        throw new Error(
-          t('new_broadcast.pages.confirm_and_send.flow_not_found'),
-        );
-      }
 
       await broadcastsStore.createBroadcast(
         name,
         template,
         variables,
         groups,
+        channel,
         attachment,
         flow,
       );

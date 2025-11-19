@@ -6,12 +6,14 @@ import type {
   NewBroadcastState,
 } from '@/types/broadcast';
 
-import BroadcastsAPI from '@/api/resources/broadcasts';
+import BroadcastsAPI from '@/api/resources/flows/broadcasts';
 import { ContactGroupStatus, NewBroadcastPage } from '@/constants/broadcasts';
+import { useProjectStore } from '@/stores/project';
 import type { Group } from '@/types/groups';
 import type { Template } from '@/types/template';
 import type { ContactField } from '@/types/contacts';
 import type { FlowReference } from '@/types/flow';
+import type { Channel } from '@/types/channel';
 
 export const useBroadcastsStore = defineStore('broadcasts', {
   state: () => ({
@@ -40,6 +42,7 @@ export const useBroadcastsStore = defineStore('broadcasts', {
       headerMediaFileType: undefined,
       selectedFlow: undefined,
       reviewed: false,
+      channel: undefined,
     },
   }),
   actions: {
@@ -125,6 +128,7 @@ export const useBroadcastsStore = defineStore('broadcasts', {
       template: Template,
       variables: string[],
       groups: string[],
+      channel: Channel,
       attachment?: { url: string; type: string },
       flow?: FlowReference,
     ) {
@@ -135,6 +139,7 @@ export const useBroadcastsStore = defineStore('broadcasts', {
           template,
           variables,
           groups,
+          channel,
           attachment,
           flow,
         );
@@ -189,6 +194,15 @@ export const useBroadcastsStore = defineStore('broadcasts', {
     setHeaderMediaFile(file?: File) {
       this.newBroadcast.headerMediaFile = file;
     },
+    setChannel(channel?: Channel) {
+      this.newBroadcast.channel = channel;
+    },
+    setChannelFromUuid(channelUuid: string) {
+      const projectStore = useProjectStore();
+      this.newBroadcast.channel = projectStore.wppChannels.find(
+        (channel) => channel.uuid === channelUuid,
+      );
+    },
     resetNewBroadcast() {
       this.newBroadcast = {
         currentPage: NewBroadcastPage.SELECT_GROUPS,
@@ -201,6 +215,7 @@ export const useBroadcastsStore = defineStore('broadcasts', {
         selectedFlow: undefined,
         headerMediaFileUrl: undefined,
         reviewed: false,
+        channel: undefined,
       };
     },
   },

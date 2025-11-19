@@ -8,6 +8,7 @@ import { useFlowsStore } from '@/stores/flows';
 import { useContactImportStore } from '@/stores/contactImport';
 import { ContactImportStatus } from '@/types/contactImport';
 import { NAME_FIELD_VALUE, NewBroadcastPage } from '@/constants/broadcasts';
+import { CHANNEL_MOCK } from '@/__tests__/mocks/channel';
 
 vi.mock('vue-i18n', () => ({
   useI18n: () => ({ t: (key: string) => key }),
@@ -54,8 +55,8 @@ const STUBS = {
     template:
       '<div data-test="modal" :data-open="modelValue"><slot /><button data-test="primary" @click="$emit(\'primary-button-click\')">primary</button></div>',
   },
-  ConfirmAndSendAudience: {
-    template: '<div data-test="audience" />',
+  ConfirmAndSendDetails: {
+    template: '<div data-test="details" />',
   },
   VariablesSelectionOverview: {
     props: ['title', 'definedVariables'],
@@ -78,7 +79,7 @@ const SELECTOR = {
   nameInput: '[data-test="name-input"]',
   flowSelect: '[data-test="flow-select"]',
   flowDisclaimer: '[data-test="flow-disclaimer"]',
-  audience: '[data-test="audience"]',
+  details: '[data-test="details"]',
   variablesOverview: '[data-test="variables-overview"]',
   reviewed: '[data-test="reviewed"]',
   modal: '[data-test="modal"]',
@@ -103,6 +104,7 @@ const mountWrapper = () => {
     { uuid: 'f1', name: 'Flow 1' },
     { uuid: 'f2', name: 'Flow 2' },
   ] as any;
+  broadcastsStore.setChannel(CHANNEL_MOCK);
 
   const listAllSpy = vi
     .spyOn(flowsStore, 'listAllFlows')
@@ -216,7 +218,7 @@ describe('ConfirmAndSend.vue', () => {
     expect(getSpy).toHaveBeenCalledTimes(2);
   });
 
-  it('disables/enables continue based on reviewed, flow (when required), and import status', async () => {
+  it('disables/enables continue based on reviewed and import status', async () => {
     const { wrapper, broadcastsStore, projectStore, contactImportStore } =
       mountWrapper();
 
@@ -225,15 +227,8 @@ describe('ConfirmAndSend.vue', () => {
       wrapper.find(SELECTOR.actionsContinue).attributes('disabled'),
     ).toBeDefined();
 
-    // reviewed but FLOW project without selected flow -> still disabled
+    // reviewed -> enabled when no import present
     broadcastsStore.setReviewed(true);
-    await wrapper.vm.$nextTick();
-    expect(
-      wrapper.find(SELECTOR.actionsContinue).attributes('disabled'),
-    ).toBeDefined();
-
-    // select a flow -> enabled when no import present
-    broadcastsStore.setSelectedFlow({ uuid: 'f1', name: 'Flow 1' } as any);
     await wrapper.vm.$nextTick();
     expect(
       wrapper.find(SELECTOR.actionsContinue).attributes('disabled'),
@@ -254,13 +249,20 @@ describe('ConfirmAndSend.vue', () => {
       wrapper.find(SELECTOR.actionsContinue).attributes('disabled'),
     ).toBeUndefined();
 
-    // AB project (no flow required): clear flow and keep reviewed
+    // AB project: clear flow and keep reviewed -> still enabled
     projectStore.project.brainOn = true;
     broadcastsStore.setSelectedFlow(undefined);
     await wrapper.vm.$nextTick();
     expect(
       wrapper.find(SELECTOR.actionsContinue).attributes('disabled'),
     ).toBeUndefined();
+
+    // AB project: unreviewed -> disabled
+    broadcastsStore.setReviewed(false);
+    await wrapper.vm.$nextTick();
+    expect(
+      wrapper.find(SELECTOR.actionsContinue).attributes('disabled'),
+    ).toBeDefined();
   });
 
   it('cancel resets inputs and navigates back correctly depending on template variables', async () => {
@@ -354,7 +356,7 @@ describe('ConfirmAndSend.vue', () => {
 
     expect(createSpy).toHaveBeenCalledTimes(1);
     const args = (createSpy as any).mock.calls[0];
-    expect(args[4]).toEqual({
+    expect(args[5]).toEqual({
       url: 'https://cdn.example.com/file.jpg',
       type: 'image',
     });
@@ -429,6 +431,7 @@ describe('ConfirmAndSend.vue', () => {
       name: 'Tpl',
       variableCount: 0,
     } as any);
+    broadcastsStore.setChannel(CHANNEL_MOCK);
 
     const createSpy = vi
       .spyOn(broadcastsStore, 'createBroadcast')
@@ -577,6 +580,6 @@ describe('ConfirmAndSend.vue', () => {
 
     expect(createSpy).toHaveBeenCalledTimes(1);
     const args = (createSpy as any).mock.calls[0];
-    expect(args[5]).toEqual(selectedFlow);
+    expect(args[6]).toEqual(selectedFlow);
   });
 });

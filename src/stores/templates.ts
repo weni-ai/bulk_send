@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import TemplatesAPI from '@/api/resources/templates';
+import TemplatesAPI from '@/api/resources/flows/templates';
 import type {
   Template,
   TemplatePricing,
