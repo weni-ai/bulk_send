@@ -5,6 +5,7 @@ import type { PageRequestParams } from '@/types/requests';
 import type { CreateBroadcastData } from '@/types/broadcast';
 import type { Template } from '@/types/template';
 import type { FlowReference } from '@/types/flow';
+import type { Channel } from '@/types/channel';
 
 export default {
   async getBroadcastsStatistics(
@@ -48,6 +49,7 @@ export default {
     template: Template,
     variables: string[],
     groups: string[],
+    channel: Channel,
     attachment?: { url: string; type: string },
     flow?: FlowReference,
   ) {
@@ -58,7 +60,7 @@ export default {
       project: project.uuid,
       name: name,
       groups: groups,
-      channel: template.channel,
+      channel: channel.uuid,
       msg: {
         template: {
           uuid: template.uuid,

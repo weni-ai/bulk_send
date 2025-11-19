@@ -10,6 +10,14 @@ import { NewBroadcastPage } from '@/constants/broadcasts';
 // i18n stub
 vi.mock('vue-i18n', () => ({ useI18n: () => ({ t: (k: string) => k }) }));
 
+// vue-router stub
+const pushMock = vi.fn();
+vi.mock('vue-router', () => ({
+  useRouter: () => ({
+    push: pushMock,
+  }),
+}));
+
 const STUBS = {
   GroupSelection: {
     props: ['open'],
@@ -85,17 +93,18 @@ describe('GroupsStep.vue', () => {
     expect(wrapper.find(SELECTOR.processing).exists()).toBe(true);
   });
 
-  it('cancel clears import and resets page', async () => {
+  it('cancel clears import, resets broadcast and navigates to home', async () => {
     const { wrapper, contactImportStore, broadcastsStore } = mountWrapper();
     contactImportStore.import = { importId: 1 } as any;
-    const setPageSpy = vi
-      .spyOn(broadcastsStore, 'setNewBroadcastPage')
+    const resetBroadcastSpy = vi
+      .spyOn(broadcastsStore, 'resetNewBroadcast')
       .mockImplementation(() => {});
 
     await wrapper.find(SELECTOR.cancel).trigger('click');
 
     expect(contactImportStore.import).toBeUndefined();
-    expect(setPageSpy).toHaveBeenCalledWith(NewBroadcastPage.SELECT_GROUPS);
+    expect(resetBroadcastSpy).toHaveBeenCalled();
+    expect(pushMock).toHaveBeenCalledWith({ name: 'HomeBulkSend' });
   });
 
   it('continue confirms import when available', async () => {

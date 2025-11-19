@@ -17,7 +17,7 @@ const routes = [
     component: () => import('@/views/BulkSend/HomeBulkSend.vue'),
   },
   {
-    path: '/broadcast/create',
+    path: '/broadcast/:channelUuid/create',
     name: 'NewBroadcast',
     component: () => import('@/views/BulkSend/NewBroadcast.vue'),
   },

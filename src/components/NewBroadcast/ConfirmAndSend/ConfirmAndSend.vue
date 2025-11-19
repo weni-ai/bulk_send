@@ -18,7 +18,7 @@
             :onFlowSelectUpdate="handleFlowSelectUpdate"
           />
 
-          <AudienceAndVariables
+          <DetailsAndVariables
             :hasMappedVariable="hasMappedVariable"
             :definedVariables="definedVariables"
           />
@@ -114,7 +114,7 @@ import { ProjectType } from '@/constants/project';
 import StepActions from '@/components/NewBroadcast/StepActions.vue';
 // import { NewBroadcastPage } from '@/constants/broadcasts';
 import ConfirmForm from './parts/ConfirmForm.vue';
-import AudienceAndVariables from './parts/AudienceAndVariables.vue';
+import DetailsAndVariables from './parts/DetailsAndVariables.vue';
 import ContactImportPendingModal from './parts/modals/ContactImportPendingModal.vue';
 import BroadcastErrorModal from './parts/modals/BroadcastErrorModal.vue';
 import BroadcastSuccessModal from './parts/modals/BroadcastSuccessModal.vue';

@@ -6,6 +6,7 @@ import { useTemplatesStore } from '@/stores/templates';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import { NewBroadcastPage } from '@/constants/broadcasts';
 import { PAGE_SIZE, TemplateStatus } from '@/constants/templates';
+import { CHANNEL_MOCK } from '@/__tests__/mocks/channel';
 
 // i18n stub
 vi.mock('vue-i18n', () => ({ useI18n: () => ({ t: (k: string) => k }) }));
@@ -15,8 +16,6 @@ vi.mock('@vueuse/core', () => ({ useDebounceFn: (fn: any) => fn }));
 
 const SELECTOR = {
   filtersSetSearch: '[data-test="set-search"]',
-  filtersSetChannel: '[data-test="set-channel"]',
-  filtersClearChannel: '[data-test="clear-channel"]',
   listNext: '[data-test="next"]',
   listSortAsc: '[data-test="sort-asc"]',
   listSortDesc: '[data-test="sort-desc"]',
@@ -33,8 +32,6 @@ const stubs = {
     template:
       '<div data-test="filters">\n' +
       '  <button data-test="set-search" @click="$emit(\'update:search\', \'hello\')">set search</button>\n' +
-      "  <button data-test=\"set-channel\" @click=\"$emit('update:channel', { uuid: 'ch-1', name: 'WAC 1', channelType: 'WAC' })\">set channel</button>\n" +
-      '  <button data-test="clear-channel" @click="$emit(\'update:channel\', undefined)">clear channel</button>\n' +
       '</div>',
   },
   TemplateSelectionList: {
@@ -64,6 +61,8 @@ const mountWithStore = () => {
     .mockResolvedValue(undefined as any);
   const broadcastsStore = useBroadcastsStore(pinia);
 
+  broadcastsStore.setChannel(CHANNEL_MOCK);
+
   const wrapper = mount(TemplateSelection, {
     global: { plugins: [pinia], stubs, mocks: { $t: (k: string) => k } },
   });
@@ -84,6 +83,7 @@ describe('TemplateSelection.vue', () => {
       offset: 0,
       name: '',
       order_by: 'date',
+      channel: CHANNEL_MOCK.uuid,
     });
   });
 
@@ -96,6 +96,7 @@ describe('TemplateSelection.vue', () => {
       offset: PAGE_SIZE * (2 - 1),
       name: '',
       order_by: 'date',
+      channel: CHANNEL_MOCK.uuid,
     });
   });
 
@@ -111,6 +112,7 @@ describe('TemplateSelection.vue', () => {
       offset: 0, // reset to page 1
       name: 'hello',
       order_by: 'date',
+      channel: CHANNEL_MOCK.uuid,
     });
   });
 
@@ -125,6 +127,7 @@ describe('TemplateSelection.vue', () => {
       offset: 0,
       name: '',
       order_by: '-name',
+      channel: CHANNEL_MOCK.uuid,
     });
 
     await wrapper.find(SELECTOR.listSortAsc).trigger('click');
@@ -133,38 +136,7 @@ describe('TemplateSelection.vue', () => {
       offset: 0,
       name: '',
       order_by: 'name',
-    });
-  });
-
-  it('updates channel filter and fetches with channel uuid', async () => {
-    const { wrapper, fetchSpy } = mountWithStore();
-    fetchSpy.mockClear();
-
-    await wrapper.find(SELECTOR.filtersSetChannel).trigger('click');
-    expect(fetchSpy).toHaveBeenCalledWith({
-      limit: PAGE_SIZE,
-      offset: 0,
-      name: '',
-      order_by: 'date',
-      channel: 'ch-1',
-    });
-  });
-
-  it('clears channel filter and fetches without channel param', async () => {
-    const { wrapper, fetchSpy } = mountWithStore();
-    fetchSpy.mockClear();
-
-    // set then clear
-    await wrapper.find(SELECTOR.filtersSetChannel).trigger('click');
-    fetchSpy.mockClear();
-    await wrapper.find(SELECTOR.filtersClearChannel).trigger('click');
-
-    expect(fetchSpy).toHaveBeenCalledWith({
-      limit: PAGE_SIZE,
-      offset: 0,
-      name: '',
-      order_by: 'date',
-      channel: undefined,
+      channel: CHANNEL_MOCK.uuid,
     });
   });
 

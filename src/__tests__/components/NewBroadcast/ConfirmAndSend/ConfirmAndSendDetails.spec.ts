@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { nextTick } from 'vue';
 import { mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
-import ConfirmAndSendAudience from '@/components/NewBroadcast/ConfirmAndSend/ConfirmAndSendAudience.vue';
+import ConfirmAndSendDetails from '@/components/NewBroadcast/ConfirmAndSend/ConfirmAndSendDetails.vue';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import { useContactImportStore } from '@/stores/contactImport';
 import { useTemplatesStore } from '@/stores/templates';
@@ -23,7 +23,7 @@ const STUBS = {
 } as const;
 
 const SELECTOR = {
-  root: '.confirm-and-send-audience',
+  root: '.confirm-and-send-details',
   items: '[data-test="i18nt"]',
 } as const;
 
@@ -40,13 +40,13 @@ const mountWrapper = () => {
     rates: { marketing: 1, utility: 2, authentication: 3, service: 4 },
   } as any;
 
-  const wrapper = mount(ConfirmAndSendAudience, {
+  const wrapper = mount(ConfirmAndSendDetails, {
     global: { plugins: [pinia], stubs: STUBS, mocks: { $t: (k: string) => k } },
   });
   return { wrapper, broadcastsStore, contactImportStore, templatesStore };
 };
 
-describe('ConfirmAndSendAudience.vue', () => {
+describe('ConfirmAndSendDetails.vue', () => {
   it('computes groups and contacts from selected groups when no import', async () => {
     const { wrapper, broadcastsStore } = mountWrapper();
     broadcastsStore.newBroadcast.selectedGroups = [

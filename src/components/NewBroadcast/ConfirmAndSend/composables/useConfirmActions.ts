@@ -123,6 +123,13 @@ export function useConfirmActions(args: {
         );
       }
 
+      const channel = broadcastsStore.newBroadcast.channel;
+      if (!channel) {
+        throw new Error(
+          t('new_broadcast.pages.confirm_and_send.channel_not_found'),
+        );
+      }
+
       const variablesMapping: Record<number, ContactField | undefined> =
         broadcastsStore.newBroadcast.variableMapping;
       const variables = createVariablesList(variablesMapping);
@@ -151,6 +158,7 @@ export function useConfirmActions(args: {
         template,
         variables,
         groups,
+        channel,
         attachment,
         flow,
       );
