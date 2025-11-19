@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.7.0] - 2025-11-19
+
+### Fixed
+- Remove no longer needed extra flow verification
+- Fix CSS overwrite with module federation
+
+### Added
+- Integrations API
+- Enhance project store to include app UUIDs in channels and add wpp channels getter
+- New broadcast linked to a channel
+
 ## [1.6.0] - 2025-11-13
 
 ### Fixed
