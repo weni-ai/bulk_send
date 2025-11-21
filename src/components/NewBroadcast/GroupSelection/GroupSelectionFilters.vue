@@ -72,5 +72,10 @@ const handleSortUpdate = (value: keyof typeof SORT_OPTIONS) => {
     gap: $unnnic-spacing-xs;
     align-items: center;
   }
+
+  &__sort-options {
+    display: flex;
+    gap: $unnnic-spacing-xs;
+  }
 }
 </style>
