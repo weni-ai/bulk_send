@@ -36,10 +36,12 @@ import GroupSelection from '@/components/NewBroadcast/GroupSelection/GroupSelect
 import ContactImport from '@/components/NewBroadcast/ContactImport/ContactImport.vue';
 import ContactImportProcessing from '@/components/NewBroadcast/ContactImport/ContactImportProcessing.vue';
 import StepActions from '@/components/NewBroadcast/StepActions.vue';
+import { useRouter } from 'vue-router';
 
 const broadcastsStore = useBroadcastsStore();
 const contactImportStore = useContactImportStore();
 const projectStore = useProjectStore();
+const router = useRouter();
 
 const props = defineProps<{
   uploadFinished: boolean;
@@ -92,7 +94,8 @@ const handleCancel = () => {
     contactImportStore.clearImport();
   }
   emit('update:upload-finished', false);
-  broadcastsStore.setNewBroadcastPage(NewBroadcastPage.SELECT_GROUPS);
+  broadcastsStore.resetNewBroadcast();
+  router.push({ name: 'HomeBulkSend' });
 };
 
 const handleContinue = () => {

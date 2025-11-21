@@ -1,15 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Channels from '@/api/resources/flows/channels';
-import requests from '@/api/resources/flows/requests';
+import Apps from '@/api/resources/integrations/apps';
+import requests from '@/api/resources/integrations/requests';
 import { createPinia, setActivePinia } from 'pinia';
 import { useProjectStore } from '@/stores/project';
 
-describe('api/resources/flows/channels', () => {
+describe('api/resources/integrations/apps', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
   });
 
-  it('listChannels calls /channels-by-project with project uuid as param', async () => {
+  it('listApps calls /my-apps/ with project uuid as param', async () => {
     const projectStore = useProjectStore();
     projectStore.setProjectUuid('project-123');
 
@@ -18,12 +18,11 @@ describe('api/resources/flows/channels', () => {
       get: httpGet,
     } as any);
 
-    const response = await Channels.listChannels();
+    const response = await Apps.listApps();
 
-    expect(httpGet).toHaveBeenCalledWith(
-      '/api/v2/internals/channels-by-project',
-      { params: { project_uuid: 'project-123' } },
-    );
+    expect(httpGet).toHaveBeenCalledWith('/api/v1/my-apps/', {
+      params: { configured: true, project_uuid: 'project-123' },
+    });
     expect(response).toEqual({ data: { results: [] } });
   });
 });

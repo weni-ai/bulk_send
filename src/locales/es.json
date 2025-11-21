@@ -168,6 +168,14 @@
     },
     "template_preview": {
       "title": "Vista previa de plantilla"
+    },
+    "channel_selection": {
+      "title": "Tu proyecto tiene más de un número de WhatsApp",
+      "description": "Selecciona el número que será usado como remitente para esta plantilla",
+      "buttons": {
+        "primary": "Continuar",
+        "secondary": "Cancelar"
+      }
     }
   },
   "new_broadcast": {
@@ -202,7 +210,8 @@
         "page_title": "Seleccionar mensaje de plantilla",
         "filters": {
           "new_tamplate": "Nueva plantilla",
-          "search_placeholder": "Buscar plantilla"
+          "search_placeholder": "Buscar plantilla",
+          "channel_not_found": "No se pudo redirigir a la creación de plantilla, faltaba el UUID del canal"
         },
         "table": {
           "name": "Nombre",
@@ -252,18 +261,19 @@
         "name_field_label": "Nombre"
       },
       "confirm_and_send": {
-        "title": "Revisar y enviar",
+        "title": "Revisar & enviar",
         "flow_placeholder": "Buscar",
         "broadcast_name_placeholder": "Nombre del envío",
         "flow_message": "Este flujo se activará si un contacto responde a este mensaje",
         "flow_label": "Selecciona un flujo para activar cuando un contacto responde",
         "broadcast_name_label": "Nombre",
-        "audience": {
-          "title": "Audiencia",
+        "details": {
+          "title": "Detalles",
           "groups": "Grupos seleccionados: {0}",
           "contacts": "Contactos seleccionados: {0}",
           "cost": "Costo estimado: {0} ({1})",
-          "unit_cost": "Unidad: {unitCost} por mensaje entregado"
+          "unit_cost": "Unidad: {unitCost} por mensaje entregado",
+          "channel": "Número de remitente: {0}"
         },
         "variables": {
           "title": "Mapeo de variables"

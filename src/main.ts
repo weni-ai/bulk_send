@@ -72,6 +72,11 @@ export default async function mountBulkSendApp({
     moduleStorage.setItem('projectUuid', sharedStore.current.project.uuid);
   }
 
+  const container = document.getElementById(containerId);
+  if (container) {
+    container.classList.add('bulk-send-webapp');
+  }
+
   app.mount(`#${containerId}`);
   appRef = app;
 

@@ -88,16 +88,22 @@ export default defineConfig({
         type: 'javascript/auto',
       },
       {
-        test: /\.css$/,
+        test: /\.(scss|sass)$/,
+        use: [
+          'postcss-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              additionalData: `@use '@weni/unnnic-system/src/assets/scss/unnnic.scss' as *; @use '@/styles/mixins.scss' as *;`,
+            },
+          },
+        ],
         type: 'css',
       },
       {
-        test: /\.(scss|sass)$/,
-        loader: 'sass-loader',
+        test: /\.css$/,
+        use: ['postcss-loader'],
         type: 'css',
-        options: {
-          additionalData: `@use '@weni/unnnic-system/src/assets/scss/unnnic.scss' as *; @use '@/styles/mixins.scss' as *;`,
-        },
       },
       {
         test: /\.(png|jpe?g|gif|svg|webp|avif)$/i,

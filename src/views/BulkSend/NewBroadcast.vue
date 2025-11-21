@@ -39,6 +39,7 @@
 
 <script setup lang="ts">
 import { computed, onBeforeMount, ref } from 'vue';
+import { useRoute } from 'vue-router';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import { useContactImportStore } from '@/stores/contactImport';
 import { useProjectStore } from '@/stores/project';
@@ -51,6 +52,8 @@ import TemplateSelection from '@/components/NewBroadcast/TemplateSelection/Templ
 import VariablesSelection from '@/components/NewBroadcast/VariablesSelection/VariablesSelection.vue';
 import ConfirmAndSend from '@/components/NewBroadcast/ConfirmAndSend/ConfirmAndSend.vue';
 
+const route = useRoute();
+
 const broadcastsStore = useBroadcastsStore();
 const contactImportStore = useContactImportStore();
 const projectStore = useProjectStore();
@@ -58,11 +61,14 @@ const templatesStore = useTemplatesStore();
 
 const uploadFinished = ref(false);
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
   broadcastsStore.setNewBroadcastPage(NewBroadcastPage.SELECT_GROUPS);
-  projectStore.getProjectInfo();
-  projectStore.getProjectChannels();
-  templatesStore.getTemplatePricing();
+  await Promise.all([
+    projectStore.getProjectInfo(),
+    projectStore.getProjectChannels(),
+    templatesStore.getTemplatePricing(),
+  ]);
+  broadcastsStore.setChannelFromUuid(route.params.channelUuid as string);
 });
 
 const isSelectGroupsPage = computed(
