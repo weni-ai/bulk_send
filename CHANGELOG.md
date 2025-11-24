@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.8.0] - 2025-11-24
+
+### Changed
+- chore: update @weni/unnnic-system to version 3.11.0
+
 ## [1.7.0] - 2025-11-19
 
 ### Fixed
