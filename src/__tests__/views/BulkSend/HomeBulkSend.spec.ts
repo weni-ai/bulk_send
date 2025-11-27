@@ -5,6 +5,7 @@ import { createPinia, setActivePinia } from 'pinia';
 import { useProjectStore } from '@/stores/project';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import { useTemplatesStore } from '@/stores/templates';
+import { moduleStorage } from '../../../utils/storage';
 
 // Mock useI18n to avoid installing i18n plugin
 vi.mock('vue-i18n', () => ({
@@ -136,7 +137,7 @@ describe('HomeBulkSend.vue', () => {
     expect(wrapper.find(SELECTOR.mmliteDisclaimer).exists()).toBe(true);
   });
 
-  it('hides MMLite disclaimer when MMLite channel exists', () => {
+  it('shows MMLite disclaimer when WAC channel exists without MMLite', () => {
     const { wrapper } = mountWrapper({
       channels: [
         { uuid: '1', name: 'WAC 1', channelType: 'WAC' },
@@ -144,7 +145,29 @@ describe('HomeBulkSend.vue', () => {
       ],
     });
 
+    expect(wrapper.find(SELECTOR.mmliteDisclaimer).exists()).toBe(true);
+  });
+
+  it('hides MMLite disclaimer when all WAC channels have MMLite', () => {
+    const { wrapper } = mountWrapper({
+      channels: [
+        { uuid: '1', name: 'WAC 1', channelType: 'WAC', MMLite: true },
+        { uuid: '2', name: 'WAC 2', channelType: 'WAC', MMLite: true },
+      ],
+    });
     expect(wrapper.find(SELECTOR.mmliteDisclaimer).exists()).toBe(false);
+  });
+
+  it('hides MMLite disclaimer do not remind is true', () => {
+    moduleStorage.setItem('mmlite_do_not_remind', 'true');
+    const { wrapper } = mountWrapper({
+      channels: [
+        { uuid: '1', name: 'WAC 1', channelType: 'WAC' },
+        { uuid: '2', name: 'WAC MMLite', channelType: 'WAC' },
+      ],
+    });
+    expect(wrapper.find(SELECTOR.mmliteDisclaimer).exists()).toBe(false);
+    moduleStorage.removeItem('mmlite_do_not_remind');
   });
 
   it('hides MMLite disclaimer when there are no channels', () => {

@@ -55,6 +55,8 @@ import type { Channel } from '@/types/channel';
 import { useI18n } from 'vue-i18n';
 import { toLocalizedFloat, toPercentage } from '@/utils/number';
 import { Currency } from '@/constants/currency';
+import { moduleStorage } from '@/utils/storage';
+import { WENI_DEMO_NUMBER } from '@/constants/channels';
 
 const { t } = useI18n();
 
@@ -63,19 +65,23 @@ const broadcastsStore = useBroadcastsStore();
 const templateStore = useTemplatesStore();
 
 const showMMLiteSection = computed(() => {
+  const doNotRemind = moduleStorage.getItem('mmlite_do_not_remind');
+  if (doNotRemind) {
+    return false;
+  }
+
   if (projectStore.project.channels.length === 0) {
     return false;
   }
 
-  const hasMMLiteChannel = projectStore.project.channels.some(
-    (channel: Channel) => channel.MMLite,
+  const hasWhatsappWithoutMMLite = projectStore.project.channels.some(
+    (channel: Channel) =>
+      channel.channelType === 'WAC' &&
+      !channel.MMLite &&
+      channel.phoneNumber !== WENI_DEMO_NUMBER,
   );
 
-  const hasWhatsappChannel = projectStore.project.channels.some(
-    (channel: Channel) => channel.channelType === 'WAC',
-  );
-
-  return hasWhatsappChannel && !hasMMLiteChannel;
+  return hasWhatsappWithoutMMLite;
 });
 
 const showActivateMMLiteModal = ref(false);
