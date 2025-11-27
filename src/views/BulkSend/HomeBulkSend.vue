@@ -57,6 +57,7 @@ import { toLocalizedFloat, toPercentage } from '@/utils/number';
 import { Currency } from '@/constants/currency';
 import { moduleStorage } from '@/utils/storage';
 import { WENI_DEMO_NUMBER } from '@/constants/channels';
+import { MMLITE_DO_NOT_REMIND_KEY } from '@/constants/storage';
 
 const { t } = useI18n();
 
@@ -65,7 +66,7 @@ const broadcastsStore = useBroadcastsStore();
 const templateStore = useTemplatesStore();
 
 const showMMLiteSection = computed(() => {
-  const doNotRemind = moduleStorage.getItem('mmlite_do_not_remind');
+  const doNotRemind = moduleStorage.getItem(MMLITE_DO_NOT_REMIND_KEY);
   if (doNotRemind) {
     return false;
   }

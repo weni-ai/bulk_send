@@ -98,6 +98,7 @@ import { useI18n } from 'vue-i18n';
 import { initFacebookSdk } from '@/utils/plugins/fb';
 import { moduleStorage } from '@/utils/storage';
 import env from '@/utils/env';
+import { MMLITE_DO_NOT_REMIND_KEY } from '@/constants/storage';
 const { t } = useI18n();
 
 defineProps<{
@@ -115,7 +116,7 @@ const handleUpdateModelValue = (value: boolean) => {
 
 const handleSecondaryButtonClick = () => {
   if (doNotRemind.value) {
-    moduleStorage.setItem('mmlite_do_not_remind', 'true');
+    moduleStorage.setItem(MMLITE_DO_NOT_REMIND_KEY, 'true');
   }
   emit('update:modelValue', false);
 };

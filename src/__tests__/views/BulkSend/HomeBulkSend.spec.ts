@@ -5,7 +5,8 @@ import { createPinia, setActivePinia } from 'pinia';
 import { useProjectStore } from '@/stores/project';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import { useTemplatesStore } from '@/stores/templates';
-import { moduleStorage } from '../../../utils/storage';
+import { moduleStorage } from '@/utils/storage';
+import { MMLITE_DO_NOT_REMIND_KEY } from '@/constants/storage';
 
 // Mock useI18n to avoid installing i18n plugin
 vi.mock('vue-i18n', () => ({
@@ -159,7 +160,7 @@ describe('HomeBulkSend.vue', () => {
   });
 
   it('hides MMLite disclaimer do not remind is true', () => {
-    moduleStorage.setItem('mmlite_do_not_remind', 'true');
+    moduleStorage.setItem(MMLITE_DO_NOT_REMIND_KEY, 'true');
     const { wrapper } = mountWrapper({
       channels: [
         { uuid: '1', name: 'WAC 1', channelType: 'WAC' },
@@ -167,7 +168,7 @@ describe('HomeBulkSend.vue', () => {
       ],
     });
     expect(wrapper.find(SELECTOR.mmliteDisclaimer).exists()).toBe(false);
-    moduleStorage.removeItem('mmlite_do_not_remind');
+    moduleStorage.removeItem(MMLITE_DO_NOT_REMIND_KEY);
   });
 
   it('hides MMLite disclaimer when there are no channels', () => {
