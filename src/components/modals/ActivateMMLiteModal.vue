@@ -134,7 +134,7 @@ const activateMMLite = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       function (response: any) {
         isMMLiteLoading.value = false;
-        if (response.authResponse) {
+        if (response.authResponse && response.authResponse.code) {
           unnnic.unnnicCallAlert({
             props: {
               text: t('modals.activate_mmlite.success_alert'),
@@ -157,7 +157,16 @@ const activateMMLite = () => {
         config_id: configId,
         response_type: 'code',
         override_default_response_type: true,
-        extras: { features: [{ name: 'marketing_messages_lite' }] },
+        extras: {
+          featureType: 'whatsapp_business_app_onboarding',
+          sessionInfoVersion: '3',
+          features: [
+            {
+              name: 'marketing_messages_lite',
+            },
+          ],
+          version: 'v3',
+        },
       },
     );
   };
