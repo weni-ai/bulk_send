@@ -106,28 +106,31 @@
     },
     "activate_mmlite": {
       "buttons": {
-        "primary": "Atualizar para API MM Lite",
+        "primary": "Atualizar para MM Lite API",
         "secondary": "Talvez depois"
       },
-      "title": "Atualizar para API MM Lite",
-      "main_subtitle": "🚀 A API MM Lite está aqui: alcance mais pessoas, com entrega inteligente",
-      "why_subtitle": "Por que mudar para a API MM Lite?",
-      "more_messages_label": "· Mais mensagens entregues, com menos esforço",
-      "engagement_label": "· Otimização de entrega baseada em engajamento",
-      "seamless_label": "· Transição suave com sua configuração atual",
-      "main_description": {
-        "text": "A API MM Lite é uma atualização da API Cloud, projetada para {0}. Agora, você pode enviar campanhas mais inteligentes — todas com alterações mínimas em sua configuração atual.",
-        "bold_text": "melhorar o desempenho do seu marketing no WhatsApp"
+      "title": "Atualizar para MM Lite API",
+      "description": "A nova MM Lite API é a evolução da Cloud API, criada pela Meta para entregar mais mensagens entregues, com menos esforço de integração.",
+      "why_subtitle": "Por que atualizar agora?",
+      "more_messages_label": "✅ Mais entregas, menos trabalho",
+      "engagement_label": "💬 Envios otimizados automaticamente",
+      "seamless_label": "🔄 Transição simples e segura",
+      "more_messages_description": {
+        "text": "Com a MM Lite API, as entregas {0} em relação à Cloud API, priorizando mensagens relevantes, esperadas e altamente engajadoras.",
+        "bold_text": "aumentaram em até +9%"
       },
-      "more_messages_description": "A API MM Lite entrega um número igual ou maior de mensagens do que a API Cloud. Mensagens com alta engajamento, relevantes e pontuais são priorizadas e podem atingir mais pessoas.",
-      "engagement_description": "Modelos com alta taxa de abertura e clique atingem automaticamente mais usuários sem exigir alterações em sua estratégia de envio.",
-      "seamless_description": "Continue usando seus números e modelos existentes. A mudança requer um esforço mínimo de integração e mantém o mesmo modelo de preço da API Cloud.",
+      "engagement_description": "Mensagens com boas taxas de abertura e cliques têm prioridade, alcançando ainda mais pessoas sem que você precise mudar sua estratégia.",
+      "seamless_description": {
+        "text": "Mantenha seus números e templates atuais. A migração é automática, não exige esforço técnico e {0}.",
+        "bold_text": "o custo permanece o mesmo"
+      },
       "footer": {
-        "text": "ℹ️ Informações fornecidas pela Meta. Veja a {0} para detalhes completos e atualizações.",
-        "link": "Documentação da Meta"
+        "text": "ℹ️ Informações disponibilizadas pela Meta. {0}.",
+        "link": "Saiba mais na documentação oficial"
       },
-      "success_alert": "Solicitação de ativação da API MM Lite realizada com sucesso",
-      "error_alert": "Erro ao solicitar ativação da API MM Lite"
+      "do_not_remind": "Não me lembrar novamente",
+      "success_alert": "Solicitação de ativação da MM Lite API realizada com sucesso",
+      "error_alert": "Erro ao solicitar ativação da MM Lite API"
     },
     "contact_import_upload_instructions": {
       "title": "Recomendações de formatação de arquivo",
