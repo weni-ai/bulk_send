@@ -17,29 +17,31 @@
     @secondary-button-click="handleSecondaryButtonClick"
   >
     <section class="activate-mmlite-modal__content">
-      <h2 class="activate-mmlite-modal__subtitle">
-        {{ $t('modals.activate_mmlite.main_subtitle') }}
-      </h2>
-      <I18nT
-        class="activate-mmlite-modal__description"
-        keypath="modals.activate_mmlite.main_description.text"
-        tag="p"
-      >
-        <b class="activate-mmlite-modal__description--bold">
-          {{ $t('modals.activate_mmlite.main_description.bold_text') }}
-        </b>
-      </I18nT>
+      <p class="activate-mmlite-modal__description">
+        {{ $t('modals.activate_mmlite.description') }}
+      </p>
+
       <h2 class="activate-mmlite-modal__subtitle">
         {{ $t('modals.activate_mmlite.why_subtitle') }}
       </h2>
+
       <section class="activate-mmlite-modal__section">
         <h3 class="activate-mmlite-modal__label">
           {{ $t('modals.activate_mmlite.more_messages_label') }}
         </h3>
-        <p class="activate-mmlite-modal__description">
-          {{ $t('modals.activate_mmlite.more_messages_description') }}
-        </p>
+        <I18nT
+          class="activate-mmlite-modal__description"
+          keypath="modals.activate_mmlite.more_messages_description.text"
+          tag="p"
+        >
+          <b class="activate-mmlite-modal__description--bold">
+            {{
+              $t('modals.activate_mmlite.more_messages_description.bold_text')
+            }}
+          </b>
+        </I18nT>
       </section>
+
       <section class="activate-mmlite-modal__section">
         <h3 class="activate-mmlite-modal__label">
           {{ $t('modals.activate_mmlite.engagement_label') }}
@@ -48,27 +50,43 @@
           {{ $t('modals.activate_mmlite.engagement_description') }}
         </p>
       </section>
+
       <section class="activate-mmlite-modal__section">
         <h3 class="activate-mmlite-modal__label">
           {{ $t('modals.activate_mmlite.seamless_label') }}
         </h3>
-        <p class="activate-mmlite-modal__description">
-          {{ $t('modals.activate_mmlite.seamless_description') }}
-        </p>
-      </section>
-      <I18nT
-        class="activate-mmlite-modal__footer"
-        keypath="modals.activate_mmlite.footer.text"
-        tag="footer"
-      >
-        <a
-          href="https://developers.facebook.com/docs/whatsapp/marketing-messages-lite-api"
-          target="_blank"
-          class="activate-mmlite-modal__footer--link"
+        <I18nT
+          class="activate-mmlite-modal__description"
+          keypath="modals.activate_mmlite.seamless_description.text"
+          tag="p"
         >
-          {{ $t('modals.activate_mmlite.footer.link') }}
-        </a>
-      </I18nT>
+          <b class="activate-mmlite-modal__description--bold">
+            {{ $t('modals.activate_mmlite.seamless_description.bold_text') }}
+          </b>
+        </I18nT>
+      </section>
+
+      <div class="activate-mmlite-modal__footer-content">
+        <I18nT
+          class="activate-mmlite-modal__footer-info"
+          keypath="modals.activate_mmlite.footer.text"
+          tag="p"
+        >
+          <a
+            href="https://developers.facebook.com/docs/whatsapp/marketing-messages-lite-api"
+            target="_blank"
+            class="activate-mmlite-modal__footer-info--link"
+          >
+            {{ $t('modals.activate_mmlite.footer.link') }}
+          </a>
+        </I18nT>
+
+        <UnnnicCheckbox
+          v-model="doNotRemind"
+          :textRight="$t('modals.activate_mmlite.do_not_remind')"
+          size="sm"
+        />
+      </div>
     </section>
   </UnnnicModalDialog>
 </template>
@@ -78,7 +96,9 @@ import unnnic from '@weni/unnnic-system';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { initFacebookSdk } from '@/utils/plugins/fb';
+import { moduleStorage } from '@/utils/storage';
 import env from '@/utils/env';
+import { MMLITE_DO_NOT_REMIND_KEY } from '@/constants/storage';
 const { t } = useI18n();
 
 defineProps<{
@@ -86,6 +106,7 @@ defineProps<{
 }>();
 
 const isMMLiteLoading = ref(false);
+const doNotRemind = ref(false);
 
 const emit = defineEmits(['update:modelValue']);
 
@@ -94,6 +115,9 @@ const handleUpdateModelValue = (value: boolean) => {
 };
 
 const handleSecondaryButtonClick = () => {
+  if (doNotRemind.value) {
+    moduleStorage.setItem(MMLITE_DO_NOT_REMIND_KEY, 'true');
+  }
   emit('update:modelValue', false);
 };
 
@@ -110,7 +134,7 @@ const activateMMLite = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       function (response: any) {
         isMMLiteLoading.value = false;
-        if (response.authResponse) {
+        if (response.authResponse && response.authResponse.code) {
           unnnic.unnnicCallAlert({
             props: {
               text: t('modals.activate_mmlite.success_alert'),
@@ -133,7 +157,16 @@ const activateMMLite = () => {
         config_id: configId,
         response_type: 'code',
         override_default_response_type: true,
-        extras: { features: [{ name: 'marketing_messages_lite' }] },
+        extras: {
+          featureType: 'whatsapp_business_app_onboarding',
+          sessionInfoVersion: '3',
+          features: [
+            {
+              name: 'marketing_messages_lite',
+            },
+          ],
+          version: 'v3',
+        },
       },
     );
   };
@@ -157,43 +190,36 @@ const activateMMLite = () => {
   }
 
   &__subtitle {
-    color: $unnnic-color-neutral-dark;
-    font-size: $unnnic-font-size-body-lg;
-    font-weight: $unnnic-font-weight-bold;
-    line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
+    color: $unnnic-color-fg-emphasized;
+    font: $unnnic-font-display-3;
   }
 
   &__label {
-    color: $unnnic-color-neutral-dark;
-    font-size: $unnnic-font-size-body-gt;
-    font-weight: $unnnic-font-weight-bold;
-    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+    color: $unnnic-color-fg-emphasized;
+    font: $unnnic-font-action;
   }
 
   &__description {
-    color: $unnnic-color-neutral-dark;
-    font-size: $unnnic-font-size-body-gt;
-    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
-
-    &--bold {
-      font-weight: $unnnic-font-weight-bold;
-    }
+    color: $unnnic-color-fg-emphasized;
+    font: $unnnic-font-body;
   }
 
-  &__footer {
-    color: $unnnic-color-neutral-cloudy;
+  &__footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: $unnnic-spacing-sm;
+  }
+
+  &__footer-info {
+    color: $unnnic-color-fg-base;
     font-size: $unnnic-font-size-body-md;
     line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
 
     &--link {
-      color: $unnnic-color-neutral-cloudy;
-      text-decoration: none;
-      text-decoration-line: underline;
-      text-decoration-style: solid;
-      text-decoration-skip-ink: none;
-      text-decoration-thickness: auto;
-      text-underline-offset: auto;
-      text-underline-position: from-font;
+      color: $unnnic-color-fg-base;
+      text-decoration: underline;
+      font-weight: $unnnic-font-weight-medium;
+      cursor: pointer;
     }
   }
 }
