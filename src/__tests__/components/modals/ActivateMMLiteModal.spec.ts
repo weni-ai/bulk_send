@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { shallowMount } from '@vue/test-utils';
+import { createPinia, setActivePinia } from 'pinia';
 import ActivateMMLiteModal from '@/components/modals/ActivateMMLiteModal.vue';
+import { useProjectStore } from '@/stores/project';
 import { moduleStorage } from '@/utils/storage';
 import { getMMLiteDoNotRemindKey } from '@/utils/mmlite';
 
@@ -52,19 +54,26 @@ describe('components/modals/ActivateMMLiteModal', () => {
     },
   } as const;
 
-  const mountModal = (props?: { modelValue?: boolean; projectUuid?: string }) =>
-    shallowMount(ActivateMMLiteModal, {
+  const mountModal = (options?: { modelValue?: boolean; projectUuid?: string }) => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
+
+    const projectStore = useProjectStore(pinia);
+    projectStore.project.uuid = options?.projectUuid ?? DEFAULT_PROJECT_UUID;
+
+    return shallowMount(ActivateMMLiteModal, {
       props: {
-        modelValue: props?.modelValue ?? true,
-        projectUuid: props?.projectUuid ?? DEFAULT_PROJECT_UUID,
+        modelValue: options?.modelValue ?? true,
       },
       global: {
+        plugins: [pinia],
         stubs: STUBS,
         mocks: {
           $t: (k: string) => k,
         },
       },
     });
+  };
 
   beforeEach(() => {
     vi.clearAllMocks();
