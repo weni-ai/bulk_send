@@ -37,7 +37,6 @@
           <ActivateMMLiteModal
             v-if="showActivateMMLiteModal"
             :modelValue="showActivateMMLiteModal"
-            :projectUuid="projectStore.project.uuid"
             @update:model-value="handleUpdateShowActivateMMLiteModal"
           />
         </section>
