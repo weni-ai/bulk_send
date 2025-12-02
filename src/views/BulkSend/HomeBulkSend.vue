@@ -37,6 +37,7 @@
           <ActivateMMLiteModal
             v-if="showActivateMMLiteModal"
             :modelValue="showActivateMMLiteModal"
+            :projectUuid="projectStore.project.uuid"
             @update:model-value="handleUpdateShowActivateMMLiteModal"
           />
         </section>
@@ -47,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onBeforeMount } from 'vue';
+import { computed, ref, onBeforeMount, watch } from 'vue';
 import { useProjectStore } from '@/stores/project';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import { useTemplatesStore } from '@/stores/templates';
@@ -56,8 +57,8 @@ import { useI18n } from 'vue-i18n';
 import { toLocalizedFloat, toPercentage } from '@/utils/number';
 import { Currency } from '@/constants/currency';
 import { moduleStorage } from '@/utils/storage';
+import { getMMLiteDoNotRemindKey } from '@/utils/mmlite';
 import { WENI_DEMO_NUMBER } from '@/constants/channels';
-import { MMLITE_DO_NOT_REMIND_KEY } from '@/constants/storage';
 
 const { t } = useI18n();
 
@@ -66,11 +67,6 @@ const broadcastsStore = useBroadcastsStore();
 const templateStore = useTemplatesStore();
 
 const showMMLiteSection = computed(() => {
-  const doNotRemind = moduleStorage.getItem(MMLITE_DO_NOT_REMIND_KEY);
-  if (doNotRemind) {
-    return false;
-  }
-
   if (projectStore.project.channels.length === 0) {
     return false;
   }
@@ -86,6 +82,20 @@ const showMMLiteSection = computed(() => {
 });
 
 const showActivateMMLiteModal = ref(false);
+
+watch(
+  showMMLiteSection,
+  (shouldShow) => {
+    if (shouldShow) {
+      const storageKey = getMMLiteDoNotRemindKey(projectStore.project.uuid);
+      const doNotRemind = moduleStorage.getItem(storageKey);
+      if (!doNotRemind) {
+        showActivateMMLiteModal.value = true;
+      }
+    }
+  },
+  { immediate: true },
+);
 
 const formattedSuccessRate = computed(() => {
   return toPercentage(broadcastsStore.broadcastMonthPerformance.successRate);
