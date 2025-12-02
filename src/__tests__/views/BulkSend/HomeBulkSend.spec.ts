@@ -6,7 +6,7 @@ import { useProjectStore } from '@/stores/project';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import { useTemplatesStore } from '@/stores/templates';
 import { moduleStorage } from '@/utils/storage';
-import { MMLITE_DO_NOT_REMIND_KEY } from '@/constants/storage';
+import { getMMLiteDoNotRemindKey } from '@/utils/mmlite';
 
 // Mock useI18n to avoid installing i18n plugin
 vi.mock('vue-i18n', () => ({
@@ -105,10 +105,24 @@ describe('HomeBulkSend.vue', () => {
     vi.restoreAllMocks();
   });
 
-  it('does not open modal when clicking outside the button in disclaimer', async () => {
-    const { wrapper } = mountWrapper();
+  it('does not open modal again when clicking outside the button in disclaimer after closing it', async () => {
+    const projectUuid = 'proj-no-reopen';
+    const storageKey = getMMLiteDoNotRemindKey(projectUuid);
+    moduleStorage.setItem(storageKey, 'true');
+
+    const { wrapper } = mountWrapper({
+      projectUuid,
+      channels: [{ uuid: '1', name: 'WAC 1', channelType: 'WAC' }],
+    });
+
+    // Modal should not be auto-opened because do not remind is set
+    expect(wrapper.find(SELECTOR.activateMMLiteModal).exists()).toBe(false);
+
+    // Clicking outside the button should not open the modal
     await wrapper.find(SELECTOR.mmliteDisclaimer).trigger('click');
     expect(wrapper.find(SELECTOR.activateMMLiteModal).exists()).toBe(false);
+
+    moduleStorage.removeItem(storageKey);
   });
 
   it('opens modal when clicking the show more button inside disclaimer', async () => {
@@ -159,16 +173,43 @@ describe('HomeBulkSend.vue', () => {
     expect(wrapper.find(SELECTOR.mmliteDisclaimer).exists()).toBe(false);
   });
 
-  it('hides MMLite disclaimer do not remind is true', () => {
-    moduleStorage.setItem(MMLITE_DO_NOT_REMIND_KEY, 'true');
+  it('auto-opens modal when WAC channel without MMLite exists', () => {
     const { wrapper } = mountWrapper({
-      channels: [
-        { uuid: '1', name: 'WAC 1', channelType: 'WAC' },
-        { uuid: '2', name: 'WAC MMLite', channelType: 'WAC' },
-      ],
+      channels: [{ uuid: '1', name: 'WAC 1', channelType: 'WAC' }],
     });
-    expect(wrapper.find(SELECTOR.mmliteDisclaimer).exists()).toBe(false);
-    moduleStorage.removeItem(MMLITE_DO_NOT_REMIND_KEY);
+    expect(wrapper.find(SELECTOR.activateMMLiteModal).exists()).toBe(true);
+  });
+
+  it('does not auto-open modal when do not remind is set for the project', () => {
+    const projectUuid = 'proj-123';
+    const storageKey = getMMLiteDoNotRemindKey(projectUuid);
+    moduleStorage.setItem(storageKey, 'true');
+
+    const { wrapper } = mountWrapper({
+      projectUuid,
+      channels: [{ uuid: '1', name: 'WAC 1', channelType: 'WAC' }],
+    });
+
+    expect(wrapper.find(SELECTOR.mmliteDisclaimer).exists()).toBe(true);
+    expect(wrapper.find(SELECTOR.activateMMLiteModal).exists()).toBe(false);
+
+    moduleStorage.removeItem(storageKey);
+  });
+
+  it('auto-opens modal for different project even if do not remind is set for another', () => {
+    const projectUuidA = 'proj-a';
+    const projectUuidB = 'proj-b';
+    const storageKeyA = getMMLiteDoNotRemindKey(projectUuidA);
+    moduleStorage.setItem(storageKeyA, 'true');
+
+    const { wrapper } = mountWrapper({
+      projectUuid: projectUuidB,
+      channels: [{ uuid: '1', name: 'WAC 1', channelType: 'WAC' }],
+    });
+
+    expect(wrapper.find(SELECTOR.activateMMLiteModal).exists()).toBe(true);
+
+    moduleStorage.removeItem(storageKeyA);
   });
 
   it('hides MMLite disclaimer when there are no channels', () => {
