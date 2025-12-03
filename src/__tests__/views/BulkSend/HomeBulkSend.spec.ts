@@ -7,6 +7,7 @@ import { useBroadcastsStore } from '@/stores/broadcasts';
 import { useTemplatesStore } from '@/stores/templates';
 import { moduleStorage } from '@/utils/storage';
 import { getMMLiteDoNotRemindKey } from '@/utils/mmlite';
+import type { Channel } from '@/types/channel';
 
 // Mock useI18n to avoid installing i18n plugin
 vi.mock('vue-i18n', () => ({
@@ -18,7 +19,9 @@ const $t = vi.fn((key) => key);
 
 describe('HomeBulkSend.vue', () => {
   const DEFAULT_PROJECT_UUID = 'proj-123';
-  const DEFAULT_CHANNELS = [{ uuid: '1', name: 'WAC 1', channelType: 'WAC' }];
+  const DEFAULT_CHANNELS: Channel[] = [
+    { uuid: '1', name: 'WAC 1', channelType: 'WAC', appUuid: 'app1' },
+  ];
   const SELECTOR = {
     header: '[data-test="home-header"]',
     metricsTable: '[data-test="metrics-table"]',
@@ -49,7 +52,7 @@ describe('HomeBulkSend.vue', () => {
 
   const mountWrapper = (
     options: {
-      channels?: Array<any>;
+      channels?: Array<Channel>;
       stubProjectAction?: boolean;
       stubBroadcastAction?: boolean;
       stubTemplatesAction?: boolean;
@@ -112,7 +115,9 @@ describe('HomeBulkSend.vue', () => {
 
     const { wrapper } = mountWrapper({
       projectUuid,
-      channels: [{ uuid: '1', name: 'WAC 1', channelType: 'WAC' }],
+      channels: [
+        { uuid: '1', name: 'WAC 1', channelType: 'WAC', appUuid: 'app-1' },
+      ],
     });
 
     // Modal should not be auto-opened because do not remind is set
@@ -146,7 +151,9 @@ describe('HomeBulkSend.vue', () => {
 
   it('shows MMLite disclaimer when there is WAC but no MMLite channel', () => {
     const { wrapper } = mountWrapper({
-      channels: [{ uuid: '1', name: 'WAC 1', channelType: 'WAC' }],
+      channels: [
+        { uuid: '1', name: 'WAC 1', channelType: 'WAC', appUuid: 'app-1' },
+      ],
     });
 
     expect(wrapper.find(SELECTOR.mmliteDisclaimer).exists()).toBe(true);
@@ -155,8 +162,14 @@ describe('HomeBulkSend.vue', () => {
   it('shows MMLite disclaimer when WAC channel exists without MMLite', () => {
     const { wrapper } = mountWrapper({
       channels: [
-        { uuid: '1', name: 'WAC 1', channelType: 'WAC' },
-        { uuid: '2', name: 'WAC MMLite', channelType: 'WAC', MMLite: true },
+        { uuid: '1', name: 'WAC 1', channelType: 'WAC', appUuid: 'app-1' },
+        {
+          uuid: '2',
+          name: 'WAC MMLite',
+          channelType: 'WAC',
+          appUuid: 'app-2',
+          mmLite: true,
+        },
       ],
     });
 
@@ -166,8 +179,20 @@ describe('HomeBulkSend.vue', () => {
   it('hides MMLite disclaimer when all WAC channels have MMLite', () => {
     const { wrapper } = mountWrapper({
       channels: [
-        { uuid: '1', name: 'WAC 1', channelType: 'WAC', MMLite: true },
-        { uuid: '2', name: 'WAC 2', channelType: 'WAC', MMLite: true },
+        {
+          uuid: '1',
+          name: 'WAC 1',
+          channelType: 'WAC',
+          appUuid: 'app-1',
+          mmLite: true,
+        },
+        {
+          uuid: '2',
+          name: 'WAC 2',
+          channelType: 'WAC',
+          appUuid: 'app-2',
+          mmLite: true,
+        },
       ],
     });
     expect(wrapper.find(SELECTOR.mmliteDisclaimer).exists()).toBe(false);
@@ -175,7 +200,9 @@ describe('HomeBulkSend.vue', () => {
 
   it('auto-opens modal when WAC channel without MMLite exists', () => {
     const { wrapper } = mountWrapper({
-      channels: [{ uuid: '1', name: 'WAC 1', channelType: 'WAC' }],
+      channels: [
+        { uuid: '1', name: 'WAC 1', channelType: 'WAC', appUuid: 'app-1' },
+      ],
     });
     expect(wrapper.find(SELECTOR.activateMMLiteModal).exists()).toBe(true);
   });
@@ -187,7 +214,9 @@ describe('HomeBulkSend.vue', () => {
 
     const { wrapper } = mountWrapper({
       projectUuid,
-      channels: [{ uuid: '1', name: 'WAC 1', channelType: 'WAC' }],
+      channels: [
+        { uuid: '1', name: 'WAC 1', channelType: 'WAC', appUuid: 'app-1' },
+      ],
     });
 
     expect(wrapper.find(SELECTOR.mmliteDisclaimer).exists()).toBe(true);
@@ -204,7 +233,9 @@ describe('HomeBulkSend.vue', () => {
 
     const { wrapper } = mountWrapper({
       projectUuid: projectUuidB,
-      channels: [{ uuid: '1', name: 'WAC 1', channelType: 'WAC' }],
+      channels: [
+        { uuid: '1', name: 'WAC 1', channelType: 'WAC', appUuid: 'app-1' },
+      ],
     });
 
     expect(wrapper.find(SELECTOR.activateMMLiteModal).exists()).toBe(true);

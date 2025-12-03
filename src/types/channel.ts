@@ -3,7 +3,7 @@ interface Channel {
   name: string;
   channelType: string;
   appUuid: string;
-  MMLite?: boolean;
+  mmLite?: boolean;
   waba?: string;
   phoneNumber?: string;
 }
