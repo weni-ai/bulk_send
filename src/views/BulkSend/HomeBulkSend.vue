@@ -128,6 +128,7 @@ const generalPerformanceData = computed(() => [
 ]);
 
 onBeforeMount(() => {
+  fetchProjectInfo();
   fetchProjectChannels();
   fetchBroadcastsMonthPerformance();
 });
@@ -158,6 +159,14 @@ const fetchBroadcastsMonthPerformance = async () => {
     await broadcastsStore.getBroadcastsMonthPerformance(
       projectStore.project.uuid,
     );
+  } catch (error) {
+    console.error(error); // TODO: check with design if we need to show an error message to the user
+  }
+};
+
+const fetchProjectInfo = async () => {
+  try {
+    await projectStore.getProjectInfo();
   } catch (error) {
     console.error(error); // TODO: check with design if we need to show an error message to the user
   }

@@ -30,8 +30,9 @@ const mountWrapper = (props: { send: BroadcastStatistic }) =>
 
 const mockSendSent: BroadcastStatistic = createBroadcast({
   createdBy: 'Alice',
-  createdOn: new Date('2024-01-01T09:00:00.000Z'),
-  modifiedOn: new Date('2024-01-01T10:00:00.000Z'),
+  // date with timezone UTC-3 included
+  createdOn: new Date('2024-01-01T09:00:00.000-03:00'),
+  modifiedOn: new Date('2024-01-01T10:00:00.000-03:00'),
   template: { id: 1, name: 'Template A' },
 });
 

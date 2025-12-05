@@ -1,38 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import {
-  formatDateWithTimezone,
-  getDateDaysAgo,
-  createDateRangeFromDaysAgo,
-} from '@/utils/date';
+import { format } from 'date-fns';
+import { getDateDaysAgo, createDateRangeFromDaysAgo } from '@/utils/date';
 
 describe('Date Utils', () => {
-  describe('formatDateWithTimezone', () => {
-    it('should format dates correctly in YYYY-MM-DD format', () => {
-      const testDate = new Date('2024-01-15T10:30:00.000Z');
-      const formattedDate = formatDateWithTimezone(testDate, 'yyyy-MM-dd');
-
-      expect(formattedDate).toMatch(/^\d{4}-\d{2}-\d{2}$/); // yyyy-MM-dd format
-    });
-
-    it('should handle timezone offset correctly', () => {
-      // Test with a known date
-      const testDate = new Date('2024-06-15T12:00:00.000Z');
-      const formattedDate = formatDateWithTimezone(testDate, 'yyyy-MM-dd');
-
-      expect(formattedDate).toBe('2024-06-15');
-    });
-
-    it('should handle dates with timezone offset correctly', () => {
-      const testDate = new Date('2024-06-15T12:00:00.000Z');
-      const formattedDate = formatDateWithTimezone(
-        testDate,
-        'yyyy-MM-dd HH:mm',
-      );
-
-      expect(formattedDate).toBe('2024-06-15 12:00');
-    });
-  });
-
   describe('getDateDaysAgo', () => {
     it('should return a date N days ago', () => {
       const today = new Date();
@@ -64,7 +34,7 @@ describe('Date Utils', () => {
       expect(dateRange.end).toMatch(/^\d{4}-\d{2}-\d{2}$/);
 
       // End date should be today
-      const today = formatDateWithTimezone(new Date(), 'yyyy-MM-dd');
+      const today = format(new Date(), 'yyyy-MM-dd');
       expect(dateRange.end).toBe(today);
 
       // Start date should be before end date
@@ -73,8 +43,8 @@ describe('Date Utils', () => {
 
     it('should create correct range for 1 day', () => {
       const dateRange = createDateRangeFromDaysAgo(1);
-      const yesterday = formatDateWithTimezone(getDateDaysAgo(1), 'yyyy-MM-dd');
-      const today = formatDateWithTimezone(new Date(), 'yyyy-MM-dd');
+      const yesterday = format(getDateDaysAgo(1), 'yyyy-MM-dd');
+      const today = format(new Date(), 'yyyy-MM-dd');
 
       expect(dateRange.start).toBe(yesterday);
       expect(dateRange.end).toBe(today);
