@@ -20,6 +20,7 @@
     </section>
     <UnnnicTemplatePreview
       v-else
+      class="template-preview-modal__preview"
       :template="template"
     />
   </UnnnicModalDialog>
@@ -65,7 +66,10 @@ const handleUpdateModelValue = (value: boolean) => {
 .template-preview-modal {
   :deep(.unnnic-modal-dialog__container__content) {
     background-color: $unnnic-color-background-lightest;
-    justify-items: center;
+  }
+
+  &__preview {
+    margin: 0 auto;
   }
 }
 </style>
