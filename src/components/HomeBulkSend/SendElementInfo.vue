@@ -72,12 +72,12 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { format } from 'date-fns';
 import type { BroadcastStatistic } from '@/types/broadcast';
 import { BroadcastStatus } from '@/constants/broadcasts';
+import { formatDatePreservingTimezone } from '@/utils/date';
 import TemplatePreviewModal from '@/components/modals/TemplatePreviewModal.vue';
 
-const DATE_FORMAT = '[MMM d, h:mm aa]';
+const DATE_FORMAT = 'MMM d, h:mm aa';
 
 const showTemplatePreviewModal = ref(false);
 
@@ -86,13 +86,13 @@ const props = defineProps<{
 }>();
 
 const startedOn = computed(() => {
-  return format(props.send.createdOn, DATE_FORMAT);
+  return formatDatePreservingTimezone(props.send.createdOn, DATE_FORMAT);
 });
 
 // TODO: check if ended on will be calculated by the backend
 const endedOn = computed(() => {
   if (props.send.status === BroadcastStatus.SENT) {
-    return format(props.send.modifiedOn, DATE_FORMAT);
+    return formatDatePreservingTimezone(props.send.modifiedOn, DATE_FORMAT);
   }
 
   return '-';

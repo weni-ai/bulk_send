@@ -10,8 +10,8 @@ export const createBroadcast = (
     name: 'Test Broadcast',
     status: BroadcastStatus.SENT,
     createdBy: 'tester',
-    createdOn: new Date('2024-01-01T00:00:00Z'),
-    modifiedOn: new Date('2024-01-02T00:00:00Z'),
+    createdOn: '2024-01-01T00:00:00.000Z',
+    modifiedOn: '2024-01-02T00:00:00.000Z',
     groups: [
       { uuid: 'uuid-1', name: 'Group 1' },
       { uuid: 'uuid-2', name: 'Group 2' },

@@ -68,8 +68,8 @@ describe('broadcasts store', () => {
     expect(store.broadcastsStatisticsCount).toBe(1);
     expect(store.broadcastsStatistics).toHaveLength(1);
     const item = store.broadcastsStatistics[0] as BroadcastStatistic;
-    expect(item.createdOn instanceof Date).toBe(true);
-    expect(item.modifiedOn instanceof Date).toBe(true);
+    expect(item.createdOn).toBe('2024-01-01T00:00:00Z');
+    expect(item.modifiedOn).toBe('2024-01-02T00:00:00Z');
     expect(store.loadingBroadcastsStatistics).toBe(false);
   });
 
