@@ -59,13 +59,7 @@ export const useBroadcastsStore = defineStore('broadcasts', {
           params,
         );
         this.broadcastsStatisticsCount = response.data.count;
-        this.broadcastsStatistics = response.data.results.map(
-          (result: BroadcastStatistic) => ({
-            ...result,
-            createdOn: new Date(result.createdOn),
-            modifiedOn: new Date(result.modifiedOn),
-          }),
-        );
+        this.broadcastsStatistics = response.data.results;
       } finally {
         this.loadingBroadcastsStatistics = false;
       }

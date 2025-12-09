@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.8.2] - 2025-12-02
+
+### Changed
+- refactor: update MMLite modal be dismissed by project
+
+## [1.8.1] - 2025-12-01
+
+### Added
+- feat: enhance MMLite disclaimer logic and update modal content
+
 ## [1.8.0] - 2025-11-24
 
 ### Changed

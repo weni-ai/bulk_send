@@ -63,8 +63,8 @@ const mountWrapper = (overrides: Partial<BroadcastStatistic> = {}) => {
   const send: BroadcastStatistic = createBroadcast({
     name: 'Test Send',
     status: BroadcastStatus.SENT,
-    createdOn: new Date('2024-01-01T12:00:00.000Z'),
-    modifiedOn: new Date('2024-01-01T13:00:00.000Z'),
+    createdOn: '2024-01-01T12:00:00.000Z',
+    modifiedOn: '2024-01-01T13:00:00.000Z',
     ...overrides,
   });
 

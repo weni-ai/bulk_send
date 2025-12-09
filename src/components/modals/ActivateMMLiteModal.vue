@@ -93,13 +93,16 @@
 
 <script setup lang="ts">
 import unnnic from '@weni/unnnic-system';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { initFacebookSdk } from '@/utils/plugins/fb';
 import { moduleStorage } from '@/utils/storage';
+import { getMMLiteDoNotRemindKey } from '@/utils/mmlite';
 import env from '@/utils/env';
-import { MMLITE_DO_NOT_REMIND_KEY } from '@/constants/storage';
+import { useProjectStore } from '@/stores/project';
 const { t } = useI18n();
+
+const projectStore = useProjectStore();
 
 defineProps<{
   modelValue: boolean;
@@ -107,6 +110,8 @@ defineProps<{
 
 const isMMLiteLoading = ref(false);
 const doNotRemind = ref(false);
+
+const projectUuid = computed(() => projectStore.project.uuid);
 
 const emit = defineEmits(['update:modelValue']);
 
@@ -116,7 +121,8 @@ const handleUpdateModelValue = (value: boolean) => {
 
 const handleSecondaryButtonClick = () => {
   if (doNotRemind.value) {
-    moduleStorage.setItem(MMLITE_DO_NOT_REMIND_KEY, 'true');
+    const storageKey = getMMLiteDoNotRemindKey(projectUuid.value);
+    moduleStorage.setItem(storageKey, 'true');
   }
   emit('update:modelValue', false);
 };

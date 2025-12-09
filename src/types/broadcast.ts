@@ -18,8 +18,8 @@ interface BroadcastStatistic {
   name: string;
   status: BroadcastStatus;
   createdBy: string;
-  createdOn: Date;
-  modifiedOn: Date;
+  createdOn: string;
+  modifiedOn: string;
   groups: GroupReference[];
   template: TemplateReference;
   statistics: Statistics;

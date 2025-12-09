@@ -5,19 +5,55 @@
 import { addMinutes, format } from 'date-fns';
 
 /**
- * Formats a date to desired format considering timezone offset
- * @param date - The date to format
- * @param formatStr  - The format to use for formatting (e.g. 'dd/MM/yyyy', 'MM/dd/yyyy', 'yyyy-MM-dd')
- * @returns Formatted date string in desired format
+ * Extracts the timezone offset in minutes from an ISO date string.
+ * @param dateString - ISO date string (e.g., '2024-01-01T09:00:00.000-03:00')
+ * @returns Offset in minutes (e.g., -180 for -03:00) or null if not found
  */
-export const formatDateWithTimezone = (
-  date: Date,
+const extractTimezoneOffset = (dateString: string): number | null => {
+  // Match timezone offset like +05:30, -03:00, or Z (UTC)
+  const offsetMatch = dateString.match(/([+-])(\d{2}):(\d{2})$|Z$/);
+
+  if (!offsetMatch) return null;
+
+  // Z means UTC (offset 0)
+  if (offsetMatch[0] === 'Z') return 0;
+
+  const sign = offsetMatch[1] === '+' ? 1 : -1;
+  const hours = parseInt(offsetMatch[2], 10);
+  const minutes = parseInt(offsetMatch[3], 10);
+
+  return sign * (hours * 60 + minutes);
+};
+
+/**
+ * Formats an ISO date string preserving the original timezone.
+ * This ensures dates are displayed as they were originally recorded,
+ * regardless of the user's browser timezone.
+ * @param dateString - ISO date string with timezone (e.g., '2024-01-01T09:00:00.000-03:00')
+ * @param formatStr - The format string (e.g. 'dd/MM/yyyy', 'MMM d, h:mm aa')
+ * @returns Formatted date string in the original timezone
+ */
+export const formatDatePreservingTimezone = (
+  dateString: string,
   formatStr: string,
 ): string => {
-  // TODO: check if this will work properly with API dates
-  const offset = date.getTimezoneOffset();
-  const tzDate = new Date(date.getTime() + offset * 60 * 1000);
-  return format(tzDate, formatStr);
+  const date = new Date(dateString);
+  const originalOffset = extractTimezoneOffset(dateString);
+
+  if (originalOffset === null) {
+    // No timezone info found, format as-is (browser timezone)
+    return format(date, formatStr);
+  }
+
+  // The Date object stores UTC time. To display in the original timezone,
+  // we adjust by adding the original offset and subtracting the local offset.
+  // This "tricks" format() into showing the correct wall-clock time.
+  const localOffset = -date.getTimezoneOffset(); // getTimezoneOffset returns inverted sign
+  const adjustedDate = new Date(
+    date.getTime() + (originalOffset - localOffset) * 60 * 1000,
+  );
+
+  return format(adjustedDate, formatStr);
 };
 
 /**
@@ -37,8 +73,8 @@ export const getDateDaysAgo = (daysAgo: number): Date => {
  * @returns Object with start and end date strings in yyyy-MM-dd format
  */
 export const createDateRangeFromDaysAgo = (daysAgo: number) => ({
-  start: formatDateWithTimezone(getDateDaysAgo(daysAgo), 'yyyy-MM-dd'),
-  end: formatDateWithTimezone(new Date(), 'yyyy-MM-dd'),
+  start: format(getDateDaysAgo(daysAgo), 'yyyy-MM-dd'),
+  end: format(new Date(), 'yyyy-MM-dd'),
 });
 
 export const getDateInUTC = (date: Date) => {
