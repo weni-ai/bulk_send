@@ -48,14 +48,14 @@
 </template>
 
 <script setup lang="ts">
+import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import MetricsTable from '@/components/MetricsTable.vue';
 import SendElementInfo from '@/components/HomeBulkSend/SendElementInfo.vue';
 import NewContactGroupModal from '@/components/modals/NewContactGroup.vue';
 import type { BroadcastStatistic } from '@/types/broadcast';
 import { BroadcastStatus, ContactGroupStatus } from '@/constants/broadcasts';
-import { formatDateWithTimezone } from '@/utils/date';
-import { computed, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { formatDatePreservingTimezone } from '@/utils/date';
 import { getEnumKeyByValue } from '@/utils/enum';
 import { Currency } from '@/constants/currency';
 import { toLocalizedFloat, toPercentage } from '@/utils/number';
@@ -73,7 +73,7 @@ const tagScheme = computed(() => {
 });
 
 const date = computed(() => {
-  return formatDateWithTimezone(props.send.createdOn, 'dd/MM/yyyy');
+  return formatDatePreservingTimezone(props.send.createdOn, 'dd/MM/yyyy');
 });
 
 const showNewGroupModal = ref(false);

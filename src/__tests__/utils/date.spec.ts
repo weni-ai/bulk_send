@@ -1,35 +1,54 @@
 import { describe, it, expect } from 'vitest';
+import { format } from 'date-fns';
 import {
-  formatDateWithTimezone,
+  formatDatePreservingTimezone,
   getDateDaysAgo,
   createDateRangeFromDaysAgo,
 } from '@/utils/date';
 
 describe('Date Utils', () => {
-  describe('formatDateWithTimezone', () => {
-    it('should format dates correctly in YYYY-MM-DD format', () => {
-      const testDate = new Date('2024-01-15T10:30:00.000Z');
-      const formattedDate = formatDateWithTimezone(testDate, 'yyyy-MM-dd');
-
-      expect(formattedDate).toMatch(/^\d{4}-\d{2}-\d{2}$/); // yyyy-MM-dd format
-    });
-
-    it('should handle timezone offset correctly', () => {
-      // Test with a known date
-      const testDate = new Date('2024-06-15T12:00:00.000Z');
-      const formattedDate = formatDateWithTimezone(testDate, 'yyyy-MM-dd');
-
-      expect(formattedDate).toBe('2024-06-15');
-    });
-
-    it('should handle dates with timezone offset correctly', () => {
-      const testDate = new Date('2024-06-15T12:00:00.000Z');
-      const formattedDate = formatDateWithTimezone(
-        testDate,
+  describe('formatDatePreservingTimezone', () => {
+    it('should preserve the original timezone from ISO string (-03:00)', () => {
+      // Date at 21:00 in -03:00 timezone
+      const dateString = '2024-01-01T21:00:00.000-03:00';
+      const formatted = formatDatePreservingTimezone(
+        dateString,
         'yyyy-MM-dd HH:mm',
       );
 
-      expect(formattedDate).toBe('2024-06-15 12:00');
+      // Should display as 21:00, not converted to browser timezone
+      expect(formatted).toBe('2024-01-01 21:00');
+    });
+
+    it('should preserve different timezone offsets (+05:30)', () => {
+      // Date at 14:30 in +05:30 timezone (India)
+      const dateString = '2024-06-15T14:30:00.000+05:30';
+      const formatted = formatDatePreservingTimezone(
+        dateString,
+        'yyyy-MM-dd HH:mm',
+      );
+
+      expect(formatted).toBe('2024-06-15 14:30');
+    });
+
+    it('should handle UTC dates (Z suffix)', () => {
+      const dateString = '2024-03-20T12:00:00.000Z';
+      const formatted = formatDatePreservingTimezone(
+        dateString,
+        'yyyy-MM-dd HH:mm',
+      );
+
+      expect(formatted).toBe('2024-03-20 12:00');
+    });
+
+    it('should format with different format strings', () => {
+      const dateString = '2024-01-01T09:00:00.000-03:00';
+      const formatted = formatDatePreservingTimezone(
+        dateString,
+        'MMM d, h:mm aa',
+      );
+
+      expect(formatted).toBe('Jan 1, 9:00 AM');
     });
   });
 
@@ -64,7 +83,7 @@ describe('Date Utils', () => {
       expect(dateRange.end).toMatch(/^\d{4}-\d{2}-\d{2}$/);
 
       // End date should be today
-      const today = formatDateWithTimezone(new Date(), 'yyyy-MM-dd');
+      const today = format(new Date(), 'yyyy-MM-dd');
       expect(dateRange.end).toBe(today);
 
       // Start date should be before end date
@@ -73,8 +92,8 @@ describe('Date Utils', () => {
 
     it('should create correct range for 1 day', () => {
       const dateRange = createDateRangeFromDaysAgo(1);
-      const yesterday = formatDateWithTimezone(getDateDaysAgo(1), 'yyyy-MM-dd');
-      const today = formatDateWithTimezone(new Date(), 'yyyy-MM-dd');
+      const yesterday = format(getDateDaysAgo(1), 'yyyy-MM-dd');
+      const today = format(new Date(), 'yyyy-MM-dd');
 
       expect(dateRange.start).toBe(yesterday);
       expect(dateRange.end).toBe(today);
