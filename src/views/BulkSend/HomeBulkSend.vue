@@ -73,7 +73,7 @@ const showMMLiteSection = computed(() => {
   const hasWhatsappWithoutMMLite = projectStore.project.channels.some(
     (channel: Channel) =>
       channel.channelType === 'WAC' &&
-      !channel.MMLite &&
+      !channel.mmLite &&
       channel.phoneNumber !== WENI_DEMO_NUMBER,
   );
 
