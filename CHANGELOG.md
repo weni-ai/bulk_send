@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.3] - 2025-12-09
+
+### Fixed
+- fix: mmlite attribute
+- fix: incorrect timezone handling
+- style: improve TemplatePreviewModal alignment
+
 ## [1.8.2] - 2025-12-02
 
 ### Changed
