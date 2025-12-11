@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.8.4] - 2025-12-11
+
+### Fixed
+- fix: update version in ActivateMMLiteModal to v2 and remove featureType
+
 ## [1.8.3] - 2025-12-09
 
 ### Fixed
