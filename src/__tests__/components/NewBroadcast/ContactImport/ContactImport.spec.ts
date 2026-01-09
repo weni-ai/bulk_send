@@ -16,8 +16,8 @@ const STUBS = {
       '<div data-test="collapse" :data-open="modelValue"><button data-test="toggle" @click="$emit(\'update:model-value\', !modelValue)">toggle</button><slot name="header" /><slot /></div>',
   },
   UnnnicDisclaimer: {
-    props: ['icon', 'text'],
-    template: '<div data-test="disclaimer">{{ text }}</div>',
+    props: ['description', 'type', 'title'],
+    template: '<div data-test="disclaimer">{{ description }}</div>',
   },
   ContactImportUpload: {
     name: 'ContactImportUpload',

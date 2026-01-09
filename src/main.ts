@@ -10,6 +10,7 @@ import i18n from './utils/plugins/i18n';
 import App from './App.vue';
 import router from './router';
 import env from './utils/env';
+import Unnnic from './utils/plugins/UnnnicSystem';
 import { moduleStorage } from './utils/storage';
 
 import { safeImport, isFederatedModule } from './utils/moduleFederation';
@@ -45,6 +46,7 @@ export default async function mountBulkSendApp({
   app.use(pinia);
   app.use(router);
   app.use(i18n);
+  app.use(Unnnic, { teleportTarget: `#${containerId}` });
 
   if (isFederatedModule && initialRoute) await router.replace(initialRoute);
 

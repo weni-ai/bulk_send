@@ -23,9 +23,9 @@
         @update:model-value="handleUpdateGroupName"
       />
       <UnnnicDisclaimer
-        icon="alert-circle-1-1"
-        scheme="neutral-dark"
-        :text="
+        title=""
+        type="neutral"
+        :description="
           $t('modals.new_contact_group.disclaimer', {
             contactCount: contactCount.toLocaleString(),
             category: categoryLabel,
