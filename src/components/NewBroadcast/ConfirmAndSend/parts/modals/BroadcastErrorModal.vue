@@ -25,8 +25,16 @@ defineProps<{
 </script>
 
 <style scoped lang="scss">
+.confirm-and-send__broadcast-errored-content {
+  @include unnnic-text-body-gt;
+  color: $unnnic-color-neutral-dark;
+  white-space: pre-wrap;
+}
+</style>
+
+<style lang="scss">
 .confirm-and-send__broadcast-errored-modal {
-  &:deep(.unnnic-modal-dialog__container__actions) {
+  .unnnic-modal-dialog__container__actions {
     display: flex;
     flex: 1;
 
@@ -34,11 +42,5 @@ defineProps<{
       flex: 1;
     }
   }
-}
-
-.confirm-and-send__broadcast-errored-content {
-  @include unnnic-text-body-gt;
-  color: $unnnic-color-neutral-dark;
-  white-space: pre-wrap;
 }
 </style>

@@ -116,10 +116,14 @@ const handleChannelUpdate = (newChannel: SelectOption[]) => {
     color: $unnnic-color-fg-emphasized;
     font: $unnnic-font-body;
   }
+}
+</style>
 
-  :deep(.unnnic-modal-dialog__container__content),
-  :deep(.unnnic-modal-dialog__container__body),
-  :deep(.unnnic-modal-dialog__container) {
+<style lang="scss">
+.channel-selection-modal {
+  .unnnic-modal-dialog__container__content,
+  .unnnic-modal-dialog__container__body,
+  .unnnic-modal-dialog__container {
     overflow: visible;
   }
 }
