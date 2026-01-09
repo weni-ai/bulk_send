@@ -24,7 +24,10 @@ const SELECTOR = {
 } as const;
 
 const stubs = {
-  UnnnicDisclaimer: { template: '<div data-test="disclaimer" />' },
+  UnnnicDisclaimer: {
+    props: ['description', 'type', 'title'],
+    template: '<div data-test="disclaimer">{{ description }}</div>',
+  },
   TemplateSelectionPreview: { template: '<div data-test="preview" />' },
   TemplateSelectionFilters: {
     props: ['search', 'channel'],

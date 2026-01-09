@@ -7,9 +7,9 @@
 
       <UnnnicDisclaimer
         class="template-selection__disclaimer"
-        icon="alert-circle-1-1"
-        scheme="neutral-dark"
-        :text="$t('new_broadcast.pages.select_template.disclaimer')"
+        type="neutral"
+        title=""
+        :description="$t('new_broadcast.pages.select_template.disclaimer')"
       />
 
       <section class="template-selection__content">

@@ -29,8 +29,8 @@ const STUBS = {
     template: '<select data-test="variable-select"></select>',
   },
   UnnnicDisclaimer: {
-    props: ['icon', 'text', 'scheme'],
-    template: '<div data-test="disclaimer">{{ text }}</div>',
+    props: ['description', 'type', 'title'],
+    template: '<div data-test="disclaimer">{{ description }}</div>',
   },
   TemplateSelectionPreview: {
     props: ['replaceVariables'],

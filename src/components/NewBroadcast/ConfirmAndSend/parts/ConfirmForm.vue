@@ -32,8 +32,9 @@
     </UnnnicFormElement>
     <UnnnicDisclaimer
       v-else
-      icon="alert-circle-1-1"
-      :text="$t('new_broadcast.pages.confirm_and_send.flow_disclaimer')"
+      type="neutral"
+      title=""
+      :description="$t('new_broadcast.pages.confirm_and_send.flow_disclaimer')"
     />
   </section>
 </template>

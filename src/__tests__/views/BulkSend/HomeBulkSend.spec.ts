@@ -43,6 +43,7 @@ describe('HomeBulkSend.vue', () => {
       template: '<div data-test="activate-mmlite-modal" />',
     },
     UnnnicDisclaimer: {
+      props: ['description', 'type', 'title'],
       emits: ['click'],
       template:
         '<div data-test="mmlite-disclaimer" @click="$emit(\'click\', $event)"><button data-test="show-more-button" @click="$emit(\'click\', $event)">Show more</button></div>',

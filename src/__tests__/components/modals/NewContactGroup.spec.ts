@@ -43,8 +43,8 @@ const stubs = {
       '<input class="unnnic-input-stub" :value="modelValue" @input="$emit(\'update:model-value\', $event.target.value)" />',
   },
   UnnnicDisclaimer: {
-    props: ['text', 'icon', 'scheme'],
-    template: '<div class="unnnic-disclaimer-stub">{{ text }}</div>',
+    props: ['description', 'type', 'title'],
+    template: '<div class="unnnic-disclaimer-stub">{{ description }}</div>',
   },
 };
 

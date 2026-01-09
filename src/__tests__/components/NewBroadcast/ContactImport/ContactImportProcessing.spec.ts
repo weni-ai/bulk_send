@@ -21,9 +21,9 @@ const STUBS = {
     template: '<div data-test="form" />',
   },
   UnnnicDisclaimer: {
-    props: ['icon', 'text'],
+    props: ['description', 'type', 'title'],
     template:
-      '<button data-test="disclaimer" @click="$emit(\'click\', $event)">{{ text }}</button>',
+      '<button data-test="disclaimer" @click="$emit(\'click\', $event)">{{ description }}</button>',
   },
 } as const;
 
