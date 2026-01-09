@@ -54,7 +54,10 @@ describe('components/modals/ActivateMMLiteModal', () => {
     },
   } as const;
 
-  const mountModal = (options?: { modelValue?: boolean; projectUuid?: string }) => {
+  const mountModal = (options?: {
+    modelValue?: boolean;
+    projectUuid?: string;
+  }) => {
     const pinia = createPinia();
     setActivePinia(pinia);
 
