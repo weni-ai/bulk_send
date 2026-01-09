@@ -164,14 +164,13 @@ const activateMMLite = () => {
         response_type: 'code',
         override_default_response_type: true,
         extras: {
-          featureType: 'whatsapp_business_app_onboarding',
           sessionInfoVersion: '3',
           features: [
             {
               name: 'marketing_messages_lite',
             },
           ],
-          version: 'v3',
+          version: 'v2',
         },
       },
     );
