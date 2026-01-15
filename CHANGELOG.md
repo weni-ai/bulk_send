@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.8.5] - 2026-01-15
+
+### Changed
+- chore: update unnnic with teleport components support
+
 ## [1.8.4] - 2025-12-11
 
 ### Fixed
