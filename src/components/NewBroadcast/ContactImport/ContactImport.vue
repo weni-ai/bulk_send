@@ -11,8 +11,9 @@
     <section class="contact-import__content">
       <UnnnicDisclaimer
         v-if="hasSelectedGroups"
-        icon="info"
-        :text="
+        type="neutral"
+        title=""
+        :description="
           $t('new_broadcast.pages.contact_import.selected_groups_disclaimer')
         "
       />

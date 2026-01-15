@@ -47,9 +47,9 @@
           <UnnnicDisclaimer
             v-if="hasMappedVariable"
             class="variables-selection__disclaimer"
-            icon="alert-circle-1-1"
-            scheme="neutral-dark"
-            :text="$t('new_broadcast.pages.select_variables.disclaimer')"
+            type="neutral"
+            title=""
+            :description="$t('new_broadcast.pages.select_variables.disclaimer')"
           />
         </section>
 

@@ -153,14 +153,9 @@ describe('contactImport store', () => {
     } as AxiosResponse;
     mocked.uploadContactImport.mockRejectedValue(axiosError);
 
-    expect.assertions(3);
-    try {
-      await store.uploadContactImport(file);
-    } catch (e: any) {
-      expect(e.message).toBe('Bad file');
-      expect(store.loadingContactImport).toBe(false);
-      expect(store.import).toBeUndefined();
-    }
+    await expect(store.uploadContactImport(file)).rejects.toThrow('Bad file');
+    expect(store.loadingContactImport).toBe(false);
+    expect(store.import).toBeUndefined();
   });
 
   it('uploadContactImport throws when API returns no data and unsets loading', async () => {
@@ -169,13 +164,10 @@ describe('contactImport store', () => {
     const mocked = ContactImportAPI as Mocked<typeof ContactImportAPI>;
     mocked.uploadContactImport.mockResolvedValue({ data: undefined } as any);
 
-    expect.assertions(2);
-    try {
-      await store.uploadContactImport(file);
-    } catch (e: any) {
-      expect(e.message).toBe('Error while uploading contact import');
-      expect(store.loadingContactImport).toBe(false);
-    }
+    await expect(store.uploadContactImport(file)).rejects.toThrow(
+      'Error while uploading contact import',
+    );
+    expect(store.loadingContactImport).toBe(false);
   });
 
   it('uploadContactImport rethrows non-AxiosError and unsets loading', async () => {
@@ -185,13 +177,8 @@ describe('contactImport store', () => {
     const genericError = new Error('generic');
     mocked.uploadContactImport.mockRejectedValue(genericError);
 
-    expect.assertions(2);
-    try {
-      await store.uploadContactImport(file);
-    } catch (e: any) {
-      expect(e).toBe(genericError);
-      expect(store.loadingContactImport).toBe(false);
-    }
+    await expect(store.uploadContactImport(file)).rejects.toBe(genericError);
+    expect(store.loadingContactImport).toBe(false);
   });
 
   it('confirmContactImport toggles loading flag and calls API', async () => {

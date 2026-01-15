@@ -33,8 +33,8 @@ const STUBS = {
     template: '<select data-test="flow-select"></select>',
   },
   UnnnicDisclaimer: {
-    props: ['icon', 'text'],
-    template: '<div data-test="flow-disclaimer">{{ text }}</div>',
+    props: ['description', 'type', 'title'],
+    template: '<div data-test="flow-disclaimer">{{ description }}</div>',
   },
   UnnnicCheckbox: {
     props: ['modelValue', 'size', 'textRight'],

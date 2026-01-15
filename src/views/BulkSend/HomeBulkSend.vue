@@ -29,9 +29,9 @@
         >
           <UnnnicDisclaimer
             class="home-bulk-send__mmlite-disclaimer"
-            icon="alert-circle-1-1"
-            scheme="neutral-dark"
-            :text="$t('home.mmlite_disclaimer')"
+            type="neutral"
+            title=""
+            :description="$t('home.mmlite_disclaimer')"
             @click="(event: Event) => handleMMLiteDisclaimerClick(event)"
           />
           <ActivateMMLiteModal

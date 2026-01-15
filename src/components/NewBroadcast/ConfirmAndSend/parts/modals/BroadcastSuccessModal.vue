@@ -26,17 +26,6 @@ defineProps<{
 </script>
 
 <style scoped lang="scss">
-.confirm-and-send__broadcast-success-modal {
-  &:deep(.unnnic-modal-dialog__container__actions) {
-    display: flex;
-    flex: 1;
-
-    button {
-      flex: 1;
-    }
-  }
-}
-
 .confirm-and-send__broadcast-success-content {
   @include unnnic-text-body-gt;
   color: $unnnic-color-neutral-dark;
@@ -44,6 +33,19 @@ defineProps<{
 
   :deep(.highlight) {
     font-weight: $unnnic-font-weight-bold;
+  }
+}
+</style>
+
+<style lang="scss">
+.confirm-and-send__broadcast-success-modal {
+  .unnnic-modal-dialog__container__actions {
+    display: flex;
+    flex: 1;
+
+    button {
+      flex: 1;
+    }
   }
 }
 </style>

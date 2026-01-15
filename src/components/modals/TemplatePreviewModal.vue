@@ -71,12 +71,16 @@ const handleUpdateModelValue = (value: boolean) => {
     height: 100%;
   }
 
-  :deep(.unnnic-modal-dialog__container__content) {
-    background-color: $unnnic-color-background-lightest;
-  }
-
   &__preview {
     margin: 0 auto;
+  }
+}
+</style>
+
+<style lang="scss">
+.template-preview-modal {
+  .unnnic-modal-dialog__container__content {
+    background-color: $unnnic-color-background-lightest;
   }
 }
 </style>

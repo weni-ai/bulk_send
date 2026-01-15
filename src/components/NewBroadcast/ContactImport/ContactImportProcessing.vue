@@ -10,8 +10,9 @@
       <UnnnicDisclaimer
         v-if="duplicatedContactsCount"
         class="contact-import-processing__duplicated-contacts-disclaimer"
-        icon="info"
-        :text="
+        type="neutral"
+        title=""
+        :description="
           $t(
             'new_broadcast.pages.contact_import.processing.duplicated_contacts_disclaimer',
             {
