@@ -3,7 +3,10 @@
     "title": "Enviar Templates",
     "description": "Envie mensagens de marketing em massa para seus contatos",
     "new_send": "Novo disparo",
-    "mmlite_disclaimer": "Atualize para a API MM Lite para ganhar velocidade e controle completo sobre a entrega das mensagens. <button class=\"highlight\">Ver mais</button>",
+    "mmlite_disclaimer": {
+      "text": "Atualize para a API MM Lite para ganhar velocidade e controle completo sobre a entrega das mensagens. {see_more_button}",
+      "see_more_button": "Ver mais"
+    },
     "general_performance": {
       "title": "Desempenho geral (últimos 30 dias)",
       "total_sent": {
@@ -240,7 +243,10 @@
           "name": "Prévia de modelo:",
           "missing": "Selecione um modelo para visualizar"
         },
-        "disclaimer": "Apenas modelos com status aprovado podem ser selecionados e enviados. Modelos pendentes devem aguardar a aprovação da Meta antes de serem utilizados. <a target=\"_blank\" href=\"https://developers.facebook.com/docs/whatsapp/message-templates/guidelines/#approval-process\" class=\"highlight\">Saiba mais na documentação da Meta</a>",
+        "disclaimer": {
+          "text": "Apenas modelos com status aprovado podem ser selecionados e enviados. Modelos pendentes devem aguardar a aprovação da Meta antes de serem utilizados. {meta_documentation_link}",
+          "meta_documentation_link": "Saiba mais na documentação da Meta"
+        },
         "actions": {
           "cancel": "Voltar"
         }
@@ -353,7 +359,10 @@
             }
           },
           "title": "Importação de arquivo",
-          "duplicated_contacts_disclaimer": "{count} contatos duplicados detectados. Apenas a primeira ocorrência de cada será mantida. <button class=\"highlight\">Download contacts list</button>"
+          "duplicated_contacts_disclaimer": {
+            "text": "{count} contatos duplicados detectados. Apenas a primeira ocorrência de cada será mantida. {download_button}",
+            "download_button": "Baixar lista de contatos"
+          }
         }
       },
       "actions": {
