@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.8.6] - 2026-01-23
+
+### Changed
+- fix: disclaimer actions
+
 ## [1.8.5] - 2026-01-15
 
 ### Changed
