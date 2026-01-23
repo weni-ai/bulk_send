@@ -2,7 +2,7 @@
 
 ## [1.8.6] - 2026-01-23
 
-### Changed
+### Fixed
 - fix: disclaimer actions
 
 ## [1.8.5] - 2026-01-15
