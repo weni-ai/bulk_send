@@ -31,9 +31,24 @@
             class="home-bulk-send__mmlite-disclaimer"
             type="neutral"
             title=""
-            :description="$t('home.mmlite_disclaimer')"
-            @click="(event: Event) => handleMMLiteDisclaimerClick(event)"
-          />
+          >
+            <template #description>
+              <I18nT
+                keypath="home.mmlite_disclaimer.text"
+                tag="p"
+              >
+                <template #see_more_button>
+                  <button
+                    class="highlight"
+                    @click="handleMMLiteDisclaimerClick"
+                  >
+                    {{ $t('home.mmlite_disclaimer.see_more_button') }}
+                  </button>
+                </template>
+              </I18nT>
+            </template>
+          </UnnnicDisclaimer>
+
           <ActivateMMLiteModal
             v-if="showActivateMMLiteModal"
             :modelValue="showActivateMMLiteModal"

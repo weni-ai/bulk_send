@@ -22,8 +22,11 @@ const STUBS = {
   },
   UnnnicDisclaimer: {
     props: ['description', 'type', 'title'],
-    template:
-      '<button data-test="disclaimer" @click="$emit(\'click\', $event)">{{ description }}</button>',
+    template: '<div data-test="disclaimer"><slot name="description" /></div>',
+  },
+  I18nT: {
+    props: ['keypath', 'tag'],
+    template: '<span><slot /><slot name="download_button" /></span>',
   },
 } as const;
 
@@ -33,6 +36,7 @@ const SELECTOR = {
   mapping: '[data-test="mapping"]',
   form: '[data-test="form"]',
   disclaimer: '[data-test="disclaimer"]',
+  downloadButton: '[data-test="download-button"]',
 } as const;
 
 const mountWrapper = () => {
@@ -86,7 +90,7 @@ describe('ContactImportProcessing.vue', () => {
     // mock window.open
     const openSpy = vi.spyOn(window, 'open').mockReturnValue(null as any);
 
-    await wrapper.find(SELECTOR.disclaimer).trigger('click');
+    await wrapper.find(SELECTOR.downloadButton).trigger('click');
     expect(openSpy).toHaveBeenCalledWith('https://example.com/d.csv', '_blank');
 
     openSpy.mockRestore();

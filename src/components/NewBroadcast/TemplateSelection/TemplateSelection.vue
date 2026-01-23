@@ -10,7 +10,28 @@
         type="neutral"
         title=""
         :description="$t('new_broadcast.pages.select_template.disclaimer')"
-      />
+      >
+        <template #description>
+          <I18nT
+            keypath="new_broadcast.pages.select_template.disclaimer.text"
+            tag="p"
+          >
+            <template #meta_documentation_link>
+              <a
+                href="https://developers.facebook.com/docs/whatsapp/message-templates/guidelines/#approval-process"
+                target="_blank"
+                class="highlight"
+              >
+                {{
+                  $t(
+                    'new_broadcast.pages.select_template.disclaimer.meta_documentation_link',
+                  )
+                }}
+              </a>
+            </template>
+          </I18nT>
+        </template>
+      </UnnnicDisclaimer>
 
       <section class="template-selection__content">
         <section class="template-selection__templates">
