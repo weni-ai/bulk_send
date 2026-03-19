@@ -3,7 +3,10 @@
     "title": "Enviar Plantillas",
     "description": "Envía mensajes de marketing masivos a tus contactos",
     "new_send": "Nuevo envío",
-    "mmlite_disclaimer": "Cambia a la API Lite de MM ahora para acelerar tu crecimiento y obtener control total sobre la entrega. <button class=\"highlight\">Ver más</button>",
+    "mmlite_disclaimer": {
+      "text": "Cambia a la API Lite de MM ahora para acelerar tu crecimiento y obtener control total sobre la entrega. {see_more_button}",
+      "see_more_button": "Ver más"
+    },
     "general_performance": {
       "title": "Rendimiento general (últimos 30 días)",
       "total_sent": {
@@ -240,7 +243,10 @@
           "name": "Vista previa de plantilla:",
           "missing": "Seleccione una plantilla para visualizar"
         },
-        "disclaimer": "Solo se pueden seleccionar y enviar plantillas con estado aprobado. Las plantillas pendientes deben esperar a la aprobación de Meta antes de usarse. <a target=\"_blank\" href=\"https://developers.facebook.com/docs/whatsapp/message-templates/guidelines/#approval-process\" class=\"highlight\">Más información en la documentación de Meta</a>",
+        "disclaimer": {
+          "text": "Solo se pueden seleccionar y enviar plantillas con estado aprobado. Las plantillas pendientes deben esperar a la aprobación de Meta antes de usarse. {meta_documentation_link}",
+          "meta_documentation_link": "Más información en la documentación de Meta"
+        },
         "actions": {
           "cancel": "Volver"
         }
@@ -353,7 +359,10 @@
             }
           },
           "title": "Procesamiento de archivo de importación",
-          "duplicated_contacts_disclaimer": "{count} contactos duplicados detectados. Solo se mantendrá la primera ocurrencia de cada uno. <button class=\"highlight\">Descargar lista de contactos</button>"
+          "duplicated_contacts_disclaimer": {
+            "text": "{count} contactos duplicados detectados. Solo se mantendrá la primera ocurrencia de cada uno. {download_button}",
+            "download_button": "Descargar lista de contactos"
+          }
         }
       },
       "actions": {

@@ -12,16 +12,31 @@
         class="contact-import-processing__duplicated-contacts-disclaimer"
         type="neutral"
         title=""
-        :description="
-          $t(
-            'new_broadcast.pages.contact_import.processing.duplicated_contacts_disclaimer',
-            {
-              count: duplicatedContactsCount,
-            },
-          )
-        "
-        @click="(event: Event) => downloadDuplicates(event)"
-      />
+      >
+        <template #description>
+          <I18nT
+            keypath="new_broadcast.pages.contact_import.processing.duplicated_contacts_disclaimer.text"
+            tag="p"
+          >
+            <template #count>
+              {{ duplicatedContactsCount }}
+            </template>
+            <template #download_button>
+              <button
+                class="highlight"
+                data-test="download-button"
+                @click="downloadDuplicates"
+              >
+                {{
+                  $t(
+                    'new_broadcast.pages.contact_import.processing.duplicated_contacts_disclaimer.download_button',
+                  )
+                }}
+              </button>
+            </template>
+          </I18nT>
+        </template>
+      </UnnnicDisclaimer>
     </header>
     <section class="contact-import-processing__content">
       <ContactImportProcessingMapping />
@@ -107,7 +122,6 @@ const downloadDuplicates = (event: Event) => {
   &__duplicated-contacts-disclaimer {
     display: flex;
     flex-direction: row;
-    padding: $unnnic-spacing-xs;
 
     :deep(.unnnic-disclaimer__text) {
       @include unnnic-text-body-md;

@@ -3,7 +3,10 @@
     "title": "Send Templates",
     "description": "Send bulk marketing messages to your contacts",
     "new_send": "New Send",
-    "mmlite_disclaimer": "Switch to MM Lite API now to accelerate your growth and gain full delivery control. <button class=\"highlight\">See more</button>",
+    "mmlite_disclaimer": {
+      "text": "Switch to MM Lite API now to accelerate your growth and gain full delivery control. {see_more_button}",
+      "see_more_button": "See more"
+    },
     "general_performance": {
       "title": "General Performance (Last 30 days)",
       "total_sent": {
@@ -240,7 +243,10 @@
           "name": "Template preview:",
           "missing": "Choose a template to preview"
         },
-        "disclaimer": "Only templates with an approved status can be selected and sent. Pending templates must wait for Meta’s approval before they can be used. <a target=\"_blank\" href=\"https://developers.facebook.com/docs/whatsapp/message-templates/guidelines/#approval-process\" class=\"highlight\">Learn more in Meta’s documentation</a>",
+        "disclaimer": {
+          "text": "Only templates with an approved status can be selected and sent. Pending templates must wait for Meta’s approval before they can be used. {meta_documentation_link}",
+          "meta_documentation_link": "Learn more in Meta’s documentation"
+        },
         "actions": {
           "cancel": "Back"
         }
@@ -353,7 +359,10 @@
             }
           },
           "title": "Import file processing",
-          "duplicated_contacts_disclaimer": "{count} duplicate contacts detected. Only the first occurence of each will be kept. <button class=\"highlight\">Download contacts list</button>"
+          "duplicated_contacts_disclaimer": {
+            "text": "{count} duplicate contacts detected. Only the first occurence of each will be kept. {download_button}",
+            "download_button": "Download contacts list"
+          }
         }
       },
       "actions": {
