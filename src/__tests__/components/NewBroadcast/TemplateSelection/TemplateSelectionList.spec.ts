@@ -132,11 +132,11 @@ describe('TemplateSelectionList.vue', () => {
   it('renders status cell with correct icon scheme and label', () => {
     const { wrapper } = mountWrapper();
     const icons = wrapper.findAll(SELECTOR.icon);
-    // First row APPROVED => check_circle / aux-green-500
+    // First row APPROVED => check_circle / fg-success
     expect(icons[0].attributes('data-icon')).toBe('check_circle');
-    expect(icons[0].attributes('data-scheme')).toBe('aux-green-500');
-    // Second row PENDING => change_circle / aux-yellow-500
+    expect(icons[0].attributes('data-scheme')).toBe('fg-success');
+    // Second row PENDING => change_circle / fg-warning
     expect(icons[1].attributes('data-icon')).toBe('change_circle');
-    expect(icons[1].attributes('data-scheme')).toBe('aux-yellow-500');
+    expect(icons[1].attributes('data-scheme')).toBe('fg-warning');
   });
 });
