@@ -230,10 +230,10 @@ const tooltipSide = (cellIndex: number) => {
 
   &__tooltip {
     display: flex;
-    align-self: end;
     justify-content: center;
     margin-left: auto;
     cursor: default;
+    align-items: flex-end;
 
     &--near {
       margin-left: unset;

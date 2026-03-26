@@ -166,11 +166,11 @@ const itemStatusIcon = (status: TemplateStatus) => {
 
 const itemStatusScheme = (status: TemplateStatus) => {
   if (status === TemplateStatus.APPROVED) {
-    return 'aux-green-500';
+    return 'fg-success';
   } else if (status === TemplateStatus.PENDING) {
-    return 'aux-yellow-500';
+    return 'fg-warning';
   } else {
-    return 'aux-red-500';
+    return 'fg-critical';
   }
 };
 
