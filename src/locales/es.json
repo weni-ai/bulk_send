@@ -1,72 +1,72 @@
 {
   "home": {
-    "title": "Enviar Plantillas",
-    "description": "Envía mensajes de marketing masivos a tus contactos",
-    "new_send": "Nuevo envío",
+    "title": "Envío de templates",
+    "description": "Envía mensajes de marketing en masa a tus contactos",
+    "new_send": "Nuevo mensaje",
     "mmlite_disclaimer": {
-      "text": "Cambia a la API Lite de MM ahora para acelerar tu crecimiento y obtener control total sobre la entrega. {see_more_button}",
-      "see_more_button": "Ver más"
+      "text": "Actualiza a la API MM Lite para obtener más velocidad y control total sobre la entrega de mensajes. {see_more_button}",
+      "see_more_button": "Aprende más"
     },
     "general_performance": {
-      "title": "Rendimiento general (últimos 30 días)",
+      "title": "Desempeño general (últimos 30 días)",
       "total_sent": {
         "label": "Total enviado",
-        "hint": "Total de mensajes enviados a través de disparos en masa en el período seleccionado."
+        "hint": "Total de mensajes enviados en masa en el periodo seleccionado."
       },
       "estimated_total_cost": {
         "label": "Costo total estimado",
-        "hint": "Costo estimado basado en el número de mensajes enviados. El precio final puede variar según la facturación de Meta."
+        "hint": "Costo estimado basado en el número de mensajes enviados. El precio final puede variar según la factura de Meta."
       },
       "success_rate": {
         "label": "Tasa de éxito",
-        "hint": "Porcentaje de contactos que recibieron mensajes con éxito, calculado a partir del total de contactos únicos objetivo en todas las campañas."
+        "hint": "Porcentaje de contactos que recibieron mensajes con éxito, calculado a partir del total de contactos únicos en todas las campañas."
       }
     },
     "no_recent_sends": {
-      "title": "Comienza a enviar mensajes personalizados a tus contactos a gran escala",
-      "subtitle": "Toma menos de 2 minutos para configurar tu primer envío.",
+      "title": "Comienza a comunicarte con tus contactos a gran escala",
+      "subtitle": "Configurar el primer mensaje tarda menos de 2 minutos",
       "button": "Comenzar ahora"
     },
     "recent_sends": {
-      "title": "Envíos recientes",
-      "search_placeholder": "Buscar envío",
+      "title": "Mensajes recientes",
+      "search_placeholder": "Buscar mensaje",
       "date_placeholder": "Últimos 30 días",
       "metrics": {
         "sent": {
-          "label": "Enviadas",
-          "hint": "Número de envíos procesados por la plataforma Weni y encaminados a Meta.",
-          "category": "Enviadas"
+          "label": "Enviados",
+          "hint": "Número de mensajes procesados por VTEX CX Platform y enviados a Meta",
+          "category": "Enviados"
         },
         "delivered": {
-          "label": "Entregadas",
-          "hint": "Mensajes confirmados como entregados al dispositivo del usuario. Nota: no todos los usuarios permiten compartir el estado de entrega. Por razones de privacidad, esos casos no se incluyen.",
-          "category": "Entregadas"
+          "label": "Entregados",
+          "hint": "Mensajes confirmados como entregados en el dispositivo del usuario. Observación: no todos los usuarios permiten compartir el status de entrega. Por razones de privacidad, estos casos no se incluyen en el cálculo.",
+          "category": "Entregados"
         },
         "estimated_cost": {
           "label": "Costo estimado",
-          "hint": "Valor estimado basado en un costo unitario de {currency} {cost} por plantilla. Nota: este cálculo no incluye diferentes modelos de precios, variaciones de cambio o impuestos."
+          "hint": "Valor estimado considerando el costo unitario de {currency} {cost} por plantilla. Observación: este cálculo no considera diferentes precios, variaciones de moneda ni impuestos."
         },
         "read": {
-          "label": "Leídas",
-          "hint": "Número de mensajes confirmados como leídos por el destinatario. Nota: no todos los usuarios permiten compartir el estado de lectura. Por razones de privacidad, esos casos no se incluyen.",
-          "category": "Leídas"
+          "label": "Leídos",
+          "hint": "Número de mensajes confirmados como leídos por el destinatario. Observación: no todos los usuarios permiten compartir el status de lectura. Por razones de privacidad estos casos no se incluyen en el cálculo.",
+          "category": "Leídos"
         },
         "clicked": {
-          "label": "Clicadas",
-          "hint": "Mensajes que fueron aceptados y enviados por Meta.",
-          "category": "Clicadas"
+          "label": "Clics",
+          "hint": "Mensajes aceptados y enviados por Meta.",
+          "category": "Clics"
         },
         "failed": {
-          "label": "Falladas",
-          "hint": "Envíos fallidos, que pueden ocurrir tanto durante el procesamiento en Weni como durante la entrega por Meta. Diversos factores pueden causar fallas (ej., número inválido, cuenta de WhatsApp inactiva, inestabilidad temporal).",
-          "category": "Falladas"
+          "label": "Fallas",
+          "hint": "Pueden ocurrir fallas en los mensajes durante el procesamiento por VTEX CX Platform o la entrega por Meta. Diversos factores pueden causar estas fallas (ejemplo: número no válido, usuario sin cuenta activa de WhatsApp, inestabilidad temporal).",
+          "category": "Fallidos"
         },
         "actions": {
           "add_to_a_new_group": "Agregar a un nuevo grupo",
           "view_template": "Ver plantilla"
         },
         "processed": {
-          "label": "Procesadas hasta ahora",
+          "label": "Procesados hasta ahora",
           "value": "{processed} de {total}"
         }
       },
@@ -78,74 +78,74 @@
         "groups": "Grupo de contactos:",
         "sent_by": "Enviado por:"
       },
-      "pagination_text": "{currentPageOffset} de {total} envíos",
+      "pagination_text": "{currentPageOffset} de {total} mensajes",
       "status": {
-        "QUEUED": "En progreso",
+        "QUEUED": "En curso",
         "SENT": "Finalizado",
-        "FAILED": "Fallado"
+        "FAILED": "Fallidos"
       },
       "refresh": "Limpiar filtros",
-      "empty_text": "No encontramos envíos que coincidan con tu búsqueda"
+      "empty_text": "No se encontraron mensajes que coincidan con tu búsqueda"
     }
   },
   "modals": {
     "new_contact_group": {
-      "disclaimer": "Este grupo contendrá {contactCount} contactos de los resultados {category} de {broadcastName}.",
+      "disclaimer": "Este grupo incluirá {contactCount} contactos de los resultados {category} de {broadcastName}.",
       "title": "Nuevo grupo de contactos",
       "name": "Nombre del grupo",
       "buttons": {
         "primary": "Crear grupo",
-        "secondary": "Cancel"
+        "secondary": "Cancelar"
       },
       "categories": {
-        "processed": "Procesadas",
-        "sent": "Enviadas",
-        "delivered": "Entregadas",
-        "read": "Leídas",
-        "failed": "Falladas"
+        "processed": "Procesados",
+        "sent": "Enviados",
+        "delivered": "Entregados",
+        "read": "Leídos",
+        "failed": "Fallidos"
       },
       "success_alert": "Grupo creado con éxito",
-      "error_alert": "Error al crear el grupo, por favor intente nuevamente"
+      "error_alert": "Error al crear grupo. Vuelve a intentarlo."
     },
     "activate_mmlite": {
       "buttons": {
         "primary": "Actualizar a MM Lite API",
         "secondary": "Tal vez más tarde"
       },
-      "title": "Actualizar a API MM Lite",
-      "description": "La nueva MM Lite API es la evolución de la Cloud API, creada por Meta para entregar más mensajes entregados, con menos esfuerzo de integración.",
+      "title": "Actualizar a MM Lite API",
+      "description": "La nueva MM Lite API es la evolución de Cloud API. Fue creada por Meta para entregar más mensajes con menos esfuerzo de integración.",
       "why_subtitle": "¿Por qué actualizar ahora?",
       "more_messages_label": "✅ Más entregas, menos trabajo",
-      "engagement_label": "💬 Envíos optimizados automáticamente",
+      "engagement_label": "💬 Mensajes en masa optimizados automáticamente",
       "seamless_label": "🔄 Transición simple y segura",
       "more_messages_description": {
-        "text": "Con la MM Lite API, las entregas {0} en comparación con la Cloud API, priorizando mensajes relevantes, esperados y altamente engajadores.",
-        "bold_text": "aumentaron en hasta +9%"
+        "text": "Con MM Lite API las entregas {0} en comparación con Cloud API. Esto prioriza mensajes relevantes, esperados y con alto engagement.",
+        "bold_text": "aumentaron hasta un +9%"
       },
-      "engagement_description": "Mensajes con buenas tasas de apertura y clics tienen prioridad, alcanzando aún más personas sin que necesites cambiar tu estrategia.",
+      "engagement_description": "Los mensajes con buenas tasas de apertura y clics tienen prioridad, alcanzando a más personas sin necesidad de cambiar tu estrategia.",
       "seamless_description": {
         "text": "Mantén tus números y plantillas actuales. La migración es automática, no requiere esfuerzo técnico y {0}.",
-        "bold_text": "el costo permanece el mismo"
+        "bold_text": "el costo permanece igual"
       },
       "footer": {
         "text": "ℹ️ Información proporcionada por Meta. {0}.",
-        "link": "Más información en la documentación oficial"
+        "link": "Consulta más información en la documentación oficial"
       },
-      "do_not_remind": "No volver a recordarme",
-      "success_alert": "Solicitud de activación de MM Lite API realizada con éxito",
+      "do_not_remind": "No recordármelo de nuevo",
+      "success_alert": "Solicitud de activación de la API MM Lite completada con éxito",
       "error_alert": "Error al solicitar la activación de MM Lite API"
     },
     "contact_import_upload_instructions": {
       "title": "Recomendaciones de formato de archivo",
       "subtitle": "Instrucciones",
       "list": {
-        "item_1": "Guarde su archivo en formato XLSX, XLS o CSV",
-        "item_2": "Incluya una <b class=\"bold\">fila de encabezado</b> con los nombres de columna soportados (ver abajo)",
-        "item_3": "Su archivo puede contener hasta <b class=\"bold\">300,000 filas</b>",
-        "item_4": "Las celdas en blanco serán ignoradas. Para limpiar un valor, use <b class=\"bold\">--</b>",
-        "item_5": "Las columnas adicionales serán ignoradas a menos que estén prefijadas con <b class=\"bold\">Field:</b>"
+        "item_1": "Guarda tu archivo en formato XLSX, XLS o CSV.",
+        "item_2": "Incluye una <b class=\"bold\">fila de encabezado</b> con nombres de columnas compatibles (consulta a continuación).",
+        "item_3": "Tu archivo puede contener hasta <b class=\"bold\">300,000 filas</b>.",
+        "item_4": "Las celdas en blanco serán ignoradas. Para limpiar un valor, usa <b class=\"bold\">--</b>.",
+        "item_5": "Se ignorarán columnas adicionales a menos que tengan el prefijo <b class=\"bold\">Campo:</b>."
       },
-      "subtitle_2": "Campos soportados:",
+      "subtitle_2": "Campos compatibles:",
       "table": {
         "header_1": "Encabezado de columna",
         "header_2": "Descripción",
@@ -153,31 +153,31 @@
         "header_description": {
           "name": "Nombre completo del contacto",
           "urn_tel": "Número de teléfono con código de país",
-          "urn_whatsapp": "Número de WhatsApp (con código de país)",
-          "field_team": "Campo personalizado (ej. nombre del equipo)"
+          "urn_whatsapp": "Número de WhatsApp con código de país",
+          "field_team": "Campo personalizado (ej.: equipo)"
         },
         "header_example": {
-          "name": "Jane Doe",
+          "name": "María Cifuentes",
           "field_team": "Gerentes"
         },
         "header_label": {
           "name": "Nombre",
           "urn_tel": "URN:tel",
           "urn_whatsapp": "URN:whatsapp",
-          "field_team": "Field:Equipo"
+          "field_team": "Campo:Equipo"
         }
       },
       "footer": {
-        "title": "Puedes {0} de plantilla para ayudarte a comenzar",
-        "title_highlight": "descargar un ejemplo"
+        "title": "Puedes {0} para comenzar",
+        "title_highlight": "descargar una plantilla de ejemplo"
       }
     },
     "template_preview": {
-      "title": "Vista previa de plantilla"
+      "title": "Vista previa de la plantilla"
     },
     "channel_selection": {
       "title": "Tu proyecto tiene más de un número de WhatsApp",
-      "description": "Selecciona el número que será usado como remitente para esta plantilla",
+      "description": "Selecciona el número que se usará como remitente para esta plantilla",
       "buttons": {
         "primary": "Continuar",
         "secondary": "Cancelar"
@@ -185,150 +185,150 @@
     }
   },
   "new_broadcast": {
-    "title": "Nuevo envío",
+    "title": "Nuevo mensaje",
     "pages": {
       "select_groups": {
         "title": "Contactos",
-        "select_contact_groups": "Seleccionar grupos de contactos",
+        "select_contact_groups": "Seleccionar grupos de contacto",
         "sort_by": {
           "label": "Ordenar por nombre:",
           "options": {
-            "asc": "Asc",
-            "desc": "Desc"
+            "asc": "A–Z",
+            "desc": "Z–A"
           }
         },
         "search_placeholder": "Buscar grupos",
         "group_count": "{count} contactos | {count} contacto | {count} contactos",
         "overview": {
-          "cost_value": "{currency}{cost} (Unidad: {currency}{templateMultiplier} por mensaje entregado)",
+          "cost_value": "{currency}{cost} (costo por mensaje: {currency}{templateMultiplier} por mensaje entregado)",
           "cost_label": "Costo estimado:",
           "total_label": "Total:",
           "total_value": "{total} contactos seleccionados | {total} contacto seleccionado | {total} contactos seleccionados",
           "title": "{count} grupos seleccionados | {count} grupo seleccionado | {count} grupos seleccionados",
-          "removal_tooltip": "Eliminar grupos seleccionados"
+          "removal_tooltip": "Remover grupos seleccionados"
         },
-        "no_groups": "No encontramos ningún grupo que coincida con tu búsqueda",
+        "no_groups": "No se encontraron grupos que coincidan con tu búsqueda",
         "pagination_text": "{currentPageOffset} de {total} grupos",
         "clear_filters": "Limpiar filtros"
       },
       "select_template": {
         "title": "Plantillas",
-        "page_title": "Seleccionar mensaje de plantilla",
+        "page_title": "Seleccionar plantilla de mensaje",
         "filters": {
           "new_tamplate": "Nueva plantilla",
           "search_placeholder": "Buscar plantilla",
-          "channel_not_found": "No se pudo redirigir a la creación de plantilla, faltaba el UUID del canal"
+          "channel_not_found": "No se pudo redirigir para crear plantilla. Falta el UUID del canal."
         },
         "table": {
           "name": "Nombre",
           "date": "Fecha",
           "content": "Contenido",
           "language": "Idioma",
-          "status": "Estado",
+          "status": "Status",
           "statuses": {
-            "APPROVED": "Aprobado",
-            "IN_APPEAL": "En apelación",
+            "APPROVED": "Aprobada",
+            "IN_APPEAL": "En revisión",
             "PENDING": "Pendiente",
-            "REJECTED": "Rechazado",
-            "PENDING_DELETION": "Pendiente de eliminación",
-            "DELETED": "Eliminado",
-            "DISABLED": "Desactivado",
-            "LOCKED": "Bloqueado",
-            "UNSUPPORTED_LANGUAGE": "Idioma no soportado",
-            "PAUSED": "Pausado"
+            "REJECTED": "Rechazada por",
+            "PENDING_DELETION": "Eliminación pendiente",
+            "DELETED": "Eliminada",
+            "DISABLED": "Desactivada",
+            "LOCKED": "Bloqueada",
+            "UNSUPPORTED_LANGUAGE": "Idioma no compatible",
+            "PAUSED": "Pausada"
           }
         },
         "preview": {
-          "title": "Vista previa de plantilla",
-          "name": "Vista previa de plantilla:",
-          "missing": "Seleccione una plantilla para visualizar"
+          "title": "Vista previa de la plantilla",
+          "name": "Vista previa de la plantilla:",
+          "missing": "Selecciona una plantilla para previsualizar"
         },
         "disclaimer": {
-          "text": "Solo se pueden seleccionar y enviar plantillas con estado aprobado. Las plantillas pendientes deben esperar a la aprobación de Meta antes de usarse. {meta_documentation_link}",
-          "meta_documentation_link": "Más información en la documentación de Meta"
+          "text": "Solo pueden seleccionarse y enviarse plantillas con status aprobado. Las plantillas pendientes deben esperar la aprobación de Meta antes de ser utilizadas. {meta_documentation_link}",
+          "meta_documentation_link": "Consulta más información en la documentación de Meta"
         },
         "actions": {
-          "cancel": "Volver"
+          "cancel": "Atrás"
         }
       },
       "select_variables": {
         "title": "Variables",
         "page_title": "Mapeo de variables",
         "variable_label": "Variable {'{{'}{index}{'}}'}",
-        "variable_placeholder": "Selecciona el campo que coincide con esta variable",
-        "disclaimer": "Revisa si cada campo está correctamente mapeado, este es el aspecto que tendrá tu mensaje para cada contacto.",
+        "variable_placeholder": "Selecciona el campo que corresponde a esta variable",
+        "disclaimer": "Asegúrate de que cada campo esté mapeado correctamente. Así es como los contactos verán tu mensaje.",
         "actions": {
-          "cancel": "Volver"
+          "cancel": "Atrás"
         },
-        "header_media_title": "Carga de encabezado",
+        "header_media_title": "Cargar encabezado",
         "header_media_button": {
           "IMAGE": "Agregar imagen",
           "VIDEO": "Agregar video",
           "DOCUMENT": "Agregar documento"
         },
-        "header_media_upload_error": "Error al subir, por favor intenta nuevamente",
+        "header_media_upload_error": "Error al cargar. Inténtalo de nuevo.",
         "name_field_label": "Nombre"
       },
       "confirm_and_send": {
-        "title": "Revisar & enviar",
+        "title": "Revisar y enviar",
         "flow_placeholder": "Buscar",
-        "broadcast_name_placeholder": "Nombre del envío",
+        "broadcast_name_placeholder": "Nombre del mensaje",
         "flow_message": "Este flujo se activará si un contacto responde a este mensaje",
-        "flow_label": "Selecciona un flujo para activar cuando un contacto responde",
+        "flow_label": "Selecciona el flujo que se activará cuando un contacto responda",
         "broadcast_name_label": "Nombre",
         "details": {
           "title": "Detalles",
           "groups": "Grupos seleccionados: {0}",
           "contacts": "Contactos seleccionados: {0}",
           "cost": "Costo estimado: {0} ({1})",
-          "unit_cost": "Unidad: {unitCost} por mensaje entregado",
-          "channel": "Número de remitente: {0}"
+          "unit_cost": "Costo por mensaje: {unitCost} por mensaje entregado",
+          "channel": "Número del remitente: {0}"
         },
         "variables": {
           "title": "Mapeo de variables"
         },
         "reviewed_label": "He revisado los contactos y el contenido. Estoy listo para enviar.",
-        "flow_disclaimer": "Asegúrate de que tu equipo de agentes esté listo para manejar respuestas a este contenido.",
+        "flow_disclaimer": "Asegúrate de que tu equipo de agentes esté preparado para responder a este contenido",
         "contact_import_pending": {
-          "title": "Importación de contactos en progreso ⏳",
-          "content": "Tu lista de contactos está siendo importada.\n\nUna vez que esté lista, podrás completar el envío.\nMientras tanto, puedes revisar los detalles de tu campaña."
+          "title": "Importando contactos",
+          "content": "Tu lista de contactos se está importando.\n\nPodrás completar el envío del mensaje una vez que la importación haya terminado.\nRevisa los detalles de tu campaña mientras esperas."
         },
-        "unknown_error": "Ocurrió un error desconocido al intentar crear el envío, por favor actualiza la página",
-        "variables_not_found": "variables incompletas",
-        "template_not_found": "plantilla seleccionada faltante",
-        "name_not_found": "nombre del envío faltante",
-        "groups_not_found": "grupos o importación faltantes",
+        "unknown_error": "Ocurrió un error desconocido al intentar enviar el mensaje. Actualiza la página.",
+        "variables_not_found": "Completa las variables",
+        "template_not_found": "Agrega la plantilla",
+        "name_not_found": "Agrega un nombre al mensaje",
+        "groups_not_found": "Agrega un grupo o importa contactos",
         "broadcast_errored": {
-          "title": "❌ Algo salió mal",
-          "primary_button": "Volver",
-          "description": "No pudimos iniciar tu envío debido a {error}.\nNo se han entregado mensajes.\n\nPuedes volver a la pantalla de revisión para verificar tu configuración y probar nuevamente."
+          "title": "Se produjo un error",
+          "primary_button": "Atrás",
+          "description": "No se pudo iniciar el envío debido a {error}.\nNo se entregaron mensajes.\n\nPuedes volver a la pantalla de revisión para verificar tus configuraciones e intentarlo nuevamente."
         },
         "broadcast_success": {
-          "title": "✅ Envío iniciado con éxito ",
-          "content": "Tu mensaje está siendo entregado a {contact_count} contactos, <span class=\"highlight\">este proceso puede tomar unos minutos para completarse</span>.\n\nEl progreso y los resultados aparecerán en tu pantalla de inicio a medida que se entreguen los mensajes.",
-          "primary_button": "Volver a la home"
+          "title": "Envío iniciado con éxito ",
+          "content": "Tu mensaje se está enviando a {contact_count} contactos. <span class=\"highlight\">Esto puede tardar unos minutos en completarse</span>.\n\nEl progreso y los resultados se mostrarán en tu pantalla de inicio a medida que se entreguen los mensajes.",
+          "primary_button": "Volver a la página de inicio"
         },
         "actions": {
-          "cancel": "Back"
+          "cancel": "Atrás"
         },
-        "flow_not_found": "Es necesario seleccionar un flujo"
+        "flow_not_found": "Selecciona un flujo"
       },
       "contact_import": {
         "title": "Importar contactos",
-        "selected_groups_disclaimer": "Ya has seleccionado un grupo de contactos, por lo tanto no puedes importar contactos.",
+        "selected_groups_disclaimer": "Ya se seleccionó un grupo de contactos. No puedes importar nuevos contactos.",
         "upload_instructions": {
-          "text": "{0} – para aprender cómo preparar su archivo",
+          "text": "{0} para preparar tu archivo",
           "button": "Ver instrucciones"
         },
         "upload_area": {
           "title": {
-            "text": "Arrastre y suelte o {0} para subir",
-            "highlight": "Elegir archivo"
+            "text": "Arrastra y suelta o {0} para cargar",
+            "highlight": "selecciona un archivo"
           },
-          "subtitle": "Importe su lista de contactos usando un archivo Excel (.xls, .xlsx) o CSV (.csv).",
-          "unknown_error_alert": "Error desconocido al subir el archivo",
-          "unsupported_format_alert": "Formato de archivo no soportado",
-          "exceeded_the_maximum_file_size_limit_alert": "Archivo demasiado grande"
+          "subtitle": "Importa tu lista de contactos con un archivo Excel (XLS, XLSX) o CSV.",
+          "unknown_error_alert": "Error desconocido al cargar el archivo",
+          "unsupported_format_alert": "Formato de archivo no compatible",
+          "exceeded_the_maximum_file_size_limit_alert": "El archivo superó el límite de tamaño"
         },
         "processing": {
           "form": {
@@ -337,13 +337,13 @@
               "add": "Agregar a un grupo existente",
               "import_without_adding": "Importar sin agregar a ningún grupo"
             },
-            "title": "Seleccionar cómo se deben manejar los contactos importados",
+            "title": "Selecciona cómo gestionar los contactos importados",
             "group_name": {
               "placeholder": "Nombre del grupo",
-              "label": "Nombre su nuevo grupo"
+              "label": "Asigna un nombre a tu nuevo grupo"
             },
             "group_select": {
-              "label": "Elegir su grupo",
+              "label": "Selecciona un grupo",
               "placeholder": "Seleccionar o buscar"
             }
           },
@@ -358,9 +358,9 @@
               "DATE": "Fecha"
             }
           },
-          "title": "Procesamiento de archivo de importación",
+          "title": "Importación de archivo",
           "duplicated_contacts_disclaimer": {
-            "text": "{count} contactos duplicados detectados. Solo se mantendrá la primera ocurrencia de cada uno. {download_button}",
+            "text": "Se detectaron {count} contactos duplicados. Solo se conservará la primera instancia de cada uno. {download_button}",
             "download_button": "Descargar lista de contactos"
           }
         }
@@ -370,7 +370,7 @@
         "continue": "Continuar"
       },
       "select_variables_disabled": {
-        "title": "Variables (no hay variables para mapear)"
+        "title": "Variables (no hay variables para el mapeo)"
       }
     }
   }
