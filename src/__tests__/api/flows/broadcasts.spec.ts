@@ -97,6 +97,7 @@ describe('api/resources/flows/broadcasts', () => {
     const variables = ['@fields.name'];
     const groups = ['g1', 'g2'];
     const channel = { uuid: 'ch-1', name: 'WAC 1' } as any;
+    const idempotencyKey = 'idem-1';
 
     // without attachment
     let result = await Broadcasts.createBroadcast(
@@ -105,6 +106,7 @@ describe('api/resources/flows/broadcasts', () => {
       variables,
       groups,
       channel,
+      idempotencyKey,
     );
     expect(httpPost).toHaveBeenCalledWith(
       '/api/v2/internals/whatsapp_broadcasts',
@@ -115,6 +117,7 @@ describe('api/resources/flows/broadcasts', () => {
         msg: { template: { uuid: 'tpl-1', variables, locale: 'en' } },
         groups,
       }),
+      { headers: { 'Idempotency-Key': idempotencyKey } },
     );
     expect(result).toEqual({ data: { id: 99 } });
 
@@ -126,6 +129,7 @@ describe('api/resources/flows/broadcasts', () => {
       variables,
       groups,
       channel,
+      idempotencyKey,
       { url: 'https://cdn/file.jpg', type: 'image' },
     );
     expect(httpPost).toHaveBeenCalledWith(
@@ -136,8 +140,34 @@ describe('api/resources/flows/broadcasts', () => {
           attachments: ['image:https://cdn/file.jpg'],
         },
       }),
+      { headers: { 'Idempotency-Key': idempotencyKey } },
     );
     expect(result).toEqual({ data: { id: 99 } });
+  });
+
+  it('sends Idempotency-Key header on /whatsapp_broadcasts', async () => {
+    const httpPost = vi.fn().mockResolvedValue({ data: { id: 1 } });
+    vi.spyOn(requests as any, '$http', 'get').mockReturnValue({
+      post: httpPost,
+    } as any);
+
+    const template = { uuid: 'tpl-1', language: 'en' } as any;
+    const channel = { uuid: 'ch-1' } as any;
+
+    await Broadcasts.createBroadcast(
+      'BC',
+      template,
+      [],
+      ['g1'],
+      channel,
+      'idem-abc-123',
+    );
+
+    expect(httpPost).toHaveBeenCalledWith(
+      '/api/v2/internals/whatsapp_broadcasts',
+      expect.any(Object),
+      { headers: { 'Idempotency-Key': 'idem-abc-123' } },
+    );
   });
 
   it('calls POST /broadcasts/upload_media with FormData including project_uuid', async () => {

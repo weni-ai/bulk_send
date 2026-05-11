@@ -50,6 +50,7 @@ export default {
     variables: string[],
     groups: string[],
     channel: Channel,
+    idempotencyKey: string,
     attachment?: { url: string; type: string },
     flow?: FlowReference,
   ) {
@@ -78,9 +79,12 @@ export default {
       data.trigger_flow_uuid = flow.uuid;
     }
 
+    // Per-submission idempotency key lets the backend safely deduplicate this
+    // POST if the same submission is retried (network, proxy, double-click, etc.).
     const response = await request.$http.post(
       `/api/v2/internals/whatsapp_broadcasts`,
       data,
+      { headers: { 'Idempotency-Key': idempotencyKey } },
     );
     return response;
   },
