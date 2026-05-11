@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.9.0] - 2026-03-26
+
+### Changed
+- chore: update @weni/unnnic-system to redesigned token versions
+- refactor: align TemplateSelectionList status tokens and MetricsTable tooltip styles with the new Unnnic redesign
+
 ## [1.8.6] - 2026-01-23
 
 ### Fixed
