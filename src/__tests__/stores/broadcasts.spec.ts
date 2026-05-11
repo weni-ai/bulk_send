@@ -238,6 +238,7 @@ describe('broadcasts store', () => {
     const attachment = { url: 'https://cdn/x.jpg', type: 'image' };
     const flow = { uuid: 'f1', name: 'Flow 1' } as any;
     const channel = { uuid: 'ch-1', name: 'WAC 1' } as any;
+    const idempotencyKey = 'idem-store-1';
 
     const promise = store.createBroadcast(
       'My Broadcast',
@@ -245,6 +246,7 @@ describe('broadcasts store', () => {
       vars,
       groups,
       channel,
+      idempotencyKey,
       attachment,
       flow,
     );
@@ -257,6 +259,7 @@ describe('broadcasts store', () => {
       vars,
       groups,
       channel,
+      idempotencyKey,
       attachment,
       flow,
     );

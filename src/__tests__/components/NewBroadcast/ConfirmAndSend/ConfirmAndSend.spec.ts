@@ -356,7 +356,7 @@ describe('ConfirmAndSend.vue', () => {
 
     expect(createSpy).toHaveBeenCalledTimes(1);
     const args = (createSpy as any).mock.calls[0];
-    expect(args[5]).toEqual({
+    expect(args[6]).toEqual({
       url: 'https://cdn.example.com/file.jpg',
       type: 'image',
     });
@@ -580,6 +580,49 @@ describe('ConfirmAndSend.vue', () => {
 
     expect(createSpy).toHaveBeenCalledTimes(1);
     const args = (createSpy as any).mock.calls[0];
-    expect(args[6]).toEqual(selectedFlow);
+    expect(args[7]).toEqual(selectedFlow);
+  });
+
+  it('rapid concurrent continue clicks dispatch createBroadcast only once', async () => {
+    const { wrapper, broadcastsStore } = mountWrapper();
+    broadcastsStore.setReviewed(true);
+    broadcastsStore.setSelectedFlow({ uuid: 'f1', name: 'Flow 1' } as any);
+    broadcastsStore.setBroadcastName('Once Only');
+    broadcastsStore.setSelectedTemplate({
+      name: 'Tpl',
+      variableCount: 0,
+    } as any);
+    broadcastsStore.setSelectedGroups([{ uuid: 'g1', memberCount: 10 } as any]);
+
+    let resolveCreate: (value?: unknown) => void = () => {};
+    const deferred = new Promise((resolve) => {
+      resolveCreate = resolve;
+    });
+    const createSpy = vi
+      .spyOn(broadcastsStore, 'createBroadcast')
+      .mockReturnValue(deferred as any);
+
+    await wrapper.vm.$nextTick();
+    const continueBtn = wrapper.find(SELECTOR.actionsContinue);
+
+    // Fire three clicks back-to-back without awaiting between them, simulating
+    // a triple-click before Vue has a chance to flip the disabled state.
+    continueBtn.trigger('click');
+    continueBtn.trigger('click');
+    continueBtn.trigger('click');
+
+    // Let the in-flight handleContinue progress past its awaits.
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(createSpy).toHaveBeenCalledTimes(1);
+
+    resolveCreate(undefined);
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    const successModal = wrapper.findAll(SELECTOR.modal)[2];
+    expect(successModal.attributes('data-open')).toBe('true');
+    expect(createSpy).toHaveBeenCalledTimes(1);
   });
 });

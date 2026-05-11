@@ -14,6 +14,15 @@ import { useRouter } from 'vue-router';
 
 type TranslateFn = (key: string, params?: Record<string, unknown>) => string;
 
+const generateIdempotencyKey = (): string => {
+  const cryptoApi = (
+    globalThis as unknown as { crypto?: { randomUUID?: () => string } }
+  ).crypto;
+  if (cryptoApi?.randomUUID) return cryptoApi.randomUUID();
+  // Fallback for environments without crypto.randomUUID (very old browsers/runtimes).
+  return `idem-${Date.now()}-${Math.random().toString(36).slice(2, 12)}`;
+};
+
 export function useConfirmActions(args: {
   t: TranslateFn;
   broadcastsStore: BroadcastsStore;
@@ -25,9 +34,10 @@ export function useConfirmActions(args: {
 
   const broadcastErrored = ref<Error | undefined>(undefined);
   const broadcastSuccess = ref(false);
+  const isSubmitting = ref(false);
 
   const loadingCreateBroadcast = computed(() => {
-    return broadcastsStore.loadingCreateBroadcast;
+    return isSubmitting.value || broadcastsStore.loadingCreateBroadcast;
   });
 
   const canContinue = computed(() => {
@@ -100,6 +110,10 @@ export function useConfirmActions(args: {
   };
 
   const handleContinue = async () => {
+    if (isSubmitting.value) return;
+    isSubmitting.value = true;
+
+    const idempotencyKey = generateIdempotencyKey();
     try {
       const groups = await getSelectedGroups();
       if (!groups || groups.length === 0) {
@@ -159,6 +173,7 @@ export function useConfirmActions(args: {
         variables,
         groups,
         channel,
+        idempotencyKey,
         attachment,
         flow,
       );
@@ -171,6 +186,8 @@ export function useConfirmActions(args: {
           t('new_broadcast.pages.confirm_and_send.unknown_error'),
         );
       }
+    } finally {
+      isSubmitting.value = false;
     }
   };
 

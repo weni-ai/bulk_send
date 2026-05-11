@@ -123,6 +123,7 @@ export const useBroadcastsStore = defineStore('broadcasts', {
       variables: string[],
       groups: string[],
       channel: Channel,
+      idempotencyKey: string,
       attachment?: { url: string; type: string },
       flow?: FlowReference,
     ) {
@@ -134,6 +135,7 @@ export const useBroadcastsStore = defineStore('broadcasts', {
           variables,
           groups,
           channel,
+          idempotencyKey,
           attachment,
           flow,
         );
