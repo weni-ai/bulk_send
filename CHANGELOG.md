@@ -1,5 +1,11 @@
 # Changelog
 
+### Fixed
+- English, Spanish and Portuguese messages
+
+### Added
+- Romanian messages
+
 ## [1.9.0] - 2026-03-26
 
 ### Changed

@@ -1,40 +1,40 @@
 {
   "home": {
-    "title": "Enviar Templates",
+    "title": "Envio de templates",
     "description": "Envie mensagens de marketing em massa para seus contatos",
-    "new_send": "Novo disparo",
+    "new_send": "Novo envio",
     "mmlite_disclaimer": {
-      "text": "Atualize para a API MM Lite para ganhar velocidade e controle completo sobre a entrega das mensagens. {see_more_button}",
-      "see_more_button": "Ver mais"
+      "text": "Atualize para a API MM Lite e ganhe mais velocidade e controle sobre a entrega das mensagens. {see_more_button}",
+      "see_more_button": "Saiba mais"
     },
     "general_performance": {
       "title": "Desempenho geral (últimos 30 dias)",
       "total_sent": {
         "label": "Total enviado",
-        "hint": "Total de mensagens enviadas através de disparos em massa no período selecionado."
+        "hint": "Total de mensagens enviadas a partir de disparos em massa no período selecionado"
       },
       "estimated_total_cost": {
         "label": "Custo total estimado",
-        "hint": "Custo estimado baseado no número de mensagens enviadas. O preço final pode variar de acordo com a fatura da Meta."
+        "hint": "Custo estimado com base no número de mensagens enviadas. O preço final pode variar conforme a fatura da Meta."
       },
       "success_rate": {
         "label": "Taxa de sucesso",
-        "hint": "Percentual de contatos que receberam mensagens com sucesso, calculado a partir do total de contatos únicos alvos em todas as campanhas."
+        "hint": "Percentual de contatos que receberam mensagens com sucesso, calculado com base no total de contatos únicos de todas as campanhas."
       }
     },
     "no_recent_sends": {
-      "title": "Comece agora a se comunicar ativamente com seus contatos em escala",
-      "subtitle": "Leva menos de 2 minutos para configurar o primeiro envio",
+      "title": "Comece a se comunicar com seus contatos em escala",
+      "subtitle": "O primeiro envio pode ser configurado em menos de 2 minutos",
       "button": "Começar agora"
     },
     "recent_sends": {
-      "title": "Disparos recentes",
-      "search_placeholder": "Pesquisar disparo",
+      "title": "Envios recentes",
+      "search_placeholder": "Buscar envio",
       "date_placeholder": "Últimos 30 dias",
       "metrics": {
         "sent": {
           "label": "Enviadas",
-          "hint": "Quantidade de envios processados pela plataforma Weni e encaminhados para a Meta.",
+          "hint": "Quantidade de envios processados pela plataforma Weni e encaminhados para a Meta",
           "category": "Enviadas"
         },
         "delivered": {
@@ -53,17 +53,17 @@
         },
         "clicked": {
           "label": "Cliques",
-          "hint": "Envios que foram aceitos e enviados pela Meta.",
+          "hint": "Envios aceitos e enviados pela Meta.",
           "category": "Cliques"
         },
         "failed": {
           "label": "Falhas",
-          "hint": "Falhas de envio, que podem ocorrer tanto no processamento da Weni quanto na entrega pela Meta. Diversos fatores podem causar falha (ex.: número inválido, usuário sem WhatsApp ativo, instabilidade temporária).",
+          "hint": "Falhas de envio podem ocorrer tanto no processamento da Weni quanto na entrega pela Meta. Diversos fatores podem causar falha (ex.: número inválido, usuário sem WhatsApp ativo, instabilidade temporária).",
           "category": "Falhas"
         },
         "actions": {
           "add_to_a_new_group": "Adicionar a um novo grupo",
-          "view_template": "Ver modelo"
+          "view_template": "Ver template"
         },
         "processed": {
           "label": "Processadas até agora",
@@ -74,18 +74,18 @@
         "title": "Informações",
         "started_on": "Iniciado em:",
         "ended_on": "Finalizado em:",
-        "template_name": "Modelo:",
+        "template_name": "Template:",
         "groups": "Grupo de contatos:",
         "sent_by": "Enviado por:"
       },
       "pagination_text": "{currentPageOffset} de {total} envios",
       "status": {
-        "QUEUED": "Em progresso",
+        "QUEUED": "Em andamento",
         "SENT": "Finalizado",
         "FAILED": "Falhas"
       },
       "refresh": "Limpar filtros",
-      "empty_text": "Não encontramos disparos que correspondam à sua pesquisa"
+      "empty_text": "Não encontramos envios que correspondam à sua busca"
     }
   },
   "modals": {
@@ -95,7 +95,7 @@
       "name": "Nome do grupo",
       "buttons": {
         "primary": "Criar grupo",
-        "secondary": "Cancel"
+        "secondary": "Cancelar"
       },
       "categories": {
         "processed": "Processadas",
@@ -105,33 +105,33 @@
         "failed": "Falhas"
       },
       "success_alert": "Grupo criado com sucesso",
-      "error_alert": "Erro ao criar o grupo, por favor tente novamente"
+      "error_alert": "Erro ao criar grupo. Tente novamente."
     },
     "activate_mmlite": {
       "buttons": {
         "primary": "Atualizar para MM Lite API",
-        "secondary": "Talvez depois"
+        "secondary": "Mais tarde"
       },
       "title": "Atualizar para MM Lite API",
-      "description": "A nova MM Lite API é a evolução da Cloud API, criada pela Meta para entregar mais mensagens entregues, com menos esforço de integração.",
+      "description": "A nova MM Lite API é a evolução da Cloud API, criada pela Meta, para que mais mensagens sejam entregues com menos esforço de integração.",
       "why_subtitle": "Por que atualizar agora?",
-      "more_messages_label": "✅ Mais entregas, menos trabalho",
+      "more_messages_label": "✅ Mais entrega, menos trabalho",
       "engagement_label": "💬 Envios otimizados automaticamente",
       "seamless_label": "🔄 Transição simples e segura",
       "more_messages_description": {
         "text": "Com a MM Lite API, as entregas {0} em relação à Cloud API, priorizando mensagens relevantes, esperadas e altamente engajadoras.",
         "bold_text": "aumentaram em até +9%"
       },
-      "engagement_description": "Mensagens com boas taxas de abertura e cliques têm prioridade, alcançando ainda mais pessoas sem que você precise mudar sua estratégia.",
+      "engagement_description": "Mensagens com boas taxas de abertura e de cliques têm prioridade e alcançam ainda mais pessoas sem que você precise mudar sua estratégia.",
       "seamless_description": {
-        "text": "Mantenha seus números e templates atuais. A migração é automática, não exige esforço técnico e {0}.",
+        "text": "Mantenha seus números e templates atualizados. A migração é automática, não exige esforço técnico e {0}.",
         "bold_text": "o custo permanece o mesmo"
       },
       "footer": {
         "text": "ℹ️ Informações disponibilizadas pela Meta. {0}.",
         "link": "Saiba mais na documentação oficial"
       },
-      "do_not_remind": "Não me lembrar novamente",
+      "do_not_remind": "Não lembrar novamente",
       "success_alert": "Solicitação de ativação da MM Lite API realizada com sucesso",
       "error_alert": "Erro ao solicitar ativação da MM Lite API"
     },
@@ -139,11 +139,11 @@
       "title": "Recomendações de formatação de arquivo",
       "subtitle": "Instruções",
       "list": {
-        "item_1": "Salve seu arquivo em formato XLSX, XLS ou CSV",
-        "item_2": "Inclua uma <b class=\"bold\">linha de cabeçalho</b> com os nomes de colunas suportados (veja abaixo)",
-        "item_3": "Seu arquivo pode conter até <b class=\"bold\">300,000 linhas</b>",
-        "item_4": "Células em branco serão ignoradas. Para limpar um valor, use <b class=\"bold\">--</b>",
-        "item_5": "Colunas adicionais serão ignoradas a menos que sejam prefixadas com <b class=\"bold\">Field:</b>"
+        "item_1": "Salve seu arquivo nos formatos XLSX, XLS ou CSV.",
+        "item_2": "Inclua uma <b class=\"bold\">linha de cabeçalho</b> com os nomes das colunas (veja abaixo).",
+        "item_3": "Seu arquivo pode ter até <b class=\"bold\">300.000 linhas</b>.",
+        "item_4": "Células em branco serão ignoradas. Para limpar um valor, use <b class=\"bold\">--</b>.",
+        "item_5": "Colunas adicionais serão ignoradas a menos que sejam prefixadas com <b class=\"bold\">Field:</b>."
       },
       "subtitle_2": "Campos suportados:",
       "table": {
@@ -152,12 +152,12 @@
         "header_3": "Exemplo",
         "header_description": {
           "name": "Nome completo do contato",
-          "urn_tel": "Número de telefone com código de país",
-          "urn_whatsapp": "Número do WhatsApp (com código de país)",
-          "field_team": "Campo personalizado (exemplo: nome do time)"
+          "urn_tel": "N.º de telefone com cód. de país",
+          "urn_whatsapp": "N.º do WhatsApp com cód. de país",
+          "field_team": "Personalizado (ex.: equipe)"
         },
         "header_example": {
-          "name": "Jane Doe",
+          "name": "Joana Alves",
           "field_team": "Gerentes"
         },
         "header_label": {
@@ -168,16 +168,16 @@
         }
       },
       "footer": {
-        "title": "Você pode {0} de modelo para ajudar você a começar",
-        "title_highlight": "baixar um exemplo"
+        "title": "Você pode {0} para começar",
+        "title_highlight": "baixar um template de exemplo"
       }
     },
     "template_preview": {
-      "title": "Prévia de modelo"
+      "title": "Prévia de template"
     },
     "channel_selection": {
       "title": "Seu projeto tem mais de um número de WhatsApp",
-      "description": "Selecione o número que será usado como remetente para este modelo",
+      "description": "Selecione o número que será usado como remetente para este template",
       "buttons": {
         "primary": "Continuar",
         "secondary": "Cancelar"
@@ -185,7 +185,7 @@
     }
   },
   "new_broadcast": {
-    "title": "Novo disparo",
+    "title": "Novo envio",
     "pages": {
       "select_groups": {
         "title": "Contatos",
@@ -193,31 +193,31 @@
         "sort_by": {
           "label": "Ordenar por nome:",
           "options": {
-            "asc": "Asc",
-            "desc": "Desc"
+            "asc": "A–Z",
+            "desc": "Z–A"
           }
         },
-        "search_placeholder": "Pesquisar grupos",
+        "search_placeholder": "Buscar grupos",
         "group_count": "{count} contatos | {count} contato | {count} contatos",
         "overview": {
-          "cost_value": "{currency}{cost} (Unidade: {currency}{templateMultiplier} por mensagem entregue)",
+          "cost_value": "{currency}{cost} (valor unitário: {currency} {templateMultiplier} por mensagem entregue)",
           "cost_label": "Custo estimado:",
           "total_label": "Total:",
           "total_value": "{total} contatos selecionados | {total} contato selecionado | {total} contatos selecionados",
           "title": "{count} grupos selecionados | {count} grupo selecionado | {count} grupos selecionados",
           "removal_tooltip": "Remover grupos selecionados"
         },
-        "no_groups": "Não encontramos nenhum grupo correspondente à sua pesquisa",
+        "no_groups": "Não encontramos nenhum grupo correspondente à sua busca",
         "pagination_text": "{currentPageOffset} de {total} grupos",
         "clear_filters": "Limpar filtros"
       },
       "select_template": {
-        "title": "Modelos",
-        "page_title": "Selecionar mensagem do modelo",
+        "title": "Templates",
+        "page_title": "Selecionar mensagem do template",
         "filters": {
-          "new_tamplate": "Novo modelo",
-          "search_placeholder": "Pesquisar modelo",
-          "channel_not_found": "Não foi possível redirecionar para a criação de modelo, UUID do canal faltando"
+          "new_tamplate": "Novo template",
+          "search_placeholder": "Buscar template",
+          "channel_not_found": "Não foi possível redirecionar para a criação do template pois está faltando o UUID do canal"
         },
         "table": {
           "name": "Nome",
@@ -227,10 +227,10 @@
           "status": "Status",
           "statuses": {
             "APPROVED": "Aprovado",
-            "IN_APPEAL": "Em apelo",
+            "IN_APPEAL": "Em revisão",
             "PENDING": "Pendente",
-            "REJECTED": "Rejeitado",
-            "PENDING_DELETION": "Pendente de exclusão",
+            "REJECTED": "Recusado",
+            "PENDING_DELETION": "Exclusão pendente",
             "DELETED": "Excluído",
             "DISABLED": "Desativado",
             "LOCKED": "Bloqueado",
@@ -239,12 +239,12 @@
           }
         },
         "preview": {
-          "title": "Prévia de modelo",
-          "name": "Prévia de modelo:",
-          "missing": "Selecione um modelo para visualizar"
+          "title": "Prévia de template",
+          "name": "Prévia do template:",
+          "missing": "Selecione um template para visualizar"
         },
         "disclaimer": {
-          "text": "Apenas modelos com status aprovado podem ser selecionados e enviados. Modelos pendentes devem aguardar a aprovação da Meta antes de serem utilizados. {meta_documentation_link}",
+          "text": "Apenas templates com status aprovado podem ser selecionados e enviados. Templates pendentes devem aguardar a aprovação da Meta antes de serem utilizados. {meta_documentation_link}",
           "meta_documentation_link": "Saiba mais na documentação da Meta"
         },
         "actions": {
@@ -256,7 +256,7 @@
         "page_title": "Mapeamento de variáveis",
         "variable_label": "Variável {'{{'}{index}{'}}'}",
         "variable_placeholder": "Selecione o campo que corresponde a esta variável",
-        "disclaimer": "Verifique se cada campo está mapeado corretamente, este é o aspecto que seu mensagem terá para cada contato.",
+        "disclaimer": "Verifique se cada campo está mapeado corretamente pois será desta forma que o contato irá visualizar sua mensagem",
         "actions": {
           "cancel": "Voltar"
         },
@@ -266,14 +266,14 @@
           "VIDEO": "Adicionar vídeo",
           "DOCUMENT": "Adicionar documento"
         },
-        "header_media_upload_error": "Upload falhou, por favor tente novamente",
+        "header_media_upload_error": "Erro ao fazer upload. Tente novamente.",
         "name_field_label": "Nome"
       },
       "confirm_and_send": {
-        "title": "Revisar & enviar",
-        "flow_placeholder": "Pesquisar",
-        "broadcast_name_placeholder": "Nome do disparo",
-        "flow_message": "Este fluxo será ativado se um contato responder a este mensagem",
+        "title": "Revisar e enviar",
+        "flow_placeholder": "Buscar",
+        "broadcast_name_placeholder": "Nome do envio",
+        "flow_message": "Este fluxo será ativado se um contato responder a esta mensagem",
         "flow_label": "Selecione um fluxo para ativar quando um contato responder",
         "broadcast_name_label": "Nome",
         "details": {
@@ -281,54 +281,54 @@
           "groups": "Grupos selecionados: {0}",
           "contacts": "Contatos selecionados: {0}",
           "cost": "Custo estimado: {0} ({1})",
-          "unit_cost": "Unidade: {unitCost} por mensagem entregada",
+          "unit_cost": "Valor unitário: {unitCost} por mensagem entregue",
           "channel": "Número do remetente: {0}"
         },
         "variables": {
           "title": "Mapeamento de variáveis"
         },
         "reviewed_label": "Revisei os contatos e o conteúdo. Estou pronto para enviar.",
-        "flow_disclaimer": "Certifique-se de que seu time de agentes está pronto para lidar com respostas a este conteúdo.",
+        "flow_disclaimer": "Certifique-se de que seu time de agentes está preparado para responder a este conteúdo",
         "contact_import_pending": {
-          "title": "Importação de contatos em progresso ⏳",
-          "content": "Sua lista de contatos está sendo importada.\n\nUma vez concluída, você poderá completar o envio.\nAguarde enquanto você revisa os detalhes da sua campanha."
+          "title": "Importando contatos",
+          "content": "Sua lista de contatos está sendo importada.\n\nVocê poderá completar o envio quando a importação for concluída.\nRevise os detalhes da sua campanha enquanto aguarda."
         },
-        "unknown_error": "Ocorreu um erro desconhecido ao tentar criar o disparo, por favor atualize a página",
-        "variables_not_found": "variáveis incompletas",
-        "template_not_found": "template selecionado faltando",
-        "name_not_found": "nome do disparo faltando",
-        "groups_not_found": "grupos ou importação faltando",
+        "unknown_error": "Ocorreu um erro desconhecido ao tentar criar o envio. Atualize a página.",
+        "variables_not_found": "Complete as variáveis",
+        "template_not_found": "Adicione o template",
+        "name_not_found": "Adicione um nome de envio",
+        "groups_not_found": "Adicione um grupo ou importe contatos",
         "broadcast_errored": {
-          "title": "❌ Algo deu errado",
+          "title": "Algo deu errado",
           "primary_button": "Voltar",
-          "description": "Não pudemos iniciar seu envio devido a {error}.\nNenhuma mensagem foi entregada.\n\nPode voltar para a tela de revisão para verificar sua configuração e tentar novamente."
+          "description": "Não foi possível iniciar o envio devido a {error}.\nNenhuma mensagem foi entregue.\n\nVolte para a tela de revisão para verificar as configurações e tentar novamente."
         },
         "broadcast_success": {
-          "title": "✅ Envio iniciado com sucesso ",
-          "content": "Sua mensagem está sendo entregada a {contact_count} contatos, <span class=\"highlight\">este processo pode levar alguns minutos para ser concluído</span>.\n\nO progresso e os resultados aparecerão na sua tela inicial à medida que as mensagens forem entregues.",
-          "primary_button": "Voltar para a home"
+          "title": "Envio iniciado com sucesso ",
+          "content": "Sua mensagem está sendo enviada a {contact_count} contatos e isso <span class=\"highlight\">pode levar alguns minutos para ser concluído</span>.\n\nO progresso e os resultados aparecerão na sua tela inicial à medida que as mensagens forem entregues.",
+          "primary_button": "Voltar para a página inicial"
         },
         "actions": {
           "cancel": "Voltar"
         },
-        "flow_not_found": "É necessário selecionar um fluxo"
+        "flow_not_found": "Selecione um fluxo"
       },
       "contact_import": {
         "title": "Importar contatos",
-        "selected_groups_disclaimer": "Você já selecionou um grupo de contatos, portanto não é possível importar contatos.",
+        "selected_groups_disclaimer": "Um grupo de contatos já foi selecionado, por isso não é possível importar novos contatos.",
         "upload_instructions": {
-          "text": "{0} – para aprender como preparar seu arquivo",
+          "text": "{0} para preparar seu arquivo",
           "button": "Ver instruções"
         },
         "upload_area": {
           "title": {
-            "text": "Arraste e solte ou {0} para fazer o upload",
-            "highlight": "Escolher arquivo"
+            "text": "Arraste e solte ou {0} para fazer upload",
+            "highlight": "escolha um arquivo"
           },
-          "subtitle": "Importe sua lista de contatos usando um arquivo Excel (.xls, .xlsx) ou CSV (.csv).",
+          "subtitle": "Importe sua lista de contatos usando um arquivo Excel (XLS, XLSX) ou CSV.",
           "unknown_error_alert": "Erro desconhecido ao fazer o upload do arquivo",
           "unsupported_format_alert": "Formato de arquivo não suportado",
-          "exceeded_the_maximum_file_size_limit_alert": "Arquivo muito grande"
+          "exceeded_the_maximum_file_size_limit_alert": "O arquivo excedeu o limite de tamanho"
         },
         "processing": {
           "form": {
@@ -340,11 +340,11 @@
             "title": "Selecione como os contatos importados devem ser tratados",
             "group_name": {
               "placeholder": "Nome do grupo",
-              "label": "Nome seu novo grupo"
+              "label": "Dê um nome para seu novo grupo"
             },
             "group_select": {
-              "label": "Escolha seu grupo",
-              "placeholder": "Selecionar ou pesquisar"
+              "label": "Selecione um grupo",
+              "placeholder": "Selecionar ou buscar"
             }
           },
           "overview": {
