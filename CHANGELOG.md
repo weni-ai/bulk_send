@@ -1,10 +1,13 @@
 # Changelog
 
+## [1.9.1] - 2026-05-12
+
 ### Fixed
 - English, Spanish and Portuguese messages
 
 ### Added
 - Romanian messages
+- feat: Implement idempotency key for createBroadcast functionality
 
 ## [1.9.0] - 2026-03-26
 
