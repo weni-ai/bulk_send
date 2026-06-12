@@ -1,0 +1,377 @@
+{
+    "home": {
+        "title": "Mesagerie șablon",
+        "description": "Trimite mesaje de marketing în masă contactelor tale",
+        "new_send": "Mesaj nou",
+        "mmlite_disclaimer": {
+            "text": "Actualizează la API-ul MM Lite pentru a obține mai multă viteză și control complet asupra livrării mesajelor. {see_more_button}",
+            "see_more_button": "Află mai multe"
+        },
+        "general_performance": {
+            "title": "Performanța generală (ultimele 30 de zile)",
+            "total_sent": {
+                "label": "Total trimise",
+                "hint": "Mesaje totale trimise în masă în perioada selectată."
+            },
+            "estimated_total_cost": {
+                "label": "Cost total estimat",
+                "hint": "Cost estimat bazat pe numărul de mesaje trimise. Prețul final poate varia în funcție de factura de la Meta."
+            },
+            "success_rate": {
+                "label": "Rata de succes",
+                "hint": "Procentul de contacte care au primit mesajele cu succes, calculat din totalul contactelor unice din toate campaniile."
+            }
+        },
+        "no_recent_sends": {
+            "title": "Începe să comunici cu contactele tale la scară largă",
+            "subtitle": "Configurarea primului mesaj durează mai puțin de 2 minute",
+            "button": "Începe acum"
+        },
+        "recent_sends": {
+            "title": "Mesaje recente",
+            "search_placeholder": "Căutare mesaj",
+            "date_placeholder": "Ultimele 30 zile",
+            "metrics": {
+                "sent": {
+                    "label": "Trimis",
+                    "hint": "Numărul de mesaje procesate de Platforma VTEX CX și trimise către Meta",
+                    "category": "Trimis"
+                },
+                "delivered": {
+                    "label": "Livrat",
+                    "hint": "Mesaje confirmate ca livrate către dispozitivul utilizatorului. Notă: Nu toți utilizatorii permit partajarea stării de livrare. Din motive de confidențialitate, aceste cazuri nu sunt incluse în calcul.",
+                    "category": "Livrat"
+                },
+                "estimated_cost": {
+                    "label": "Cost estimat",
+                    "hint": "Cost estimat luând în considerare costul unitar de {currency} {cost} pe șablon. Notă: Acest calcul nu ia în considerare prețuri diferite, variații valutare sau taxe."
+                },
+                "read": {
+                    "label": "Citite",
+                    "hint": "Numărul de mesaje confirmate ca fiind citite de destinatar. Notă: Nu toți utilizatorii permit partajarea stării de citire. Din motive de confidențialitate, aceste cazuri nu sunt incluse în calcul.",
+                    "category": "Citite"
+                },
+                "clicked": {
+                    "label": "Clickuri",
+                    "hint": "Mesaje acceptate și trimise de Meta.",
+                    "category": "Clickuri"
+                },
+                "failed": {
+                    "label": "Nereușit",
+                    "hint": "Erorile mesajelor pot apărea în timpul procesării de către Platforma VTEX CX sau la livrarea de către Meta. Diferite factori pot cauza eroarea (exemplu: număr nevalid, utilizator fără un cont WhatsApp activ, instabilitate temporară).",
+                    "category": "Nereușit"
+                },
+                "actions": {
+                    "add_to_a_new_group": "Adaugă la un grup nou",
+                    "view_template": "Vizualizează șablonul"
+                },
+                "processed": {
+                    "label": "Procesate până acum",
+                    "value": "{processed} din {total}"
+                }
+            },
+            "info": {
+                "title": "Informații",
+                "started_on": "Inițiat la:",
+                "ended_on": "Finalizat la:",
+                "template_name": "Șablon:",
+                "groups": "Grup de persoane de contact:",
+                "sent_by": "Trimis de:"
+            },
+            "pagination_text": "{currentPageOffset} din {total} mesaje",
+            "status": {
+                "QUEUED": "În curs",
+                "SENT": "Finalizat",
+                "FAILED": "Nereușit"
+            },
+            "refresh": "Elimină filtrele",
+            "empty_text": "Nu au fost găsite mesaje care să corespundă căutării tale"
+        }
+    },
+    "modals": {
+        "new_contact_group": {
+            "disclaimer": "Acest grup va include {contactCount} contacte din rezultatele {category} ale {broadcastName}.",
+            "title": "Grup nou de persoane de contact",
+            "name": "Nume grup",
+            "buttons": {
+                "primary": "Creează grup",
+                "secondary": "Anulare"
+            },
+            "categories": {
+                "processed": "Procesate",
+                "sent": "Trimis",
+                "delivered": "Livrat",
+                "read": "Citite",
+                "failed": "Nereușit"
+            },
+            "success_alert": "Grupul a fost creat cu succes",
+            "error_alert": "Eroare la crearea grupului. Încearcă din nou."
+        },
+        "activate_mmlite": {
+            "buttons": {
+                "primary": "Actualizează la API MM Lite",
+                "secondary": "Poate mai târziu"
+            },
+            "title": "Actualizează la API MM Lite",
+            "description": "Noua actualizare API MM Lite reprezintă evoluția Cloud API. A fost creată de Meta pentru a trimite mai multe mesaje cu un efort redus de integrare.",
+            "why_subtitle": "De ce să actualizezi acum?",
+            "more_messages_label": "✅ Mai multe livrări, muncă redusă",
+            "engagement_label": "💬 Mesaje în masă optimizate automat",
+            "seamless_label": "🔄 Tranziție simplă și sigură",
+            "more_messages_description": {
+                "text": "Cu API-ul MM Lite, livrările sunt {0} comparativ cu API-ul Cloud. Aceasta prioritizează mesajele relevante, așteptate și cu un angajament ridicat.",
+                "bold_text": "crescut cu până la +9%"
+            },
+            "engagement_description": "Mesajele cu rate bune de deschidere și click au prioritate, ajungând la și mai mulți oameni fără a fi nevoie să îți schimbi strategia.",
+            "seamless_description": {
+                "text": "Păstrează numerele și șabloanele actuale. Migrația este automată, nu necesită efort tehnic și {0}.",
+                "bold_text": "costul rămâne același"
+            },
+            "footer": {
+                "text": "ℹ️ Informații furnizate de Meta. {0}.",
+                "link": "Află mai multe în documentația oficială"
+            },
+            "do_not_remind": "Nu-mi aminti din nou",
+            "success_alert": "Solicitarea de activare API MM Lite a fost finalizată cu succes",
+            "error_alert": "Eroare la solicitarea activării API-ului MM Lite"
+        },
+        "contact_import_upload_instructions": {
+            "title": "Recomandări privind formatul fișierului",
+            "subtitle": "Instrucțiuni",
+            "list": {
+                "item_1": "Salvează fișierul în format XLSX, XLS sau CSV.",
+                "item_2": "Include un <b class=\"bold\">rând antet</b> cu numele coloanelor acceptate (vezi mai jos).",
+                "item_3": "Fișierul tău poate conține până la <b class=\"bold\">300.000 de rânduri</b>.",
+                "item_4": "Celulele goale vor fi ignorate. Pentru a șterge o valoare, folosește <b class=\"bold\">--</b>.",
+                "item_5": "Coloanele suplimentare vor fi ignorate, cu excepția cazului în care sunt prefixate cu <b class=\"bold\">Câmp:</b>."
+            },
+            "subtitle_2": "Câmpuri acceptate:",
+            "table": {
+                "header_1": "Antet coloană",
+                "header_2": "Descriere",
+                "header_3": "Exemplu",
+                "header_description": {
+                    "name": "Numele complet al persoanei de contact",
+                    "urn_tel": "Număr de telefon cu prefixul țării",
+                    "urn_whatsapp": "Număr WhatsApp cu prefixul țării",
+                    "field_team": "Câmp personalizat (ex.: echipă)"
+                },
+                "header_example": {
+                    "name": "Jamie Smith",
+                    "field_team": "Manageri"
+                },
+                "header_label": {
+                    "name": "Nume",
+                    "urn_tel": "URN:telefon",
+                    "urn_whatsapp": "URN:whatsapp",
+                    "field_team": "Câmp:Echipă"
+                }
+            },
+            "footer": {
+                "title": "Poți {0} pentru a începe",
+                "title_highlight": "descarcă un șablon exemplu"
+            }
+        },
+        "template_preview": {
+            "title": "Previzualizare șablon"
+        },
+        "channel_selection": {
+            "title": "Proiectul tău are mai mult de un număr WhatsApp",
+            "description": "Selectează numărul care va fi folosit ca expeditor pentru acest șablon",
+            "buttons": {
+                "primary": "Continuă",
+                "secondary": "Anulare"
+            }
+        }
+    },
+    "new_broadcast": {
+        "title": "Mesaj nou",
+        "pages": {
+            "select_groups": {
+                "title": "Contacte",
+                "select_contact_groups": "Selectează grupurile de persoane de contact",
+                "sort_by": {
+                    "label": "Sortează după nume:",
+                    "options": {
+                        "asc": "A–Z",
+                        "desc": "Z–A"
+                    }
+                },
+                "search_placeholder": "Caută grupuri",
+                "group_count": "{count, plural, one {{count} contact} few {{count} contacte} other {{count} contacte}}",
+                "overview": {
+                    "cost_value": "{currency}{cost} (cost pe mesaj: {currency}{templateMultiplier} pe mesaj livrat)",
+                    "cost_label": "Cost estimat:",
+                    "total_label": "Total:",
+                    "total_value": "{total, plural, one {{total} contact selectat} few {{total} contacte selectate} other {{total} contacte selectate}}",
+                    "title": "{count, plural, one {{count} grup selectat} few {{count} grupuri selectate} other {{count} grupuri selectate}}",
+                    "removal_tooltip": "Elimină grupurile selectate"
+                },
+                "no_groups": "Nu au fost găsite grupuri care să corespundă căutării tale",
+                "pagination_text": "{currentPageOffset} din {total} grupuri",
+                "clear_filters": "Șterge filtrele"
+            },
+            "select_template": {
+                "title": "Șabloane",
+                "page_title": "Selectează mesaj șablon",
+                "filters": {
+                    "new_tamplate": "Șablon nou",
+                    "search_placeholder": "Căutare șablon",
+                    "channel_not_found": "Nu s-a putut redirecționa pentru a crea șablonul. Lipsește UUID-ul canalului."
+                },
+                "table": {
+                    "name": "Nume",
+                    "date": "Dată",
+                    "content": "Conținut",
+                    "language": "Limbă",
+                    "status": "Stare",
+                    "statuses": {
+                        "APPROVED": "Aprobat",
+                        "IN_APPEAL": "În curs de revizuire",
+                        "PENDING": "În așteptare",
+                        "REJECTED": "Respins",
+                        "PENDING_DELETION": "În așteptarea ștergerii",
+                        "DELETED": "Șters",
+                        "DISABLED": "Dezactivat",
+                        "LOCKED": "Blocate",
+                        "UNSUPPORTED_LANGUAGE": "Limbă neacceptată",
+                        "PAUSED": "Pauză"
+                    }
+                },
+                "preview": {
+                    "title": "Previzualizare șablon",
+                    "name": "Previzualizare șablon:",
+                    "missing": "Selectează un șablon pentru previzualizare"
+                },
+                "disclaimer": {
+                    "text": "Numai șabloanele cu stare aprobată pot fi selectate și trimise. Șabloanele în așteptare trebuie să aștepte aprobarea de la Meta înainte de a fi utilizate. {meta_documentation_link}",
+                    "meta_documentation_link": "Află mai multe în documentația Meta"
+                },
+                "actions": {
+                    "cancel": "Înapoi"
+                }
+            },
+            "select_variables": {
+                "title": "Variabile",
+                "page_title": "Maparea variabilelor",
+                "variable_label": "Variabilă {placeholder}",
+                "variable_placeholder": "Selectează câmpul care corespunde acestei variabile",
+                "disclaimer": "Asigură-te că fiecare câmp este mapat corect. În acest mod, persoanele tale de contact îți vor vedea mesajul.",
+                "actions": {
+                    "cancel": "Înapoi"
+                },
+                "header_media_title": "Încărcare antet",
+                "header_media_button": {
+                    "IMAGE": "Adaugă imagine",
+                    "VIDEO": "Adaugă video",
+                    "DOCUMENT": "Adaugă document"
+                },
+                "header_media_upload_error": "Eroare la încărcare. Încearcă din nou.",
+                "name_field_label": "Nume"
+            },
+            "confirm_and_send": {
+                "title": "Revizuiește și trimite",
+                "flow_placeholder": "Căutare",
+                "broadcast_name_placeholder": "Denumire mesaj",
+                "flow_message": "Acest flux va fi activat dacă un contact răspunde la acest mesaj",
+                "flow_label": "Selectează fluxul care va fi activat când un contact răspunde",
+                "broadcast_name_label": "Nume",
+                "details": {
+                    "title": "Detalii",
+                    "groups": "Grupuri selectate: {0}",
+                    "contacts": "Contacte selectate: {0}",
+                    "cost": "Cost estimat: {0} ({1})",
+                    "unit_cost": "Cost pe mesaj: {unitCost} pe mesaj livrat",
+                    "channel": "Numărul expeditorului: {0}"
+                },
+                "variables": {
+                    "title": "Maparea variabilelor"
+                },
+                "reviewed_label": "Am revizuit contactele și conținutul. Sunt gata să trimit.",
+                "flow_disclaimer": "Asigură-te că echipa ta de agenți este pregătită să gestioneze răspunsurile la acest conținut",
+                "contact_import_pending": {
+                    "title": "Importare contacte",
+                    "content": "Lista de contacte este importată.\n\nVei putea trimite un mesaj după ce importul este finalizat.\nVerifică detaliile campaniei în timp ce aștepți."
+                },
+                "unknown_error": "A apărut o eroare necunoscută în timpul trimiterii mesajului. Reîmprospătează pagina.",
+                "variables_not_found": "Finalizează variabilele",
+                "template_not_found": "Adaugă șablonul",
+                "name_not_found": "Adaugă un nume mesajului",
+                "groups_not_found": "Adaugă un grup sau importă contacte",
+                "broadcast_errored": {
+                    "title": "Ceva nu a mers bine",
+                    "primary_button": "Înapoi",
+                    "description": "Nu s-a putut iniția trimiterea din cauza erorii {error}.\nNiciun mesaj nu a fost livrat.\n\nPoți reveni la ecranul de revizuire pentru a verifica setările și a încerca din nou."
+                },
+                "broadcast_success": {
+                    "title": "Trimiterea a fost inițiată cu succes ",
+                    "content": "Mesajul tău este trimis către {contact_count} contacte. <span class=\"highlight\">Acest proces poate dura câteva minute pentru a se finaliza</span>.\n\nProgresul și rezultatele vor fi afișate pe ecranul tău principal pe măsură ce mesajele sunt livrate.",
+                    "primary_button": "Înapoi la pagina de pornire"
+                },
+                "actions": {
+                    "cancel": "Înapoi"
+                },
+                "flow_not_found": "Selectează un flux"
+            },
+            "contact_import": {
+                "title": "Importă contacte",
+                "selected_groups_disclaimer": "Un grup de contacte a fost deja selectat. Nu poți importa contacte noi.",
+                "upload_instructions": {
+                    "text": "{0} pentru a pregăti fișierul tău",
+                    "button": "Vezi instrucțiunile"
+                },
+                "upload_area": {
+                    "title": {
+                        "text": "Trage și plasează sau {0} pentru a încărca",
+                        "highlight": "alege un fișier"
+                    },
+                    "subtitle": "Importă lista de contacte folosind un fișier Excel (XLS, XLSX) sau CSV.",
+                    "unknown_error_alert": "Eroare necunoscută la încărcarea fișierului",
+                    "unsupported_format_alert": "Format de fișier neacceptat",
+                    "exceeded_the_maximum_file_size_limit_alert": "Fișierul a depășit limita maximă de dimensiune"
+                },
+                "processing": {
+                    "form": {
+                        "action_type": {
+                            "create": "Creează un grup nou",
+                            "add": "Adaugă la un grup existent",
+                            "import_without_adding": "Importă fără a adăuga într-un grup"
+                        },
+                        "title": "Selectează cum trebuie gestionate contactele importate",
+                        "group_name": {
+                            "placeholder": "Nume grup",
+                            "label": "Denumește noul tău grup"
+                        },
+                        "group_select": {
+                            "label": "Selectează un grup",
+                            "placeholder": "Selectează sau caută"
+                        }
+                    },
+                    "overview": {
+                        "contact_count": "{count} contacte"
+                    },
+                    "mapping": {
+                        "title": "Mapare coloane",
+                        "type": {
+                            "TEXT": "Text",
+                            "NUMBER": "Număr",
+                            "DATE": "Dată"
+                        }
+                    },
+                    "title": "Import fișier",
+                    "duplicated_contacts_disclaimer": {
+                        "text": "Au fost detectate {count} contacte duplicat. Va fi păstrată doar prima instanță a fiecăruia. {download_button}",
+                        "download_button": "Descarcă lista de contacte"
+                    }
+                }
+            },
+            "actions": {
+                "cancel": "Anulare",
+                "continue": "Continuă"
+            },
+            "select_variables_disabled": {
+                "title": "Variabile (fără variabile pentru mapare)"
+            }
+        }
+    }
+}

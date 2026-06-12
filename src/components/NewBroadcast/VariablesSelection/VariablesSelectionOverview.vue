@@ -21,11 +21,7 @@
           class="variables-selection-overview__item-label"
           data-test="variables-overview-item-label"
         >
-          {{
-            $t('new_broadcast.pages.select_variables.variable_label', {
-              index: index + 1,
-            })
-          }}
+          {{ getVariableLabel(index + 1) }}
         </p>
         <UnnnicIcon
           icon="arrow_right_alt"
@@ -43,7 +39,10 @@
 </template>
 
 <script setup lang="ts">
+import { useVariableLabel } from '@/components/NewBroadcast/VariablesSelection/composables/useVariableLabel';
 import type { ContactField } from '@/types/contacts';
+
+const { getVariableLabel } = useVariableLabel();
 
 defineProps<{
   title?: string;

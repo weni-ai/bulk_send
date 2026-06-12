@@ -1,64 +1,64 @@
 {
   "home": {
-    "title": "Send Templates",
+    "title": "Template messaging",
     "description": "Send bulk marketing messages to your contacts",
-    "new_send": "New Send",
+    "new_send": "New message",
     "mmlite_disclaimer": {
-      "text": "Switch to MM Lite API now to accelerate your growth and gain full delivery control. {see_more_button}",
-      "see_more_button": "See more"
+      "text": "Upgrade to the MM Lite API to get more speed and full control over message delivery. {see_more_button}",
+      "see_more_button": "Learn more"
     },
     "general_performance": {
-      "title": "General Performance (Last 30 days)",
+      "title": "Overall performance (last 30 days)",
       "total_sent": {
         "label": "Total sent",
-        "hint": "Total number of messages sent through bulk sends within the selected period."
+        "hint": "Total messages sent in bulk in the selected period."
       },
       "estimated_total_cost": {
         "label": "Estimated total cost",
-        "hint": "Estimated cost based on the number of messages sent. Final pricing may vary according to Meta’s billing."
+        "hint": "Estimated cost based on the number of sent messages. The final price may vary depending on the invoice from Meta."
       },
       "success_rate": {
         "label": "Success rate",
-        "hint": "Percentage of contacts who successfully received messages, calculated from the total number of unique contacts targeted across all campaigns."
+        "hint": "Percentage of contacts who received messages successfully, calculated from the total unique contacts across all campaigns."
       }
     },
     "no_recent_sends": {
-      "title": "Start sending personalized template messages to your contacts at scale",
-      "subtitle": "It takes less than 2 minutes to set up your first send.",
+      "title": "Start communicating with your contacts at scale",
+      "subtitle": "Setting up the first message takes less than 2 minutes",
       "button": "Start now"
     },
     "recent_sends": {
-      "title": "Recent Sends",
-      "search_placeholder": "Search send",
+      "title": "Recent messages",
+      "search_placeholder": "Search message",
       "date_placeholder": "Last 30 days",
       "metrics": {
         "sent": {
           "label": "Sent",
-          "hint": "Number of sends processed by platform Weni and forwarded to Meta.",
+          "hint": "Number of messages processed by VTEX CX Platform and sent to Meta",
           "category": "Sent"
         },
         "delivered": {
           "label": "Delivered",
-          "hint": "Messages confirmed as delivered to the user’s device. Note: not all users allow delivery status to be shared. For privacy reasons, those cases are not included.",
+          "hint": "Messages confirmed as delivered to the user device. Note: Not all users allow sharing delivery status. For privacy reasons, these cases aren't included in the calculation.",
           "category": "Delivered"
         },
         "estimated_cost": {
           "label": "Estimated cost",
-          "hint": "Estimated value based on a unit cost of {currency} {cost} per template. Note: this calculation does not include different pricing models, exchange rate variations, or taxes."
+          "hint": "Estimated cost considering the unit cost of {currency} {cost} per template. Note: This calculation doesn't consider different pricing, currency variations, or taxes."
         },
         "read": {
           "label": "Read",
-          "hint": "Number of messages confirmed as read by the recipient. Note: not all users allow read status to be shared. For privacy reasons, those cases are not included.",
+          "hint": "Number of messages confirmed as read by the recipient. Note: Not all users allow sharing read status. For privacy reasons, these cases aren't included in the calculation.",
           "category": "Read"
         },
         "clicked": {
           "label": "Clicks",
-          "hint": "Messages that were accepted and sent by Meta.",
-          "category": "Clicked"
+          "hint": "Messages accepted and sent by Meta.",
+          "category": "Clicks"
         },
         "failed": {
           "label": "Failed",
-          "hint": "Failed sends, which may occur either during processing in Weni or delivery by Meta. Various factors can cause failure (e.g., invalid number, inactive WhatsApp account, temporary instability).",
+          "hint": "Message failures may occur during processing by VTEX CX Platform or delivery by Meta. Various factors can cause failure (example: invalid number, user without an active WhatsApp account, temporary instability).",
           "category": "Failed"
         },
         "actions": {
@@ -73,24 +73,24 @@
       "info": {
         "title": "Information",
         "started_on": "Started on:",
-        "ended_on": "Ended on:",
+        "ended_on": "Completed on:",
         "template_name": "Template:",
         "groups": "Contact group:",
         "sent_by": "Sent by:"
       },
-      "pagination_text": "{currentPageOffset} of {total} sends",
+      "pagination_text": "{currentPageOffset} of {total} messages",
       "status": {
         "QUEUED": "In progress",
-        "SENT": "Finished",
+        "SENT": "Completed",
         "FAILED": "Failed"
       },
       "refresh": "Clear filters",
-      "empty_text": "We couldn’t find any sends matching your search"
+      "empty_text": "No messages matching your search were found"
     }
   },
   "modals": {
     "new_contact_group": {
-      "disclaimer": "This group will contain {contactCount} contacts from the {category} results of {broadcastName} campaign.",
+      "disclaimer": "This group will include {contactCount} contacts from the {category} results of {broadcastName}.",
       "title": "New contact group",
       "name": "Group name",
       "buttons": {
@@ -105,45 +105,45 @@
         "failed": "Failed"
       },
       "success_alert": "Group created successfully",
-      "error_alert": "Group creation failed, please try again"
+      "error_alert": "Error creating group. Try again."
     },
     "activate_mmlite": {
       "buttons": {
-        "primary": "Update to MM Lite API",
+        "primary": "Upgrade to MM Lite API",
         "secondary": "Maybe later"
       },
-      "title": "Update to MM Lite API",
-      "description": "The new MM Lite API is the evolution of the Cloud API, created by Meta to deliver more messages with less integration effort.",
-      "why_subtitle": "Why update now?",
+      "title": "Upgrade to MM Lite API",
+      "description": "The new MM Lite API is the evolution of Cloud API. It was created by Meta to deliver more messages with less integration effort.",
+      "why_subtitle": "Why upgrade now?",
       "more_messages_label": "✅ More deliveries, less work",
-      "engagement_label": "💬 Automatically optimized delivery",
+      "engagement_label": "💬 Automatically optimized bulk messages",
       "seamless_label": "🔄 Simple and secure transition",
       "more_messages_description": {
-        "text": "With MM Lite API, message deliveries {0} versus the Cloud API, ensuring relevant, expected, and high-engagement communications.",
+        "text": "With MM Lite API, deliveries {0} compared to Cloud API. This prioritizes relevant, expected, and highly engaging messages.",
         "bold_text": "increased by up to +9%"
       },
-      "engagement_description": "Messages with high open and click rates receive priority, reaching even more people without requiring you to change your strategy.",
+      "engagement_description": "Messages with good open and click rates take priority, reaching even more people without needing to change your strategy.",
       "seamless_description": {
-        "text": "Keep your existing numbers and templates. The migration is automatic, requires no technical effort, {0}.",
-        "bold_text": "and the cost stays the same"
+        "text": "Keep your current numbers and templates. The migration is automatic, requires no technical effort, and {0}.",
+        "bold_text": "the cost remains the same"
       },
       "footer": {
         "text": "ℹ️ Information provided by Meta. {0}.",
         "link": "Learn more in the official documentation"
       },
-      "do_not_remind": "Do not remind me again",
-      "success_alert": "Successfully requested MM Lite API activation",
-      "error_alert": "Error requesting MM Lite activation"
+      "do_not_remind": "Don't remind me again",
+      "success_alert": "MM Lite API activation request completed successfully",
+      "error_alert": "Error requesting MM Lite API activation"
     },
     "contact_import_upload_instructions": {
-      "title": "File formatting recommendations",
+      "title": "File format recommendations",
       "subtitle": "Instructions",
       "list": {
-        "item_1": "Save your file in XLSX, XLS or CSV format",
-        "item_2": "Include a <b class=\"bold\">header row</b> with the supported column names (see below)",
-        "item_3": "Your file can contain up to <b class=\"bold\">300,000 rows</b>",
-        "item_4": "Blank cells will be ignored. To clear a value, use <b class=\"bold\">--</b>",
-        "item_5": "Additional columns will be ignored unless prefixed with <b class=\"bold\">Field:</b>"
+        "item_1": "Save your file in XLSX, XLS, or CSV format.",
+        "item_2": "Include a <b class=\"bold\">header row</b> with supported column names (see below).",
+        "item_3": "Your file can contain up to <b class=\"bold\">300,000 rows</b>.",
+        "item_4": "Blank cells will be ignored. To clear a value, use <b class=\"bold\">--</b>.",
+        "item_5": "Additional columns will be ignored unless prefixed with <b class=\"bold\">Field:</b>."
       },
       "subtitle_2": "Supported fields:",
       "table": {
@@ -151,25 +151,25 @@
         "header_2": "Description",
         "header_3": "Example",
         "header_description": {
-          "name": "Contact’s full name",
+          "name": "Full name of contact",
           "urn_tel": "Phone number with country code",
-          "urn_whatsapp": "WhatsApp number (with country code)",
-          "field_team": "Custom field (e.g. team name)"
+          "urn_whatsapp": "WhatsApp number with country code",
+          "field_team": "Custom field (ex.: team)"
         },
         "header_example": {
-          "name": "Jane Doe",
+          "name": "Jamie Smith",
           "field_team": "Managers"
         },
         "header_label": {
           "name": "Name",
-          "urn_tel": "URN:tel",
+          "urn_tel": "URN:phone",
           "urn_whatsapp": "URN:whatsapp",
           "field_team": "Field:Team"
         }
       },
       "footer": {
-        "title": "You can {0} template to help you get started",
-        "title_highlight": "download a sample"
+        "title": "You can {0} to start",
+        "title_highlight": "download a sample template"
       }
     },
     "template_preview": {
@@ -177,7 +177,7 @@
     },
     "channel_selection": {
       "title": "Your project has more than one WhatsApp number",
-      "description": "Select the number that will be used as the sender for this template",
+      "description": "Select the number that will be used as sender for this template",
       "buttons": {
         "primary": "Continue",
         "secondary": "Cancel"
@@ -185,7 +185,7 @@
     }
   },
   "new_broadcast": {
-    "title": "New send",
+    "title": "New message",
     "pages": {
       "select_groups": {
         "title": "Contacts",
@@ -193,21 +193,21 @@
         "sort_by": {
           "label": "Sort by name:",
           "options": {
-            "asc": "Asc",
-            "desc": "Desc"
+            "asc": "A–Z",
+            "desc": "Z–A"
           }
         },
         "search_placeholder": "Search groups",
-        "group_count": "{count} contacts | {count} contact | {count} contacts",
+        "group_count": "{count, plural, one {{count} contact} other {{count} contacts}}",
         "overview": {
-          "cost_value": "{currency}{cost} (Unit: {currency}{templateMultiplier} per delivered message)",
-          "cost_label": "Estimate cost:",
+          "cost_value": "{currency}{cost} (cost per message: {currency}{templateMultiplier} per delivered message)",
+          "cost_label": "Estimated cost:",
           "total_label": "Total:",
-          "total_value": "{total} contacts selected | {total} contact selected | {total} contacts selected",
-          "title": "{count} selected groups | {count} selected group | {count} selected groups",
+          "total_value": "{total, plural, one {{total} selected contact} other {{total} selected contacts}}",
+          "title": "{count, plural, one {{count} selected group} other {{count} selected groups}}",
           "removal_tooltip": "Remove selected groups"
         },
-        "no_groups": "We couldn’t find any groups matching your search",
+        "no_groups": "No groups matching your search were found",
         "pagination_text": "{currentPageOffset} of {total} groups",
         "clear_filters": "Clear filters"
       },
@@ -217,7 +217,7 @@
         "filters": {
           "new_tamplate": "New template",
           "search_placeholder": "Search template",
-          "channel_not_found": "Could not redirect to template creation, missing Channel UUID"
+          "channel_not_found": "Couldn't redirect to create template. Missing channel UUID."
         },
         "table": {
           "name": "Name",
@@ -227,13 +227,13 @@
           "status": "Status",
           "statuses": {
             "APPROVED": "Approved",
-            "IN_APPEAL": "In appeal",
+            "IN_APPEAL": "Reviewing",
             "PENDING": "Pending",
             "REJECTED": "Rejected",
-            "PENDING_DELETION": "Pending deletion",
+            "PENDING_DELETION": "Pending delete",
             "DELETED": "Deleted",
-            "DISABLED": "Disabled",
-            "LOCKED": "Locked",
+            "DISABLED": "Deactivated",
+            "LOCKED": "Blocked",
             "UNSUPPORTED_LANGUAGE": "Unsupported language",
             "PAUSED": "Paused"
           }
@@ -241,11 +241,11 @@
         "preview": {
           "title": "Template preview",
           "name": "Template preview:",
-          "missing": "Choose a template to preview"
+          "missing": "Select a template to preview"
         },
         "disclaimer": {
-          "text": "Only templates with an approved status can be selected and sent. Pending templates must wait for Meta’s approval before they can be used. {meta_documentation_link}",
-          "meta_documentation_link": "Learn more in Meta’s documentation"
+          "text": "Only templates with approved status can be selected and sent. Pending templates must wait approval from Meta before being used. {meta_documentation_link}",
+          "meta_documentation_link": "Learn more in the Meta documentation"
         },
         "actions": {
           "cancel": "Back"
@@ -254,9 +254,9 @@
       "select_variables": {
         "title": "Variables",
         "page_title": "Variable mapping",
-        "variable_label": "Variable {'{{'}{index}{'}}'}",
-        "variable_placeholder": "Select the field that matches this variable",
-        "disclaimer": "Check if each field is correctly mapped, this is how your message will look to each contact.",
+        "variable_label": "Variable {placeholder}",
+        "variable_placeholder": "Select the field that corresponds to this variable",
+        "disclaimer": "Make sure each field is mapped correctly. This is how contacts will see your message.",
         "actions": {
           "cancel": "Back"
         },
@@ -266,84 +266,84 @@
           "VIDEO": "Add video",
           "DOCUMENT": "Add document"
         },
-        "header_media_upload_error": "Upload failed, please try again",
+        "header_media_upload_error": "Error while uploading. Try again.",
         "name_field_label": "Name"
       },
       "confirm_and_send": {
-        "title": "Review & send",
+        "title": "Review and send",
         "flow_placeholder": "Search",
-        "broadcast_name_placeholder": "Broadcast name",
+        "broadcast_name_placeholder": "Message name",
         "flow_message": "This flow will be activated if a contact replies to this message",
-        "flow_label": "Select a flow to trigger when a contact replies",
+        "flow_label": "Select the flow that will be activated when a contact replies",
         "broadcast_name_label": "Name",
         "details": {
           "title": "Details",
-          "groups": "Groups selected: {0}",
-          "contacts": "Contacts selected: {0}",
+          "groups": "Selected groups: {0}",
+          "contacts": "Selected contacts: {0}",
           "cost": "Estimated cost: {0} ({1})",
-          "unit_cost": "Unit: {unitCost} per delivered message",
+          "unit_cost": "Cost per message: {unitCost} per delivered message",
           "channel": "Sender number: {0}"
         },
         "variables": {
           "title": "Variable mapping"
         },
-        "reviewed_label": "I’ve reviewed the contacts and content. I’m ready to send.",
-        "flow_disclaimer": "Make sure your agent team is ready to handle replies to this content.",
+        "reviewed_label": "I have reviewed the contacts and content. I am ready to send.",
+        "flow_disclaimer": "Make sure your team of agents is ready to handle responses to this content",
         "contact_import_pending": {
-          "title": "Contact import in progress ⏳",
-          "content": "Your contact list is being imported.\n\nOnce it’s done, you’ll be able to complete the send.\nIn the meantime, you can review your campaign details."
+          "title": "Importing contacts",
+          "content": "Your contact list is being imported.\n\nYou'll be able to send a message after import is complete.\nCheck your campaign details while you wait."
         },
-        "unknown_error": "An unknown error occured while trying to create the broadcast, please refresh the page",
-        "variables_not_found": "incomplete variables",
-        "template_not_found": "missing selected template",
-        "name_not_found": "missing broadcast name",
-        "groups_not_found": "missing groups or import",
+        "unknown_error": "An unknown error occurred while trying to send the message. Refresh the page.",
+        "variables_not_found": "Complete the variables",
+        "template_not_found": "Add the template",
+        "name_not_found": "Add a name to the message",
+        "groups_not_found": "Add a group or import contacts",
         "broadcast_errored": {
-          "title": "❌ Something went wrong",
+          "title": "Something went wrong",
           "primary_button": "Back",
-          "description": "We couldn’t start your send due to {error}.\nNo messages have been delivered.\n\nYou can return to the review screen to check your setup and try again."
+          "description": "Couldn't start sending due to {error}.\nNo messages were delivered.\n\nYou can go back to the review screen to check your settings and try again."
         },
         "broadcast_success": {
-          "title": "✅ Send initiated successfully ",
-          "content": "Your message is being delivered to {contact_count} contacts, <span class=\"highlight\">this process may take a few minutes to complete</span>.\n\nProgress and results will appear on your home screen as messages are delivered.",
-          "primary_button": "Back to home"
+          "title": "Send started successfully ",
+          "content": "Your message is being sent to {contact_count} contacts. <span class=\"highlight\">This can take a few minutes to complete</span>.\n\nProgress and results will show on your home screen as messages are delivered.",
+          "primary_button": "Back to homepage"
         },
         "actions": {
           "cancel": "Back"
         },
-        "flow_not_found": "Missing selected flow"
+        "flow_not_found": "Select a flow"
       },
       "contact_import": {
         "title": "Import contacts",
-        "selected_groups_disclaimer": "You have already selected a contact group, so you cannot import contacts.",
+        "selected_groups_disclaimer": "A contact group was already selected. You can't import new contacts.",
         "upload_instructions": {
-          "text": "{0} – to learn how to prepare your file",
-          "button": "View instructions"
+          "text": "{0} to prepare your file",
+          "button": "See instructions"
         },
         "upload_area": {
           "title": {
             "text": "Drag and drop or {0} to upload",
-            "highlight": "Choose file"
+            "highlight": "choose a file"
           },
-          "subtitle": "Import your contact list using an Excel (.xls, .xlsx) or CSV (.csv) file.",
-          "unknown_error_alert": "Unknown error while uploading file",
+          "subtitle": "Import your contact list using an Excel (XLS, XLSX) or CSV file.",
+          "unknown_error_alert": "Unknown error uploading file",
           "unsupported_format_alert": "Unsupported file format",
-          "exceeded_the_maximum_file_size_limit_alert": "File too large"
+          "exceeded_the_maximum_file_size_limit_alert": "File exceeded size limit"
         },
         "processing": {
           "form": {
             "action_type": {
               "create": "Create a new group",
               "add": "Add to an existing group",
-              "import_without_adding": "Import without adding to any group"
+              "import_without_adding": "Import without adding to a group"
             },
-            "title": "Select how the imported contacts should be handled",
+            "title": "Select how imported contacts should be handled",
             "group_name": {
               "placeholder": "Group name",
               "label": "Name your new group"
             },
             "group_select": {
-              "label": "Choose your group",
+              "label": "Select a group",
               "placeholder": "Select or search"
             }
           },
@@ -358,10 +358,10 @@
               "DATE": "Date"
             }
           },
-          "title": "Import file processing",
+          "title": "File import",
           "duplicated_contacts_disclaimer": {
-            "text": "{count} duplicate contacts detected. Only the first occurence of each will be kept. {download_button}",
-            "download_button": "Download contacts list"
+            "text": "{count} duplicate contacts detected. Only the first instance of each will be kept. {download_button}",
+            "download_button": "Download contact list"
           }
         }
       },
@@ -370,7 +370,7 @@
         "continue": "Continue"
       },
       "select_variables_disabled": {
-        "title": "Variables (no variable to map)"
+        "title": "Variables (no variables for mapping)"
       }
     }
   }
