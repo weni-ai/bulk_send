@@ -19,7 +19,7 @@
             v-for="index in templateVariablesCount"
             :key="index"
             class="variables-selection__item"
-            :label="variableLabel(index)"
+            :label="getVariableLabel(index)"
           >
             <UnnnicSelectSmart
               :options="contactFields"
@@ -74,6 +74,7 @@ import { useContactStore } from '@/stores/contact';
 import { useBroadcastsStore } from '@/stores/broadcasts';
 import TemplateSelectionPreview from '@/components/NewBroadcast/TemplateSelection/TemplateSelectionPreview.vue';
 import VariablesSelectionOverview from '@/components/NewBroadcast/VariablesSelection/VariablesSelectionOverview.vue';
+import { useVariableLabel } from '@/components/NewBroadcast/VariablesSelection/composables/useVariableLabel';
 import VariablesSelectionHeaderMedia from '@/components/NewBroadcast/VariablesSelection/VariablesSelectionHeaderMedia.vue';
 import { NewBroadcastPage, NAME_FIELD_VALUE } from '@/constants/broadcasts';
 import StepActions from '@/components/NewBroadcast/StepActions.vue';
@@ -86,12 +87,7 @@ import {
 const contactStore = useContactStore();
 const broadcastsStore = useBroadcastsStore();
 const { t } = useI18n();
-
-function variableLabel(index: number) {
-  return t('new_broadcast.pages.select_variables.variable_label', {
-    placeholder: `{{${index}}}`,
-  });
-}
+const { getVariableLabel } = useVariableLabel();
 
 onBeforeMount(() => {
   fetchContactFields();
