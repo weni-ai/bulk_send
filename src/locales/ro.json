@@ -198,13 +198,13 @@
                     }
                 },
                 "search_placeholder": "Caută grupuri",
-                "group_count": "{count} contacte | {count} contact | {count} contacte",
+                "group_count": "{count, plural, one {{count} contact} few {{count} contacte} other {{count} contacte}}",
                 "overview": {
                     "cost_value": "{currency}{cost} (cost pe mesaj: {currency}{templateMultiplier} pe mesaj livrat)",
                     "cost_label": "Cost estimat:",
                     "total_label": "Total:",
-                    "total_value": "{total} contacte selectate | {total} contact selectat | {total} contacte selectate",
-                    "title": "{count} grupuri selectate | {count} grup selectat | {count} grupuri selectate",
+                    "total_value": "{total, plural, one {{total} contact selectat} few {{total} contacte selectate} other {{total} contacte selectate}}",
+                    "title": "{count, plural, one {{count} grup selectat} few {{count} grupuri selectate} other {{count} grupuri selectate}}",
                     "removal_tooltip": "Elimină grupurile selectate"
                 },
                 "no_groups": "Nu au fost găsite grupuri care să corespundă căutării tale",
@@ -254,7 +254,7 @@
             "select_variables": {
                 "title": "Variabile",
                 "page_title": "Maparea variabilelor",
-                "variable_label": "Variabilă {'{{'}{index}{'}}'}",
+                "variable_label": "Variabilă {placeholder}",
                 "variable_placeholder": "Selectează câmpul care corespunde acestei variabile",
                 "disclaimer": "Asigură-te că fiecare câmp este mapat corect. În acest mod, persoanele tale de contact îți vor vedea mesajul.",
                 "actions": {

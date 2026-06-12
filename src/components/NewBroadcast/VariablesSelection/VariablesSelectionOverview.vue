@@ -21,11 +21,7 @@
           class="variables-selection-overview__item-label"
           data-test="variables-overview-item-label"
         >
-          {{
-            $t('new_broadcast.pages.select_variables.variable_label', {
-              index: index + 1,
-            })
-          }}
+          {{ variableLabel(index + 1) }}
         </p>
         <UnnnicIcon
           icon="arrow_right_alt"
@@ -43,12 +39,21 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import type { ContactField } from '@/types/contacts';
+
+const { t } = useI18n();
 
 defineProps<{
   title?: string;
   definedVariables: ContactField[];
 }>();
+
+function variableLabel(index: number) {
+  return t('new_broadcast.pages.select_variables.variable_label', {
+    placeholder: `{{${index}}}`,
+  });
+}
 </script>
 
 <style scoped lang="scss">

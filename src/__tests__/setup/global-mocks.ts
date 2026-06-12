@@ -27,7 +27,8 @@ vi.mock('@/api/requests', () => {
 vi.mock('@/utils/plugins/i18n', () => ({
   default: {
     global: {
-      locale: 'en',
+      locale: { value: 'en' },
+      t: (key: string) => key,
     },
   },
 }));

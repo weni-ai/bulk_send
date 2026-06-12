@@ -19,11 +19,7 @@
             v-for="index in templateVariablesCount"
             :key="index"
             class="variables-selection__item"
-            :label="
-              $t('new_broadcast.pages.select_variables.variable_label', {
-                index,
-              })
-            "
+            :label="variableLabel(index)"
           >
             <UnnnicSelectSmart
               :options="contactFields"
@@ -90,6 +86,12 @@ import {
 const contactStore = useContactStore();
 const broadcastsStore = useBroadcastsStore();
 const { t } = useI18n();
+
+function variableLabel(index: number) {
+  return t('new_broadcast.pages.select_variables.variable_label', {
+    placeholder: `{{${index}}}`,
+  });
+}
 
 onBeforeMount(() => {
   fetchContactFields();
