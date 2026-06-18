@@ -198,13 +198,13 @@
           }
         },
         "search_placeholder": "Buscar grupos",
-        "group_count": "{count} contatos | {count} contato | {count} contatos",
+        "group_count": "{count, plural, one {{count} contato} other {{count} contatos}}",
         "overview": {
           "cost_value": "{currency}{cost} (valor unitário: {currency} {templateMultiplier} por mensagem entregue)",
           "cost_label": "Custo estimado:",
           "total_label": "Total:",
-          "total_value": "{total} contatos selecionados | {total} contato selecionado | {total} contatos selecionados",
-          "title": "{count} grupos selecionados | {count} grupo selecionado | {count} grupos selecionados",
+          "total_value": "{total, plural, one {{total} contato selecionado} other {{total} contatos selecionados}}",
+          "title": "{count, plural, one {{count} grupo selecionado} other {{count} grupos selecionados}}",
           "removal_tooltip": "Remover grupos selecionados"
         },
         "no_groups": "Não encontramos nenhum grupo correspondente à sua busca",
@@ -254,7 +254,7 @@
       "select_variables": {
         "title": "Variáveis",
         "page_title": "Mapeamento de variáveis",
-        "variable_label": "Variável {'{{'}{index}{'}}'}",
+        "variable_label": "Variável {placeholder}",
         "variable_placeholder": "Selecione o campo que corresponde a esta variável",
         "disclaimer": "Verifique se cada campo está mapeado corretamente pois será desta forma que o contato irá visualizar sua mensagem",
         "actions": {

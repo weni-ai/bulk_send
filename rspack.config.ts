@@ -137,6 +137,7 @@ export default defineConfig({
         './locales/pt_br': './src/locales/pt_br.json',
         './locales/en': './src/locales/en.json',
         './locales/es': './src/locales/es.json',
+        './locales/ro': './src/locales/ro.json',
       },
       remotes: {
         connect: `connect@${process.env.MODULE_FEDERATION_CONNECT_URL}/remoteEntry.js`,
