@@ -61,7 +61,7 @@ const handleRemoval = () => {
   justify-content: space-between;
   gap: $unnnic-spacing-nano;
   box-sizing: border-box;
-  border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+  border: 1px solid $unnnic-color-border-base;
   border-radius: $unnnic-border-radius-md;
   padding: $unnnic-spacing-xs;
 
@@ -73,12 +73,12 @@ const handleRemoval = () => {
   &__file-name {
     @include unnnic-text-body-gt;
     font-weight: $unnnic-font-weight-bold;
-    color: $unnnic-color-neutral-darkest;
+    color: $unnnic-color-fg-emphasized;
   }
 
   &__contact-count {
     @include unnnic-text-body-md;
-    color: $unnnic-color-neutral-cloudy;
+    color: $unnnic-color-fg-base;
   }
 
   &__removal {

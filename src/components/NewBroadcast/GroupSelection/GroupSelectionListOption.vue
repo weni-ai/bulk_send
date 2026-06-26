@@ -53,18 +53,18 @@ const emitSelectionUpdate = () => {
   box-sizing: border-box;
   padding: $unnnic-spacing-xs;
 
-  border: $unnnic-border-width-thinner solid $unnnic-color-neutral-light;
+  border: 1px solid $unnnic-color-border-muted;
   border-radius: $unnnic-border-radius-sm;
   width: 100%;
   cursor: pointer;
 
   &:hover {
-    border-color: $unnnic-color-neutral-soft;
+    border-color: $unnnic-color-border-base;
   }
 
   &--selected {
-    background-color: $unnnic-color-background-lightest;
-    border-color: $unnnic-color-neutral-soft;
+    background-color: $unnnic-color-bg-base-soft;
+    border-color: $unnnic-color-border-base;
   }
 
   &__content {
@@ -76,7 +76,7 @@ const emitSelectionUpdate = () => {
   &__title {
     @include unnnic-text-body-gt;
     font-weight: $unnnic-font-weight-bold;
-    color: $unnnic-color-neutral-darkest;
+    color: $unnnic-color-fg-emphasized;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -84,7 +84,7 @@ const emitSelectionUpdate = () => {
 
   &__description {
     @include unnnic-text-body-md;
-    color: $unnnic-color-neutral-cloudy;
+    color: $unnnic-color-fg-base;
   }
 
   &__checkbox {

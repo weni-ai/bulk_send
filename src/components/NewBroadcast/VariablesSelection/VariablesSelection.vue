@@ -267,7 +267,7 @@ const handleContinue = () => {
   &__title {
     @include unnnic-text-body-lg;
     font-weight: $unnnic-font-weight-bold;
-    color: $unnnic-color-neutral-darkest;
+    color: $unnnic-color-fg-emphasized;
   }
 
   &__main {
@@ -297,7 +297,7 @@ const handleContinue = () => {
 
   &__item-label {
     @include unnnic-text-body-gt;
-    color: $unnnic-color-neutral-cloudy;
+    color: $unnnic-color-fg-base;
   }
 }
 </style>

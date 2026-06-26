@@ -130,23 +130,23 @@ const channelName = computed(() => {
   flex-direction: column;
   gap: $unnnic-spacing-xs;
 
-  border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+  border: 1px solid $unnnic-color-border-base;
   border-radius: $unnnic-border-radius-sm;
   padding: $unnnic-spacing-ant;
 
   &__title {
     @include unnnic-text-body-lg;
     font-weight: $unnnic-font-weight-bold;
-    color: $unnnic-color-neutral-dark;
+    color: $unnnic-color-fg-base;
   }
 
   &__item {
     @include unnnic-text-body-gt;
-    color: $unnnic-color-neutral-dark;
+    color: $unnnic-color-fg-base;
   }
 
   &__value {
-    color: $unnnic-color-neutral-cloudy;
+    color: $unnnic-color-fg-base;
   }
 }
 </style>

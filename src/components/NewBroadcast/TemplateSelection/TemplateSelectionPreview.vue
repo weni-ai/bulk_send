@@ -120,7 +120,7 @@ const bodyFormatter = (body: string) => {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+  border: 1px solid $unnnic-color-border-base;
   border-radius: $unnnic-border-radius-md;
 
   &__header {
@@ -131,7 +131,7 @@ const bodyFormatter = (body: string) => {
   &__name {
     @include unnnic-text-body-gt;
     font-weight: $unnnic-font-weight-bold;
-    color: $unnnic-color-neutral-dark;
+    color: $unnnic-color-fg-base;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -145,7 +145,7 @@ const bodyFormatter = (body: string) => {
     display: flex;
     flex: 1;
     padding: $unnnic-spacing-sm;
-    background-color: $unnnic-color-background-lightest;
+    background-color: $unnnic-color-bg-base-soft;
     justify-content: center;
   }
 
@@ -156,20 +156,20 @@ const bodyFormatter = (body: string) => {
   &__missing {
     display: flex;
     flex: 1;
-    background-color: $unnnic-color-background-white;
+    background-color: $unnnic-color-bg-base;
     border-radius: $unnnic-border-radius-md;
     align-items: center;
     justify-content: center;
-    box-shadow: $unnnic-shadow-level-near;
+    box-shadow: $unnnic-shadow-1;
 
     @include unnnic-text-body-gt;
-    color: $unnnic-color-neutral-cloudy;
+    color: $unnnic-color-fg-base;
   }
 
   &__content-preview {
     :deep(strong) {
       font-weight: $unnnic-font-weight-bold;
-      color: $unnnic-color-neutral-dark;
+      color: $unnnic-color-fg-base;
     }
 
     :deep(i) {

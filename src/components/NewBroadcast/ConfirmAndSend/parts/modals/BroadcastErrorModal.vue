@@ -27,7 +27,7 @@ defineProps<{
 <style scoped lang="scss">
 .confirm-and-send__broadcast-errored-content {
   @include unnnic-text-body-gt;
-  color: $unnnic-color-neutral-dark;
+  color: $unnnic-color-fg-base;
   white-space: pre-wrap;
 }
 </style>

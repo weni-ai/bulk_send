@@ -191,13 +191,13 @@ const handleCancel = () => {
 
   &__title {
     @include unnnic-text-body-gt;
-    color: $unnnic-color-neutral-dark;
+    color: $unnnic-color-fg-base;
   }
 
   &__title-highlight {
     @include unnnic-text-body-gt;
     @include button-reset;
-    color: $unnnic-color-neutral-dark;
+    color: $unnnic-color-fg-base;
     font-weight: $unnnic-font-weight-bold;
     text-decoration: underline;
     cursor: pointer;
@@ -205,14 +205,14 @@ const handleCancel = () => {
 
   &__subtitle {
     @include unnnic-text-body-gt;
-    color: $unnnic-color-neutral-dark;
+    color: $unnnic-color-fg-base;
     margin-top: $unnnic-spacing-md;
   }
 
   &__title--disabled,
   &__title-highlight--disabled,
   &__subtitle--disabled {
-    color: $unnnic-color-neutral-clean;
+    color: $unnnic-color-fg-base;
   }
 
   &__upload-area {
@@ -222,12 +222,12 @@ const handleCancel = () => {
   }
 
   &__drop-area:deep(.unnnic-upload-area__dropzone__icon) {
-    color: $unnnic-color-neutral-dark;
+    color: $unnnic-color-fg-base;
     font-size: $unnnic-font-size-title-sm;
   }
 
   &__drop-area--disabled:deep(.unnnic-upload-area__dropzone__icon) {
-    color: $unnnic-color-neutral-clean;
+    color: $unnnic-color-fg-base;
   }
 
   &__upload-progress-loading {

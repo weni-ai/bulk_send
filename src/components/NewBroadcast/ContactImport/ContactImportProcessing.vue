@@ -110,7 +110,7 @@ const downloadDuplicates = (event: Event) => {
   &__title {
     @include unnnic-text-body-lg;
     font-weight: $unnnic-font-weight-bold;
-    color: $unnnic-color-neutral-darkest;
+    color: $unnnic-color-fg-emphasized;
   }
 
   &__content {
@@ -125,12 +125,12 @@ const downloadDuplicates = (event: Event) => {
 
     :deep(.unnnic-disclaimer__text) {
       @include unnnic-text-body-md;
-      color: $unnnic-color-neutral-cloudy;
+      color: $unnnic-color-fg-base;
     }
 
     :deep(.highlight) {
       @include unnnic-text-body-md;
-      color: $unnnic-color-neutral-cloudy;
+      color: $unnnic-color-fg-base;
       text-decoration: underline;
       font-weight: $unnnic-font-weight-bold;
       cursor: pointer;

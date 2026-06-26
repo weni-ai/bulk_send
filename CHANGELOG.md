@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.9.2] - 2026-06-18
+
+### Added
+- feat: Add ICU MessageFormat support for localization
+
 ## [1.9.1] - 2026-05-12
 
 ### Fixed

@@ -80,7 +80,7 @@ const handleUpdateModelValue = (value: boolean) => {
 <style lang="scss">
 .template-preview-modal {
   .unnnic-modal-dialog__container__content {
-    background-color: $unnnic-color-background-lightest;
+    background-color: $unnnic-color-bg-base-soft;
   }
 }
 </style>

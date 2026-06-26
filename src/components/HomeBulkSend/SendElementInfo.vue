@@ -122,12 +122,12 @@ const handleUpdateShowTemplatePreviewModal = (value: boolean) => {
   flex-direction: column;
   gap: $unnnic-spacing-xs;
 
-  border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+  border: 1px solid $unnnic-color-border-base;
   border-radius: $unnnic-border-radius-sm;
   padding: $unnnic-spacing-ant;
 
   &__title {
-    color: $unnnic-color-neutral-darkest;
+    color: $unnnic-color-fg-emphasized;
     font-size: $unnnic-font-size-body-gt;
     font-weight: $unnnic-font-weight-bold;
     line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
@@ -140,14 +140,14 @@ const handleUpdateShowTemplatePreviewModal = (value: boolean) => {
   }
 
   &__label {
-    color: $unnnic-color-neutral-dark;
+    color: $unnnic-color-fg-base;
     font-size: $unnnic-font-size-body-md;
     font-weight: $unnnic-font-weight-bold;
     line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
   }
 
   &__value {
-    color: $unnnic-color-neutral-cloudy;
+    color: $unnnic-color-fg-base;
     font-size: $unnnic-font-size-body-md;
     font-weight: $unnnic-font-weight-regular;
     line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
@@ -168,7 +168,7 @@ const handleUpdateShowTemplatePreviewModal = (value: boolean) => {
 
   &__started-on::after {
     content: '–';
-    color: $unnnic-color-neutral-cloudy;
+    color: $unnnic-color-fg-base;
     font-size: $unnnic-font-size-body-md;
     font-weight: $unnnic-font-weight-regular;
     line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
@@ -176,7 +176,7 @@ const handleUpdateShowTemplatePreviewModal = (value: boolean) => {
 
   &__view-template {
     @include button-reset;
-    color: $unnnic-color-neutral-cloudy;
+    color: $unnnic-color-fg-base;
     font-family: Lato;
     font-size: $unnnic-font-size-body-md;
     font-weight: $unnnic-font-weight-bold;

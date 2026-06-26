@@ -136,7 +136,7 @@ const handleSelectedGroupsUpdate = (groups: Group[]) => {
   &__title {
     @include unnnic-text-body-lg;
     font-weight: $unnnic-font-weight-bold;
-    color: $unnnic-color-neutral-darkest;
+    color: $unnnic-color-fg-emphasized;
   }
 
   &__list {

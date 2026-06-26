@@ -150,7 +150,7 @@ const handleMediaOverviewRemove = () => {
   &__title {
     @include unnnic-text-body-lg;
     font-weight: $unnnic-font-weight-bold;
-    color: $unnnic-color-neutral-darkest;
+    color: $unnnic-color-fg-emphasized;
   }
 
   &__button {
@@ -162,7 +162,7 @@ const handleMediaOverviewRemove = () => {
     gap: $unnnic-spacing-xs;
     align-items: center;
 
-    border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+    border: 1px solid $unnnic-color-border-base;
     border-radius: $unnnic-border-radius-sm;
     padding: $unnnic-spacing-ant;
   }
@@ -182,12 +182,12 @@ const handleMediaOverviewRemove = () => {
     align-items: center;
     justify-content: center;
     border-radius: $unnnic-border-radius-sm;
-    background-color: $unnnic-color-gray-50;
+    background-color: $unnnic-color-gray-1;
   }
 
   &__overview-file-name {
     @include unnnic-text-body-gt;
-    color: $unnnic-color-gray-900;
+    color: $unnnic-color-gray-13;
     flex: 1;
   }
 

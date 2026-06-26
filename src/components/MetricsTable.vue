@@ -171,7 +171,7 @@ const tooltipSide = (cellIndex: number) => {
   border-collapse: separate;
   border-spacing: 0;
   table-layout: fixed;
-  border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+  border: 1px solid $unnnic-color-border-base;
   border-radius: $unnnic-border-radius-sm;
 
   &__row:last-child {
@@ -181,8 +181,8 @@ const tooltipSide = (cellIndex: number) => {
   }
 
   &__cell {
-    border-right: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
-    border-bottom: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+    border-right: 1px solid $unnnic-color-border-base;
+    border-bottom: 1px solid $unnnic-color-border-base;
     padding: $unnnic-spacing-md;
 
     &:last-child {
@@ -216,7 +216,7 @@ const tooltipSide = (cellIndex: number) => {
 
   &__label {
     overflow: hidden;
-    color: $unnnic-color-neutral-darkest;
+    color: $unnnic-color-fg-emphasized;
     text-overflow: ellipsis;
 
     font-size: $unnnic-font-size-body-lg;
@@ -268,7 +268,7 @@ const tooltipSide = (cellIndex: number) => {
   }
 
   &__value {
-    color: $unnnic-color-neutral-black;
+    color: $unnnic-color-fg-emphasized;
 
     font-size: $unnnic-font-size-title-md;
     line-height: $unnnic-font-size-title-md + $unnnic-line-height-md;
@@ -284,7 +284,7 @@ const tooltipSide = (cellIndex: number) => {
     display: flex;
     align-items: center;
 
-    color: $unnnic-color-neutral-cloudy;
+    color: $unnnic-color-fg-base;
 
     font-size: $unnnic-font-size-body-gt;
     line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
@@ -297,9 +297,9 @@ const tooltipSide = (cellIndex: number) => {
     &::before {
       content: '';
       display: block;
-      width: $unnnic-border-width-thinner;
+      width: 1px;
       height: $unnnic-font-size-body-md + $unnnic-line-height-md;
-      background-color: $unnnic-color-neutral-soft;
+      background-color: $unnnic-color-border-base;
       margin: 0 $unnnic-spacing-xs;
     }
   }

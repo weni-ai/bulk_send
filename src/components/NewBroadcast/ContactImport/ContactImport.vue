@@ -67,7 +67,7 @@ const hasSelectedGroups = computed(() => selectedGroups.value.length > 0);
   &__title {
     @include unnnic-text-body-lg;
     font-weight: $unnnic-font-weight-bold;
-    color: $unnnic-color-neutral-darkest;
+    color: $unnnic-color-fg-emphasized;
   }
 }
 </style>
