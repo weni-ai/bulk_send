@@ -222,7 +222,7 @@ const handlePageUpdate = (page: number) => {
   flex: 1;
 
   &__title {
-    color: $unnnic-color-neutral-darkest;
+    color: $unnnic-color-fg-emphasized;
     font-size: $unnnic-font-size-body-lg;
     font-weight: $unnnic-font-weight-bold;
     line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;

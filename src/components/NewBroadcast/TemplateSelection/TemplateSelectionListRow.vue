@@ -37,8 +37,8 @@ const hasValue = computed(() => {
   white-space: nowrap;
 
   &--selected {
-    background-color: $unnnic-color-background-lightest;
-    border-color: $unnnic-color-neutral-soft;
+    background-color: $unnnic-color-bg-base-soft;
+    border-color: $unnnic-color-border-base;
   }
 }
 </style>

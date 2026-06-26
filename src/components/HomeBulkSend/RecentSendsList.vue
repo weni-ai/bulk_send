@@ -116,7 +116,7 @@ const handleReset = useDebounceFn(() => {
 
   &__pagination-text {
     font-size: $unnnic-font-size-body-md;
-    color: $unnnic-color-neutral-cloudy;
+    color: $unnnic-color-fg-base;
     line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
   }
 
@@ -127,7 +127,7 @@ const handleReset = useDebounceFn(() => {
     gap: $unnnic-spacing-sm;
     padding: $unnnic-spacing-sm 0;
 
-    color: $unnnic-color-neutral-cloudy;
+    color: $unnnic-color-fg-base;
     font-size: $unnnic-font-size-body-gt;
     line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
   }

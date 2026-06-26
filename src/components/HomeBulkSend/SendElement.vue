@@ -212,7 +212,7 @@ const estimatedCost = computed(() => {
 <style scoped lang="scss">
 .send-element {
   padding: $unnnic-spacing-sm;
-  border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+  border: 1px solid $unnnic-color-border-base;
   border-radius: $unnnic-border-radius-sm;
 
   &:deep(.unnnic-collapse__header) {
@@ -227,14 +227,14 @@ const estimatedCost = computed(() => {
   }
 
   &__title {
-    color: $unnnic-color-neutral-darkest;
+    color: $unnnic-color-fg-emphasized;
     font-size: $unnnic-font-size-body-lg;
     font-weight: $unnnic-font-weight-bold;
     line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
   }
 
   &__date {
-    color: $unnnic-color-neutral-cloudy;
+    color: $unnnic-color-fg-base;
     font-size: $unnnic-font-size-body-gt;
     font-weight: $unnnic-font-weight-regular;
     line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
@@ -242,11 +242,11 @@ const estimatedCost = computed(() => {
 
   &__tag {
     &--aux-green {
-      background-color: $unnnic-color-aux-green-100;
+      background-color: $unnnic-color-bg-success;
     }
 
     &--aux-orange {
-      background-color: $unnnic-color-aux-orange-100;
+      background-color: $unnnic-color-bg-warning;
     }
   }
 

@@ -20,8 +20,8 @@ import BaseLayout from '@/layouts/BaseLayout.vue';
     content: '';
     display: block;
     width: 100%;
-    height: $unnnic-border-width-thinner;
-    background-color: $unnnic-color-neutral-soft;
+    height: 1px;
+    background-color: $unnnic-color-border-base;
     margin: $unnnic-spacing-md 0;
   }
 }

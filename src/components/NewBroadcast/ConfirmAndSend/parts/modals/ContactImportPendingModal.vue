@@ -20,7 +20,7 @@ defineProps<{
 <style scoped lang="scss">
 .confirm-and-send__contact-import-pending-content {
   @include unnnic-text-body-gt;
-  color: $unnnic-color-neutral-cloudy;
+  color: $unnnic-color-fg-base;
   white-space: pre-line;
 }
 </style>

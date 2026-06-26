@@ -56,21 +56,21 @@ const handleModalUpdate = (value: boolean) => {
 
   &__text {
     @include unnnic-text-body-gt;
-    color: $unnnic-color-neutral-dark;
+    color: $unnnic-color-fg-base;
   }
 
   &__button {
     @include unnnic-text-body-gt;
     @include button-reset;
     font-weight: $unnnic-font-weight-bold;
-    color: $unnnic-color-neutral-dark;
+    color: $unnnic-color-fg-base;
     text-decoration: underline;
     cursor: pointer;
   }
 
   &__text--disabled,
   &__button--disabled {
-    color: $unnnic-color-neutral-clean;
+    color: $unnnic-color-fg-base;
   }
 }
 </style>
