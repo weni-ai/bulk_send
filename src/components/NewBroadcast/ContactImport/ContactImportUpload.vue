@@ -212,7 +212,7 @@ const handleCancel = () => {
   &__title--disabled,
   &__title-highlight--disabled,
   &__subtitle--disabled {
-    color: $unnnic-color-fg-base;
+    color: $unnnic-color-fg-muted;
   }
 
   &__upload-area {
