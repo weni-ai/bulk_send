@@ -41,14 +41,14 @@ const loadedChannels = computed(() => {
   }
 
   &__title {
-    color: $unnnic-color-neutral-darkest;
+    color: $unnnic-color-fg-emphasized;
     font-size: $unnnic-font-size-title-sm;
     font-weight: $unnnic-font-weight-bold;
     line-height: $unnnic-font-size-title-sm + $unnnic-line-height-md;
   }
 
   &__description {
-    color: $unnnic-color-neutral-cloudy;
+    color: $unnnic-color-fg-base;
     font-size: $unnnic-font-size-body-gt;
     line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
   }

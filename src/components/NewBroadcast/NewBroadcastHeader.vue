@@ -44,7 +44,7 @@ const handleBackButtonClick = () => {
   }
 
   &__title-text {
-    color: $unnnic-color-neutral-darkest;
+    color: $unnnic-color-fg-emphasized;
     font-weight: $unnnic-font-weight-bold;
     font-size: $unnnic-font-size-title-sm;
     line-height: $unnnic-font-size-title-sm + $unnnic-line-height-md;

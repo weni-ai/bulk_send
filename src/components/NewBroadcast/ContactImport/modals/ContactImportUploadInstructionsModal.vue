@@ -167,7 +167,7 @@ const handleDownloadSample = () => {
 
   &__subtitle {
     @include unnnic-text-body-lg;
-    color: $unnnic-color-neutral-dark;
+    color: $unnnic-color-fg-base;
     font-weight: $unnnic-font-weight-bold;
   }
 
@@ -177,7 +177,7 @@ const handleDownloadSample = () => {
 
   &__list-item {
     @include unnnic-text-body-gt;
-    color: $unnnic-color-neutral-cloudy;
+    color: $unnnic-color-fg-base;
     margin-left: $unnnic-font-size-title-sm;
 
     :deep(.bold) {
@@ -191,14 +191,14 @@ const handleDownloadSample = () => {
 
   &__footer-title {
     @include unnnic-text-body-gt;
-    color: $unnnic-color-neutral-cloudy;
+    color: $unnnic-color-fg-base;
   }
 
   &__footer-title-highlight {
     @include unnnic-text-body-gt;
     @include button-reset;
     font-weight: $unnnic-font-weight-bold;
-    color: $unnnic-color-neutral-cloudy;
+    color: $unnnic-color-fg-base;
     text-decoration: underline;
     cursor: pointer;
   }

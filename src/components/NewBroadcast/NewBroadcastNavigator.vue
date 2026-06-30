@@ -56,7 +56,7 @@ const getPageLabel = (page: NewBroadcastPage) => {
   &--disabled-variables-page {
     :nth-child(3) {
       :deep(.unnnic-navigator-pages__page-progress) {
-        background-color: $unnnic-color-neutral-clean;
+        background-color: $unnnic-color-bg-muted;
       }
     }
   }

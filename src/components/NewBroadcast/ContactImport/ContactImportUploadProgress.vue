@@ -79,7 +79,7 @@ const handleClose = () => {
     gap: $unnnic-spacing-sm;
     flex: 1;
     padding: $unnnic-spacing-sm;
-    border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+    border: 1px solid $unnnic-color-border-base;
     border-radius: $unnnic-border-radius-md;
   }
 
@@ -92,11 +92,11 @@ const handleClose = () => {
 
   &__file-name {
     font-weight: $unnnic-font-weight-bold;
-    color: $unnnic-color-neutral-darkest;
+    color: $unnnic-color-fg-emphasized;
   }
 
   &__file-size {
-    color: $unnnic-color-neutral-cloudy;
+    color: $unnnic-color-fg-base;
   }
 
   &__progress {
@@ -116,10 +116,10 @@ const handleClose = () => {
 
       .progress-container {
         height: 4px !important;
-        background-color: $unnnic-color-teal-100 !important;
+        background-color: $unnnic-color-teal-2 !important;
 
         .bar {
-          background-color: $unnnic-color-teal-600 !important;
+          background-color: $unnnic-color-teal-8 !important;
         }
       }
 

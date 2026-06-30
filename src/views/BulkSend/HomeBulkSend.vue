@@ -198,7 +198,7 @@ const fetchBroadcastsMonthPerformance = async () => {
     gap: $unnnic-spacing-sm;
 
     &-title {
-      color: $unnnic-color-neutral-darkest;
+      color: $unnnic-color-fg-emphasized;
       font-size: $unnnic-font-size-body-lg;
       font-weight: $unnnic-font-weight-bold;
       line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
@@ -221,8 +221,8 @@ const fetchBroadcastsMonthPerformance = async () => {
       content: '';
       display: block;
       width: 100%;
-      height: $unnnic-border-width-thinner;
-      background-color: $unnnic-color-neutral-soft;
+      height: 1px;
+      background-color: $unnnic-color-border-base;
       margin-top: $unnnic-spacing-md;
       margin-bottom: $unnnic-spacing-xs;
     }

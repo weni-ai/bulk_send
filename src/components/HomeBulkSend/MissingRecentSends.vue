@@ -37,7 +37,7 @@ import campaignIcon from '@/assets/images/campaign.svg';
   }
 
   &__title {
-    color: $unnnic-color-neutral-darkest;
+    color: $unnnic-color-fg-emphasized;
     font-size: $unnnic-font-size-body-lg;
     font-weight: $unnnic-font-weight-bold;
     line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
@@ -46,7 +46,7 @@ import campaignIcon from '@/assets/images/campaign.svg';
   }
 
   &__subtitle {
-    color: $unnnic-color-neutral-cloudy;
+    color: $unnnic-color-fg-base;
     font-size: $unnnic-font-size-body-gt;
     font-weight: $unnnic-font-weight-regular;
     line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;

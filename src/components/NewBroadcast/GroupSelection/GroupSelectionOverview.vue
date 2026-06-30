@@ -131,7 +131,7 @@ const handleRemoval = () => {
   align-items: center;
   padding: $unnnic-spacing-xs;
 
-  border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+  border: 1px solid $unnnic-color-border-base;
   border-radius: $unnnic-border-radius-sm;
 
   &__content {
@@ -143,7 +143,7 @@ const handleRemoval = () => {
   &__title {
     @include unnnic-text-body-gt;
     font-weight: $unnnic-font-weight-bold;
-    color: $unnnic-color-neutral-dark;
+    color: $unnnic-color-fg-base;
   }
 
   &__items {
@@ -159,12 +159,12 @@ const handleRemoval = () => {
   &__label {
     @include unnnic-text-body-md;
     font-weight: $unnnic-font-weight-bold;
-    color: $unnnic-color-neutral-cloudy;
+    color: $unnnic-color-fg-base;
   }
 
   &__value {
     @include unnnic-text-body-md;
-    color: $unnnic-color-neutral-cloudy;
+    color: $unnnic-color-fg-base;
   }
 
   &__removal {
