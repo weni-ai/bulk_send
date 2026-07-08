@@ -26,12 +26,12 @@
               :options="contactFields"
               :modelValue="variableOption(index - 1)"
               enableSearch
-              :search="variableSearch"
+              :search="variableSearchMap[index - 1] ?? ''"
               :disabled="loadingContactFields"
               :placeholder="
                 $t('new_broadcast.pages.select_variables.variable_placeholder')
               "
-              @update:search="variableSearch = $event"
+              @update:search="(v) => (variableSearchMap[index - 1] = v)"
               @update:model-value="
                 (event: ContactFieldOption | undefined) =>
                   handleVariableUpdate(index - 1, event)
@@ -97,7 +97,7 @@ const nameFieldOption: ContactFieldOption = {
   value: NAME_FIELD_VALUE,
 };
 
-const variableSearch = ref('');
+const variableSearchMap = ref<Record<number, string>>({});
 
 const contactFields = computed(() => {
   const fields = contactStore.contactFields.map(
