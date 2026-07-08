@@ -198,13 +198,13 @@
                     }
                 },
                 "search_placeholder": "Caută grupuri",
-                "group_count": "{count, plural, one {{count} contact} few {{count} contacte} other {{count} contacte}}",
+                "group_count": "{count, plural, one {{count} contact} few {{count} contacte} other {{count} de contacte}}",
                 "overview": {
                     "cost_value": "{currency}{cost} (cost pe mesaj: {currency}{templateMultiplier} pe mesaj livrat)",
                     "cost_label": "Cost estimat:",
                     "total_label": "Total:",
-                    "total_value": "{total, plural, one {{total} contact selectat} few {{total} contacte selectate} other {{total} contacte selectate}}",
-                    "title": "{count, plural, one {{count} grup selectat} few {{count} grupuri selectate} other {{count} grupuri selectate}}",
+                    "total_value": "{total, plural, one {{total} contact selectat} few {{total} contacte selectate} other {{total} de contacte selectate}}",
+                    "title": "{count, plural, one {{count} grup selectat} few {{count} grupuri selectate} other {{count} de grupuri selectate}}",
                     "removal_tooltip": "Elimină grupurile selectate"
                 },
                 "no_groups": "Nu au fost găsite grupuri care să corespundă căutării tale",
