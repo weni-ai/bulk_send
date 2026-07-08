@@ -21,13 +21,12 @@
       <p class="channel-selection-modal__description">
         {{ $t('modals.channel_selection.description') }}
       </p>
-      <UnnnicSelectSmart
+      <UnnnicSelect
+        returnObject
         class="channel-selection-modal__select"
         :options="channelsOptions"
         :modelValue="channelOption"
-        :isLoading="loadingChannels"
-        orderedByIndex
-        selectFirst
+        :disabled="loadingChannels"
         @update:model-value="handleChannelUpdate"
       />
     </section>
@@ -35,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import type { SelectOption } from '@/types/select';
 import { useProjectStore } from '@/stores/project';
 import { useBroadcastsStore } from '@/stores/broadcasts';
@@ -57,17 +56,15 @@ const selectedChannel = computed(() => {
   return broadcastsStore.newBroadcast.channel;
 });
 
-const channelOption = computed<SelectOption[]>(() => {
+const channelOption = computed<SelectOption | undefined>(() => {
   if (!selectedChannel.value) {
-    return [];
+    return undefined;
   }
 
-  return [
-    {
-      label: selectedChannel.value.name,
-      value: selectedChannel.value.uuid,
-    },
-  ];
+  return {
+    label: selectedChannel.value.name,
+    value: selectedChannel.value.uuid,
+  };
 });
 
 const channelsOptions = computed<SelectOption[]>(() => {
@@ -93,10 +90,9 @@ const handleSecondaryButtonClick = () => {
   handleUpdateModelValue(false);
 };
 
-const handleChannelUpdate = (newChannel: SelectOption[]) => {
-  const channelUuid = newChannel[0].value;
+const handleChannelUpdate = (option: SelectOption) => {
   const channelMatch = projectStore.wppChannels.find(
-    (channel) => channel.uuid === channelUuid,
+    (channel) => channel.uuid === option.value,
   );
   if (!channelMatch) {
     return;
@@ -104,6 +100,16 @@ const handleChannelUpdate = (newChannel: SelectOption[]) => {
 
   broadcastsStore.setChannel(channelMatch);
 };
+
+watch(
+  [channelsOptions, loadingChannels],
+  ([options, loading]) => {
+    if (!selectedChannel.value && !loading && options.length > 0) {
+      handleChannelUpdate(options[0]);
+    }
+  },
+  { immediate: true },
+);
 </script>
 
 <style scoped lang="scss">

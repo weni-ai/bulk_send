@@ -17,16 +17,17 @@
       :label="$t('new_broadcast.pages.confirm_and_send.flow_label')"
       :message="$t('new_broadcast.pages.confirm_and_send.flow_message')"
     >
-      <UnnnicSelectSmart
+      <UnnnicSelect
+        returnObject
         :options="projectFlowsOptions"
         :modelValue="selectedFlowOption"
-        autocomplete
-        autocompleteClearOnFocus
-        enableSearchByValue
+        enableSearch
+        :search="flowSearch"
+        :disabled="loadingFlows"
         :placeholder="
           $t('new_broadcast.pages.confirm_and_send.flow_placeholder')
         "
-        :isLoading="loadingFlows"
+        @update:search="flowSearch = $event"
         @update:model-value="onFlowSelectUpdate"
       />
     </UnnnicFormElement>
@@ -40,6 +41,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { ProjectType } from '@/constants/project';
 import type { SelectOption } from '@/types/select';
@@ -50,11 +52,13 @@ defineProps<{
   broadcastName: string;
   projectType: ProjectType;
   projectFlowsOptions: FlowOption[];
-  selectedFlowOption: FlowOption[];
+  selectedFlowOption: FlowOption | undefined;
   loadingFlows: boolean;
   onBroadcastNameUpdate: (value: string) => void;
-  onFlowSelectUpdate: (selection: FlowOption[]) => void;
+  onFlowSelectUpdate: (selection: FlowOption) => void;
 }>();
+
+const flowSearch = ref('');
 
 useI18n();
 </script>

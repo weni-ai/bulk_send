@@ -21,20 +21,19 @@
             class="variables-selection__item"
             :label="getVariableLabel(index)"
           >
-            <UnnnicSelectSmart
+            <UnnnicSelect
+              returnObject
               :options="contactFields"
               :modelValue="variableOption(index - 1)"
-              autocomplete
-              autocompleteClearOnFocus
-              enableSearchByValue
-              orderedByIndex
-              :selectFirst="false"
-              :isLoading="loadingContactFields"
+              enableSearch
+              :search="variableSearch"
+              :disabled="loadingContactFields"
               :placeholder="
                 $t('new_broadcast.pages.select_variables.variable_placeholder')
               "
+              @update:search="variableSearch = $event"
               @update:model-value="
-                (event: ContactFieldOption[]) =>
+                (event: ContactFieldOption | undefined) =>
                   handleVariableUpdate(index - 1, event)
               "
             />
@@ -68,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, computed } from 'vue';
+import { onBeforeMount, computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useContactStore } from '@/stores/contact';
 import { useBroadcastsStore } from '@/stores/broadcasts';
@@ -97,6 +96,8 @@ const nameFieldOption: ContactFieldOption = {
   label: t('new_broadcast.pages.select_variables.name_field_label'),
   value: NAME_FIELD_VALUE,
 };
+
+const variableSearch = ref('');
 
 const contactFields = computed(() => {
   const fields = contactStore.contactFields.map(
@@ -171,19 +172,22 @@ const initializeVariableMapping = () => {
   }
 };
 
-const handleVariableUpdate = (key: number, newValue: ContactFieldOption[]) => {
-  if (!newValue || newValue.length === 0) {
+const handleVariableUpdate = (
+  key: number,
+  newValue: ContactFieldOption | undefined,
+) => {
+  if (!newValue) {
     broadcastsStore.updateVariableMapping(key, undefined);
     return;
   }
 
   // check if the value is the same as the old value
   const oldValue = variableMapping.value[key];
-  if (oldValue?.key === newValue[0].value) {
+  if (oldValue?.key === newValue.value) {
     return;
   }
 
-  const newFieldKey = newValue[0];
+  const newFieldKey = newValue;
 
   if (newFieldKey.value === NAME_FIELD_VALUE) {
     const nameField: ContactField = {
@@ -203,19 +207,17 @@ const handleVariableUpdate = (key: number, newValue: ContactFieldOption[]) => {
   broadcastsStore.updateVariableMapping(key, field);
 };
 
-const variableOption = (index: number): ContactFieldOption[] => {
+const variableOption = (index: number): ContactFieldOption | undefined => {
   const mapping = broadcastsStore.newBroadcast.variableMapping;
 
   if (!mapping[index]) {
-    return [];
+    return undefined;
   }
 
-  return [
-    {
-      label: mapping[index].label,
-      value: mapping[index].key,
-    },
-  ];
+  return {
+    label: mapping[index].label,
+    value: mapping[index].key,
+  };
 };
 
 const hasFilledVariables = computed(() => {

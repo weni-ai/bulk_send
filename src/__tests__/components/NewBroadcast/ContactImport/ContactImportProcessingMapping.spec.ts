@@ -24,9 +24,9 @@ const STUBS = {
     template:
       '<button data-test="checkbox" :data-disabled="disabled" :data-checked="modelValue" @click="$emit(\'update:model-value\', !modelValue)">cb</button>',
   },
-  UnnnicSelectSmart: {
-    name: 'UnnnicSelectSmart',
-    props: ['options', 'modelValue', 'size'],
+  UnnnicSelect: {
+    name: 'UnnnicSelect',
+    props: ['options', 'modelValue', 'size', 'returnObject'],
     emits: ['update:model-value'],
     template: '<div data-test="select"></div>',
   },
@@ -123,10 +123,11 @@ describe('ContactImportProcessingMapping.vue', () => {
     ).toBe('age');
 
     // Change type via select component emit
-    const select = rows[2].findComponent({ name: 'UnnnicSelectSmart' });
-    select.vm.$emit('update:model-value', [
-      { label: 'Date', value: ContactFieldType.DATE },
-    ]);
+    const select = rows[2].findComponent({ name: 'UnnnicSelect' });
+    select.vm.$emit('update:model-value', {
+      label: 'Date',
+      value: ContactFieldType.DATE,
+    });
     await wrapper.vm.$nextTick();
 
     expect(

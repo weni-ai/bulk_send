@@ -23,20 +23,20 @@ const STUBS = {
     template:
       '<input data-test="group-name" :value="modelValue" @input="$emit(\'update:model-value\', $event.target.value)" />',
   },
-  UnnnicSelectSmart: {
-    name: 'UnnnicSelectSmart',
+  UnnnicSelect: {
+    name: 'UnnnicSelect',
     props: [
       'modelValue',
       'options',
-      'isLoading',
+      'disabled',
       'size',
-      'autocomplete',
-      'autocompleteClearOnFocus',
-      'autocompleteIconLeft',
+      'enableSearch',
+      'search',
+      'returnObject',
     ],
-    emits: ['update:model-value'],
+    emits: ['update:model-value', 'update:search'],
     template:
-      '<select data-test="group-select" @change="$emit(\'update:model-value\', [options.find(o => o.value == $event.target.value)])"><option v-for="opt in options" :key="opt.value" :value="opt.value">{{ opt.label }}</option></select>',
+      '<select data-test="group-select" @change="$emit(\'update:model-value\', options.find(o => o.value == $event.target.value))"><option v-for="opt in options" :key="opt.value" :value="opt.value">{{ opt.label }}</option></select>',
   },
 } as const;
 
