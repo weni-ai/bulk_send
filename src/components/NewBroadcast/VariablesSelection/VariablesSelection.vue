@@ -31,7 +31,7 @@
               :placeholder="
                 $t('new_broadcast.pages.select_variables.variable_placeholder')
               "
-              @update:search="(v) => (variableSearchMap[index - 1] = v)"
+              @update:search="(v: string) => (variableSearchMap[index - 1] = v)"
               @update:model-value="
                 (event: ContactFieldOption | undefined) =>
                   handleVariableUpdate(index - 1, event)
