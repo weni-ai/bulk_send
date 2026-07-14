@@ -15,17 +15,17 @@ const STUBS = {
     props: ['label'],
     template: '<div data-test="form-element"><slot /></div>',
   },
-  UnnnicSelectSmart: {
+  UnnnicSelect: {
     props: [
       'options',
       'modelValue',
       'placeholder',
-      'isLoading',
-      'autocomplete',
-      'autocompleteClearOnFocus',
-      'enableSearchByValue',
+      'disabled',
+      'enableSearch',
+      'search',
+      'returnObject',
     ],
-    emits: ['update:model-value'],
+    emits: ['update:model-value', 'update:search'],
     template: '<select data-test="variable-select"></select>',
   },
   UnnnicDisclaimer: {
@@ -157,9 +157,10 @@ describe('VariablesSelection.vue', () => {
   it('maps NAME_FIELD_VALUE to name field with translated label', async () => {
     const { wrapper, broadcastsStore } = mountWrapper(1);
     // simulate selection of the special name field option
-    await (wrapper.vm as any).handleVariableUpdate(0, [
-      { label: 'ignored', value: NAME_FIELD_VALUE },
-    ]);
+    await (wrapper.vm as any).handleVariableUpdate(0, {
+      label: 'ignored',
+      value: NAME_FIELD_VALUE,
+    });
 
     const mapped = broadcastsStore.newBroadcast.variableMapping[0] as any;
     expect(mapped.key).toBe(NAME_FIELD_VALUE);
@@ -178,9 +179,10 @@ describe('VariablesSelection.vue', () => {
     const spy = vi.spyOn(broadcastsStore, 'updateVariableMapping');
     spy.mockClear();
 
-    await (wrapper.vm as any).handleVariableUpdate(0, [
-      { label: 'Age', value: 'age' },
-    ]);
+    await (wrapper.vm as any).handleVariableUpdate(0, {
+      label: 'Age',
+      value: 'age',
+    });
 
     expect(spy).not.toHaveBeenCalled();
   });

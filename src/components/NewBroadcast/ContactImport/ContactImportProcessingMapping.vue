@@ -34,13 +34,14 @@
         <p v-if="item.columnType !== ContactImportColumnType.NEW_FIELD">
           {{ itemTypeLabel(item.type) }}
         </p>
-        <UnnnicSelectSmart
+        <UnnnicSelect
           v-else
+          returnObject
           :options="fieldTypeOptions"
           :modelValue="getFieldTypeOption(item)"
           size="sm"
           @update:model-value="
-            (event: SelectOption<ContactFieldType>[]) =>
+            (event: SelectOption<ContactFieldType>) =>
               handleFieldTypeUpdate(item, event)
           "
         />
@@ -236,14 +237,15 @@ const handleSelect = (item: Row) => {
 
 const handleFieldTypeUpdate = (
   item: Row,
-  options: SelectOption<ContactFieldType>[],
+  option: SelectOption<ContactFieldType>,
 ) => {
-  item.type = options[0].value;
+  item.type = option.value;
 };
 
-const getFieldTypeOption = (item: Row): SelectOption<ContactFieldType>[] => {
-  const option = fieldTypeOptions.find((option) => option.value === item.type);
-  return [option!];
+const getFieldTypeOption = (
+  item: Row,
+): SelectOption<ContactFieldType> | undefined => {
+  return fieldTypeOptions.find((option) => option.value === item.type);
 };
 </script>
 

@@ -13,8 +13,6 @@ vi.mock('@vueuse/core', () => ({ useDebounceFn: (fn: any) => fn }));
 const SELECTOR = {
   search: '[data-test="search"]',
   newTemplate: '[data-test="new-template"]',
-  setChannel: '[data-test="set-channel"]',
-  clearChannel: '[data-test="clear-channel"]',
 } as const;
 
 const stubs = {
@@ -35,12 +33,6 @@ const stubs = {
     props: ['size', 'type', 'iconLeft', 'text'],
     template:
       '<button data-test="new-template" @click="$emit(\'click\')">new</button>',
-  },
-  UnnnicSelectSmart: {
-    props: ['modelValue', 'options', 'isLoading', 'size'],
-    emits: ['update:model-value'],
-    template:
-      '<div data-test="channel"><button data-test="set-channel" @click="$emit(\'update:model-value\', [{ label: \'WAC 1\', value: \'ch-1\' }])">set</button><button data-test="clear-channel" @click="$emit(\'update:model-value\', [])">clear</button></div>',
   },
 } as const;
 

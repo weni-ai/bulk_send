@@ -21,23 +21,20 @@ export function useFlowSelection(
     }));
   });
 
-  const selectedFlowOption = computed<FlowOption[]>(() => {
+  const selectedFlowOption = computed<FlowOption | undefined>(() => {
     if (!broadcastsStore.newBroadcast.selectedFlow) {
-      return [];
+      return undefined;
     }
 
-    return [
-      {
-        label: broadcastsStore.newBroadcast.selectedFlow.name,
-        value: broadcastsStore.newBroadcast.selectedFlow.uuid,
-      },
-    ];
+    return {
+      label: broadcastsStore.newBroadcast.selectedFlow.name,
+      value: broadcastsStore.newBroadcast.selectedFlow.uuid,
+    };
   });
 
-  const handleFlowSelectUpdate = (selection: FlowOption[]) => {
-    const flowUuid = selection[0].value;
+  const handleFlowSelectUpdate = (selection: FlowOption) => {
     const flow = flowsStore.flows.find(
-      (flow: FlowReference) => flow.uuid === flowUuid,
+      (flow: FlowReference) => flow.uuid === selection.value,
     );
     broadcastsStore.setSelectedFlow(flow);
   };

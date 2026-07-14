@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.11.0] - 2026-07-14
+
+### Changed
+- refactor: migrate deprecated `UnnnicSelectSmart` to `UnnnicSelect`
+
 ## [1.10.0] - 2026-06-30
 
 ### Changed
