@@ -24,6 +24,7 @@
     "@rspack/core": "^1.6.0",
     "@sentry/vue": "^9.46.0",
     "@vueuse/core": "^13.9.0",
+    "@weni/rspack-config": "^0.1.0",
     "@weni/unnnic-system": "3.24.5-redesign.2",
     "axios": "^1.13.1",
     "camelcase-keys": "^9.1.3",
