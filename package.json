@@ -6,7 +6,7 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "NODE_OPTIONS='--experimental-transform-types' rspack dev",
+    "dev": "NODE_ENV=development NODE_OPTIONS='--experimental-transform-types' rspack dev",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "NODE_OPTIONS='--experimental-transform-types' rspack preview",
     "test": "vitest",
@@ -59,8 +59,7 @@
     "npm-run-all2": "^8.0.4",
     "postcss": "^8.5.6",
     "postcss-loader": "^8.2.0",
-    "postcss-prefixwrap": "^1.57.0",
-    "postcss-preset-env": "^10.4.0",
+    "postcss-prefixwrap": "^1.58.0",
     "prettier": "3.6.2",
     "sass": "^1.93.2",
     "ts-node": "^10.9.2",

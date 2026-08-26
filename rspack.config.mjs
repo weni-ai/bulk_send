@@ -1,9 +1,12 @@
 import { resolve } from 'node:path';
+import dotenv from 'dotenv';
 import { defineWeniConfig } from '@weni/rspack-config';
 import UnpluginVueComponents from 'unplugin-vue-components/rspack';
 import pkg from './package.json' with { type: 'json' };
-import { config } from 'dotenv';
-config();
+
+dotenv.config();
+
+const connectUrl = process.env.MODULE_FEDERATION_CONNECT_URL;
 
 export default defineWeniConfig({
   dirname: import.meta.dirname,
@@ -12,6 +15,7 @@ export default defineWeniConfig({
   entry: './src/main.ts',
   postcss: {
     prefix: '.bulk-send-webapp',
+    ignoredSelectors: ['html', 'body', '*'],
   },
   federation: {
     name: 'bulk_send',
@@ -23,7 +27,19 @@ export default defineWeniConfig({
       './locales/ro': './src/locales/ro.json',
     },
     remotes: {
-      connect: process.env.MODULE_FEDERATION_CONNECT_URL,
+      connect: connectUrl,
+    },
+  },
+  sharedDeps: {
+    pinia: {
+      singleton: true,
+      requiredVersion: pkg.dependencies.pinia,
+      eager: true,
+    },
+    'vue-router': {
+      singleton: true,
+      requiredVersion: pkg.dependencies['vue-router'],
+      eager: true,
     },
   },
   plugins: [
