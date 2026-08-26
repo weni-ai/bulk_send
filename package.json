@@ -30,7 +30,6 @@
     "camelcase-keys": "^9.1.3",
     "date-fns": "^4.1.0",
     "dotenv": "^17.2.3",
-    "html-rspack-plugin": "^6.1.3",
     "intl-messageformat": "^11.2.8",
     "pinia": "^3.0.3",
     "sass-loader": "^16.0.6",
