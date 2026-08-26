@@ -70,7 +70,7 @@ const handleModalUpdate = (value: boolean) => {
 
   &__text--disabled,
   &__button--disabled {
-    color: $unnnic-color-fg-base;
+    color: $unnnic-color-fg-muted;
   }
 }
 </style>

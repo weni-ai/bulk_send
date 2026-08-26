@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.11.0] - 2026-07-14
+
+### Changed
+- refactor: migrate deprecated `UnnnicSelectSmart` to `UnnnicSelect`
+
+## [1.10.0] - 2026-06-30
+
+### Changed
+- refactor: migrate deprecated Unnnic design tokens to semantic Shoreline tokens
+
 ## [1.9.2] - 2026-06-18
 
 ### Added

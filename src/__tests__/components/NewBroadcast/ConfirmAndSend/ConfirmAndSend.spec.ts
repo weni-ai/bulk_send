@@ -27,9 +27,9 @@ const STUBS = {
     template:
       '<input data-test="name-input" :value="modelValue" @input="$emit(\'update:model-value\', $event.target.value)" />',
   },
-  UnnnicSelectSmart: {
-    props: ['options', 'modelValue', 'isLoading', 'placeholder'],
-    emits: ['update:model-value'],
+  UnnnicSelect: {
+    props: ['options', 'modelValue', 'disabled', 'placeholder', 'returnObject'],
+    emits: ['update:model-value', 'update:search'],
     template: '<select data-test="flow-select"></select>',
   },
   UnnnicDisclaimer: {
@@ -154,7 +154,7 @@ describe('ConfirmAndSend.vue', () => {
   it('emits selection to set selected flow in store', async () => {
     const { wrapper, broadcastsStore, flowsStore } = mountWrapper();
     const select = wrapper.find(SELECTOR.flowSelect);
-    const option = [{ label: 'Flow 2', value: 'f2' }];
+    const option = { label: 'Flow 2', value: 'f2' };
     // Emit update:model-value as the component would
     await select.trigger('change');
     // Directly call handler via component instance (simulate event)

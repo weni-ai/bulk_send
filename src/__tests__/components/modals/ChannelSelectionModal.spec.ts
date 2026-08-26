@@ -42,15 +42,9 @@ describe('components/modals/ChannelSelectionModal', () => {
             ],
             template: '<div><slot /></div>',
           },
-          UnnnicSelectSmart: {
-            name: 'UnnnicSelectSmart',
-            props: [
-              'options',
-              'modelValue',
-              'isLoading',
-              'orderedByIndex',
-              'selectFirst',
-            ],
+          UnnnicSelect: {
+            name: 'UnnnicSelect',
+            props: ['options', 'modelValue', 'disabled', 'returnObject'],
             emits: ['update:model-value'],
             template: '<select />',
           },
@@ -69,7 +63,7 @@ describe('components/modals/ChannelSelectionModal', () => {
     ];
 
     const wrapper = mountModal();
-    const select = wrapper.findComponent({ name: 'UnnnicSelectSmart' });
+    const select = wrapper.findComponent({ name: 'UnnnicSelect' });
     const options = select.props('options') as Array<{
       label: string;
       value: string;
@@ -88,10 +82,8 @@ describe('components/modals/ChannelSelectionModal', () => {
     broadcastsStore.setChannel(ch);
 
     const wrapper = mountModal();
-    const select = wrapper.findComponent({ name: 'UnnnicSelectSmart' });
-    expect(select.props('modelValue')).toEqual([
-      { label: 'Chosen', value: 'z' },
-    ]);
+    const select = wrapper.findComponent({ name: 'UnnnicSelect' });
+    expect(select.props('modelValue')).toEqual({ label: 'Chosen', value: 'z' });
   });
 
   it('emits update:modelValue when modal value changes', async () => {
@@ -109,8 +101,8 @@ describe('components/modals/ChannelSelectionModal', () => {
 
     const wrapper = mountModal();
 
-    const select = wrapper.findComponent({ name: 'UnnnicSelectSmart' });
-    await select.vm.$emit('update:model-value', [{ label: 'X', value: 'x' }]);
+    const select = wrapper.findComponent({ name: 'UnnnicSelect' });
+    await select.vm.$emit('update:model-value', { label: 'X', value: 'x' });
 
     expect(broadcastsStore.newBroadcast.channel).toEqual(ch);
 

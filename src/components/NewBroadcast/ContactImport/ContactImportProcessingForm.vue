@@ -51,14 +51,15 @@
             )
           }}
         </label>
-        <UnnnicSelectSmart
+        <UnnnicSelect
+          returnObject
           :modelValue="groupOption"
           :options="groups"
-          :isLoading="loadingGroups"
+          :disabled="loadingGroups"
           size="sm"
-          autocomplete
-          autocompleteClearOnFocus
-          autocompleteIconLeft
+          enableSearch
+          :search="groupSearch"
+          @update:search="groupSearch = $event"
           @update:model-value="handleGroupSelectUpdate"
         />
       </section>
@@ -100,17 +101,17 @@ const ActionType: Record<string, string> = {
 const actionType = ref(ActionType.CREATE);
 const actionTypeOptions = Object.values(ActionType);
 
-const groupOption = computed<SelectOption[]>(() => {
+const groupSearch = ref('');
+
+const groupOption = computed<SelectOption | undefined>(() => {
   if (group.value) {
-    return [
-      {
-        label: group.value.name,
-        value: group.value.id.toString(),
-      },
-    ];
+    return {
+      label: group.value.name,
+      value: group.value.id.toString(),
+    };
   }
 
-  return [];
+  return undefined;
 });
 
 const groups = computed<SelectOption[]>(() => {
@@ -131,7 +132,7 @@ const groups = computed<SelectOption[]>(() => {
 });
 
 const clearAll = () => {
-  handleGroupSelectUpdate([]);
+  handleGroupSelectUpdate(undefined);
   handleGroupNameUpdate('');
 };
 
@@ -157,13 +158,13 @@ const handleGroupNameUpdate = (value: string) => {
   contactImportStore.setProcessingGroupName(value);
 };
 
-const handleGroupSelectUpdate = (value: SelectOption[]) => {
-  if (value.length === 0) {
+const handleGroupSelectUpdate = (value: SelectOption | undefined) => {
+  if (!value || value.value === '') {
     contactImportStore.setProcessingGroup(undefined);
     return;
   }
 
-  const selectedGroup = value[0];
+  const selectedGroup = value;
   const group = groupsStore.groups.find(
     (group) => group.id === Number(selectedGroup.value),
   );
