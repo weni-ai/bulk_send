@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+
 import { resolve } from 'node:path';
 import dotenv from 'dotenv';
 import { defineWeniConfig } from '@weni/rspack-config';
