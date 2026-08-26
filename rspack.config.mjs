@@ -29,9 +29,18 @@ export default defineWeniConfig({
       './locales/ro': './src/locales/ro.json',
     },
     remotes: {
-      connect: connectUrl,
+      ...(connectUrl ? { connect: connectUrl } : {}),
     },
   },
+  // Without the remote, alias the import so CI/standalone builds still resolve.
+  aliases: connectUrl
+    ? {}
+    : {
+        'connect/sharedStore': resolve(
+          import.meta.dirname,
+          'src/shims/connectSharedStore.ts',
+        ),
+      },
   sharedDeps: {
     pinia: {
       singleton: true,
